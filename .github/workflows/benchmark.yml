@@ -1,0 +1,71 @@
+name: benchmark
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+# No secrets are used anywhere in this file, and the token can only read.
+permissions:
+  contents: read
+
+concurrency:
+  group: benchmark-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  # The repository's own scripts, as they are in this commit. Skipped for pull requests from forks,
+  # so that a fork's code never runs here; the job below covers those with the scripts from main.
+  selftest:
+    if: github.event_name == 'push' || github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - run: pip install numpy scikit-learn
+      - name: Scorer self-test
+        run: python benchmark/score.py --selftest
+      - name: Metadata and report of every submission
+        run: python benchmark/submission.py check
+      - name: Leaderboard builds from the submissions
+        if: github.event_name == 'pull_request'
+        run: python benchmark/leaderboard.py
+      - name: Leaderboard in the repository is up to date
+        if: github.event_name == 'push'
+        run: python benchmark/leaderboard.py --check
+
+  # Every pull request: the scripts come from the base branch and only read the submission folders of
+  # the pull request as data. The maps are downloaded by URL, hashed and scored. Nothing from the pull
+  # request is executed.
+  submission:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.base.sha }}
+          path: base
+          persist-credentials: false
+      - uses: actions/checkout@v4
+        with:
+          path: pr
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - run: pip install numpy scikit-learn
+      - name: Scorer self-test (base branch)
+        run: python base/benchmark/score.py --selftest
+      - name: Truth files
+        uses: actions/cache@v4
+        with:
+          path: base/benchmark/data/truth_*.npz
+          key: truth-${{ hashFiles('base/benchmark/data/manifest.json') }}
+      - name: Check and re-score the submissions this pull request changes
+        run: python base/benchmark/submission.py --root pr/benchmark/submissions ci base/benchmark/submissions

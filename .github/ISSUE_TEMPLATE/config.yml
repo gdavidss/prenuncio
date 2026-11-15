@@ -1,0 +1,5 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Benchmark rules
+    url: https://github.com/gdavidss/prenuncio/blob/main/benchmark/README.md
+    about: The task, the rules, the scores and how to submit.

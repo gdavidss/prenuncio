@@ -1,0 +1,30 @@
+{
+ "benchmark_version": "1.0",
+ "base_url": "https://github.com/gdavidss/prenuncio/releases/download/bench-v1",
+ "files": {
+  "truth_2022.npz": {
+   "sha256": "fcd9ff2ef8eca37e0e0bbd0c9313b7c821c8c2b3ef522c05dac68ada77587c67",
+   "bytes": 8522429
+  },
+  "truth_2023.npz": {
+   "sha256": "007a0ef5edfb81dd5d33c592ff8d2a1f4913a8094dc7dc0626862f328c92f634",
+   "bytes": 8448885
+  },
+  "truth_2024.npz": {
+   "sha256": "2bafb5a3ef58ddafc70cd6a18c5e4602595be1368122bd26f128d9d39f4aa383",
+   "bytes": 8451692
+  },
+  "truth_2025.npz": {
+   "sha256": "c661e0274ec06815a31f551683e1cd6da5e93a403a72e317048f3cb61ae04b90",
+   "bytes": 8409792
+  },
+  "truth_2026.npz": {
+   "sha256": "372bcc0b9eb43b6152352f91573f687064d8ee8774cb48e99807e2c542677abd",
+   "bytes": 8340895
+  },
+  "grid.json": {
+   "sha256": "7cb64e4d962c5517c4900452c44d8bf0adf86c2044207304fdc35dbd3d12660c",
+   "bytes": 115
+  }
+ }
+}

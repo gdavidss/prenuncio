@@ -1,0 +1,24 @@
+# data, raw and derived. data/raw holds IBAMA files with personal names and tax numbers: never commit it
+/data/
+# the site's generated maps and tables (pipeline/export.py, pipeline/regions.py)
+/web/data/
+# benchmark truth files and maps are release assets, fetched by benchmark/score.py
+/benchmark/data/*
+!/benchmark/data/grid.json
+!/benchmark/data/manifest.json
+!/benchmark/data/README.md
+/agg3/
+*.npy
+*.npz
+*.parquet
+*.tif
+*.pt
+.venv/
+node_modules/
+__pycache__/
+*.log
+.env
+.env.*
+.DS_Store
+*.local.md
+.vercel/

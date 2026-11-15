@@ -1,0 +1,37 @@
+{
+ "name": "TODO-folder-name",
+ "title": "TODO a short name for the leaderboard row",
+ "summary": "TODO one sentence on what the model is",
+ "authors": ["TODO name or handle"],
+ "contact": "TODO a GitHub handle or a link, optional",
+ "date": "TODO YYYY-MM-DD",
+ "benchmark_version": "1.0",
+ "code": {
+  "url": "TODO https link to the public repository",
+  "commit": "TODO the commit that produced the maps",
+  "license": "TODO for example MIT"
+ },
+ "predictions": [],
+ "data_sources": [
+  {
+   "name": "TODO for example INPE PRODES raster, 2025 release",
+   "url": "TODO https link",
+   "dates": "TODO what period it covers and the last date used for each forecast year",
+   "license": "TODO"
+  }
+ ],
+ "compute": {
+  "hardware": "TODO for example one cloud GPU machine with an L4",
+  "hours": null,
+  "cost_usd": null
+ },
+ "agents": {
+  "used": true,
+  "tools": [
+   {
+    "name": "TODO the agent and the model behind it",
+    "how": "TODO what it did and what a person checked"
+   }
+  ]
+ }
+}
