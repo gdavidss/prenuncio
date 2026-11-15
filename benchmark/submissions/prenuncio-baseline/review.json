@@ -3,5 +3,7 @@
  "by": "maintainers",
  "date": "2026-11-15",
  "note": "The maintainers' own model. The scores come from benchmark/score.py on the published maps. Nobody outside the project has reproduced it yet.",
- "live": {"2027": "2026-11-15"}
+ "live": {
+  "2027": "2026-11-15"
+ }
 }
