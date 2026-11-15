@@ -1,6 +1,6 @@
 # Prenúncio
 
-Prenúncio forecasts where the Brazilian Legal Amazon will be cleared in the next PRODES year, on a 500 m grid. The forecast and its replay over past years are at [prenuncio.com](https://prenuncio.com), with shorter-horizon maps for clearing alerts, degradation, mining and fire scars. Prenúncio is Portuguese for the sign that comes before the event.
+Prenúncio forecasts where the Brazilian Legal Amazon will be cleared in the next PRODES year, on a 500 m grid. The forecast and its replay over past years are at [prenuncio.com](https://prenuncio.com), next to maps and month-by-month forecasts for four hazards: clearing, fire, degradation and mining. Prenúncio is Portuguese for the sign that comes before the event.
 
 The code, the data pipeline and the benchmark are open. Anyone can propose a better model.
 
@@ -47,20 +47,21 @@ python pipeline/horizons.py eval        # 3 and 6 month clearing, 12 month fire 
 python pipeline/horizons.py forecast
 python pipeline/export.py               # writes web/data
 python pipeline/regions.py              # sector shapes and numbers; run after every export
+python pipeline/monthly.py              # how much, month by month: the next 12 months of each hazard, with its backtest
 python3 -m http.server 8878 -d web      # open http://localhost:8878
 node test/sectors.mjs                   # drives the site with real mouse events
 ```
 
 `AZ_F=50` in front of a pipeline step runs it on the 500 m grid, with its own folders `data/grid50` and `data/model50`. `AZ_X=hansen,glad,aef` adds the finer inputs. The published model is the 500 m trees with those inputs, blended with the U-Net by `pipeline/blendmaps.py`. The 500 m steps and the U-Net ran on a cloud GPU machine.
 
-On the site, links carry state: `#y=2023` replays a year, `#k=clear3` or `clear6` is the monthly clearing view with that window ahead, `#k=scar12` is fire and any other hazard uses its own layer name (add `t=months` for the monthly view), `#m=cells` paints cells instead of sectors, `#s=uf` (or `mun`, `ti`, `uc`) picks the kind of sector, `#r=<id>` selects one, `#l=pt` sets the language and `#about` opens the About text.
+On the site, links carry state: `#y=2023` replays a year, `#k=clear3` or `clear6` is the monthly clearing view with that window ahead, `#k=scar12` is fire and any other hazard uses its own layer name (add `t=months` for the monthly view), `#m=cells` paints cells instead of sectors (500 m for the yearly clearing forecast and its replay, 1 km for the rest), `#s=uf` (or `mun`, `ti`, `uc`) picks the kind of sector, `#r=<id>` selects one, `#l=pt` sets the language and `#about` opens the About text.
 
 ## What is where
 
 - `benchmark/` is the open benchmark: rules, scorer, submissions, leaderboard.
-- `pipeline/` is the tree models and everything that feeds the site. `pipeline/lab.py` is the model lab: it scores a model on cached feature tables in minutes (see [docs/BENCH.md](docs/BENCH.md)). `pipeline/extras.py` and `pipeline/tenure.py` build candidate inputs for it. `pipeline/benchdata.py` writes the benchmark's truth files.
+- `pipeline/` is the tree models and everything that feeds the site: the yearly map (`model.py`), the yearly total (`quantity.py`), the shorter windows and the other hazards (`horizons.py`), and the monthly totals for the four hazards (`monthly.py`). `pipeline/lab.py` is the model lab: it scores a model on cached feature tables in minutes (see [docs/BENCH.md](docs/BENCH.md)). `pipeline/extras.py` and `pipeline/tenure.py` build candidate inputs for it. `pipeline/benchdata.py` writes the benchmark's truth files.
 - `unet/` is the convolutional model, and the scripts that grid Hansen forest loss, GLAD alerts, AlphaEarth embeddings and DETER for both models.
-- `web/` is the site, static, with no build step. `web/data` is generated and not in git. Only this folder is ever deployed.
+- `web/` is the site, static, with no build step. It paints the yearly clearing forecast at 500 m, the resolution it is scored at. `web/data` is generated and not in git. Only this folder is ever deployed.
 - `docs/` has the results, the research notes, the internal benchmark history and the brand.
 - `scripts/fetch.sh` downloads the raw inputs. No account or key is needed.
 

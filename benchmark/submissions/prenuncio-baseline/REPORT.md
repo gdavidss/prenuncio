@@ -8,7 +8,7 @@ The scores of every year are in [scores.json](scores.json) and in the [leaderboa
 
 Two models forecast the same thing, and the published map is their blend.
 
-The first is gradient boosted trees (LightGBM, Tweedie loss with power 1.3, 400 rounds, 127 leaves) on the 500 m grid. Each row is one forest cell on one forecast date, and the target is the share of the cell cleared in the following PRODES year. The inputs are the clearing history of the cell and of its neighbourhood at 3, 9, 25 and 75 km, distances to recent clearing and to the forest edge, DETER alerts, Hansen forest loss, GLAD Sentinel-2 alerts, AlphaEarth embeddings, fire detections, IBAMA records, tenure and location. To forecast year T the trees are fitted on target years 2011 to T-1. `pipeline/model.py` builds the features and fits.
+The first is gradient boosted trees (LightGBM, Tweedie loss with power 1.3, 400 rounds, 127 leaves) on the 500 m grid. Each row is one forest cell on one forecast date, and the target is the share of the cell cleared in the following PRODES year. The inputs are the clearing history of the cell and of its neighbourhood at 3, 9, 25 and 75 km, distances to recent clearing and to the forest edge, DETER alerts, Hansen forest loss, GLAD Sentinel-2 alerts, AlphaEarth embeddings, fire detections, IBAMA records, tenure and location. To forecast year T the trees are fitted on target years 2015 to T-1. `pipeline/model.py` builds the features and fits.
 
 The second is a U-Net that reads 25 km tiles at 100 m: the year each cell was cleared, land classes, tenure, Hansen and GLAD bit planes, and the embeddings repeated from 500 m. It predicts the cleared share of every 500 m cell. One network is trained on targets up to the year before the first test year, then fine-tuned with one more year of outcomes before each later forecast, so the network that forecasts year T has never seen T or any later year. `unet/train.py roll` does this.
 
@@ -58,27 +58,52 @@ What helped: the 500 m grid, Hansen (removing it costs 1.5 points), GLAD (2.2 po
 
 ## How to reproduce
 
-With Python 3.13 and the packages named in the README. The header of each script says what it reads, what it writes and where the next step expects the file.
+With Python 3.13 and the packages named in the README, on a machine with a GPU for the U-Net steps.
+
+Inputs on the 500 m grid:
 
 ```sh
 scripts/fetch.sh                                   # INPE, IBAMA and NOAA inputs
 AZ_F=50 python pipeline/grid.py                    # PRODES raster to the 500 m grid
 AZ_F=50 python pipeline/layers.py                  # alerts, fire, enforcement and tenure on the grid
-python unet/hansen.py                              # Hansen loss on the 500 m grid; `hansen.py 100` for the U-Net planes
-python unet/glad.py                                # GLAD alerts on the 500 m grid; `glad.py 100` for the U-Net planes
-python unet/aef.py 2018 2019 2020 2021 2022 2023 2024 2025   # AlphaEarth embeddings on the 500 m grid
-python unet/prep.py                                # PRODES at 100 m for the U-Net
-AZ_F=50 AZ_X=hansen,glad,aef AZ_MAPS=1 python pipeline/model.py eval       # tree maps for the test years
-AZ_F=50 AZ_X=hansen,glad,aef AZ_MAPS=1 python pipeline/model.py forecast   # tree maps for 2026 and 2027
-python unet/train.py roll 2019 2027                # one U-Net forecast per year; UNET_AEF=<folder> adds the embeddings
-AZ_F=50 python pipeline/blendmaps.py '<folder>/roll_{y}.npy' 0.6 <tree map folders>
+python unet/hansen.py                              # writes hansen500.npz
+python unet/glad.py                                # writes glad500.npz
+python unet/aef.py 2018 2019 2020 2021 2022 2023 2024 2025   # writes data/aef/emb_<year>.npy
 ```
 
-The gridding of Hansen, GLAD and the embeddings reads public cloud storage and takes most of the time. This is the path the maintainers followed. Nobody has run it end to end on a clean machine yet, so this submission has the status "re-scored" and not "reproduced". A reproduction by someone outside the project would be a welcome first contribution.
+The tree pipeline expects those three outputs in `data/grid50`: the `loss` array of `hansen500.npz` saved as `data/grid50/hansen.npy` (uint16, [25, rows, cols]), `glad500.npz` copied to `data/grid50/glad.npz`, and `data/aef` linked as `data/grid50/aef`.
+
+Trees, fitted on target years from 2015:
+
+```sh
+AZ_F=50 AZ_X=hansen,glad,aef AZ_FIRST=2015 AZ_MAPS=1 python pipeline/model.py eval       # maps for the test years
+AZ_F=50 AZ_X=hansen,glad,aef AZ_FIRST=2015 AZ_MAPS=1 python pipeline/model.py forecast   # maps for 2026 and 2027
+```
+
+U-Net. `unet/prep.py`, `unet/hansen.py 100` and `unet/glad.py 100` write its 100 m arrays, `hb.npy` and `gb4.npy` among them, into `data/`. Every training command below ran with `UNET_AEF=<folder with emb_<year>.npy> UNET_GB4=1 UNET_TTA=1 UNET_WIDTH=48 UNET_PB=8`:
+
+```sh
+python unet/prep.py && python unet/hansen.py 100 && python unet/glad.py 100
+python unet/train.py roll 2019 2027 20000 4000     # the maps for 2019 to 2024 come from this run
+python unet/train.py roll 2025 2027 16000 3000     # a second network from scratch: the maps for 2025 and 2026
+UNET_INIT=<checkpoint written with the 2026 forecast> python unet/train.py ft 2026 2027 2000   # the map for 2027
+```
+
+Blend:
+
+```sh
+AZ_F=50 python pipeline/blendmaps.py "<unet folder>/roll_aefp_{y}.npy" 0.6 <tree map folders>
+```
+
+The gridding of Hansen, GLAD and the embeddings reads public cloud storage and takes most of the wall-clock time. This is the path the maintainers followed. Nobody has run it end to end on a clean machine yet, so this submission has the status "re-scored" and not "reproduced". A reproduction by someone outside the project would be a welcome first contribution.
 
 ## Compute and cost
 
-One cloud machine with a single NVIDIA L4 GPU for the U-Net and the 500 m trees, and a laptop for the 1 km steps. Hours and cost were not recorded for this run.
+One cloud machine with 16 vCPU, 64 GB of RAM and one NVIDIA L4 GPU (24 GB).
+
+The published trees took about 2 hours on its CPUs, in three processes. The published U-Net took about 7.5 GPU hours in total: the rolling run for 2019 to 2024, then the second network from scratch for 2025 to 2027. That is 9.5 machine hours and about 11 US dollars for the published model.
+
+All the experimentation behind `docs/BENCH.md` so far comes to roughly 30 machine hours, about 35 US dollars.
 
 ## Agent disclosure
 
