@@ -51,7 +51,10 @@ if "UNET_AEF" in os.environ:
         print("embeddings", f.stem, flush=True)
 DB = gpu("db") if (DATA / "db.npy").exists() and "UNET_DETER" in os.environ else None  # DETER alert bits (deter100.py)
 CTX = "UNET_CTX" in os.environ  # three wide-context planes: clearing density over 3 km and 10 km
-CIN = 12 + (4 if HB is not None else 0) + (5 + GB4 if GB is not None else 0) + (4 if DB is not None else 0) + (3 if CTX else 0) + (129 if EMB else 0)
+# JRC TMF first-disturbance bits (tmf.py 100): logging, fire damage and small openings. Kept in RAM, cut per batch.
+TB = np.load(DATA / "tb.npy") if "UNET_TMF" in os.environ else None
+tmf_cut = lambda yy, xx: torch.from_numpy(TB[yy.cpu().numpy(), xx.cpu().numpy()]).to(dev)
+CIN = 12 + (5 if TB is not None else 0) + (4 if HB is not None else 0) + (5 + GB4 if GB is not None else 0) + (4 if DB is not None else 0) + (3 if CTX else 0) + (129 if EMB else 0)
 
 
 def aef_planes(y0, x0, tt, size):
@@ -78,7 +81,7 @@ def aef_planes(y0, x0, tt, size):
     return torch.stack([up[b, :, oy[b]:oy[b] + size, ox[b]:ox[b] + size] for b in range(len(oy))])
 
 
-def channels(c, l, tn, tt, hb, gb, db=None):
+def channels(c, l, tn, tt, hb, gb, db=None, tb=None):
     """Input planes for forecast year index tt (year - 2000 of the last mapped PRODES year).
     c, l, tn: uint8 crops [B, H, W]; tt: [B, 1, 1]; hb, gb: Hansen and GLAD bit crops or None."""
     cleared = (c > 0) & (c <= tt)
@@ -106,6 +109,10 @@ def channels(c, l, tn, tt, hb, gb, db=None):
         have = di >= 0
         v = (db >> (3 * di.clamp(min=0))) & 7
         planes += [have & (v & 1 == 1), have & (v & 2 == 2), have & (v & 4 == 4), have.expand_as(forest)]
+    if tb is not None:  # dated like Hansen: first disturbed in the newest year, the two before, the 8 before those, earlier
+        s = tt.to(torch.int32) - 2
+        old = (s - 10).clamp(min=0)
+        planes += [(tb >> (s - k)) & 1 == 1 for k in range(3)] + [((tb >> old) & 255) != 0, ((tb & ((1 << old) - 1)) != 0) | ((tb >> 25) & 1 == 1)]
     x = torch.stack(planes, 1).float()
     if CTX:  # what a 3x3 kernel cannot see: how much clearing, recent and total, lies within 3 and 10 km
         recent, total = x[:, 1:4].sum(1, keepdim=True), x[:, 1:6].sum(1, keepdim=True)
@@ -166,8 +173,9 @@ def batch(draw, last_target, recent=0.0):
     gb = aug(GB[yy, xx]) if GB is not None else None
     db = aug(DB[yy, xx]) if DB is not None else None
     emb = aug(aef_planes(y0, x0, tt, TILE)) if EMB else None
+    tb = aug(tmf_cut(yy, xx)) if TB is not None else None
     tt = tt.to(torch.uint8)[:, None, None]
-    x, forest = channels(c, l, tn, tt, hb, gb, db)
+    x, forest = channels(c, l, tn, tt, hb, gb, db, tb)
     if EMB:
         x = torch.cat([x, emb], 1)
     return x, ((c == tt + 1) & (r == 0)).float(), forest
@@ -193,7 +201,8 @@ def predict(net, year, out):
             l = torch.where(inside, lc[yy, xx], torch.full_like(lc[:1, :1], 3))  # beyond the raster counts as outside
             x, forest = channels(cy[yy, xx] * inside, l, ten[yy, xx] * inside, tt,
                                  HB[yy, xx] * inside if HB is not None else None, GB[yy, xx] * inside if GB is not None else None,
-                                 DB[yy, xx] * inside if DB is not None else None)
+                                 DB[yy, xx] * inside if DB is not None else None,
+                                 tmf_cut(yy, xx) * inside if TB is not None else None)
             if EMB:
                 x = torch.cat([x, aef_planes(torch.full_like(x0, y - m), x0 - m, tt.flatten().expand(len(x0)), core + 2 * m)], 1)
             with torch.autocast("cuda", dtype=torch.float16):

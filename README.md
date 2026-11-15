@@ -60,7 +60,7 @@ On the site, links carry state: `#y=2023` replays a year, `#k=clear3` or `clear6
 
 - `benchmark/` is the open benchmark: rules, scorer, submissions, leaderboard.
 - `pipeline/` is the tree models and everything that feeds the site: the yearly map (`model.py`), the yearly total (`quantity.py`), the shorter windows and the other hazards (`horizons.py`), and the monthly totals for the four hazards (`monthly.py`). `pipeline/lab.py` is the model lab: it scores a model on cached feature tables in minutes (see [docs/BENCH.md](docs/BENCH.md)). `pipeline/extras.py` and `pipeline/tenure.py` build candidate inputs for it. `pipeline/benchdata.py` writes the benchmark's truth files.
-- `unet/` is the convolutional model, and the scripts that grid Hansen forest loss, GLAD alerts, AlphaEarth embeddings and DETER for both models.
+- `unet/` is the convolutional model, and the scripts that grid Hansen forest loss, GLAD alerts, the JRC disturbance record, AlphaEarth embeddings and DETER for both models.
 - `web/` is the site, static, with no build step. It paints the yearly clearing forecast at 500 m, the resolution it is scored at. `web/data` is generated and not in git. Only this folder is ever deployed.
 - `docs/` has the results, the research notes, the internal benchmark history and the brand.
 - `scripts/fetch.sh` downloads the raw inputs. No account or key is needed.
@@ -75,6 +75,7 @@ The code is under the [MIT licence](LICENSE). The data belongs to its producers,
 - **Active fire detections**, INPE Programa Queimadas.
 - **Global Forest Change**, Hansen, Potapov, Moore, Hancher et al., University of Maryland, Google, USGS and NASA, CC BY 4.0. Hansen et al. 2013, Science 342, 850 to 853.
 - **GLAD Sentinel-2 forest disturbance alerts**, GLAD laboratory, University of Maryland.
+- **Tropical Moist Forest** disturbance record, European Commission Joint Research Centre. Vancutsem et al. 2021, Science Advances 7, eabe1603.
 - **AlphaEarth Foundations Satellite Embedding**, CC BY 4.0. The AlphaEarth Foundations Satellite Embedding dataset is produced by Google and Google DeepMind.
 - **Embargoes and infraction notices**, IBAMA open data.
 - **Oceanic Niño Index and tropical North Atlantic index**, NOAA.

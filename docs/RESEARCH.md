@@ -47,7 +47,8 @@ Status is either **in** the current models or **next**.
 | Alerts | DETER clearing, degradation and selective logging, and fire scar alerts, trailing 12 and 3 months | INPE DETER-B, daily since Aug 2016 | in |
 | Fine disturbance | Forest loss at 30 m by calendar year 2001 to 2025: small openings, logging roads, burned forest | Hansen Global Forest Change v1.13 | in |
 | Fine disturbance | Sentinel-2 disturbance alerts at 10 m, trailing 12 and 3 months, from 2019 | GLAD-S2, University of Maryland | in |
-| Satellite embeddings | 64 numbers per pixel per year from Sentinel-1/2 and Landsat, 2018 to 2025, averaged to 500 m | Google AlphaEarth Foundations, open on GCS and AWS (CC BY 4.0) | tested, +1.5 points in trees, being added to the U-Net |
+| Fine disturbance | Year each 30 m pixel of moist forest was first disturbed, 1982 to 2025: selective logging, fire damage under the canopy, openings that close again | JRC Tropical Moist Forest v1 (Vancutsem et al. 2021), free download in 10 degree tiles | tested, +0.6 points in trees, going into both models |
+| Satellite embeddings | 64 numbers per pixel per year from Sentinel-1/2 and Landsat, 2018 to 2025, averaged to 500 m | Google AlphaEarth Foundations, open on GCS and AWS (CC BY 4.0) | in |
 | Fire | Reference-satellite fire detections, trailing 12 and 36 months, trend | INPE Queimadas, 2003 on | in |
 | Tenure | Indigenous lands, conservation units by group and creation year, distance to protected land | INPE auxiliary layers (FUNAI, MMA) | in |
 | Tenure | Undesignated public forests | SFB CNFP 2025 | next |

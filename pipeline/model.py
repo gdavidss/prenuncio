@@ -97,6 +97,7 @@ def events(name, m0, m1, col="n", active=False):
 
 
 _hansen = None
+_tmf = None
 
 
 def hansen(y0, y1):
@@ -253,6 +254,25 @@ def features(y, mc=None, pick=None, extra=None):
             now = np.asarray(a[k], np.float32) if a is not None else nan
             f[f"e{k}"] = now
             f[f"de{k}"] = now - np.asarray(b[k], np.float32) if a is not None and b is not None else nan
+    if "tmf" in X:
+        # JRC Tropical Moist Forest first-disturbance year (unet/tmf.py; copy its tmf500.npz into the grid folder
+        # as tmf.npz): logging, fire damage and small openings
+        # that PRODES and Hansen do not keep. Dated like Hansen: on 31 July the newest calendar year is last year's.
+        global _tmf
+        if _tmf is None:
+            w = np.load(GRID / "tmf.npz")
+            _tmf = (w["dist"], w["old"])
+        td, told = _tmf
+        e, px = mc // 12 + 2000 - (1 if mc % 12 >= 4 else 2), (C / 0.00026949459) ** 2
+        span = lambda a, b: td[a - 2001:b - 2000].sum(0, dtype=np.float32) / px
+        t1, t3, t10 = span(e, e), span(e - 2, e), span(e - 9, e)
+        ever = t10 + (td[:e - 9 - 2001].sum(0, dtype=np.float32) + told) / px
+        f["t1"], f["t1_n3"], f["t1_n9"] = t1, box(t1, 3), box(t1, 9)
+        f["t3"], f["t3_n3"], f["t3_n9"], f["t3_n25"] = t3, box(t3, 3), box(t3, 9), box(t3, 25)
+        f["t10_n9"], f["tever"], f["tever_n9"] = box(t10, 9), ever, box(ever, 9)
+        f["dist_t1"], f["dist_t3"] = dist(t1 >= 0.01), dist(t3 >= 0.01)
+        f["t3_forest"], f["t3_forest_n3"] = np.minimum(t3, forest), box(np.minimum(t3, forest), 3)  # disturbed, still forest to PRODES
+        f["t10_forest_n9"], f["t1_trend_n9"] = box(np.minimum(t10, forest), 9), box(t1 - span(e - 1, e - 1), 9)
     if "dir" in X:  # which side the clearing is on: neighbourhood means displaced one width each way
         for km in (3, 9):
             n = (km * K) | 1

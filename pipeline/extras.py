@@ -5,6 +5,7 @@ A group that proves itself gets moved into model.features().
   AZ_F=50 python extras.py glad2 <glad500wide.npz>   GLAD alerts over 31, 183 and 730 days, their trend, alerts inside forest
   AZ_F=50 python extras.py lags                      older clearing: the neighbourhood five years ago, its growth since, late-mapped clearing
   AZ_F=50 python extras.py aef <folder of emb_<year>.npy>   AlphaEarth satellite embeddings and their yearly change
+  AZ_F=50 python extras.py tmf <tmf500.npz>          JRC Tropical Moist Forest first-disturbance year (unet/tmf.py)
 """
 import sys
 from pathlib import Path
@@ -59,8 +60,23 @@ def aef(y, folder):
     return now + [now[k] - np.asarray(b[k], np.float32) if a is not None and b is not None else NAN for k in range(64)]
 
 
+def tmf(y, src):
+    """JRC TMF first disturbance (logging, fire damage, small openings), calendar years up to y-2, the
+    newest that holds nothing from after the forecast date. The last one, three and ten years, near and
+    wide, and the part of it that PRODES still calls forest."""
+    w, e, px = np.load(src), y - 2, (m.C / 0.00026949459) ** 2
+    d = w["dist"]
+    span = lambda a, b: d[a - 2001:b - 2000].sum(0, dtype=np.float32) / px
+    t1, t3, t10 = span(e, e), span(e - 2, e), span(e - 9, e)
+    ever = t10 + (d[:e - 9 - 2001].sum(0, dtype=np.float32) + w["old"]) / px
+    forest = m.forest_at(y - 1)
+    return [t1, m.box(t1, 3), m.box(t1, 9), t3, m.box(t3, 3), m.box(t3, 9), m.box(t3, 25), m.box(t10, 9), ever, m.box(ever, 9),
+            m.dist(t1 >= 0.01), m.dist(t3 >= 0.01), np.minimum(t3, forest), m.box(np.minimum(t3, forest), 3),
+            m.box(np.minimum(t10, forest), 9), m.box(t1 - span(e - 1, e - 1), 9)]
+
+
 if __name__ == "__main__":
     m.load_2026()
-    group = {"glad2": glad2, "lags": lambda y, *_: lags(y), "aef": aef}[sys.argv[1]]
+    group = {"glad2": glad2, "lags": lambda y, *_: lags(y), "aef": aef, "tmf": tmf}[sys.argv[1]]
     for y in range(2011, 2027):
         save(sys.argv[1], y, group(y, *sys.argv[2:3]))
