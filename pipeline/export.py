@@ -67,6 +67,11 @@ def main():
     # (pipeline/blendmaps.py). One grey PNG per year, value 85 * (flagged + 2 * cleared).
     if (m.OUT / "flags500.npz").exists():
         fl, b5 = np.load(m.OUT / "flags500.npz"), json.load(open(m.OUT / "bench500.json"))
+        # the best naive map at 500 m, from the tree run's own baselines (persistence and forest edge)
+        naive500 = {}
+        if (m.OUT / "naive500.json").exists():
+            for y, e in json.load(open(m.OUT / "naive500.json")).items():
+                naive500[y] = max(e[k]["capture@5"] for k in ("persistence_cell", "persistence_9km", "edge_distance"))
         for y in fl.files:
             a = fl[y]
             with rasterio.open(WEB / f"f{y}.png", "w", driver="PNG", width=a.shape[1], height=a.shape[0], count=1, dtype="uint8") as ds:
@@ -74,8 +79,11 @@ def main():
             for aux in WEB.glob(f"f{y}.png.aux.xml"):
                 aux.unlink()
             if int(y) in years:
+                flagged = int((a & 1).sum())
                 years[int(y)]["flags500"] = {"rows": int(a.shape[0]), "cols": int(a.shape[1]), "cell": float(m.C) / 2,
-                                             "capture5": b5.get(y, {}).get("full"), "flagged_cells": int((a & 1).sum())}
+                                             "capture5": b5.get(y, {}).get("full"), "flagged_cells": flagged,
+                                             "forest_cells": round(flagged / 0.05),  # flagged = the top 5% of forest cells
+                                             "naive5": naive500.get(y)}
     # shorter horizons and fire scars: live forecast only, with their backtest summary
     layers = {}
     hz = m.OUT / "horizons_eval.json"

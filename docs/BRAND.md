@@ -4,7 +4,7 @@ Prenúncio is the sign before the event: an early warning for the Brazilian Amaz
 
 ## Voice
 
-Number first, then the fact, then stop. One short sentence per idea, present tense, no adjectives, no reassurance, no exclamation marks. Measured and forecast are never dressed as each other, and a quantity that was not tested is not shown. English and Portuguese carry equal weight. No em dashes. In Portuguese, no label followed by a colon.
+Number first, then the fact, then stop. Quantities are named for what happened to the forest (km² cleared, burned, degraded, mined), never for the instrument that saw it. One short sentence per idea, present tense, no adjectives, no reassurance, no exclamation marks. Measured and forecast are never dressed as each other, and a quantity that was not tested is not shown. English and Portuguese carry equal weight. No em dashes. In Portuguese, no label followed by a colon.
 
 ## Colour
 
@@ -30,7 +30,7 @@ Barlow Condensed and Barlow, one family drawn from highway signs and number plat
 
 The level is counted, never chosen. For the hazard and place on screen:
 
-- its own alerts in the last three months against the same months a year before: 10% up is 1 point, double is 2;
+- its own last three months (what INPE's DETER measured) against the same months a year before: 10% up is 1 point, double is 2;
 - for the whole Amazon, a strong El Niño (ONI of 1.5 or more) is 1 point;
 - for a sector, the top 10% of its kind for forecast risk (or the top three) is 1 point, the top 2% (or first place) is 2.
 
@@ -41,7 +41,7 @@ The level is counted, never chosen. For the hazard and place on screen:
 | 2 | Warning | A full red band across the column. |
 | 3 or more | Alarm | The whole bulletin turns red. |
 
-On the timeline, red marks only what is above last year in the three months that set the level. In the signals, red marks only what is rising for the place on screen. A replayed past year has no level: the alarm is about now.
+On the timeline nothing is red: measured months are ink and the model's forecast is in the hazard's hue. In the signals, red marks only what is rising for the place on screen. A replayed past year has no level: the alarm is about now.
 
 ## Never
 

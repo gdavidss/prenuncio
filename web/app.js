@@ -6,8 +6,8 @@ const $ = id => document.getElementById(id);
 const T = {
   en: {
     hazard: { clear: "Clearing", fire: "Fire", degr: "Degradation", mine: "Mining" }, scale: { years: "Years", months: "Months" },
-    amazon: "Amazon", about: "About", close: "Close", sure: "How sure?", views: { chart: "Timeline", map: "Map" },
-    axisY: "km² cleared per year, August to July", axisM: s => `km² of ${s} per month`, axisW: s => `km² of ${s} per 12 months`,
+    amazon: "Amazon", about: "About", close: "Close", views: { chart: "Timeline", map: "Map" },
+    axisY: "km² cleared per year, August to July",
     shareOf: v => `<b>${v.pct}%</b> of forest cells flagged, ${v.km} km²`, prevYear: "Previous year", nextYear: "Next year",
     modes: { sectors: "Sectors", cells: "Cells" },
     kinds: { uf: "States", mun: "Municipalities", ti: "Indigenous lands", uc: "Conservation units" },
@@ -28,11 +28,24 @@ const T = {
     pastHere: v => `In ${v.y}, ${v.act} km² were cleared here, ${v.inside}% inside flagged cells`,
     pastHereNone: v => `In ${v.y} no clearing was mapped here`,
     pastHereSub: v => `Forecast share ${v.ps}%, actual share ${v.as}%.`,
-    run: v => `${v.what}${v.here} are running ${v.trend}`,
-    runFlat: v => `${v.km} km² of ${v.what.toLowerCase()}${v.here} in the last three months`,
-    runNone: v => `No ${v.what.toLowerCase()}${v.here} in the last three months`,
-    runSub: v => `${v.now} km² from ${v.m0} to ${v.m1}, against ${v.prev}.`,
-    nextSub: v => ` Ranks ${v.rank} of ${v.n} for the next ${v.h} months.`,
+    mfc: {
+      clear: v => `About ${v.km} km² expected to be cleared${v.here} in the next ${v.h} months`,
+      fire: v => `About ${v.km} km² expected to burn${v.here} in the next ${v.h} months`,
+      degr: v => `About ${v.km} km² expected to be degraded${v.here} in the next ${v.h} months`,
+      mine: v => `About ${v.km} km² of mining expected${v.here} in the next ${v.h} months`,
+    },
+    mobs: {
+      clear: v => `${v.km} km² cleared${v.here} in the last three months`,
+      fire: v => `${v.km} km² burned${v.here} in the last three months`,
+      degr: v => `${v.km} km² degraded${v.here} in the last three months`,
+      mine: v => `${v.km} km² mined${v.here} in the last three months`,
+    },
+    scaledSub: v => `Its share of the Amazon forecast, with no range of its own. ${v.rank} of ${v.n} ${v.many}.`,
+    rankOnly: v => `${v.rank} of ${v.n} ${v.many} on the risk map.`,
+    deter: "Monthly figures are what INPE's DETER detects. The yearly PRODES count is larger.",
+    axisM: { clear: "km² cleared per month", fire: "km² burned per month", degr: "km² degraded per month", mine: "km² mined per month" },
+    axisW: { fire: "km² burned per 12 months", degr: "km² degraded per 12 months", mine: "km² mined per 12 months" },
+    whole: "Whole Amazon", to: (a, b) => `${a} to ${b}`,
     where: {
       fire: v => `Where forest is most likely to burn by ${v.end}`,
       degr: v => `Where forest is most likely to be degraded or logged by ${v.end}`,
@@ -43,24 +56,19 @@ const T = {
     lastSub: {
       fire: v => `${v.km} km² burned${v.here} in the last twelve months.`,
       degr: v => `${v.km} km² degraded or logged${v.here} in the last twelve months.`,
-      mine: v => `${v.km} km² of mining alerts${v.here} in the last twelve months.`,
+      mine: v => `${v.km} km² mined${v.here} in the last twelve months.`,
     },
     here: " here",
-    series: { clear: "Clearing alerts", scar: "Burn scars", degr: "Degradation alerts", mine: "Mining alerts" },
-    short: { clear: "alerts", scar: "burn scars", degr: "degradation", mine: "mining" },
-    sign: { clear: "Clearing", scar: "Burn scars", degr: "Degradation", mine: "Mining", autos: "IBAMA fines" },
-    above: p => `${p}% above last year`, below: p => `${p}% below last year`, times: x => `at ${x} times last year's level`,
-    // depth on demand
-    sureY: v => `Every year from ${v.first} to ${v.last} was forecast without seeing it. On average the flagged 5% of forest caught ${v.cap}% of the clearing that followed, and repeating the year before caught ${v.naive}%. The total is the weak part, off by ${v.mape}% in a typical year.`,
-    sureL: v => `On ${v.n} past forecast dates the flagged 5% of forest caught ${v.cap}% of what followed, and repeating the year before caught ${v.naive}%. The amount has not been tested at this horizon, so none is shown.`,
+    short: { clear: "clearing", scar: "burning", degr: "degradation", mine: "mining" },
+    sign: { clear: "Clearing", scar: "Burning", degr: "Degradation", mine: "Mining", autos: "IBAMA fines" },
     hintY: v => `Pick a year from ${v.first} on to replay it.`,
-    lastYear: "a year before", now: "now", ahead: n => `${n} months`, window: "forecast",
+    now: "now", ahead: n => `${n} months`, window: "forecast",
     signs: "Signals, three months against last year",
     enso: ["El Niño", "La Niña", "Pacific"], ensoLevel: [["very strong", "strong", "moderate", "weak"], ["very strong", "strong", "moderate", "weak"], "neutral"],
     signTitle: v => `${v.now} in the last three months, ${v.prev} a year before`,
     legend: { clear: "Clearing risk", fire: "Fire risk", degr: "Degradation risk", mine: "Mining risk" }, lower: "lower", higher: "higher", next: n => `next ${n} months`,
     flagged: "flagged", hit: "flagged and cleared", miss: "cleared, missed",
-    about_: x => `about ${x} km²`, range: (lo, hi) => `likely ${lo} to ${hi}`, inside: p => `${p}% inside flagged cells`, was: x => `${x} a year before`,
+    about_: x => `about ${x} km²`, range: (lo, hi) => `likely ${lo} to ${hi}`, inside: p => `${p}% inside flagged cells`,
     tipFc: v => `about ${v.exp} km² expected`, tipPast: v => `${v.exp} km² expected, ${v.act} cleared`, tipRank: v => `${v.rank} of ${v.n}`,
     credit: "Imagery: Esri, Maxar, Earthstar Geographics",
     aboutHtml: v => `
@@ -68,20 +76,22 @@ const T = {
       <p>Prenúncio is an early warning for Brazil's Legal Amazon. It forecasts where forest will be cleared, burned, degraded or mined next, and shows how hard the pressure is now.</p>
       <h3>What it shows</h3>
       <ul>
-        <li><b>The level.</b> Quiet, Watch, Warning or Alarm. It is counted from the hazard's alerts over three months against a year before, a strong El Niño for the whole Amazon, and a sector's rank in the forecast. Red follows the level and nothing else.</li>
-        <li><b>The timeline.</b> By year, clearing with the forecast at the end, and any year since ${v.first} can be replayed. By month, alerts against the same month a year before, with the forecast window ahead.</li>
+        <li><b>The level.</b> Quiet, Watch, Warning or Alarm. It is counted from the hazard's last three months against a year before, a strong El Niño for the whole Amazon, and a sector's rank in the forecast. Red follows the level and nothing else.</li>
+        <li><b>The timeline.</b> By year, clearing with the forecast at the end, and any year since ${v.first} can be replayed. By month, what was cleared and what the model expects for each month ahead, with its range.</li>
         <li><b>The map.</b> By sector or by cell. Flagged cells are the 5% of standing forest where the model expects the most. The yearly clearing forecast is painted at 500 metres, the rest at one kilometre.</li>
       </ul>
       <h3>How sure</h3>
       <ul>
         <li><b>Where is the strong part.</b> Forecasting each year from ${v.first} to ${v.last} blind, the flagged 5% of forest held ${v.cap}% of the clearing that followed. Repeating the year before held ${v.naive}%.</li>
         <li><b>How much is the weak part.</b> The yearly total missed by ${v.mape}% on average, against ${v.previsia}% for Imazon's PrevisIA as published.</li>
-        <li><b>Shorter windows and other hazards.</b> Tested for place only, on ${v.tmin} to ${v.tmax} past dates, so they show no amount.</li>
+        <li><b>Shorter windows and other hazards.</b> Their maps were tested for place, on ${v.tmin} to ${v.tmax} past dates.</li>${v.mo ? `
+        <li><b>Month by month.</b> On ${v.mo.origins} past forecast dates the total cleared over three months missed by ${v.mo.h3}% on average, against ${v.mo.n3}% for repeating the same months of the year before. Monthly figures are what INPE's DETER detects, and the yearly PRODES count is larger.</li>` : ""}
       </ul>
       <h3>What it cannot do</h3>
       <ul>
         <li>Say why a place is flagged. The signals are things the model reads, not causes.</li>
         <li>Give a range for a single sector, or see a change of policy coming.</li>
+        <li>Forecast one municipality, Indigenous land or conservation unit month by month. Theirs is their share of the Amazon forecast.</li>
         <li>Replace INPE's official figures. The ${v.partial} outcome covers priority scenes only so far.</li>
       </ul>
       <h3>Open and democratic</h3>
@@ -91,9 +101,9 @@ const T = {
       <p>INPE PRODES and DETER, through TerraBrasilis, and INPE Queimadas fire detections. Global Forest Change by Hansen, UMD, Google, USGS and NASA. GLAD Sentinel-2 alerts, University of Maryland. IBAMA open enforcement records. NOAA's Oceanic Niño Index. Boundaries of states, municipalities, Indigenous lands and conservation units as INPE distributes them. Close-up imagery by Esri, Maxar and Earthstar Geographics. Map drawn with Leaflet.</p>`,
   },
   pt: {
-    hazard: { clear: "Desmatamento", fire: "Fogo", degr: "Degradação", mine: "Mineração" }, scale: { years: "Anos", months: "Meses" },
-    amazon: "Amazônia", about: "Sobre", close: "Fechar", sure: "Quão certo?", views: { chart: "Linha do tempo", map: "Mapa" },
-    axisY: "km² desmatados por ano, de agosto a julho", axisM: s => `km² de ${s} por mês`, axisW: s => `km² de ${s} em 12 meses`,
+    hazard: { clear: "Desmatamento", fire: "Fogo", degr: "Degradação", mine: "Garimpo" }, scale: { years: "Anos", months: "Meses" },
+    amazon: "Amazônia", about: "Sobre", close: "Fechar", views: { chart: "Linha do tempo", map: "Mapa" },
+    axisY: "km² desmatados por ano, de agosto a julho",
     shareOf: v => `<b>${v.pct}%</b> das células de floresta marcadas, ${v.km} km²`, prevYear: "Ano anterior", nextYear: "Ano seguinte",
     modes: { sectors: "Setores", cells: "Células" },
     kinds: { uf: "Estados", mun: "Municípios", ti: "Terras indígenas", uc: "Unidades de conservação" },
@@ -112,38 +122,47 @@ const T = {
     pastHere: v => `Em ${v.y}, ${v.act} km² desmatados aqui, ${v.inside}% em células marcadas`,
     pastHereNone: v => `Em ${v.y}, nenhum desmatamento mapeado aqui`,
     pastHereSub: v => `Fatia prevista de ${v.ps}%, fatia real de ${v.as}%.`,
-    run: v => `${v.what}${v.here} estão ${v.trend}`,
-    runFlat: v => `${v.km} km² de ${v.what.toLowerCase()}${v.here} nos últimos três meses`,
-    runNone: v => `Sem ${v.what.toLowerCase()}${v.here} nos últimos três meses`,
-    runSub: v => `${v.now} km² de ${v.m0} a ${v.m1}, contra ${v.prev}.`,
-    nextSub: v => ` ${v.rank} entre ${v.n} nos próximos ${v.h} meses.`,
+    mfc: {
+      clear: v => `Cerca de ${v.km} km² devem ser desmatados${v.here} nos próximos ${v.h} meses`,
+      fire: v => `Cerca de ${v.km} km² devem queimar${v.here} nos próximos ${v.h} meses`,
+      degr: v => `Cerca de ${v.km} km² devem ser degradados${v.here} nos próximos ${v.h} meses`,
+      mine: v => `Cerca de ${v.km} km² de garimpo devem surgir${v.here} nos próximos ${v.h} meses`,
+    },
+    mobs: {
+      clear: v => `${v.km} km² desmatados${v.here} nos últimos três meses`,
+      fire: v => `${v.km} km² queimados${v.here} nos últimos três meses`,
+      degr: v => `${v.km} km² degradados${v.here} nos últimos três meses`,
+      mine: v => `${v.km} km² de garimpo${v.here} nos últimos três meses`,
+    },
+    scaledSub: v => `É a fatia deste setor na previsão da Amazônia, sem faixa própria. ${v.rank} entre ${v.n} ${v.many}.`,
+    rankOnly: v => `${v.rank} entre ${v.n} ${v.many} no mapa de risco.`,
+    deter: "Os valores mensais são o que o DETER, do INPE, detecta. A contagem anual do PRODES é maior.",
+    axisM: { clear: "km² desmatados por mês", fire: "km² queimados por mês", degr: "km² degradados por mês", mine: "km² de garimpo por mês" },
+    axisW: { fire: "km² queimados em 12 meses", degr: "km² degradados em 12 meses", mine: "km² de garimpo em 12 meses" },
+    whole: "Amazônia inteira", to: (a, b) => `${a} a ${b}`,
     where: {
       fire: v => `Onde a floresta tem mais chance de queimar até ${v.end}`,
       degr: v => `Onde a floresta tem mais chance de ser degradada até ${v.end}`,
-      mine: v => `Onde a mineração tem mais chance de avançar até ${v.end}`,
+      mine: v => `Onde o garimpo tem mais chance de avançar até ${v.end}`,
     },
     whereHere: v => `${v.rank} entre ${v.n} ${v.many} em risco de ${v.risk} até ${v.end}`,
-    risk: { fire: "fogo", degr: "degradação", mine: "mineração" },
+    risk: { fire: "fogo", degr: "degradação", mine: "garimpo" },
     lastSub: {
       fire: v => `${v.km} km² queimados${v.here} nos últimos doze meses.`,
       degr: v => `${v.km} km² degradados${v.here} nos últimos doze meses.`,
-      mine: v => `${v.km} km² de alertas de mineração${v.here} nos últimos doze meses.`,
+      mine: v => `${v.km} km² de garimpo${v.here} nos últimos doze meses.`,
     },
     here: " aqui",
-    series: { clear: "Alertas de desmatamento", scar: "Cicatrizes de queimada", degr: "Alertas de degradação", mine: "Alertas de mineração" },
-    short: { clear: "alertas", scar: "cicatrizes", degr: "degradação", mine: "mineração" },
-    sign: { clear: "Desmate", scar: "Cicatrizes", degr: "Degradação", mine: "Mineração", autos: "Autos IBAMA" },
-    above: p => `${p}% acima do ano passado`, below: p => `${p}% abaixo do ano passado`, times: x => `em ${x} vezes o nível do ano passado`,
-    sureY: v => `Cada ano de ${v.first} a ${v.last} foi previsto sem ser visto. Em média, os 5% de floresta marcados pegaram ${v.cap}% do desmatamento que veio depois, e repetir o ano anterior pegou ${v.naive}%. O total é a parte fraca e erra ${v.mape}% em um ano típico.`,
-    sureL: v => `Em ${v.n} datas de previsão passadas, os 5% de floresta marcados pegaram ${v.cap}% do que veio depois, e repetir o ano anterior pegou ${v.naive}%. A quantidade não foi testada neste horizonte, então nenhuma aparece.`,
+    short: { clear: "desmatamento", scar: "queimadas", degr: "degradação", mine: "garimpo" },
+    sign: { clear: "Desmate", scar: "Queimadas", degr: "Degradação", mine: "Garimpo", autos: "Autos IBAMA" },
     hintY: v => `Escolha um ano a partir de ${v.first} para revê-lo.`,
-    lastYear: "um ano antes", now: "agora", ahead: n => `${n} meses`, window: "previsão",
+    now: "agora", ahead: n => `${n} meses`, window: "previsão",
     signs: "Sinais, três meses contra o ano passado",
     enso: ["El Niño", "La Niña", "Pacífico"], ensoLevel: [["muito forte", "forte", "moderado", "fraco"], ["muito forte", "forte", "moderada", "fraca"], "neutro"],
     signTitle: v => `${v.now} nos últimos três meses, ${v.prev} um ano antes`,
-    legend: { clear: "Risco de desmatamento", fire: "Risco de fogo", degr: "Risco de degradação", mine: "Risco de mineração" }, lower: "menor", higher: "maior", next: n => `próximos ${n} meses`,
+    legend: { clear: "Risco de desmatamento", fire: "Risco de fogo", degr: "Risco de degradação", mine: "Risco de garimpo" }, lower: "menor", higher: "maior", next: n => `próximos ${n} meses`,
     flagged: "marcado", hit: "marcado e desmatado", miss: "desmatado, não marcado",
-    about_: x => `cerca de ${x} km²`, range: (lo, hi) => `provável de ${lo} a ${hi}`, inside: p => `${p}% em células marcadas`, was: x => `${x} um ano antes`,
+    about_: x => `cerca de ${x} km²`, range: (lo, hi) => `provável de ${lo} a ${hi}`, inside: p => `${p}% em células marcadas`,
     tipFc: v => `cerca de ${v.exp} km² esperados`, tipPast: v => `${v.exp} km² esperados, ${v.act} desmatados`, tipRank: v => `${v.rank} entre ${v.n}`,
     credit: "Imagens: Esri, Maxar, Earthstar Geographics",
     aboutHtml: v => `
@@ -151,20 +170,22 @@ const T = {
       <p>O Prenúncio é um alerta antecipado para a Amazônia Legal. Ele prevê onde a floresta vai ser desmatada, queimada, degradada ou minerada a seguir e mostra quanta pressão existe agora.</p>
       <h3>O que ele mostra</h3>
       <ul>
-        <li><b>O nível.</b> Calmo, Atenção, Alerta ou Alarme. Ele é contado a partir dos alertas daquele risco em três meses contra um ano antes, de um El Niño forte para a Amazônia inteira e da posição do setor na previsão. O vermelho segue o nível e nada mais.</li>
-        <li><b>A linha do tempo.</b> Por ano, o desmatamento com a previsão no fim, e qualquer ano desde ${v.first} pode ser revisto. Por mês, os alertas contra o mesmo mês um ano antes, com a janela de previsão à frente.</li>
+        <li><b>O nível.</b> Calmo, Atenção, Alerta ou Alarme. Ele é contado a partir dos últimos três meses daquele risco contra um ano antes, de um El Niño forte para a Amazônia inteira e da posição do setor na previsão. O vermelho segue o nível e nada mais.</li>
+        <li><b>A linha do tempo.</b> Por ano, o desmatamento com a previsão no fim, e qualquer ano desde ${v.first} pode ser revisto. Por mês, o que foi desmatado e o que o modelo espera para cada mês à frente, com a faixa.</li>
         <li><b>O mapa.</b> Por setor ou por célula. As células marcadas são os 5% da floresta em pé onde o modelo espera mais. A previsão anual de desmatamento é pintada a 500 metros, e o resto a um quilômetro.</li>
       </ul>
       <h3>Quão certo</h3>
       <ul>
         <li><b>Onde é a parte forte.</b> Prevendo cada ano de ${v.first} a ${v.last} às cegas, os 5% de floresta marcados concentraram ${v.cap}% do desmatamento que veio depois. Repetir o ano anterior concentrou ${v.naive}%.</li>
         <li><b>Quanto é a parte fraca.</b> O total anual errou ${v.mape}% em média, contra ${v.previsia}% do PrevisIA, do Imazon, como publicado.</li>
-        <li><b>Janelas curtas e outros riscos.</b> Testados só quanto ao lugar, em ${v.tmin} a ${v.tmax} datas passadas, e por isso não mostram quantidade.</li>
+        <li><b>Janelas curtas e outros riscos.</b> Os mapas foram testados quanto ao lugar, em ${v.tmin} a ${v.tmax} datas passadas.</li>${v.mo ? `
+        <li><b>Mês a mês.</b> Em ${v.mo.origins} datas de previsão passadas, o total desmatado em três meses errou ${v.mo.h3}% em média, contra ${v.mo.n3}% de repetir os mesmos meses do ano anterior. Os valores mensais são o que o DETER, do INPE, detecta, e a contagem anual do PRODES é maior.</li>` : ""}
       </ul>
       <h3>O que ele não faz</h3>
       <ul>
         <li>Dizer por que um lugar foi marcado. Os sinais são coisas que o modelo lê, não causas.</li>
         <li>Dar uma faixa para um setor sozinho, nem ver chegar uma mudança de política.</li>
+        <li>Prever mês a mês um município, uma terra indígena ou uma unidade de conservação. A previsão deles é a fatia que têm na previsão da Amazônia.</li>
         <li>Substituir os números oficiais do INPE. O resultado de ${v.partial} cobre só cenas prioritárias até agora.</li>
       </ul>
       <h3>Aberto e democrático</h3>
@@ -188,7 +209,7 @@ const share = x => (x < 0.1 ? t().tiny : fmt(x, 1));
 const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
 const css = name => getComputedStyle(document.documentElement).getPropertyValue(name).trim();
 
-const [M, R] = await Promise.all(["meta", "regions"].map(f => fetch(`data/${f}.json`).then(r => r.json())));
+const [M, R, MO] = await Promise.all(["meta", "regions", "monthly"].map(f => fetch(`data/${f}.json`).then(r => (r.ok ? r.json() : null)).catch(() => null)));  // monthly.json may not be there yet
 M.layers ||= {};
 if (Math.abs(R.total_km2 / M.forecast.total_km2 - 1) > 1e-6) console.warn("Sector numbers are older than the forecast, run pipeline/regions.py");
 const PARTIAL = 2026;  // the year whose outcome is INPE's priority scenes only, until the full map is out
@@ -221,9 +242,10 @@ const isPast = () => typeof key() === "number" && info().actual_km2 != null;
 // the share of a year's clearing inside its flagged cells, for the cells the site paints: the 500 m flags when
 // the export has them, the 1 km ones otherwise
 const cap5 = Y => Y.flags500?.capture5 ?? Y.capture["5"];
+const naive5 = Y => Y.flags500?.naive5 ?? Y.naive["5"];  // the naive map's share, at 500 m once the export has it
 const month = (y, mo, opt = { month: "long", year: "numeric" }) => new Date(y, mo, 1).toLocaleDateString(loc(), opt);
 const endOf = L_ => { const [y, mo] = L_.from.split("-").map(Number); return month(y, mo - 2 + L_.months); };
-const [LY, LM] = R.months.end.split("-").map(Number);            // the last complete month of alerts
+const [LY, LM] = (MO?.last_month || R.months.end).split("-").map(Number);  // the last complete month
 const back = (k, opt) => month(LY, LM - 1 - k, opt);              // the month k months before it
 
 // ---------- sectors: numbers and shapes per kind, fetched when first needed ----------
@@ -252,6 +274,22 @@ const three = a => [ago(a, 0) + ago(a, 1) + ago(a, 2), ago(a, 12) + ago(a, 13) +
 const delta = (now, prev, unit = " km²") => (prev < 1 ? (now < 0.05 ? null : km(now) + unit) : now / prev >= 2 ? "×" + fmt(now / prev, 1) : (now >= prev ? "+" : "−") + fmt(Math.abs(100 * (now / prev - 1))) + "%");
 const rising = (now, prev) => (now < 1 ? 0 : now / Math.max(prev, 1) >= 2 ? 2 : now / Math.max(prev, 1) >= 1.1 ? 1 : 0);
 const enso = () => { const x = R.months.oni.v.at(-1), side = x >= 0.5 ? 0 : x <= -0.5 ? 1 : 2, a = Math.abs(x); return { x, side, word: side === 2 ? t().ensoLevel[2] : t().ensoLevel[side][a >= 2 ? 0 : a >= 1.5 ? 1 : a >= 1 ? 2 : 3] }; };
+
+// ---------- month by month: what was measured, and what the model expects for the months ahead ----------
+// data/monthly.json has both for the whole Amazon and for each state. A municipality, an Indigenous land or a
+// conservation unit has no forecast of its own there: it gets its share of the Amazon forecast, the share being
+// its part of the risk map on screen, and no range. That is the same split the yearly number uses.
+function monthsOf(it) {
+  const name = HAZ[S.hazard].series, hz = MO?.hazards?.[name], own = !it ? hz : S.kind === "uf" ? hz?.states?.[it.id] : null;
+  const ym = k => { const d = new Date(LY, LM - 1 - k, 1); return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}`; };
+  const a = monthly(it, name) || [], [ry, rm] = R.months.end.split("-").map(Number), off = (LY - ry) * 12 + LM - rm;  // regions.json may end on another month
+  const obs = own ? k => own.history[ym(k)] ?? 0 : k => ago(a, k - off);
+  const part = it && !own && hz ? expOf(it) / info().risk_km2 : 1;
+  const fc = own ? own.forecast : hz ? hz.forecast.map(f => ({ month: f.month, p50: f.p50 * part })) : null;
+  return { obs, fc, scaled: !!(it && !own && hz) };
+}
+// the months ahead added up: the middle, and the range where the forecast has one
+const ahead = (fc, n) => fc && fc.length >= n && { km: fc.slice(0, n).reduce((s, f) => s + f.p50, 0), lo: fc[0].p10 == null ? null : fc.slice(0, n).reduce((s, f) => s + f.p10, 0), hi: fc[0].p90 == null ? null : fc.slice(0, n).reduce((s, f) => s + f.p90, 0) };
 
 // ---------- the alert level (docs/BRAND.md): counted from the hazard's own alerts, plus El Niño for the
 // whole Amazon or the forecast rank for a sector. 0 quiet, 1 watch, 2 warning, 3 alarm.
@@ -589,12 +627,6 @@ async function select(id, fit = true) {
 }
 
 // ---------- the bulletin: the level, then what is happening or what to expect, in one sentence ----------
-function trend(now, prev) {
-  const L_ = t();
-  if (prev < 1) return null;  // too little a year before for a ratio to mean anything
-  const r = now / prev;
-  return r >= 2 ? L_.times(fmt(r, 1)) : r >= 1 ? L_.above(fmt(100 * (r - 1))) : L_.below(fmt(100 * (1 - r)));
-}
 let turn = 0;
 async function say() {
   const mine = ++turn, L_ = t(), I = info(), k = key(), yearly = typeof k === "number", past = isPast(), y = S.year, hz = S.hazard;
@@ -604,19 +636,23 @@ async function say() {
   const v = { y, here, many: L_.many[S.kind], n: K?.items.length };
   if (it) v.rank = L_.rank(rankOf(it, K));
   let head, sub = "";
-  if (S.scale === "months") {
-    // what is happening: the last three months of alerts against the same months a year before
-    const name = HAZ[hz].series, [now, prev] = three(monthly(it, name) || []), tr = trend(now, prev), what = L_.series[name];
-    head = tr ? L_.run({ what, here, trend: tr }) : now >= 0.05 ? L_.runFlat({ what, here, km: km(now) }) : L_.runNone({ what, here });
-    if (now >= 0.05 || prev >= 0.05) sub = L_.runSub({ now: km(now), prev: km(prev), m0: back(2, { month: "long" }), m1: back(0, { month: "long" }) });
-    if (it) sub += L_.nextSub({ ...v, h: I.months });
-  } else if (hz !== "clear") {
-    const a = it ? it.L[k] : R.amazon.L[k];
-    head = it ? L_.whereHere({ ...v, risk: L_.risk[hz], end: endOf(I) }) : L_.where[hz]({ end: endOf(I) });
-    if (a?.length > 1) sub = L_.lastSub[hz]({ km: km(a.at(-1)), here });
+  if (S.scale === "months" || hz !== "clear") {
+    // what the model expects over the months ahead; where there is no monthly forecast, what was measured
+    const mo = monthsOf(it), sum = ahead(mo.fc, I.months);
+    if (sum && (sum.km >= 0.05 || !it)) {
+      head = L_.mfc[hz]({ km: approx(sum.km), here, h: I.months });
+      sub = mo.scaled ? L_.scaledSub(v) : sum.lo != null ? L_.fcSub({ lo: approx(sum.lo), hi: approx(sum.hi) }) : "";
+    } else if (S.scale === "months") {
+      head = L_.mobs[hz]({ km: km(mo.obs(0) + mo.obs(1) + mo.obs(2)), here });
+      if (it) sub = L_.rankOnly(v);
+    } else {
+      const a = it ? it.L[k] : R.amazon.L[k];
+      head = it ? L_.whereHere({ ...v, risk: L_.risk[hz], end: endOf(I) }) : L_.where[hz]({ end: endOf(I) });
+      if (a?.length > 1) sub = L_.lastSub[hz]({ km: km(a.at(-1)), here });
+    }
   } else if (past) {
     const act = it ? actOf(it) : I.actual_km2;
-    if (!it) { head = L_.past({ y, cap: pct(cap5(I)) }); sub = L_.pastSub({ naive: pct(I.naive["5"]) }); }
+    if (!it) { head = L_.past({ y, cap: pct(cap5(I)) }); sub = L_.pastSub({ naive: pct(naive5(I)) }); }
     else {
       head = act < 0.05 ? L_.pastHereNone(v) : L_.pastHere({ y, act: km(act), inside: pct(Math.min(1, hitOf(it) / act)) });
       sub = L_.pastHereSub({ ps: share(100 * expOf(it) / I.risk_km2), as: share(100 * act / I.actual_km2) });
@@ -635,16 +671,12 @@ async function say() {
   document.documentElement.dataset.level = $("lead").dataset.l = l;
   $("level").innerHTML = (A ? `<span class="meter" aria-hidden="true">${[1, 2, 3].map(n => `<i${n <= A.l ? ' class="on"' : ""}></i>`).join("")}</span>` : "")
     + `<b>${A ? L_.level[A.l] : L_.replay}</b><span>${A ? A.why.join(", ") : L_.made(y)}</span>`;
-  $("scope").innerHTML = it ? `<button>${L_.amazon}</button><span aria-hidden="true">/</span><span>${esc(it.n)}${it.s ? ", " + it.s : ""}</span>` : `<span>${L_.amazon}</span>`;
-  $("say").textContent = head.replaceAll(" km²", " km²");
-  $("sub").textContent = sub.trim().replaceAll(" km²", " km²");
-  // depth on demand: how well this kind of forecast has done
-  const hy = R.hyears, mean = f => hy.reduce((s, yy) => s + f(M.years[yy]), 0) / hy.length;
-  $("sure").querySelector("summary").textContent = L_.sure;
-  $("sure").querySelector("p").textContent = yearly
-    ? L_.sureY({ first: hy[0], last: hy.at(-1), cap: pct(mean(cap5)), naive: pct(mean(Y => Y.naive["5"])), mape: pct(M.forecast.mape) })
-    : L_.sureL({ n: I.tests, cap: pct(I.capture["5"]), naive: pct(I.naive["5"]) });
-  $("hint").textContent = yearly ? L_.hintY({ first: hy[0] }) : "";
+  // the whole Amazon needs no label; a sector is named, with a way back
+  $("scope").innerHTML = it ? `<span>${esc(it.n)}${it.s ? ", " + it.s : ""}</span><button aria-label="${L_.whole}" title="${L_.whole}">×</button>` : "";
+  $("scope").hidden = !it;
+  $("say").textContent = head.replaceAll(" km²", "\u00a0km²");
+  $("sub").textContent = sub.trim().replaceAll(" km²", "\u00a0km²");
+  $("hint").textContent = S.scale === "months" ? L_.deter : yearly ? L_.hintY({ first: R.hyears[0] }) : "";
   chart(it);
   signs(it);
   // what the map colours mean
@@ -655,7 +687,7 @@ async function say() {
     : `<span>${L_.lower}<span class="ramp"><i style="--c:rgb(172,199,166)"></i>${steps().slice(0, 4).map(c => `<i style="--c:rgb(${c})"></i>`).join("")}</span>${L_.higher}</span>`);
   flaggedShare();
 }
-$("scope").onclick = e => { if (e.target.closest("button")) { select(null); pristine = true; whole(!calm()); } };
+$("scope").onclick = e => { if (e.target.closest("button")) { select(null); if (mapOn()) { pristine = true; whole(!calm()); } } };
 
 // ---------- signals: what the model is reading, as small traces. Red only where it is rising. ----------
 function signs(it) {
@@ -694,17 +726,19 @@ function ticks(max) {
 function series(it) {
   const I = info(), k = key();
   if (S.scale === "months") {
-    const a = monthly(it, HAZ[S.hazard].series) || [];
+    const mo = monthsOf(it);
     return Array.from({ length: 36 }, (_, s) => {
-      const n = 23 - s, d = new Date(LY, LM - 1 - n, 1);  // n months back; negative is ahead
-      return { key: s, d, v: n >= 0 ? ago(a, n) : null, was: ago(a, n + 12), cur: n >= 0 && n < 3, last3: n >= 0 && n < 3, sub: month(d.getFullYear(), d.getMonth()) };
+      const n = 23 - s, d = new Date(LY, LM - 1 - n, 1), sub = month(d.getFullYear(), d.getMonth()), f = n < 0 && mo.fc?.[-n - 1];  // n months back; negative is ahead
+      return n >= 0 ? { key: s, d, v: mo.obs(n), cur: n < 3, sub } : f ? { key: s, d, v: f.p50, fc: true, range: f.p10 == null ? null : [f.p10, f.p90], dim: -n > I.months, sub } : { key: s, d, v: null, sub };
     });
   }
   if (S.hazard !== "clear") {
-    const vals = (it ? it.L[k] : R.amazon.L[k]) || [];
-    const span = w => { const [y, m_] = w.split("-").map(Number); return `${month(y, m_ - 1)} – ${month(y, m_ - 2 + I.months)}`; };
+    const vals = (it ? it.L[k] : R.amazon.L[k]) || [], sum = ahead(monthsOf(it).fc, I.months);
+    const span = w => { const [y, m_] = w.split("-").map(Number); return t().to(month(y, m_ - 1), month(y, m_ - 2 + I.months)); };
     const end = w => new Date(+w.slice(0, 4), +w.slice(5) - 2 + I.months, 1).getFullYear();
-    return [...(R.layers[k]?.windows || []).map((w, i) => ({ key: w, label: end(w), v: vals[i + 1] ?? 0, sub: span(w) })), { key: I.from, label: end(I.from), v: null, win: true }];
+    // the last slot is the forecast: the months ahead added up, or only the window when there is no monthly forecast
+    const last = sum ? { v: sum.km, fc: true, on: true, range: sum.lo == null ? null : [sum.lo, sum.hi], sub: span(I.from) } : { v: null, win: true };
+    return [...(R.layers[k]?.windows || []).map((w, i) => ({ key: w, label: end(w), v: vals[i + 1] ?? 0, sub: span(w) })), { key: I.from, label: end(I.from), ...last }];
   }
   const fy = M.forecast.year;
   const out = R.cyears.map((y, i) => {
@@ -721,18 +755,17 @@ function chart(it = scope) {
   bars = series(it);
   const monthsView = S.scale === "months", sector = !!it;
   const gut = 42, top = monthsView ? 40 : 46, bot = monthsView ? 34 : 22, pw = W - gut, ph = H - top - bot, pitch = pw / bars.length, bw = Math.max(3, pitch * (monthsView ? 0.62 : 0.72));
-  // the scale fits the bars. A year-before tick above it (2024's fires, say) is pinned to the top as a caret.
-  const peak = b => Math.max(b.v ?? b.was ?? 0, b.range ? b.range[1] : 0);
+  const peak = b => Math.max(b.v ?? 0, b.range ? b.range[1] : 0);
   const max = Math.max(sector ? 0.5 : 1, ...bars.map(peak));
   const Y = v => top + ph - ph * Math.min(v, max) / max, X = i => gut + i * pitch, y0 = Y(0);
   const [tk, dec] = ticks(max), skip = pitch < 26 ? 2 : 1, onAt = bars.findIndex(b => b.on);
   let s = `<svg width="${W}" height="${H}" role="img"><defs><pattern id="hatch" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="6" height="6" fill="rgb(${steps()[0]})"/><rect width="3" height="6" fill="rgb(${steps()[3]})"/></pattern></defs><g class="grid">`;
   for (const v of tk) s += `<line x1="${gut}" x2="${W}" y1="${Y(v)}" y2="${Y(v)}"/><text x="${gut - 8}" y="${Y(v) + 4}" text-anchor="end">${fmt(v, dec)}</text>`;
   // what the axis counts, written on it
-  const name = L_.series[HAZ[S.hazard].series].toLowerCase();
-  s += `<text class="unit" x="0" y="${monthsView ? top - 10 : 13}">${monthsView ? L_.axisM(name) : S.hazard === "clear" ? L_.axisY : L_.axisW(name)}</text></g>`;
+  s += `<text class="unit" x="0" y="${monthsView ? top - 10 : 13}">${monthsView ? L_.axisM[S.hazard] : S.hazard === "clear" ? L_.axisY : L_.axisW[S.hazard]}</text></g>`;
   if (monthsView) {
-    // the window ahead: from now to the end of the chosen horizon. For clearing there are two to choose from.
+    // the window ahead: from now to the end of the chosen horizon, the months the headline adds up.
+    // For clearing there are two to choose from.
     const I = info(), hs = S.hazard === "clear" ? [3, 6].filter(h => M.layers["clear" + h]) : [I.months], now = X(24);
     s += `<rect class="win" x="${now}" y="${top}" width="${I.months * pitch}" height="${ph}"/><line class="winrule" x1="${now}" x2="${now + I.months * pitch}" y1="${top}" y2="${top}"/>`;
     s += `<line class="now" x1="${now}" x2="${now}" y1="${top - 24}" y2="${y0}"/><text class="caps" x="${now - 7}" y="${top - 10}" text-anchor="end">${L_.now}</text>`;
@@ -741,7 +774,7 @@ function chart(it = scope) {
   bars.forEach((b, i) => {
     const x = X(i) + (pitch - bw) / 2, cx = x + bw / 2, h = b.v > 0 ? Math.max(1.5, ph * Math.min(b.v, max) / max) : 0;
     const rect = (cls, yy, hh, fill = "") => `<rect class="${cls}" x="${x}" y="${yy}" width="${bw}" height="${Math.max(0, hh)}" ${fill}/>`;
-    s += `<g class="bar${b.can ? " can" : ""}${b.on ? " on" : ""}${b.cur ? " cur" : ""}" data-i="${i}"${b.can ? ` tabindex="0" role="button" aria-pressed="${!!b.on}" aria-label="${b.label}"` : ""}>`;
+    s += `<g class="bar${b.can ? " can" : ""}${b.on ? " on" : ""}${b.cur ? " cur" : ""}${b.dim ? " dim" : ""}" data-i="${i}"${b.can ? ` tabindex="0" role="button" aria-pressed="${!!b.on}" aria-label="${b.label}"` : ""}>`;
     if (b.win) s += `<rect class="win" x="${X(i) + 1}" y="${top}" width="${pitch - 2}" height="${ph}"/><line class="winrule" x1="${X(i) + 1}" x2="${X(i) + pitch - 1}" y1="${top}" y2="${top}"/><text class="h on end" x="${X(i) + pitch}" y="${top - 10}">${L_.window}</text>`;
     else if (b.fc) {
       s += rect("fc", y0 - h, h, 'fill="url(#hatch)"');
@@ -749,37 +782,28 @@ function chart(it = scope) {
     } else if (b.hit != null) {
       const hh = b.v > 0 ? h * b.hit / b.v : 0;
       s += rect("in", y0 - hh, hh) + rect("out", y0 - h, h - hh);
-    } else if (b.last3 && b.v > b.was && b.v >= 1) {
-      // in the three months that set the level, what is above a year before is red
-      const hw = ph * Math.min(b.was, max) / max;
-      s += rect("plain", y0 - hw, hw) + rect("worse", y0 - h, h - hw);
     } else if (b.v != null) s += rect("plain", y0 - h, h);
     if (monthsView) {
-      // the same month a year before: a tick across a past bar, a dashed outline where there is no bar yet
-      if (b.v == null) { const g = ph * Math.min(b.was, max) / max; s += rect("ghost", y0 - g, g); }
-      else if (b.was > max) s += `<path class="over" d="M${cx - 3.5} ${top + 5}L${cx} ${top}L${cx + 3.5} ${top + 5}"/>`;
-      else s += `<line class="tick" x1="${x - 1.5}" x2="${x + bw + 1.5}" y1="${Y(b.was)}" y2="${Y(b.was)}"/>`;
       s += `<text x="${cx}" y="${y0 + 15}"${pitch < 14 ? ' style="font-size:10px"' : ""}>${b.d.toLocaleDateString(loc(), { month: "narrow" })}</text>`;
       if (b.d.getMonth() === 0) s += `<text x="${cx}" y="${y0 + 30}">${b.d.getFullYear()}</text>`;
     } else if (skip === 1 || b.on || ((bars.length - 1 - i) % 2 === 0 && Math.abs(i - onAt) !== 1)) s += `<text x="${cx}" y="${H - 5}">${b.label}</text>`;
     s += `<rect class="hot" x="${X(i)}" y="${top - 12}" width="${pitch}" height="${H - top + 12}"/></g>`;
   });
-  if (monthsView) s += `<text class="note" x="${X(30)}" y="${Y(bars[29].was) - 7}" text-anchor="middle">${L_.lastYear}</text>`;
   el.innerHTML = s + `<line class="axis" x1="${gut}" x2="${W}" y1="${y0}" y2="${y0}"/><g class="tip" pointer-events="none"><path/><text></text><text></text></g></svg>`;
   pinned = onAt >= 0 && bars[onAt].hit != null ? onAt : -1;  // a replayed year keeps its label; the forecast is already the headline
   tip(pinned);
   function tip(i) {
     const [t1, t2] = el.querySelectorAll(".tip text"), lead = el.querySelector(".tip path"), b = bars[i];
-    if (!b || b.win) { t1.textContent = t2.textContent = ""; lead.setAttribute("d", ""); return; }
+    if (!b || b.win || (b.v == null && !monthsView)) { t1.textContent = t2.textContent = ""; lead.setAttribute("d", ""); return; }
     const exact = x => `${sector || typeof key() !== "number" ? km(x) : fmt(x)} km²`;
-    const lines = b.fc ? [L_.about_(approx(b.v)), b.range ? L_.range(approx(b.range[0]), approx(b.range[1])) : ""]
-      : monthsView ? [b.v == null ? b.sub : `${b.sub}, ${exact(b.v)}`, L_.was(exact(b.was))]
+    const lines = b.fc ? [(monthsView ? b.sub + ", " : "") + L_.about_(approx(b.v)), b.range ? L_.range(approx(b.range[0]), approx(b.range[1])) : ""]
+      : monthsView ? [b.v == null ? b.sub : `${b.sub}, ${exact(b.v)}`, ""]
       : [exact(b.v), b.hit != null ? (b.v >= 0.05 ? L_.inside(fmt(100 * b.hit / b.v)) : "") : b.sub || ""];
-    const x0 = X(i) + (pitch - bw) / 2, cx = x0 + bw / 2, yy = Y(Math.max(peak(b), b.was ?? 0));
+    const x0 = X(i) + (pitch - bw) / 2, cx = x0 + bw / 2, yy = Y(peak(b));
     const hw = monthsView ? 96 : 74, [anchor, x, left] = cx < gut + hw ? ["start", x0, x0] : cx > W - hw ? ["end", x0 + bw, x0 + bw - 2 * hw] : ["middle", cx, cx - hw];
     // the label sits above every bar it spans, with a hairline down to its own
     let up = yy;
-    bars.forEach((c, j) => { const bx = X(j) + (pitch - bw) / 2; if (bx + bw > left && bx < left + 2 * hw) up = Math.min(up, Y(Math.max(peak(c), c.was ?? 0))); });
+    bars.forEach((c, j) => { const bx = X(j) + (pitch - bw) / 2; if (bx + bw > left && bx < left + 2 * hw) up = Math.min(up, Y(peak(c))); });
     if (monthsView) up = Math.max(up, top + 44);  // stay clear of the labels along the top
     t1.textContent = lines[0]; t2.textContent = lines[1];
     for (const [el_, dy] of [[t1, lines[1] ? -27 : -9], [t2, -9]]) { el_.setAttribute("x", x); el_.setAttribute("y", up + dy); el_.setAttribute("text-anchor", anchor); }
@@ -861,9 +885,10 @@ $("lang-btn").onclick = () => { lang = localStorage.lang = lang === "pt" ? "en" 
 $("about-btn").onclick = () => {
   const hy = R.hyears, mean = f => hy.reduce((s, y) => s + f(M.years[y]), 0) / hy.length, tests = Object.values(M.layers).map(l => l.tests);
   $("about-body").innerHTML = t().aboutHtml({
-    first: hy[0], last: hy.at(-1), cap: fmt(100 * mean(cap5)), naive: fmt(100 * mean(Y => Y.naive["5"])),
+    first: hy[0], last: hy.at(-1), cap: fmt(100 * mean(cap5)), naive: fmt(100 * mean(naive5)),
     mape: fmt(100 * M.forecast.mape), previsia: fmt(100 * M.forecast.previsia_mape), tmin: Math.min(...tests), tmax: Math.max(...tests),
     partial: PARTIAL, repo: REPO,
+    mo: (b => b && b.h3sum_mape != null && { origins: b.origins, h3: fmt(100 * b.h3sum_mape), n3: fmt(100 * b.naive_h3sum_mape) })(MO?.hazards?.clear?.backtest),
   });
   $("about").showModal();
   $("about").scrollTop = 0;

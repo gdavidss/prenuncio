@@ -7,8 +7,9 @@ import { mkdtempSync, rmSync } from "node:fs";
 import { tmpdir } from "node:os";
 import assert from "node:assert/strict";
 
-const SITE = "http://localhost:8878/";
+const SITE = process.env.PRENUNCIO_SITE || "http://localhost:8878/";
 const [meta, regions, mun] = await Promise.all(["meta", "regions", "sectors_mun"].map(f => fetch(`${SITE}data/${f}.json`).then(r => r.json())));
+const monthly = await fetch(`${SITE}data/monthly.json`).then(r => (r.ok ? r.json() : null)).catch(() => null);  // the monthly forecast, once it is exported
 // the level, recounted here from docs/BRAND.md rather than taken from the site
 const three = a => [a.at(-1) + a.at(-2) + a.at(-3), a.at(-13) + a.at(-14) + a.at(-15)];
 const rising = ([now, prev]) => (now < 1 ? 0 : now / Math.max(prev, 1) >= 2 ? 2 : now / Math.max(prev, 1) >= 1.1 ? 1 : 0);
@@ -72,7 +73,8 @@ try {
   await send("Page.navigate", { url: SITE + "#l=en" });
   // the default screen: the whole Amazon, the yearly clearing forecast, sectors by municipality
   await until(head("/^About [\\d,]+\\skm² of clearing expected by July 2027$/") + ` && !!document.querySelector("#legend .ramp") && !!document.querySelector("#signs svg")`, "the forecast headline, the map legend and the signals");
-  assert.equal(await text("#scope"), "Amazon");
+  assert.equal(await js(`document.getElementById("scope").hidden`), true, "the whole Amazon needs no label");
+  assert.equal(await js(`!!document.getElementById("sure")`), false, "accuracy lives in About, not in the bulletin");
   assert.match(await text("#sub"), /^Likely between [\d,]+ and [\d,]+\.$/);
   assert.equal(+await level(), amazonLevel("clear"), "the clearing level for the Amazon is the one the data counts to");
   await redFollows(amazonLevel("clear"));
@@ -105,11 +107,16 @@ try {
 
   // months: alerts month by month, and the window ahead chosen on the timeline itself
   await clickOn('#scale button[data-k="months"]');
-  await until(head("/[Cc]learing alerts here/"), "the monthly view");
+  // months: what was cleared month by month, then the model's forecast for the months ahead (when monthly.json is there)
+  await until(head("/km² (cleared here in the last three months|expected to be cleared here in the next 3 months)$/"), "the monthly view");
   const months = await text("#level") + " | " + await text("#say") + " " + await text("#sub");
   assert.equal(await js(`document.querySelectorAll("#chart .bar").length`), 36, "24 months back and 12 ahead");
-  assert.equal(await text("#chart .unit"), "km² of clearing alerts per month");
+  assert.equal(await text("#chart .unit"), "km² cleared per month");
   assert.doesNotMatch(await text("#chart"), /PRODES/, "no jargon on the monthly timeline");
+  assert.doesNotMatch(await js(`document.getElementById("col").innerText`), /alerts?\b/i, "the quantity is km² cleared, never alerts");
+  assert.equal(await js(`document.querySelectorAll("#chart .ghost, #chart .tick").length`), 0, "nothing from a year before on the timeline");
+  assert.equal(await js(`document.querySelectorAll("#chart .bar .fc").length`), monthly ? 12 : 0, "the months ahead are the model's forecast");
+  assert.match(await text("#hint"), /DETER/, "says once where monthly figures come from");
   assert.match(await hash(), /k=clear3/);
   await clickOn('#chart tspan[data-h="6"]');
   await until(`/k=clear6/.test(location.hash) && /next 6 months/.test(document.getElementById("legend").textContent)`, "the six month window");
@@ -122,7 +129,7 @@ try {
   }
   await clickOn('#hazard button:nth-child(2)');
   await clickOn('#scale button[data-k="years"]');
-  await until(head("/^Ranks \\d+(st|nd|rd|th) of \\d+ municipalities for fire risk by /"), "fire by year");
+  await until(head("/^(Ranks \\d+(st|nd|rd|th) of \\d+ municipalities for fire risk by |About [\\d,.]+\\skm² expected to burn here in the next 12 months$)/"), "fire by year");
 
   // cells, with the sector still selected, and back to the clearing replay
   await clickOn('#modes button[data-k="cells"]');
@@ -143,14 +150,14 @@ try {
   // sectors of another kind drop the selection
   await clickOn('#modes button[data-k="sectors"]');
   await clickOn('#kinds button[data-k="ti"]');
-  await until(`document.getElementById("scope").textContent === "Amazon" && /s=ti/.test(location.hash) && !/r=/.test(location.hash)`, "the Indigenous lands overview");
+  await until(`document.getElementById("scope").hidden && /s=ti/.test(location.hash) && !/r=/.test(location.hash)`, "the Indigenous lands overview");
   assert.equal(await text("#say"), `In 2023, ${cap5(2023)}% of clearing fell inside the flagged 5% of forest`, "the replay quotes the accuracy of the cells it paints");
 
   // fire for the whole Amazon, by month: the level the data counts to, and the red that goes with it
   // (a link opened in the same tab changes only the fragment, and the app reloads itself on that. Do not send
   // Page.reload after it: a busy page may not have taken the new fragment yet, and the old link gets reloaded.)
   await send("Page.navigate", { url: SITE + "#l=en&k=scar12&t=months" });
-  await until(head("/[Bb]urn scars/") + ` && document.getElementById("lead").dataset.l === "${amazonLevel("scar")}"`, "the fire level");
+  await until(head("/burn/") + ` && document.getElementById("lead").dataset.l === "${amazonLevel("scar")}"`, "the fire level");
   await redFollows(amazonLevel("scar"));
   const fire = await text("#level") + " | " + await text("#say");
 
@@ -163,7 +170,7 @@ try {
 
   // Portuguese, and the About text
   await clickOn("#lang-btn");
-  await until(`document.getElementById("scope").textContent.startsWith("Amazônia")`, "Portuguese");
+  await until(`document.documentElement.lang === "pt" && /km²/.test(document.getElementById("say").textContent)`, "Portuguese");
   await clickOn("#about-btn");
   await until(`document.getElementById("about").open`, "the About text");
   assert.doesNotMatch(await js(`document.body.innerText + document.getElementById("about").innerText`), /—/, "no em dashes");
