@@ -41,6 +41,7 @@ const T = {
       mine: v => `${v.km} km² mined${v.here} in the last three months`,
     },
     scaledSub: v => `Its share of the Amazon forecast, with no range of its own. ${v.rank} of ${v.n} ${v.many}.`,
+    unsure: v => `Very uncertain, anywhere from ${v.lo} to ${v.hi}. In backtests this total missed by ${v.miss}% on average.`, veryUnsure: "very uncertain",
     rankOnly: v => `${v.rank} of ${v.n} ${v.many} on the risk map.`,
     deter: "Monthly figures are what INPE's DETER detects. The yearly PRODES count is larger.",
     axisM: { clear: "km² cleared per month", fire: "km² burned per month", degr: "km² degraded per month", mine: "km² mined per month" },
@@ -91,11 +92,17 @@ const T = {
       <ul>
         <li>Say why a place is flagged. The signals are things the model reads, not causes.</li>
         <li>Give a range for a single sector, or see a change of policy coming.</li>
-        <li>Forecast one municipality, Indigenous land or conservation unit month by month. Theirs is their share of the Amazon forecast.</li>
+        <li>Forecast one municipality, Indigenous land or conservation unit month by month. Theirs is their share of the Amazon forecast.</li>${v.fire ? `
+        <li>Say how much will burn. In backtests the fire total over three months missed by ${v.fire}% on average.</li>` : ""}
         <li>Replace INPE's official figures. The ${v.partial} outcome covers priority scenes only so far.</li>
       </ul>
       <h3>Open and democratic</h3>
-      <p>The code and the benchmark are public. Anyone can propose a better model by pull request, with its benchmark scores, the method disclosed and a written report. Doing it with AI agents is welcome and encouraged. Researchers are invited. Forecasts for 2027 can be registered now and are scored when INPE publishes its map.</p>
+      <ul>
+        <li>The code, the data pipeline and a public benchmark are on GitHub.</li>
+        <li>Anyone can submit a model by pull request, with its scores, its code and a written report of how it was made. Building with AI agents is welcome, as long as the report says which agent was used and how.</li>
+        <li>Forecasts for 2027 can be registered until 31 December 2026 and are scored when INPE publishes the map, so nobody, including us, can adjust one after seeing the outcome.</li>
+        <li>Researchers are invited to put their models on the leaderboard next to ours. A model that beats the published one, and that someone else reproduces, can take its place on this site.</li>
+      </ul>
       <p>Start with the <a href="${v.repo}">code</a>, the <a href="${v.repo}/tree/HEAD/benchmark">benchmark</a> and <a href="${v.repo}/blob/HEAD/CONTRIBUTING.md">how to contribute</a>.</p>
       <h3>Data</h3>
       <p>INPE PRODES and DETER, through TerraBrasilis, and INPE Queimadas fire detections. Global Forest Change by Hansen, UMD, Google, USGS and NASA. GLAD Sentinel-2 alerts, University of Maryland. IBAMA open enforcement records. NOAA's Oceanic Niño Index. Boundaries of states, municipalities, Indigenous lands and conservation units as INPE distributes them. Close-up imagery by Esri, Maxar and Earthstar Geographics. Map drawn with Leaflet.</p>`,
@@ -135,6 +142,7 @@ const T = {
       mine: v => `${v.km} km² de garimpo${v.here} nos últimos três meses`,
     },
     scaledSub: v => `É a fatia deste setor na previsão da Amazônia, sem faixa própria. ${v.rank} entre ${v.n} ${v.many}.`,
+    unsure: v => `Muito incerto, de ${v.lo} a ${v.hi}. Nos testes, esse total errou ${v.miss}% em média.`, veryUnsure: "muito incerto",
     rankOnly: v => `${v.rank} entre ${v.n} ${v.many} no mapa de risco.`,
     deter: "Os valores mensais são o que o DETER, do INPE, detecta. A contagem anual do PRODES é maior.",
     axisM: { clear: "km² desmatados por mês", fire: "km² queimados por mês", degr: "km² degradados por mês", mine: "km² de garimpo por mês" },
@@ -185,11 +193,17 @@ const T = {
       <ul>
         <li>Dizer por que um lugar foi marcado. Os sinais são coisas que o modelo lê, não causas.</li>
         <li>Dar uma faixa para um setor sozinho, nem ver chegar uma mudança de política.</li>
-        <li>Prever mês a mês um município, uma terra indígena ou uma unidade de conservação. A previsão deles é a fatia que têm na previsão da Amazônia.</li>
+        <li>Prever mês a mês um município, uma terra indígena ou uma unidade de conservação. A previsão deles é a fatia que têm na previsão da Amazônia.</li>${v.fire ? `
+        <li>Dizer quanto vai queimar. Nos testes, o total de fogo em três meses errou ${v.fire}% em média.</li>` : ""}
         <li>Substituir os números oficiais do INPE. O resultado de ${v.partial} cobre só cenas prioritárias até agora.</li>
       </ul>
       <h3>Aberto e democrático</h3>
-      <p>O código e o benchmark são públicos. Qualquer pessoa pode propor um modelo melhor por pull request, com as notas no benchmark, o método aberto e um relatório escrito. Fazer isso com agentes de IA é bem-vindo e incentivado. Pesquisadores estão convidados. Previsões para 2027 podem ser registradas agora e recebem nota quando o INPE publicar o mapa.</p>
+      <ul>
+        <li>O código, o pipeline de dados e um benchmark público estão no GitHub.</li>
+        <li>Qualquer pessoa pode enviar um modelo por pull request, com as notas, o código e um relatório escrito de como ele foi feito. Usar agentes de IA é bem-vindo, desde que o relatório diga qual agente foi usado e como.</li>
+        <li>Previsões para 2027 podem ser registradas até 31 de dezembro de 2026 e recebem nota quando o INPE publicar o mapa, então ninguém, nem nós, consegue ajustar uma previsão depois de ver o resultado.</li>
+        <li>Pesquisadores estão convidados a pôr seus modelos no placar ao lado do nosso. Um modelo que supere o publicado, e que outra pessoa reproduza, pode tomar o lugar dele neste site.</li>
+      </ul>
       <p>Comece pelo <a href="${v.repo}">código</a>, pelo <a href="${v.repo}/tree/HEAD/benchmark">benchmark</a> e por <a href="${v.repo}/blob/HEAD/CONTRIBUTING.md">como contribuir</a>.</p>
       <h3>Dados</h3>
       <p>PRODES e DETER do INPE, pelo TerraBrasilis, e focos de fogo do INPE Queimadas. Global Forest Change, de Hansen, UMD, Google, USGS e NASA. Alertas GLAD do Sentinel-2, da Universidade de Maryland. Registros abertos de fiscalização do IBAMA. Índice Oceânico Niño da NOAA. Limites de estados, municípios, terras indígenas e unidades de conservação como o INPE distribui. Imagens de satélite da Esri, Maxar e Earthstar Geographics. Mapa desenhado com o Leaflet.</p>`,
@@ -286,10 +300,17 @@ function monthsOf(it) {
   const obs = own ? k => own.history[ym(k)] ?? 0 : k => ago(a, k - off);
   const part = it && !own && hz ? expOf(it) / info().risk_km2 : 1;
   const fc = own ? own.forecast : hz ? hz.forecast.map(f => ({ month: f.month, p50: f.p50 * part })) : null;
-  return { obs, fc, scaled: !!(it && !own && hz) };
+  // how far the total over n months has missed in backtests. Above 60% (fire) the amount is said to be very uncertain.
+  const miss = n => hz?.backtest?.[`h${n}sum_mape`] ?? null;
+  return { obs, fc, part, scaled: !!(it && !own && hz), sums: (own || hz)?.sums, miss, unsure: n => miss(n) > 0.6 };
 }
-// the months ahead added up: the middle, and the range where the forecast has one
-const ahead = (fc, n) => fc && fc.length >= n && { km: fc.slice(0, n).reduce((s, f) => s + f.p50, 0), lo: fc[0].p10 == null ? null : fc.slice(0, n).reduce((s, f) => s + f.p10, 0), hi: fc[0].p90 == null ? null : fc.slice(0, n).reduce((s, f) => s + f.p90, 0) };
+// the months ahead added up. The file gives the model's own total and range for 3, 6 and 12 months; a sector
+// scaled from the Amazon gets the middle only. Without those, the monthly middles are added.
+function ahead(mo, n) {
+  if (!mo.fc || mo.fc.length < n) return null;
+  const t_ = mo.sums?.[n], add = k => mo.fc.slice(0, n).reduce((x, f) => x + f[k], 0), ranged = !mo.scaled && (t_ || mo.fc[0].p10 != null);
+  return { km: t_ ? t_.p50 * mo.part : add("p50"), lo: ranged ? (t_ ? t_.p10 : add("p10")) : null, hi: ranged ? (t_ ? t_.p90 : add("p90")) : null, miss: mo.miss(n), unsure: mo.unsure(n) };
+}
 
 // ---------- the alert level (docs/BRAND.md): counted from the hazard's own alerts, plus El Niño for the
 // whole Amazon or the forecast rank for a sector. 0 quiet, 1 watch, 2 warning, 3 alarm.
@@ -638,10 +659,10 @@ async function say() {
   let head, sub = "";
   if (S.scale === "months" || hz !== "clear") {
     // what the model expects over the months ahead; where there is no monthly forecast, what was measured
-    const mo = monthsOf(it), sum = ahead(mo.fc, I.months);
+    const mo = monthsOf(it), sum = ahead(mo, I.months);
     if (sum && (sum.km >= 0.05 || !it)) {
       head = L_.mfc[hz]({ km: approx(sum.km), here, h: I.months });
-      sub = mo.scaled ? L_.scaledSub(v) : sum.lo != null ? L_.fcSub({ lo: approx(sum.lo), hi: approx(sum.hi) }) : "";
+      sub = mo.scaled ? L_.scaledSub(v) : sum.lo == null ? "" : sum.unsure ? L_.unsure({ lo: approx(sum.lo), hi: approx(sum.hi), miss: fmt(100 * sum.miss) }) : L_.fcSub({ lo: approx(sum.lo), hi: approx(sum.hi) });
     } else if (S.scale === "months") {
       head = L_.mobs[hz]({ km: km(mo.obs(0) + mo.obs(1) + mo.obs(2)), here });
       if (it) sub = L_.rankOnly(v);
@@ -729,15 +750,16 @@ function series(it) {
     const mo = monthsOf(it);
     return Array.from({ length: 36 }, (_, s) => {
       const n = 23 - s, d = new Date(LY, LM - 1 - n, 1), sub = month(d.getFullYear(), d.getMonth()), f = n < 0 && mo.fc?.[-n - 1];  // n months back; negative is ahead
-      return n >= 0 ? { key: s, d, v: mo.obs(n), cur: n < 3, sub } : f ? { key: s, d, v: f.p50, fc: true, range: f.p10 == null ? null : [f.p10, f.p90], dim: -n > I.months, sub } : { key: s, d, v: null, sub };
+      return n >= 0 ? { key: s, d, v: mo.obs(n), cur: n < 3, sub }
+        : f ? { key: s, d, v: f.p50, fc: true, range: f.p10 == null || -n > I.months || mo.unsure(I.months) ? null : [f.p10, f.p90], dim: -n > I.months, unsure: mo.unsure(I.months), sub } : { key: s, d, v: null, sub };
     });
   }
   if (S.hazard !== "clear") {
-    const vals = (it ? it.L[k] : R.amazon.L[k]) || [], sum = ahead(monthsOf(it).fc, I.months);
+    const vals = (it ? it.L[k] : R.amazon.L[k]) || [], sum = ahead(monthsOf(it), I.months);
     const span = w => { const [y, m_] = w.split("-").map(Number); return t().to(month(y, m_ - 1), month(y, m_ - 2 + I.months)); };
     const end = w => new Date(+w.slice(0, 4), +w.slice(5) - 2 + I.months, 1).getFullYear();
     // the last slot is the forecast: the months ahead added up, or only the window when there is no monthly forecast
-    const last = sum ? { v: sum.km, fc: true, on: true, range: sum.lo == null ? null : [sum.lo, sum.hi], sub: span(I.from) } : { v: null, win: true };
+    const last = sum ? { v: sum.km, fc: true, on: true, range: sum.lo == null || sum.unsure ? null : [sum.lo, sum.hi], unsure: sum.unsure, sub: span(I.from) } : { v: null, win: true };
     return [...(R.layers[k]?.windows || []).map((w, i) => ({ key: w, label: end(w), v: vals[i + 1] ?? 0, sub: span(w) })), { key: I.from, label: end(I.from), ...last }];
   }
   const fy = M.forecast.year;
@@ -755,8 +777,9 @@ function chart(it = scope) {
   bars = series(it);
   const monthsView = S.scale === "months", sector = !!it;
   const gut = 42, top = monthsView ? 40 : 46, bot = monthsView ? 34 : 22, pw = W - gut, ph = H - top - bot, pitch = pw / bars.length, bw = Math.max(3, pitch * (monthsView ? 0.62 : 0.72));
+  // the scale fits the bars, with a little room above them. A range that runs past it is cut off at the top, open.
   const peak = b => Math.max(b.v ?? 0, b.range ? b.range[1] : 0);
-  const max = Math.max(sector ? 0.5 : 1, ...bars.map(peak));
+  const tallest = Math.max(sector ? 0.5 : 1, ...bars.map(b => b.v ?? 0)), max = tallest * (bars.some(b => b.range && b.range[1] > tallest) ? 1.15 : 1);
   const Y = v => top + ph - ph * Math.min(v, max) / max, X = i => gut + i * pitch, y0 = Y(0);
   const [tk, dec] = ticks(max), skip = pitch < 26 ? 2 : 1, onAt = bars.findIndex(b => b.on);
   let s = `<svg width="${W}" height="${H}" role="img"><defs><pattern id="hatch" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="6" height="6" fill="rgb(${steps()[0]})"/><rect width="3" height="6" fill="rgb(${steps()[3]})"/></pattern></defs><g class="grid">`;
@@ -778,7 +801,7 @@ function chart(it = scope) {
     if (b.win) s += `<rect class="win" x="${X(i) + 1}" y="${top}" width="${pitch - 2}" height="${ph}"/><line class="winrule" x1="${X(i) + 1}" x2="${X(i) + pitch - 1}" y1="${top}" y2="${top}"/><text class="h on end" x="${X(i) + pitch}" y="${top - 10}">${L_.window}</text>`;
     else if (b.fc) {
       s += rect("fc", y0 - h, h, 'fill="url(#hatch)"');
-      if (b.range) s += `<path class="rng" fill="none" d="M${cx} ${Y(b.range[0])}V${Y(b.range[1])}M${cx - 4} ${Y(b.range[0])}h8M${cx - 4} ${Y(b.range[1])}h8"/>`;
+      if (b.range) s += `<path class="rng" fill="none" d="M${cx} ${Y(b.range[0])}V${Y(b.range[1])}M${cx - 4} ${Y(b.range[0])}h8${b.range[1] <= max ? `M${cx - 4} ${Y(b.range[1])}h8` : ""}"/>`;
     } else if (b.hit != null) {
       const hh = b.v > 0 ? h * b.hit / b.v : 0;
       s += rect("in", y0 - hh, hh) + rect("out", y0 - h, h - hh);
@@ -796,14 +819,14 @@ function chart(it = scope) {
     const [t1, t2] = el.querySelectorAll(".tip text"), lead = el.querySelector(".tip path"), b = bars[i];
     if (!b || b.win || (b.v == null && !monthsView)) { t1.textContent = t2.textContent = ""; lead.setAttribute("d", ""); return; }
     const exact = x => `${sector || typeof key() !== "number" ? km(x) : fmt(x)} km²`;
-    const lines = b.fc ? [(monthsView ? b.sub + ", " : "") + L_.about_(approx(b.v)), b.range ? L_.range(approx(b.range[0]), approx(b.range[1])) : ""]
+    const lines = b.fc ? [(monthsView ? b.sub + ", " : "") + L_.about_(approx(b.v)), b.range ? L_.range(approx(b.range[0]), approx(b.range[1])) : b.unsure ? L_.veryUnsure : ""]
       : monthsView ? [b.v == null ? b.sub : `${b.sub}, ${exact(b.v)}`, ""]
       : [exact(b.v), b.hit != null ? (b.v >= 0.05 ? L_.inside(fmt(100 * b.hit / b.v)) : "") : b.sub || ""];
-    const x0 = X(i) + (pitch - bw) / 2, cx = x0 + bw / 2, yy = Y(peak(b));
+    const x0 = X(i) + (pitch - bw) / 2, cx = x0 + bw / 2, yy = Y(b.v ?? 0);
     const hw = monthsView ? 96 : 74, [anchor, x, left] = cx < gut + hw ? ["start", x0, x0] : cx > W - hw ? ["end", x0 + bw, x0 + bw - 2 * hw] : ["middle", cx, cx - hw];
     // the label sits above every bar it spans, with a hairline down to its own
     let up = yy;
-    bars.forEach((c, j) => { const bx = X(j) + (pitch - bw) / 2; if (bx + bw > left && bx < left + 2 * hw) up = Math.min(up, Y(peak(c))); });
+    bars.forEach((c, j) => { const bx = X(j) + (pitch - bw) / 2; if (bx + bw > left && bx < left + 2 * hw) up = Math.min(up, Y(c.v ?? 0)); });
     if (monthsView) up = Math.max(up, top + 44);  // stay clear of the labels along the top
     t1.textContent = lines[0]; t2.textContent = lines[1];
     for (const [el_, dy] of [[t1, lines[1] ? -27 : -9], [t2, -9]]) { el_.setAttribute("x", x); el_.setAttribute("y", up + dy); el_.setAttribute("text-anchor", anchor); }
@@ -888,6 +911,7 @@ $("about-btn").onclick = () => {
     first: hy[0], last: hy.at(-1), cap: fmt(100 * mean(cap5)), naive: fmt(100 * mean(naive5)),
     mape: fmt(100 * M.forecast.mape), previsia: fmt(100 * M.forecast.previsia_mape), tmin: Math.min(...tests), tmax: Math.max(...tests),
     partial: PARTIAL, repo: REPO,
+    fire: (b => (b?.h3sum_mape > 0.6 ? fmt(100 * b.h3sum_mape) : ""))(MO?.hazards?.scar?.backtest),
     mo: (b => b && b.h3sum_mape != null && { origins: b.origins, h3: fmt(100 * b.h3sum_mape), n3: fmt(100 * b.naive_h3sum_mape) })(MO?.hazards?.clear?.backtest),
   });
   $("about").showModal();

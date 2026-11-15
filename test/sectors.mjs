@@ -159,7 +159,12 @@ try {
   await send("Page.navigate", { url: SITE + "#l=en&k=scar12&t=months" });
   await until(head("/burn/") + ` && document.getElementById("lead").dataset.l === "${amazonLevel("scar")}"`, "the fire level");
   await redFollows(amazonLevel("scar"));
-  const fire = await text("#level") + " | " + await text("#say");
+  const fire = await text("#level") + " | " + await text("#say") + " " + await text("#sub");
+  if (monthly) {  // the headline is the model's own total for the window, to two figures
+    const p50 = monthly.hazards.scar.sums["12"].p50, two = x => { const p = 10 ** (Math.floor(Math.log10(x)) - 1); return (Math.round(x / p) * p).toLocaleString("en-US"); };
+    assert.equal(await text("#say"), `About ${two(p50)}\u00a0km² expected to burn in the next 12 months`);
+    assert.equal(await js(`[...document.querySelectorAll("#chart .bar.dim .rng")].length`), 0, "no ranges drawn outside the chosen window");
+  }
 
   // a quiet sector: no alerts rising, forecast rank in the lower half. No red anywhere in the column.
   await send("Page.navigate", { url: SITE + `#l=en&r=${quiet.id}` });

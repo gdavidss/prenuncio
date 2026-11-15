@@ -60,6 +60,8 @@ Year by year, with three months of alerts in hand, the model missed by −9%, +9
 
 For the PRODES year 2027 (August 2026 to July 2027) the model gives 3,200 km², with a range of 2,400 to 4,200 that is one typical backtest miss either side. Read it with two cautions. The model carries a downward drift learned from four falling years. And the early signals point the other way: DETER is up 24% for August to October, fire is up about 70% on last year, and a very strong El Niño is under way. The upper half of the range deserves more weight than the lower.
 
+A longer test asked whether anything known on 31 July beats repeating last year's total. Twelve forecast years (2014 to 2025), state by state, with fourteen combinations of the previous year's change, the basin-wide trend, the level against its three-year mean, IBAMA notices, embargoed area and fire detections. Repeating last year missed by 17% on average. Every combination missed by 18% to 26%. The yearly total turns on decisions in Brasília that none of these series carries in advance, and the honest forecast a year out is last year's number with a wide range. The total gets sharper only as the year's own months come in, which is what the monthly forecast below is for.
+
 These totals are in PRODES mapped increments on our grid, with 2026 taken from the priority scenes. The official rate that INPE announces includes a cloud correction and has differed from the mapped increments by between −9% and +13% in recent years.
 
 ## Shorter horizons and the other hazards
@@ -74,9 +76,24 @@ Clear-cutting is not the only way the forest is lost. Since August 2016 INPE's D
 | Mining, next 12 months | 5 | 95% | 60% | 77% | 57% |
 | Forest burn scars, next 12 months | 5 | 54% | 41% | 19% | 7% |
 
+### How much, month by month
+
+The site's monthly chart shows square kilometres per month as DETER detects them, and the bars after the present are a forecast of that same quantity for the Amazon and for each state. `pipeline/monthly.py` backtests four candidates on every forecast date since mid 2020 (63 dates), each seeing only months already observed, and publishes the one with the lowest error for each hazard. The ranges on the site are the 10th to 90th percentile of that candidate's own backtest misses.
+
+| Hazard | Chosen model | Next month | Next 3 months | Next 6 months | Next 12 months |
+|---|---|---|---|---|---|
+| Clearing | level times season, with trend | 29% (40%) | 21% (28%) | 14% (18%) | 12% (15%) |
+| Degradation and logging | level times season | 30% (45%) | 24% (25%) | 19% (22%) | 18% (18%) |
+| Mining | level times season | 46% (55%) | 40% (50%) | 32% (36%) | 30% (30%) |
+| Fire scars | boosted trees | 80% (92%) | 74% (88%) | 76% (92%) | 80% (82%) |
+
+Each cell is the median miss on the Amazon total, and in brackets the miss of "the same months a year earlier". The winning idea is plain. Take the last twelve months' total as the level, nudge it by the fourth root of how the last half year compares with the same half a year before, and spread it over the calendar using each month's average share of its year over three years. Averaging the season over three years is what pays, because a single freak month (May 2025, for one) otherwise comes back as next year's forecast.
+
+An earlier version scored these models on the last 24 dates only and reported 23% for three months of clearing. Scored on all 63 dates that model was no better than last year's months (28% against 28%), so it was replaced. Boosted trees on the same series lose to the simple rule for every hazard but fire, and fire is not forecastable from these inputs at all. Its amount depends on a drought that has not happened yet.
+
 Mining is the most predictable hazard because it recurs at and around known sites. Fire is the least. The fire model has five test dates, no weather input beyond two ocean indices, and does not simulate spread. It is also untested on a year like 2024, when burn scars were several times any other year, because that year sits inside its training data.
 
-DETER dates are detection dates, so cloud cover shifts some alerts between windows, and these scores include that noise. Only placement was tested for these models, so the site shows where, not how much.
+DETER dates are detection dates, so cloud cover shifts some alerts between windows, and these scores include that noise. The hazard maps say where. The monthly totals above say how much.
 
 Still outside any model: drought mortality and edge effects in standing forest, which no alert system maps, and the pressure variables (roads, credit, prices, enforcement) that act through the yearly total.
 
