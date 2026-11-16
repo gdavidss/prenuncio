@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#f2f2ef">
+<meta name="theme-color" content="#0b6b3a">
 <title>Prenúncio, an early warning for the Amazon</title>
 <meta name="description" content="Where the Amazon forest will be cleared, burned, degraded or mined next, and how hard the pressure is now. Every past forecast can be checked against what happened.">
 <link rel="canonical" href="https://prenuncio.com/">
@@ -16,7 +16,7 @@
 <meta property="og:image" content="https://prenuncio.com/og.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="Prenúncio. The Legal Amazon drawn on a white field, with the cells flagged for clearing in violet.">
+<meta property="og:image:alt" content="Prenúncio. The Amazon drawn in forest green, with the cells most likely to be cleared in red.">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -28,7 +28,7 @@
 <main id="app">
   <section id="col">
     <header id="top">
-      <div class="brand"><svg viewBox="0 0 20 18" aria-hidden="true"><path d="M10 0L20 18H0z"/></svg>Prenúncio</div>
+      <div class="brand"><svg viewBox="0 0 20 20" aria-hidden="true"><path class="f" d="M0 0h20v9.5L9.5 20H0z"/><path class="c" d="M20 13v7h-7z"/></svg>Prenúncio</div>
       <nav>
         <button id="about-btn"></button>
         <button id="lang-btn"></button>
@@ -46,6 +46,7 @@
     <div id="body">
       <div id="bar">
         <div id="scale" role="group"></div>
+        <div id="shape" role="group"></div>
         <div id="ahead" role="group"></div>
         <div id="step"><button data-d="-1">‹</button><span></span><button data-d="1">›</button></div>
       </div>
@@ -53,16 +54,24 @@
       <p id="hint"></p>
       <div id="signs"></div>
     </div>
+    <div id="list" hidden>
+      <p id="list-say"></p>
+      <p id="list-key"></p>
+      <ol id="list-rows"></ol>
+    </div>
   </section>
 
   <section id="stage">
     <div id="map"></div>
     <div id="mapctl">
       <div id="modes" role="group"></div>
+      <button id="rank-btn"></button>
       <div id="kinds" role="group"></div>
     </div>
-    <p id="share"></p>
-    <p id="legend"></p>
+    <div id="foot">
+      <p id="share"></p>
+      <p id="legend"></p>
+    </div>
     <p id="credit" hidden></p>
   </section>
 

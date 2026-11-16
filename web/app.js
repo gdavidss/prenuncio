@@ -1,15 +1,32 @@
-// Prenúncio. An alert level, a headline, a timeline and a few signals, beside a drawn map of the Legal Amazon.
-// It follows docs/BRAND.md. No build step, no keys.
+// Prenúncio. An alert level, a headline, a timeline and a few signals, beside a drawn map of the Amazon.
+// It follows docs/BRAND.md: green is forest, red is clearing. No build step, no keys.
 // Data formats: pipeline/export.py (cells) and pipeline/regions.py (sectors, months).
 const $ = id => document.getElementById(id);
 
 const T = {
   en: {
     hazard: { clear: "Clearing", fire: "Fire", degr: "Degradation", mine: "Mining" }, scale: { years: "Years", months: "Months" },
-    amazon: "Amazon", about: "About", close: "Close", views: { chart: "Timeline", map: "Map" },
+    amazon: "Amazon", about: "About", close: "Close", views: { chart: "Timeline", map: "Map", list: "List" },
     axisY: "km² cleared per year, August to July",
-    shareOf: v => `<b>${v.pct}%</b> of forest cells flagged, ${v.km} km²`, prevYear: "Previous year", nextYear: "Next year",
-    modes: { sectors: "Sectors", cells: "Cells" },
+    // cells: every forest cell has its own chance
+    chanceBy: y => `Chance each cell loses a hectare by July ${y}`, chanceFor: y => `Chance given to each cell for ${y}`, mapped: "clearing mapped",
+    onlyFrom: "Choose a step to show only cells at that chance or more",
+    stepLo: c => `under ${c}`, stepMid: (a, b) => `${a} to ${b}`, stepHi: c => `over ${c}`, under: c => `under ${c}`,
+    cellFc: v => `${v.p} chance this cell loses a hectare by July ${v.y}`,
+    cellPast: v => `In ${v.y} this cell was given ${v.p}. ${v.clr ? "Clearing was mapped in it." : "No clearing was mapped in it."}`,
+    areaFc: v => (v.low ? `Every cell here has ${v.p} chance of losing a hectare by July ${v.y}` : `Up to ${v.p} chance a cell here loses a hectare by July ${v.y}`),
+    areaPast: v => `In ${v.y} cells here were given ${v.low ? "" : "up to "}${v.p}. ${v.clr ? `Clearing was mapped in ${v.clr} of ${v.n}.` : "No clearing was mapped."}`,
+    pShare: v => `<b>${v.exp}</b> of ${v.cells} million forest cells expected to lose a hectare`,
+    pShareMin: v => `<b>${v.n}</b> cells at ${v.cut} or more, with ${v.share}% of the expected loss`,
+    pSharePastNo: v => `<b>${v.act}</b> cells had clearing mapped`,
+    pSharePastMin: v => `<b>${v.n}</b> cells at ${v.cut} or more, with ${v.share}% of the cells where clearing was mapped`,
+    pastP: v => `In ${v.y}, ${v.exp} cells were expected to lose a hectare and ${v.act} did`, prevYear: "Previous year", nextYear: "Next year",
+    modes: { sectors: "Sectors", cells: "Cells", prio: "Priorities" }, ranking: "Ranking", bars: "Bars", line: "Line",
+    // the priority list: where to look first
+    prioSay: v => `Of the ${v.top} blocks of ${v.km} km ranked highest, ${v.hit}% lost at least 10 hectares in ${v.y}, against ${v.base}% of all forest blocks.`,
+    prioCols: ["cells", "max chance"], prioColsTitle: v => `Cells of the block expected to lose a hectare by July ${v.y}, and the highest chance among them`,
+    csv: "Download CSV", land: { ti: "Indigenous land", uc: "conservation unit" },
+    rankSay: v => `${v.kind} by ${v.what}`, rankWhat: { fc: y => `clearing expected by July ${y}`, past: y => `clearing expected for ${y}`, risk: "share of the risk map", fire: "share of where fire tends to occur" },
     kinds: { uf: "States", mun: "Municipalities", ti: "Indigenous lands", uc: "Conservation units" },
     many: { uf: "states", mun: "municipalities", ti: "Indigenous lands", uc: "conservation units" },
     rank: n => n + (n % 100 > 10 && n % 100 < 14 ? "th" : ["th", "st", "nd", "rd"][n % 10] || "th"),
@@ -22,15 +39,13 @@ const T = {
     fcNone: v => `Almost no clearing expected here by July ${v.y}`,
     fcSub: v => `Likely between ${v.lo} and ${v.hi}.`,
     rankSub: v => `${v.rank} of ${v.n} ${v.many}. ${v.share}% of the Amazon total.`,
-    past: v => `In ${v.y}, ${v.cap}% of clearing fell inside the flagged 5% of forest`,
-    pastSub: v => `Repeating the year before would have caught ${v.naive}%.`,
+    past: v => `In ${v.y}, ${v.act} km² were cleared`,
     partial: " Priority scenes only, so far.",
-    pastHere: v => `In ${v.y}, ${v.act} km² were cleared here, ${v.inside}% inside flagged cells`,
+    pastHere: v => `In ${v.y}, ${v.act} km² were cleared here`,
     pastHereNone: v => `In ${v.y} no clearing was mapped here`,
     pastHereSub: v => `Forecast share ${v.ps}%, actual share ${v.as}%.`,
     mfc: {
       clear: v => `About ${v.km} km² expected to be cleared${v.here} in the next ${v.h} months`,
-      fire: v => `About ${v.km} km² expected to burn${v.here} in the next ${v.h} months`,
       degr: v => `About ${v.km} km² expected to be degraded${v.here} in the next ${v.h} months`,
       mine: v => `About ${v.km} km² of mining expected${v.here} in the next ${v.h} months`,
     },
@@ -41,21 +56,21 @@ const T = {
       mine: v => `${v.km} km² mined${v.here} in the last three months`,
     },
     scaledSub: v => `Its share of the Amazon forecast, with no range of its own. ${v.rank} of ${v.n} ${v.many}.`,
-    unsure: v => `Very uncertain, anywhere from ${v.lo} to ${v.hi}. In backtests this total missed by ${v.miss}% on average.`, veryUnsure: "very uncertain",
+    // fire: what burned, never how much will burn
+    burned: { months: v => `${v.km} km² burned${v.here} in the last three months, ${v.prev} a year before`, years: v => `${v.km} km² burned${v.here} in the last twelve months, ${v.prev} in the twelve before` },
+    fireRank: v => `${v.rank} of ${v.n} ${v.many} on the map of where fire tends to occur.`,
     rankOnly: v => `${v.rank} of ${v.n} ${v.many} on the risk map.`,
     deter: "Monthly figures are what INPE's DETER detects. The yearly PRODES count is larger.",
     axisM: { clear: "km² cleared per month", fire: "km² burned per month", degr: "km² degraded per month", mine: "km² mined per month" },
     axisW: { fire: "km² burned per 12 months", degr: "km² degraded per 12 months", mine: "km² mined per 12 months" },
     whole: "Whole Amazon", to: (a, b) => `${a} to ${b}`,
     where: {
-      fire: v => `Where forest is most likely to burn by ${v.end}`,
       degr: v => `Where forest is most likely to be degraded or logged by ${v.end}`,
       mine: v => `Where mining is most likely to spread by ${v.end}`,
     },
     whereHere: v => `Ranks ${v.rank} of ${v.n} ${v.many} for ${v.risk} by ${v.end}`,
-    risk: { fire: "fire risk", degr: "degradation risk", mine: "mining risk" },
+    risk: { degr: "degradation risk", mine: "mining risk" },
     lastSub: {
-      fire: v => `${v.km} km² burned${v.here} in the last twelve months.`,
       degr: v => `${v.km} km² degraded or logged${v.here} in the last twelve months.`,
       mine: v => `${v.km} km² mined${v.here} in the last twelve months.`,
     },
@@ -67,33 +82,34 @@ const T = {
     signs: "Signals, three months against last year",
     enso: ["El Niño", "La Niña", "Pacific"], ensoLevel: [["very strong", "strong", "moderate", "weak"], ["very strong", "strong", "moderate", "weak"], "neutral"],
     signTitle: v => `${v.now} in the last three months, ${v.prev} a year before`,
-    legend: { clear: "Clearing risk", fire: "Fire risk", degr: "Degradation risk", mine: "Mining risk" }, lower: "lower", higher: "higher", next: n => `next ${n} months`,
-    flagged: "flagged", hit: "flagged and cleared", miss: "cleared, missed",
-    about_: x => `about ${x} km²`, range: (lo, hi) => `likely ${lo} to ${hi}`, inside: p => `${p}% inside flagged cells`,
+    legend: { clear: "Clearing risk", fire: "Where fire tends to occur", degr: "Degradation risk", mine: "Mining risk" }, lower: "lower", higher: "higher", next: n => `next ${n} months`,
+    about_: x => `about ${x} km²`, range: (lo, hi) => `likely ${lo} to ${hi}`,
     tipFc: v => `about ${v.exp} km² expected`, tipPast: v => `${v.exp} km² expected, ${v.act} cleared`, tipRank: v => `${v.rank} of ${v.n}`,
     credit: "Imagery: Esri, Maxar, Earthstar Geographics",
     aboutHtml: v => `
       <h2>The sign before the event</h2>
-      <p>Prenúncio is an early warning for Brazil's Legal Amazon. It forecasts where forest will be cleared, burned, degraded or mined next, and shows how hard the pressure is now.</p>
+      <p>Prenúncio is an early warning for the Brazilian Amazon. It forecasts where forest will be cleared, burned, degraded or mined next, and shows how hard the pressure is now.</p>
       <h3>What it shows</h3>
       <ul>
-        <li><b>The level.</b> Quiet, Watch, Warning or Alarm. It is counted from the hazard's last three months against a year before, a strong El Niño for the whole Amazon, and a sector's rank in the forecast. Red follows the level and nothing else.</li>
+        <li><b>The level.</b> Quiet, Watch, Warning or Alarm. It is counted from the hazard's last three months against a year before, a strong El Niño for the whole Amazon, and a sector's rank in the forecast. The red band follows the level.</li>
         <li><b>The timeline.</b> By year, clearing with the forecast at the end, and any year since ${v.first} can be replayed. By month, what was cleared and what the model expects for each month ahead, with its range.</li>
-        <li><b>The map.</b> By sector or by cell. Flagged cells are the 5% of standing forest where the model expects the most. The yearly clearing forecast is painted at 500 metres, the rest at one kilometre.</li>
+        <li><b>The map.</b> Green is forest, red is clearing. By sector or by cell. In cells, every 500 metre cell of forest carries its own chance of losing at least a hectare in the year, and the legend filters by minimum chance. Seen from far, a block takes the step a fifth of its cells reach. Shorter windows and other hazards show the 5% of forest with the highest risk, at one kilometre.</li>${v.prio ? `
+        <li><b>Priorities.</b> The ${v.prio.top} blocks of ${v.prio.km} km where the most cells are expected to lose a hectare, ranked, with the list to download. In ${v.prio.y}, ${v.prio.hit}% of the blocks ranked highest lost at least 10 hectares, against ${v.prio.base}% of all forest blocks.</li>` : ""}
       </ul>
       <h3>How sure</h3>
       <ul>
-        <li><b>Where is the strong part.</b> Forecasting each year from ${v.first} to ${v.last} blind, the flagged 5% of forest held ${v.cap}% of the clearing that followed. Repeating the year before held ${v.naive}%.</li>
+${v.rel ? `        <li><b>The chances are checked.</b> In ${v.rel.y}, cells given ${v.rel.said[0]}% lost a hectare ${v.rel.did[0]}% of the time, cells given ${v.rel.said[1]}% did ${v.rel.did[1]}% of the time, and cells given ${v.rel.said[2]}% did ${v.rel.did[2]}% of the time. ${v.rel.exp} cells were expected to lose a hectare and ${v.rel.act} did.</li>
+` : ""}        <li><b>The yardstick for comparing models.</b> Forecasting each year from ${v.first} to ${v.last} blind, the 5% of forest ranked highest held ${v.cap}% of the clearing that followed. Repeating the year before held ${v.naive}%.</li>
         <li><b>How much is the weak part.</b> The yearly total missed by ${v.mape}% on average, against ${v.previsia}% for Imazon's PrevisIA as published.</li>
         <li><b>Shorter windows and other hazards.</b> Their maps were tested for place, on ${v.tmin} to ${v.tmax} past dates.</li>${v.mo ? `
         <li><b>Month by month.</b> On ${v.mo.origins} past forecast dates the total cleared over three months missed by ${v.mo.h3}% on average, against ${v.mo.n3}% for repeating the same months of the year before. Monthly figures are what INPE's DETER detects, and the yearly PRODES count is larger.</li>` : ""}
       </ul>
       <h3>What it cannot do</h3>
       <ul>
-        <li>Say why a place is flagged. The signals are things the model reads, not causes.</li>
+        <li>Say why a place is at risk. The signals are things the model reads, not causes.</li>
         <li>Give a range for a single sector, or see a change of policy coming.</li>
-        <li>Forecast one municipality, Indigenous land or conservation unit month by month. Theirs is their share of the Amazon forecast.</li>${v.fire ? `
-        <li>Say how much will burn. In backtests the fire total over three months missed by ${v.fire}% on average.</li>` : ""}
+        <li>Forecast one municipality, Indigenous land or conservation unit month by month. Theirs is their share of the Amazon forecast.</li>
+        <li>Say how much will burn. That depends on a drought that has not happened yet, so the site shows where fire tends to occur and what has burned.</li>
         <li>Replace INPE's official figures. The ${v.partial} outcome covers priority scenes only so far.</li>
       </ul>
       <h3>Open and democratic</h3>
@@ -109,10 +125,25 @@ const T = {
   },
   pt: {
     hazard: { clear: "Desmatamento", fire: "Fogo", degr: "Degradação", mine: "Garimpo" }, scale: { years: "Anos", months: "Meses" },
-    amazon: "Amazônia", about: "Sobre", close: "Fechar", views: { chart: "Linha do tempo", map: "Mapa" },
+    amazon: "Amazônia", about: "Sobre", close: "Fechar", views: { chart: "Linha do tempo", map: "Mapa", list: "Lista" },
     axisY: "km² desmatados por ano, de agosto a julho",
-    shareOf: v => `<b>${v.pct}%</b> das células de floresta marcadas, ${v.km} km²`, prevYear: "Ano anterior", nextYear: "Ano seguinte",
-    modes: { sectors: "Setores", cells: "Células" },
+    chanceBy: y => `Chance de cada célula perder um hectare até julho de ${y}`, chanceFor: y => `Chance dada a cada célula para ${y}`, mapped: "desmatamento mapeado",
+    onlyFrom: "Escolha um degrau para mostrar só as células com essa chance ou mais",
+    stepLo: c => `abaixo de ${c}`, stepMid: (a, b) => `${a} a ${b}`, stepHi: c => `acima de ${c}`, under: c => `menos de ${c}`,
+    cellFc: v => `${v.p} de chance de esta célula perder um hectare até julho de ${v.y}`,
+    cellPast: v => `Em ${v.y} esta célula recebeu ${v.p}. ${v.clr ? "Houve desmatamento mapeado nela." : "Não houve desmatamento mapeado nela."}`,
+    areaFc: v => (v.low ? `Cada célula aqui tem ${v.p} de chance de perder um hectare até julho de ${v.y}` : `Até ${v.p} de chance de uma célula aqui perder um hectare até julho de ${v.y}`),
+    areaPast: v => `Em ${v.y} as células aqui receberam ${v.low ? "" : "até "}${v.p}. ${v.clr ? `Houve desmatamento mapeado em ${v.clr} de ${v.n}.` : "Não houve desmatamento mapeado."}`,
+    pShare: v => `<b>${v.exp}</b> de ${v.cells} milhões de células de floresta devem perder um hectare`,
+    pShareMin: v => `<b>${v.n}</b> células com ${v.cut} ou mais, com ${v.share}% da perda esperada`,
+    pSharePastNo: v => `<b>${v.act}</b> células tiveram desmatamento mapeado`,
+    pSharePastMin: v => `<b>${v.n}</b> células com ${v.cut} ou mais, com ${v.share}% das células com desmatamento mapeado`,
+    pastP: v => `Em ${v.y}, esperava-se que ${v.exp} células perdessem um hectare e ${v.act} perderam`, prevYear: "Ano anterior", nextYear: "Ano seguinte",
+    modes: { sectors: "Setores", cells: "Células", prio: "Prioridades" }, ranking: "Ranking", bars: "Barras", line: "Linha",
+    prioSay: v => `Dos ${v.top} blocos de ${v.km} km no topo do ranking, ${v.hit}% perderam pelo menos 10 hectares em ${v.y}, contra ${v.base}% de todos os blocos de floresta.`,
+    prioCols: ["células", "chance máxima"], prioColsTitle: v => `Células do bloco que devem perder um hectare até julho de ${v.y}, e a maior chance entre elas`,
+    csv: "Baixar CSV", land: { ti: "terra indígena", uc: "unidade de conservação" },
+    rankSay: v => `${v.kind} por ${v.what}`, rankWhat: { fc: y => `desmatamento esperado até julho de ${y}`, past: y => `desmatamento esperado para ${y}`, risk: "fatia do mapa de risco", fire: "fatia de onde o fogo costuma ocorrer" },
     kinds: { uf: "Estados", mun: "Municípios", ti: "Terras indígenas", uc: "Unidades de conservação" },
     many: { uf: "estados", mun: "municípios", ti: "terras indígenas", uc: "unidades de conservação" },
     rank: n => n + "º",
@@ -123,15 +154,13 @@ const T = {
     fcNone: v => `Quase nenhum desmatamento esperado aqui até julho de ${v.y}`,
     fcSub: v => `Provavelmente entre ${v.lo} e ${v.hi}.`,
     rankSub: v => `${v.rank} entre ${v.n} ${v.many}. ${v.share}% do total da Amazônia.`,
-    past: v => `Em ${v.y}, ${v.cap}% do desmatamento caiu nos 5% de floresta marcados`,
-    pastSub: v => `Repetir o ano anterior teria pegado ${v.naive}%.`,
+    past: v => `Em ${v.y}, ${v.act} km² desmatados`,
     partial: " Só cenas prioritárias, por enquanto.",
-    pastHere: v => `Em ${v.y}, ${v.act} km² desmatados aqui, ${v.inside}% em células marcadas`,
+    pastHere: v => `Em ${v.y}, ${v.act} km² desmatados aqui`,
     pastHereNone: v => `Em ${v.y}, nenhum desmatamento mapeado aqui`,
     pastHereSub: v => `Fatia prevista de ${v.ps}%, fatia real de ${v.as}%.`,
     mfc: {
       clear: v => `Cerca de ${v.km} km² devem ser desmatados${v.here} nos próximos ${v.h} meses`,
-      fire: v => `Cerca de ${v.km} km² devem queimar${v.here} nos próximos ${v.h} meses`,
       degr: v => `Cerca de ${v.km} km² devem ser degradados${v.here} nos próximos ${v.h} meses`,
       mine: v => `Cerca de ${v.km} km² de garimpo devem surgir${v.here} nos próximos ${v.h} meses`,
     },
@@ -142,21 +171,20 @@ const T = {
       mine: v => `${v.km} km² de garimpo${v.here} nos últimos três meses`,
     },
     scaledSub: v => `É a fatia deste setor na previsão da Amazônia, sem faixa própria. ${v.rank} entre ${v.n} ${v.many}.`,
-    unsure: v => `Muito incerto, de ${v.lo} a ${v.hi}. Nos testes, esse total errou ${v.miss}% em média.`, veryUnsure: "muito incerto",
+    burned: { months: v => `${v.km} km² queimados${v.here} nos últimos três meses, ${v.prev} um ano antes`, years: v => `${v.km} km² queimados${v.here} nos últimos doze meses, ${v.prev} nos doze anteriores` },
+    fireRank: v => `${v.rank} entre ${v.n} ${v.many} no mapa de onde o fogo costuma ocorrer.`,
     rankOnly: v => `${v.rank} entre ${v.n} ${v.many} no mapa de risco.`,
     deter: "Os valores mensais são o que o DETER, do INPE, detecta. A contagem anual do PRODES é maior.",
     axisM: { clear: "km² desmatados por mês", fire: "km² queimados por mês", degr: "km² degradados por mês", mine: "km² de garimpo por mês" },
     axisW: { fire: "km² queimados em 12 meses", degr: "km² degradados em 12 meses", mine: "km² de garimpo em 12 meses" },
     whole: "Amazônia inteira", to: (a, b) => `${a} a ${b}`,
     where: {
-      fire: v => `Onde a floresta tem mais chance de queimar até ${v.end}`,
       degr: v => `Onde a floresta tem mais chance de ser degradada até ${v.end}`,
       mine: v => `Onde o garimpo tem mais chance de avançar até ${v.end}`,
     },
     whereHere: v => `${v.rank} entre ${v.n} ${v.many} em risco de ${v.risk} até ${v.end}`,
-    risk: { fire: "fogo", degr: "degradação", mine: "garimpo" },
+    risk: { degr: "degradação", mine: "garimpo" },
     lastSub: {
-      fire: v => `${v.km} km² queimados${v.here} nos últimos doze meses.`,
       degr: v => `${v.km} km² degradados${v.here} nos últimos doze meses.`,
       mine: v => `${v.km} km² de garimpo${v.here} nos últimos doze meses.`,
     },
@@ -168,33 +196,34 @@ const T = {
     signs: "Sinais, três meses contra o ano passado",
     enso: ["El Niño", "La Niña", "Pacífico"], ensoLevel: [["muito forte", "forte", "moderado", "fraco"], ["muito forte", "forte", "moderada", "fraca"], "neutro"],
     signTitle: v => `${v.now} nos últimos três meses, ${v.prev} um ano antes`,
-    legend: { clear: "Risco de desmatamento", fire: "Risco de fogo", degr: "Risco de degradação", mine: "Risco de garimpo" }, lower: "menor", higher: "maior", next: n => `próximos ${n} meses`,
-    flagged: "marcado", hit: "marcado e desmatado", miss: "desmatado, não marcado",
-    about_: x => `cerca de ${x} km²`, range: (lo, hi) => `provável de ${lo} a ${hi}`, inside: p => `${p}% em células marcadas`,
+    legend: { clear: "Risco de desmatamento", fire: "Onde o fogo costuma ocorrer", degr: "Risco de degradação", mine: "Risco de garimpo" }, lower: "menor", higher: "maior", next: n => `próximos ${n} meses`,
+    about_: x => `cerca de ${x} km²`, range: (lo, hi) => `provável de ${lo} a ${hi}`,
     tipFc: v => `cerca de ${v.exp} km² esperados`, tipPast: v => `${v.exp} km² esperados, ${v.act} desmatados`, tipRank: v => `${v.rank} entre ${v.n}`,
     credit: "Imagens: Esri, Maxar, Earthstar Geographics",
     aboutHtml: v => `
       <h2>O sinal antes do acontecimento</h2>
-      <p>O Prenúncio é um alerta antecipado para a Amazônia Legal. Ele prevê onde a floresta vai ser desmatada, queimada, degradada ou minerada a seguir e mostra quanta pressão existe agora.</p>
+      <p>O Prenúncio é um alerta antecipado para a Amazônia brasileira. Ele prevê onde a floresta vai ser desmatada, queimada, degradada ou minerada a seguir e mostra quanta pressão existe agora.</p>
       <h3>O que ele mostra</h3>
       <ul>
-        <li><b>O nível.</b> Calmo, Atenção, Alerta ou Alarme. Ele é contado a partir dos últimos três meses daquele risco contra um ano antes, de um El Niño forte para a Amazônia inteira e da posição do setor na previsão. O vermelho segue o nível e nada mais.</li>
+        <li><b>O nível.</b> Calmo, Atenção, Alerta ou Alarme. Ele é contado a partir dos últimos três meses daquele risco contra um ano antes, de um El Niño forte para a Amazônia inteira e da posição do setor na previsão. A faixa vermelha segue o nível.</li>
         <li><b>A linha do tempo.</b> Por ano, o desmatamento com a previsão no fim, e qualquer ano desde ${v.first} pode ser revisto. Por mês, o que foi desmatado e o que o modelo espera para cada mês à frente, com a faixa.</li>
-        <li><b>O mapa.</b> Por setor ou por célula. As células marcadas são os 5% da floresta em pé onde o modelo espera mais. A previsão anual de desmatamento é pintada a 500 metros, e o resto a um quilômetro.</li>
+        <li><b>O mapa.</b> Verde é floresta, vermelho é desmatamento. Por setor ou por célula. Nas células, cada célula de floresta de 500 metros tem a sua própria chance de perder pelo menos um hectare no ano, e a legenda filtra pela chance mínima. De longe, um bloco assume o degrau que um quinto das suas células alcança. As janelas curtas e os outros riscos mostram os 5% de floresta de maior risco, a um quilômetro.</li>${v.prio ? `
+        <li><b>Prioridades.</b> Os ${v.prio.top} blocos de ${v.prio.km} km onde mais células devem perder um hectare, em ordem, com a lista para baixar. Em ${v.prio.y}, ${v.prio.hit}% dos blocos no topo perderam pelo menos 10 hectares, contra ${v.prio.base}% de todos os blocos de floresta.</li>` : ""}
       </ul>
       <h3>Quão certo</h3>
       <ul>
-        <li><b>Onde é a parte forte.</b> Prevendo cada ano de ${v.first} a ${v.last} às cegas, os 5% de floresta marcados concentraram ${v.cap}% do desmatamento que veio depois. Repetir o ano anterior concentrou ${v.naive}%.</li>
+${v.rel ? `        <li><b>As chances são conferidas.</b> Em ${v.rel.y}, as células com ${v.rel.said[0]}% perderam um hectare em ${v.rel.did[0]}% dos casos, as com ${v.rel.said[1]}% em ${v.rel.did[1]}%, e as com ${v.rel.said[2]}% em ${v.rel.did[2]}%. Esperava-se que ${v.rel.exp} células perdessem um hectare, e ${v.rel.act} perderam.</li>
+` : ""}        <li><b>A régua para comparar modelos.</b> Prevendo cada ano de ${v.first} a ${v.last} às cegas, os 5% de floresta no topo do ranking concentraram ${v.cap}% do desmatamento que veio depois. Repetir o ano anterior concentrou ${v.naive}%.</li>
         <li><b>Quanto é a parte fraca.</b> O total anual errou ${v.mape}% em média, contra ${v.previsia}% do PrevisIA, do Imazon, como publicado.</li>
         <li><b>Janelas curtas e outros riscos.</b> Os mapas foram testados quanto ao lugar, em ${v.tmin} a ${v.tmax} datas passadas.</li>${v.mo ? `
         <li><b>Mês a mês.</b> Em ${v.mo.origins} datas de previsão passadas, o total desmatado em três meses errou ${v.mo.h3}% em média, contra ${v.mo.n3}% de repetir os mesmos meses do ano anterior. Os valores mensais são o que o DETER, do INPE, detecta, e a contagem anual do PRODES é maior.</li>` : ""}
       </ul>
       <h3>O que ele não faz</h3>
       <ul>
-        <li>Dizer por que um lugar foi marcado. Os sinais são coisas que o modelo lê, não causas.</li>
+        <li>Dizer por que um lugar está em risco. Os sinais são coisas que o modelo lê, não causas.</li>
         <li>Dar uma faixa para um setor sozinho, nem ver chegar uma mudança de política.</li>
-        <li>Prever mês a mês um município, uma terra indígena ou uma unidade de conservação. A previsão deles é a fatia que têm na previsão da Amazônia.</li>${v.fire ? `
-        <li>Dizer quanto vai queimar. Nos testes, o total de fogo em três meses errou ${v.fire}% em média.</li>` : ""}
+        <li>Prever mês a mês um município, uma terra indígena ou uma unidade de conservação. A previsão deles é a fatia que têm na previsão da Amazônia.</li>
+        <li>Dizer quanto vai queimar. Isso depende de uma seca que ainda não aconteceu, então o site mostra onde o fogo costuma ocorrer e o que já queimou.</li>
         <li>Substituir os números oficiais do INPE. O resultado de ${v.partial} cobre só cenas prioritárias até agora.</li>
       </ul>
       <h3>Aberto e democrático</h3>
@@ -223,38 +252,47 @@ const share = x => (x < 0.1 ? t().tiny : fmt(x, 1));
 const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
 const css = name => getComputedStyle(document.documentElement).getPropertyValue(name).trim();
 
-const [M, R, MO] = await Promise.all(["meta", "regions", "monthly"].map(f => fetch(`data/${f}.json`).then(r => (r.ok ? r.json() : null)).catch(() => null)));  // monthly.json may not be there yet
+const [M, R, MO, P] = await Promise.all(["meta", "regions", "monthly", "prob"].map(f => fetch(`data/${f}.json`).then(r => (r.ok ? r.json() : null)).catch(() => null)));  // monthly.json may not be there yet
 M.layers ||= {};
 if (Math.abs(R.total_km2 / M.forecast.total_km2 - 1) > 1e-6) console.warn("Sector numbers are older than the forecast, run pipeline/regions.py");
 const PARTIAL = 2026;  // the year whose outcome is INPE's priority scenes only, until the full map is out
 const REPO = "https://github.com/gdavidss/prenuncio";  // the public code and benchmark, linked from About
 
-// ---------- hazards. Each has a forecast layer in meta.json, a monthly DETER series, a hue that is never red,
-// and a glyph, so it can be told apart by shape as well as colour. Clearing also has the yearly forecast.
+// ---------- hazards. Each has a forecast layer in meta.json, a monthly DETER series, a hue and a glyph, so it
+// can be told apart by shape as well as colour. Clearing is red and also has the yearly forecast. The steps are
+// the four map colours above standing forest, which stays green: they climb from near the forest to the
+// hazard's most vivid tone, so on the green map brighter is more.
+const FOREST = [11, 107, 58], DARK = [20, 20, 20];  // standing forest, and clearing mapped in a replayed year
 const HAZ = {
-  clear: { series: "clear", glyph: "M1 1h10v6l-4 4H1z", steps: [[214, 200, 240], [176, 146, 226], [134, 92, 205], [98, 48, 180], [58, 17, 115]] },
-  fire: { layer: "scar12", series: "scar", glyph: "M6 .5C8 3 10.6 5 10.6 7.7A4.6 4 0 0 1 1.4 7.7C1.4 6 2.6 5 3.4 3.6C3.9 5 4.5 5.5 5.2 5.5C5 3.7 5.3 2 6 .5z", steps: [[252, 230, 160], [248, 202, 84], [242, 169, 0], [200, 124, 0], [146, 84, 0]] },
-  degr: { layer: "degr12", series: "degr", glyph: "M1 1.5h10v2.2H1zM1 4.9h10v2.2H1zM1 8.3h10v2.2H1z", steps: [[190, 226, 228], [128, 196, 201], [52, 160, 168], [11, 124, 134], [6, 82, 92]] },
-  mine: { layer: "mine12", series: "mine", glyph: "M6 .5L11.5 6L6 11.5L.5 6z", steps: [[212, 212, 208], [160, 160, 156], [110, 110, 107], [62, 62, 60], [20, 20, 20]] },
+  clear: { series: "clear", glyph: "M1 1h10v6l-4 4H1z", steps: [[74, 140, 62], [178, 198, 62], [247, 158, 30], [228, 0, 43]] },
+  fire: { layer: "scar12", series: "scar", glyph: "M6 .5C8 3 10.6 5 10.6 7.7A4.6 4 0 0 1 1.4 7.7C1.4 6 2.6 5 3.4 3.6C3.9 5 4.5 5.5 5.2 5.5C5 3.7 5.3 2 6 .5z", steps: [[112, 128, 48], [176, 146, 30], [236, 170, 8], [255, 214, 46]] },
+  degr: { layer: "degr12", series: "degr", glyph: "M1 1.5h10v2.2H1zM1 4.9h10v2.2H1zM1 8.3h10v2.2H1z", steps: [[36, 112, 124], [40, 118, 180], [56, 136, 236], [140, 196, 255]] },
+  mine: { layer: "mine12", series: "mine", glyph: "M6 .5L11.5 6L6 11.5L.5 6z", steps: [[92, 92, 128], [132, 70, 172], [176, 58, 214], [236, 140, 255]] },
 };
-const hazards = () => Object.keys(HAZ).filter(k => k === "clear" || M.layers[HAZ[k].layer]);  // only the ones that have a forecast
+const hazards = () => Object.keys(HAZ).filter(k => k === "clear" || M.layers[HAZ[k].layer]);  // only the ones that have a layer
 const glyph = k => `<svg class="glyph" viewBox="0 0 12 12" style="--c:var(--${k})" aria-hidden="true"><path d="${HAZ[k].glyph}"/></svg>`;
 
 // hazard: one of the above. scale: years or months. h: months ahead, in the monthly clearing view.
-const S = { year: M.forecast.year, hazard: "clear", scale: "years", h: 3, mode: "sectors", kind: "mun", sel: null };
+const S = { year: M.forecast.year, hazard: "clear", scale: "years", h: 3, mode: "sectors", kind: "mun", sel: null, min: 0, block: null, rank: false, line: false };
+// mode: what the map shows (sectors, cells, or the priority blocks over the cells). min: the lowest chance step shown.
+// block: the priority block selected. rank: the sector ranking is open. line: the timeline as a line instead of bars.
+const cellsOn = () => S.mode !== "sectors";  // the priority list sits on top of the cells
 if (M.years[H.get("y")]) S.year = +H.get("y");
 S.hazard = hazards().find(k => HAZ[k].layer && HAZ[k].layer === H.get("k")) || "clear";
 if (/^clear[36]$/.test(H.get("k") || "")) { S.scale = "months"; S.h = +H.get("k").slice(5); }
 if (H.get("t") === "months") S.scale = "months";
-if (H.get("m") === "cells") S.mode = "cells";
+if (["cells", "prio"].includes(H.get("m"))) S.mode = H.get("m");
+if (H.get("b") > 0) S.block = +H.get("b");
+S.rank = H.get("g") === "1"; S.line = H.get("c") === "line";
+if (H.get("p") > 0 && H.get("p") < 5) S.min = +H.get("p");
 if (T.en.kinds[H.get("s")]) S.kind = H.get("s");
 if (H.get("r")) S.sel = H.get("r");
 // which forecast map is on screen: a PRODES year, or one of the shorter layers
 const key = () => (S.hazard !== "clear" ? HAZ[S.hazard].layer : S.scale === "months" ? "clear" + S.h : S.year);
 const info = () => (typeof key() === "number" ? M.years[key()] : M.layers[key()]);
 const isPast = () => typeof key() === "number" && info().actual_km2 != null;
-// the share of a year's clearing inside its flagged cells, for the cells the site paints: the 500 m flags when
-// the export has them, the 1 km ones otherwise
+// the benchmark's yardstick, quoted in About only: the share of a year's clearing inside the 5% of forest ranked
+// highest, at 500 m when the export has it, at 1 km otherwise
 const cap5 = Y => Y.flags500?.capture5 ?? Y.capture["5"];
 const naive5 = Y => Y.flags500?.naive5 ?? Y.naive["5"];  // the naive map's share, at 500 m once the export has it
 const month = (y, mo, opt = { month: "long", year: "numeric" }) => new Date(y, mo, 1).toLocaleDateString(loc(), opt);
@@ -299,17 +337,17 @@ function monthsOf(it) {
   const a = monthly(it, name) || [], [ry, rm] = R.months.end.split("-").map(Number), off = (LY - ry) * 12 + LM - rm;  // regions.json may end on another month
   const obs = own ? k => own.history[ym(k)] ?? 0 : k => ago(a, k - off);
   const part = it && !own && hz ? expOf(it) / info().risk_km2 : 1;
+  // fire has no forecast amount: how much burns depends on a drought that has not happened yet (the owner's decision)
+  if (S.hazard === "fire") return { obs, fc: null, part: 1, scaled: false, sums: null };
   const fc = own ? own.forecast : hz ? hz.forecast.map(f => ({ month: f.month, p50: f.p50 * part })) : null;
-  // how far the total over n months has missed in backtests. Above 60% (fire) the amount is said to be very uncertain.
-  const miss = n => hz?.backtest?.[`h${n}sum_mape`] ?? null;
-  return { obs, fc, part, scaled: !!(it && !own && hz), sums: (own || hz)?.sums, miss, unsure: n => miss(n) > 0.6 };
+  return { obs, fc, part, scaled: !!(it && !own && hz), sums: (own || hz)?.sums };
 }
 // the months ahead added up. The file gives the model's own total and range for 3, 6 and 12 months; a sector
 // scaled from the Amazon gets the middle only. Without those, the monthly middles are added.
 function ahead(mo, n) {
   if (!mo.fc || mo.fc.length < n) return null;
   const t_ = mo.sums?.[n], add = k => mo.fc.slice(0, n).reduce((x, f) => x + f[k], 0), ranged = !mo.scaled && (t_ || mo.fc[0].p10 != null);
-  return { km: t_ ? t_.p50 * mo.part : add("p50"), lo: ranged ? (t_ ? t_.p10 : add("p10")) : null, hi: ranged ? (t_ ? t_.p90 : add("p90")) : null, miss: mo.miss(n), unsure: mo.unsure(n) };
+  return { km: t_ ? t_.p50 * mo.part : add("p50"), lo: ranged ? (t_ ? t_.p10 : add("p10")) : null, hi: ranged ? (t_ ? t_.p90 : add("p90")) : null };
 }
 
 // ---------- the alert level (docs/BRAND.md): counted from the hazard's own alerts, plus El Niño for the
@@ -337,8 +375,9 @@ function alarm(it, K) {
 // ---------- map: the Legal Amazon drawn from the grid, satellite only when close ----------
 const SAT_ZOOM = 10, AMAZON = [[-18.05, -74.0], [5.3, -43.9]];
 const PHONE = matchMedia("(max-width: 860px)"), narrow = () => PHONE.matches;
-let view = H.get("m") === "cells" || H.get("r") || H.get("v") ? "map" : "chart";  // on a phone, which of the two is on screen
+let view = H.get("m") === "cells" || H.get("r") || H.get("v") || H.get("b") ? "map" : "chart";  // on a phone, which of the two is on screen
 const mapOn = () => !narrow() || view === "map";
+const listOn = () => S.mode === "prio" || (S.mode === "sectors" && S.rank);  // the ranked list takes the timeline's place in the column
 const FIT = () => (narrow() ? { paddingTopLeft: [8, 8], paddingBottomRight: [8, 44] } : { paddingTopLeft: [14, 70], paddingBottomRight: [14, 52] });
 const BOUNDS = [[M.north - M.rows * M.cell, M.west], [M.north, M.west + M.cols * M.cell]];
 const map = L.map("map", { zoomControl: false, attributionControl: false, minZoom: 4, maxZoom: 14, zoomSnap: 0.25, maxBounds: [[-30, -92], [17, -26]], maxBoundsViscosity: 0.8 });
@@ -404,7 +443,7 @@ function startMap() {
   // every cell is a mix of forest, water, natural non-forest and cleared land (see pipeline/regions.py)
   pixels("base").then(d => {
     const px = new Uint32Array(M.cols * M.rows);
-    const FOREST = [172, 199, 166], WATER = [168, 198, 214], NATURAL = [214, 214, 190], CLEARED = [232, 225, 208];
+    const WATER = [156, 196, 212], NATURAL = [216, 214, 184], CLEARED = [236, 229, 210];
     for (let i = 0, j = 0; i < px.length; i++, j += 4) {
       if (d[j] === 255 && d[j + 1] === 255) continue;
       const f = d[j] / 240, w = d[j + 1] / 240, n = d[j + 2] / 240, c = Math.max(0, 1 - f - w - n);
@@ -431,109 +470,152 @@ function startMap() {
   });
 }
 
-// ---------- hazard colour on the map: five steps from pale to deep, in the hazard's own hue ----------
+// ---------- hazard colour on the map: forest green, then the hazard's four steps ----------
 const steps = () => HAZ[S.hazard].steps;
-const mix = k => {  // k in 0..1 along the five steps
-  const s = steps(), x = Math.min(0.9999, Math.max(0, k)) * 4, i = Math.floor(x), u = x - i;
+const mix = k => {  // k in 0..1 along the four steps
+  const s = steps(), x = Math.min(0.9999, Math.max(0, k)) * 3, i = Math.floor(x), u = x - i;
   return s[i].map((c, n) => c + (s[i + 1][n] - c) * u | 0);
 };
 
 // ---------- cells ----------
-// Nothing here becomes one big canvas. Every forecast is kept as arrays, one value per cell, with coarser
-// levels above it, and the map draws only the window on screen from the finest level whose cell is at least
-// a screen pixel. Each screen row takes the grid row at its own latitude, so a cell lands on its ground.
+// Nothing here becomes one big canvas. Every layer is kept as arrays, one value per cell, with coarser levels
+// above it, and the map draws only the window on screen from the finest level whose cell is at least a screen
+// pixel. Each screen row takes the grid row at its own latitude, so a cell lands on its ground.
 //
-// The yearly clearing forecast and its replay are painted on the 500 m cells they are scored on.
-// f<year>.png is one grey band, twice the grid each way: value 85 * (flagged + 2 * cleared). It is 34.5 million
-// pixels: a worker decodes it in tiles into a byte per cell and builds the coarser levels (a block takes the
-// highest code in it and counts its flagged cells).
-async function decodeMask(url, cols, rows, north, cell) {
-  const bmp = await createImageBitmap(await (await fetch(url)).blob(), { colorSpaceConversion: "none", premultiplyAlpha: "none" });
-  const T = 1024, cv = typeof OffscreenCanvas === "function" ? new OffscreenCanvas(T, T) : Object.assign(document.createElement("canvas"), { width: T, height: T });
-  const cx = cv.getContext("2d", { willReadFrequently: true }), code = new Uint8Array(cols * rows);
-  for (let y = 0; y < rows; y += T) for (let x = 0; x < cols; x += T) {
-    const w = Math.min(T, cols - x), h = Math.min(T, rows - y);
-    cx.clearRect(0, 0, T, T);
-    cx.drawImage(bmp, x, y, w, h, 0, 0, w, h);
-    const d = cx.getImageData(0, 0, w, h).data;
-    for (let r = 0; r < h; r++) for (let c = 0, o = (y + r) * cols + x, i = 4 * r * w; c < w; c++, i += 4) code[o + c] = (d[i] + 42) / 85 | 0;
+// The shorter windows, the other hazards and a year that has no chances are painted at 1 km, from one RGB PNG
+// per layer (see pipeline/export.py for the encoding): the forest ranked highest, from the hazard's first step
+// to its last, and in a replayed year the cells where clearing was mapped. Here a level holds the cell's colour;
+// a coarser block takes the most telling cell in it.
+const CLEARED_CODE = 26; // at least 1 ha of the cell cleared: round(255 * sqrt(0.01))
+const MAPPED = rgba(...DARK, 1);
+async function kmLevels(y, I) {
+  const d = await pixels(y), code = k => Math.round(255 * Math.cbrt(k));
+  const lo = Math.max(1, code(I.cut["5"])), hi = Math.max(lo + 1, code(I.cut["0.2"])), past = I.actual_km2 != null;
+  const lut = new Uint32Array(256);
+  for (let v = lo; v < 256; v++) { const c = mix(Math.min(1, (v - lo) / (hi - lo))); lut[v] = rgba(c[0], c[1], c[2], 1); }
+  const color = new Uint32Array(M.cols * M.rows), tell = new Uint8Array(M.cols * M.rows), clr = past ? new Uint8Array(M.cols * M.rows) : null;  // tell: which cell wins in a block
+  for (let i = 0; i < color.length; i++) {
+    const R_ = d[4 * i], cleared = past && d[4 * i + 1] >= CLEARED_CODE;
+    color[i] = cleared ? MAPPED : lut[R_];
+    if (cleared) clr[i] = 1; else if (color[i]) tell[i] = Math.min(255, R_);
   }
-  if (bmp.close) bmp.close();
-  const levels = [{ f: 1, cols, rows, code, n: null }];
-  for (const k of [2, 3, 2, 2]) {  // 1 km, 3 km, 6 km and 12 km blocks
-    const p = levels[levels.length - 1], c2 = Math.ceil(p.cols / k), r2 = Math.ceil(p.rows / k);
-    const q = { f: p.f * k, cols: c2, rows: r2, code: new Uint8Array(c2 * r2), n: new Uint16Array(c2 * r2) };
+  const levels = [{ f: 1, cols: M.cols, rows: M.rows, color, tell, clr }];
+  for (const k of [3, 2, 2]) {  // 3 km, 6 km and 12 km blocks
+    const p = levels.at(-1), c2 = Math.ceil(p.cols / k), r2 = Math.ceil(p.rows / k), n2 = (p.f * k) ** 2;
+    const q = { f: p.f * k, cols: c2, rows: r2, color: new Uint32Array(c2 * r2), raw: new Uint32Array(c2 * r2), tell: new Uint8Array(c2 * r2), n: new Uint16Array(c2 * r2), clr: clr && new Uint16Array(c2 * r2) };
     for (let r = 0; r < p.rows; r++) for (let c = 0, o = r * p.cols, j = ((r / k) | 0) * c2; c < p.cols; c++) {
-      const v = p.code[o + c];
-      if (!v) continue;
       const i = j + ((c / k) | 0);
-      if (v > q.code[i]) q.code[i] = v;
-      q.n[i] += p.n ? p.n[o + c] : v & 1;
+      if (clr) q.clr[i] += p.clr[o + c];
+      if (!p.tell[o + c]) continue;
+      q.n[i] += p.n ? p.n[o + c] : 1;
+      if (p.tell[o + c] > q.tell[i]) { q.tell[i] = p.tell[o + c]; q.raw[i] = (p.raw || p.color)[o + c]; }
+    }
+    // a block with only a few painted cells is fainter, so a far view does not overstate how much is at risk;
+    // and it darkens with the share of it where clearing was mapped
+    for (let i = 0; i < q.color.length; i++) {
+      const a = clr && q.clr[i] ? Math.min(1, 1.1 * Math.sqrt(q.clr[i] / n2)) : 0, c = q.raw[i];
+      q.color[i] = !q.tell[i] ? (a ? rgba(...DARK, a) : 0)
+        : a ? rgba(...[0, 8, 16].map((sh, n) => (c >> sh & 255) + (DARK[n] - (c >> sh & 255)) * a | 0), 1)
+        : (c & 0xffffff | (255 * (0.3 + 0.7 * Math.sqrt(q.n[i] / n2)) << 24)) >>> 0;
     }
     levels.push(q);
   }
-  // how much is flagged: cells, and their area by latitude
-  let flagged = 0, km2 = 0;
-  for (let r = 0; r < rows; r++) {
-    let n = 0;
-    for (let c = 0, o = r * cols; c < cols; c++) n += code[o + c] & 1;
-    flagged += n; km2 += n * cell * 110.57 * cell * 111.32 * Math.cos((north - (r + 0.5) * cell) * Math.PI / 180);
-  }
-  levels[0].flagged = flagged; levels[0].km2 = km2;
   return levels;
 }
-function loadMask(y, F) {
-  const args = [new URL(`data/f${y}.png`, location.href).href, F.cols, F.rows, M.north, F.cell];
+// The yearly clearing forecast is a chance for every forest cell. p<year>.png is one grey band on the 500 m
+// grid: 0 is not forest, otherwise chance = (value / 255) squared, the calibrated chance that the cell loses at
+// least a hectare in that PRODES year. In a replay the f<year>.png mask adds where clearing was mapped (its bit
+// 1: at least 1% of the cell). Seen from far, a block of cells takes the highest step that a fifth of its
+// forest cells reach: a hot spot does not vanish when the map is small, and a single cell does not paint a
+// whole block. With a fifth, red covers about as much of the far view as it does of the cells (0.13% of them
+// in 2027). The chances are very skewed (three quarters of the cells are under 0.1%), so most of the forest
+// stays green and red is rare.
+const PCUT = [0.001, 0.01, 0.05, 0.2];  // the steps of the legend: under 0.1%, to 1%, to 5%, to 20%, over
+const PCLS = Uint8Array.from({ length: 256 }, (_, v) => PCUT.filter(c => (v / 255) ** 2 >= c).length);
+const FAR_PART = 0.2;
+async function decodeProb(urlP, urlF, cols, rows, cuts, part) {
+  const raw = async url => {
+    const bmp = await createImageBitmap(await (await fetch(url)).blob(), { colorSpaceConversion: "none", premultiplyAlpha: "none" });
+    const T = 1024, cv = typeof OffscreenCanvas === "function" ? new OffscreenCanvas(T, T) : Object.assign(document.createElement("canvas"), { width: T, height: T });
+    const cx = cv.getContext("2d", { willReadFrequently: true }), out = new Uint8Array(cols * rows);
+    for (let y = 0; y < rows; y += T) for (let x = 0; x < cols; x += T) {
+      const w = Math.min(T, cols - x), h = Math.min(T, rows - y);
+      cx.clearRect(0, 0, T, T);
+      cx.drawImage(bmp, x, y, w, h, 0, 0, w, h);
+      const d = cx.getImageData(0, 0, w, h).data;
+      for (let r = 0; r < h; r++) for (let c = 0, o = (y + r) * cols + x, i = 4 * r * w; c < w; c++, i += 4) out[o + c] = d[i];
+    }
+    if (bmp.close) bmp.close();
+    return out;
+  };
+  const val = await raw(urlP), sq = Float64Array.from({ length: 256 }, (_, v) => (v / 255) ** 2), cls = Uint8Array.from(sq, x => cuts.filter(c => x >= c).length);
+  let bits = null;
+  if (urlF) {  // one bit per cell: clearing was mapped in it that year
+    const f = await raw(urlF);
+    bits = new Uint8Array(Math.ceil(val.length / 8));
+    for (let i = 0; i < f.length; i++) if (((f[i] + 42) / 85 | 0) & 2) bits[i >> 3] |= 1 << (i & 7);
+  }
+  // per step of the legend: how many forest cells, their chances added up, and how many had clearing
+  const stats = { n: [0, 0, 0, 0, 0], sum: [0, 0, 0, 0, 0], clr: bits ? [0, 0, 0, 0, 0] : null };
+  // far views: blocks of 1, 3, 6 and 12 km. Each counts its forest cells, how many reach each step, and how many had clearing.
+  const far = [2, 6, 12, 24].map(f => {
+    const c = Math.ceil(cols / f), r = Math.ceil(rows / f), A = f > 12 ? Uint16Array : Uint8Array;
+    return { f, cols: c, rows: r, at: Int32Array.from({ length: cols }, (_, x) => (x / f) | 0), cnt: new A(c * r), ge: [0, 1, 2, 3].map(() => new A(c * r)), nclr: bits && new A(c * r) };
+  });
+  for (let r = 0; r < rows; r++) {
+    const off = far.map(l => ((r / l.f) | 0) * l.cols);
+    for (let c = 0, o = r * cols; c < cols; c++) {
+      const v = val[o + c];
+      if (!v) continue;
+      const k = cls[v], cl = bits ? (bits[(o + c) >> 3] >> ((o + c) & 7)) & 1 : 0;
+      stats.n[k]++; stats.sum[k] += sq[v];
+      if (cl) stats.clr[k]++;
+      for (let n = 0; n < 4; n++) {
+        const l = far[n], i = off[n] + l.at[c];
+        l.cnt[i]++;
+        for (let s = 0; s < k; s++) l.ge[s][i]++;
+        if (cl) l.nclr[i]++;
+      }
+    }
+  }
+  // a block's byte: the low half is 1 + the highest step that `part` of its forest cells reach (one cell at
+  // least), the high half is the highest step any of its cells reaches. clr: how much of the block had clearing.
+  const levels = [{ f: 1, cols, rows, val, bits }, ...far.map(l => {
+    const k = new Uint8Array(l.cnt.length), clr = bits && new Uint8Array(l.cnt.length), n2 = l.f * l.f;
+    for (let i = 0; i < k.length; i++) {
+      if (!l.cnt[i]) continue;
+      const need = Math.max(1, Math.ceil(part * l.cnt[i]));
+      let a = 0, top = 0;
+      for (let s = 0; s < 4; s++) { if (l.ge[s][i] >= need) a = s + 1; if (l.ge[s][i]) top = s + 1; }
+      k[i] = (a + 1) | (top << 4);
+      if (clr && l.nclr[i]) clr[i] = Math.max(1, Math.round(255 * l.nclr[i] / n2));
+    }
+    return { f: l.f, cols: l.cols, rows: l.rows, k, clr };
+  })];
+  return { levels, stats };
+}
+function loadProb(y, F, withTruth) {
+  const url = f => new URL(`data/${f}${y}.png`, location.href).href, args = [url("p"), withTruth ? url("f") : null, F.cols, F.rows, PCUT, FAR_PART];
   return new Promise(done => {
     let w;
-    const here = () => { if (w) w.terminate(); done(decodeMask(...args)); };  // no worker, or no canvas inside one: decode here
+    const here = () => { if (w) w.terminate(); done(decodeProb(...args)); };  // no worker, or no canvas inside one: decode here
     try {
-      w = new Worker(URL.createObjectURL(new Blob([`onmessage = async e => { try { const lv = await (${decodeMask})(...e.data); postMessage(lv, lv.flatMap(l => (l.n ? [l.code.buffer, l.n.buffer] : [l.code.buffer]))); } catch (err) { postMessage(null); } };`], { type: "text/javascript" })));
+      w = new Worker(URL.createObjectURL(new Blob([`onmessage = async e => { try { const g = await (${decodeProb})(...e.data); postMessage(g, g.levels.flatMap(l => [l.val, l.bits, l.k, l.clr].filter(Boolean).map(a => a.buffer))); } catch (err) { postMessage(null); } };`], { type: "text/javascript" })));
       w.onmessage = e => { if (e.data) { w.terminate(); done(e.data); } else here(); };
       w.onerror = here;
       w.postMessage(args);
     } catch (err) { here(); }
   });
 }
-// The shorter windows and the other hazards are painted at 1 km, from one RGB PNG per layer (see
-// pipeline/export.py for the encoding). This is also the fallback for a year exported without the 500 m flags.
-// Here a level holds the cell's colour; a coarser block takes the most telling cell in it.
-const CLEARED_CODE = 26; // at least 1 ha of the cell cleared: round(255 * sqrt(0.01))
-const HIT = rgba(17, 17, 17, 1), MISS = rgba(184, 115, 10, 1);
-async function kmLevels(y, I) {
-  const d = await pixels(y), code = k => Math.round(255 * Math.cbrt(k));
-  const lo = Math.max(1, code(I.cut["5"])), hi = Math.max(lo + 1, code(I.cut["0.2"])), past = I.actual_km2 != null;
-  const lut = new Uint32Array(256);
-  for (let v = lo; v < 256; v++) { const c = mix(0.25 + 0.75 * Math.min(1, (v - lo) / (hi - lo))); lut[v] = rgba(c[0], c[1], c[2], 1); }
-  const color = new Uint32Array(M.cols * M.rows), tell = new Uint8Array(M.cols * M.rows);  // tell: which cell wins in a block
-  let flagged = 0, forest = 0, km2 = 0;
-  for (let r = 0, i = 0; r < M.rows; r++) {
-    const area = M.cell * 110.57 * M.cell * 111.32 * Math.cos((M.north - (r + 0.5) * M.cell) * Math.PI / 180);
-    for (let c = 0; c < M.cols; c++, i++) {
-      const R_ = d[4 * i], cleared = past && d[4 * i + 1] >= CLEARED_CODE;
-      color[i] = cleared ? (R_ >= lo ? HIT : MISS) : lut[R_];
-      tell[i] = !color[i] ? 0 : cleared ? (R_ >= lo ? 255 : 254) : Math.min(253, R_);
-      if (d[4 * i + 2] >= 3) forest++;  // a forest cell: at least 1% forest, the cells the 5% is taken from
-      if (R_ >= lo) { flagged++; km2 += area; }
-    }
-  }
-  const levels = [{ f: 1, cols: M.cols, rows: M.rows, color, tell, flagged, km2, forest }];
-  for (const k of [3, 2, 2]) {  // 3 km, 6 km and 12 km blocks
-    const p = levels.at(-1), c2 = Math.ceil(p.cols / k), r2 = Math.ceil(p.rows / k);
-    const q = { f: p.f * k, cols: c2, rows: r2, color: new Uint32Array(c2 * r2), tell: new Uint8Array(c2 * r2), n: new Uint16Array(c2 * r2) };
-    for (let r = 0; r < p.rows; r++) for (let c = 0, o = r * p.cols, j = ((r / k) | 0) * c2; c < p.cols; c++) {
-      const i = j + ((c / k) | 0);
-      if (!p.tell[o + c]) continue;
-      q.n[i] += p.n ? p.n[o + c] : 1;
-      if (p.tell[o + c] > q.tell[i]) { q.tell[i] = p.tell[o + c]; q.color[i] = p.color[o + c] | 0xff000000; }
-    }
-    // a block with only a few flagged cells is fainter, so a far view does not overstate how much is flagged
-    for (let i = 0; i < q.color.length; i++) if (q.tell[i] && q.tell[i] < 254) q.color[i] = (q.color[i] & 0xffffff | (255 * (0.3 + 0.7 * Math.sqrt(q.n[i] / (q.f * q.f))) << 24)) >>> 0;
-    levels.push(q);
-  }
-  return levels;
-}
-let grid = null;  // what the cells layer draws: { key, cell, levels }. One forecast at a time (the 500 m mask is 45 MB).
+// which years have a p file: asked once per year, without downloading it
+const probs = {};
+const hasProb = y => (probs[y] ??= M.years[y]?.flags500 ? fetch(`data/p${y}.png`, { method: "HEAD" }).then(r => r.ok).catch(() => false) : Promise.resolve(false));
+// the five steps: forest under 0.1% is left as the base map shows it, green; then clearing's four steps, up to red
+const PRGB = HAZ.clear.steps, PCOL = [0, ...PRGB.map(c => rgba(...c, 1))], PCSS = [FOREST, ...PRGB].map(c => `rgb(${c})`);
+const pct = c => fmt(100 * c, c < 0.01 ? 1 : 0) + "%";
+const chanceText = ch => (ch < PCUT[0] ? t().under(pct(PCUT[0])) : pct(ch));
+
+let grid = null;  // what the cells layer draws: { key, cell, levels }. One layer at a time (a 500 m one is 45 MB).
 // A canvas the size of the view, redrawn after every move. Leaflet's renderer base keeps it placed, and scales
 // it during a zoom animation.
 const GridLayer = L.Renderer.extend({
@@ -546,51 +628,96 @@ const GridLayer = L.Renderer.extend({
     L.DomUtil.setPosition(cv, b.min);
     cv.width = size.x; cv.height = size.y;
     cv.style.width = size.x + "px"; cv.style.height = size.y + "px";
-    if (!grid || S.mode !== "cells" || grid.key !== key() || !size.x || !size.y) { delete cv.dataset.key; return; }
+    if (!grid || !cellsOn() || grid.key !== key() || !size.x || !size.y) { delete cv.dataset.key; return; }
     // the finest level whose cell is at least one screen pixel wide
     const px = grid.cell * 256 * 2 ** map_.getZoom() / 360, lv = grid.levels.find(l => px * l.f >= 1) || grid.levels.at(-1), cell = grid.cell * lv.f;
     const lng0 = map_.layerPointToLatLng(b.min).lng, dLng = (map_.layerPointToLatLng(b.max).lng - lng0) / size.x;
     const col = new Int32Array(size.x), row = new Int32Array(size.y);
     for (let x = 0; x < size.x; x++) { const c = Math.floor((lng0 + (x + 0.5) * dLng - M.west) / cell); col[x] = c >= 0 && c < lv.cols ? c : -1; }
     for (let y = 0; y < size.y; y++) { const r = Math.floor((M.north - map_.layerPointToLatLng([b.min.x, b.min.y + y + 0.5]).lat) / cell); row[y] = r >= 0 && r < lv.rows ? r : -1; }
-    // 500 m codes: flagged cells in the clearing hue, deeper where more of a block is flagged; cleared ones as in the legend
-    // (a block with only a few flagged cells is fainter, so a far view does not overstate how much is flagged)
-    const st = HAZ.clear.steps, shade = (k, a) => { const x = Math.min(0.9999, k) * 4, i = Math.floor(x), u = x - i; return rgba(...st[i].map((c, n) => c + (st[i + 1][n] - c) * u | 0), a); };
-    const lut = lv.code && Uint32Array.from({ length: lv.f * lv.f + 1 }, (_, n) => (lv.f === 1 ? shade(0.62, 1) : shade(0.45 + 0.55 * n / (lv.f * lv.f), 0.3 + 0.7 * Math.sqrt(n / (lv.f * lv.f)))));
     const img = this._cx.createImageData(size.x, size.y), out = new Uint32Array(img.data.buffer);
+    if (grid.prob) this._chances(lv, row, col, size, out);
+    else for (let y = 0, i = 0; y < size.y; y++) {
+      if (row[y] < 0) { i += size.x; continue; }
+      for (let x = 0, o = row[y] * lv.cols; x < size.x; x++, i++) if (col[x] >= 0) out[i] = lv.color[o + col[x]];
+    }
+    this._cx.putImageData(img, 0, 0);
+    cv.dataset.key = grid.key; cv.dataset.f = lv.f; cv.dataset.cell = cell; cv.dataset.min = grid.prob ? S.min : 0;
+  },
+  // every forest cell by its chance. Cells under the lowest step, or under the chosen minimum, are left to the
+  // green base map; cells where clearing was mapped are dark, on top. A far block shows the step a fifth of its
+  // cells reach; when a minimum is chosen it is kept, fainter, if any of its cells reaches it; and it darkens
+  // with the share of it that had clearing.
+  _chances(lv, row, col, size, out) {
+    const min = S.min, faint = PCOL.map(c => c && ((c & 0xffffff) | (120 << 24)) >>> 0);
+    const dark = (k, a) => (k ? rgba(...PRGB[k - 1].map((c, n) => c + (DARK[n] - c) * a | 0), 1) : rgba(...DARK, a));  // clearing over a step, or over the base map
     for (let y = 0, i = 0; y < size.y; y++) {
       if (row[y] < 0) { i += size.x; continue; }
       for (let x = 0, o = row[y] * lv.cols; x < size.x; x++, i++) {
-        const c = col[x];
+        const c = col[x], j = o + c;
         if (c < 0) continue;
-        if (lv.color) out[i] = lv.color[o + c];
-        else { const v = lv.code[o + c]; if (v) out[i] = v === 3 ? HIT : v === 2 ? MISS : lut[lv.n ? lv.n[o + c] : 1]; }
+        if (lv.val) {
+          const v = lv.val[j];
+          if (!v) continue;
+          if (lv.bits && (lv.bits[j >> 3] >> (j & 7)) & 1) out[i] = MAPPED;
+          else { const k = PCLS[v]; if (k && k >= min) out[i] = PCOL[k]; }
+        } else if (lv.k[j]) {
+          const k = (lv.k[j] & 15) - 1, on = k && k >= min;
+          if (lv.clr && lv.clr[j]) out[i] = dark(on ? k : 0, Math.min(1, 0.1 + 1.8 * Math.sqrt(lv.clr[j] / 255)));
+          else if (on) out[i] = PCOL[k];
+          else if (min && (lv.k[j] >> 4) >= min) out[i] = faint[min];
+        }
       }
     }
-    this._cx.putImageData(img, 0, 0);
-    cv.dataset.key = grid.key; cv.dataset.f = lv.f; cv.dataset.cell = cell;
   },
 });
 const gridLayer = new GridLayer({ pane: "paint", padding: 0.2 }).addTo(map);
 async function paint() {
-  const y = key(), I = info();
-  if (S.mode !== "cells" || grid?.key === y) return zoomed();
-  const g = I.flags500 ? { key: y, cell: I.flags500.cell, levels: await loadMask(y, I.flags500) } : { key: y, cell: M.cell, levels: await kmLevels(y, I) };
-  if (y !== key() || S.mode !== "cells") return;
-  // the share of forest cells that is flagged. At 1 km it is counted from the layer. At 500 m the export gives
-  // the flagged cells but not the forest cells; they are flagged as the top 5% of them, so that is the share.
-  const l0 = g.levels[0], F = I.flags500;
-  g.pct = l0.forest ? 100 * l0.flagged / l0.forest : F.forest_cells ? 100 * l0.flagged / F.forest_cells : 5;
-  g.km2 = l0.km2;
+  const y = key(), I = info(), F = I.flags500;
+  if (!cellsOn() || grid?.key === y) return zoomed();
+  const g = S.hazard === "clear" && typeof y === "number" && await hasProb(y)
+    ? { key: y, prob: true, cell: F.cell, ...await loadProb(y, F, I.actual_km2 != null) }
+    : { key: y, cell: M.cell, levels: await kmLevels(y, I) };
+  if (y !== key() || !cellsOn()) return;
   grid = g;
   zoomed();
-  flaggedShare();
+  legend();
 }
-function flaggedShare() {
-  const on = S.mode === "cells" && grid && grid.key === key();
+// the line that stands outside the legend box: how many cells, for the chances on screen
+function shareLine() {
+  const L_ = t(), n3 = x => fmt(round(Math.max(1, x), 3)), st = grid?.stats, Y = P?.years?.[grid?.key], past = !!st?.clr;
+  // (a replayed year whose chances were checked already has its count in the headline, or is about a sector)
+  const on = cellsOn() && grid?.prob && grid.key === key() && (S.min || !(past && Y));
   $("share").hidden = !on;
-  if (on) $("share").innerHTML = t().shareOf({ pct: fmt(grid.pct, 1), km: fmt(round(grid.km2, 3)) });
+  if (!on) return;
+  const from = a => a.slice(S.min).reduce((x, v) => x + v, 0), all = a => a.reduce((x, v) => x + v, 0);
+  $("share").innerHTML = S.min
+    ? (past ? L_.pSharePastMin : L_.pShareMin)({ n: n3(from(st.n)), cut: pct(PCUT[S.min - 1]), share: fmt(100 * (past ? from(st.clr) / all(st.clr) : from(st.sum) / all(st.sum))) })
+    : past ? L_.pSharePastNo({ act: n3(all(st.clr)) })
+    : L_.pShare({ exp: n3(all(st.sum)), cells: fmt(all(st.n) / 1e6, 1) });
 }
+// what a cell says when the pointer or a finger is on it. Close up it is the cell; from far it is the block on
+// screen: the highest chance among its cells and, in a replay, how many of them had clearing.
+const cellTip = L.tooltip({ className: "tip cell", direction: "top", offset: [0, -8], opacity: 1 });
+function cellSay(e) {
+  const on = cellsOn() && grid?.prob && grid.key === key() && gridLayer._container.dataset.key, l0 = on && grid.levels[0], f = +gridLayer._container.dataset.f || 1;
+  const r = on ? Math.floor((M.north - e.latlng.lat) / grid.cell) : -1, c = on ? Math.floor((e.latlng.lng - M.west) / grid.cell) : -1;
+  if (r < 0 || c < 0 || r >= l0.rows || c >= l0.cols) return map.closeTooltip(cellTip);
+  let v = 0, n = 0, clr = 0;
+  for (let y = r - r % f; y < Math.min(l0.rows, r - r % f + f); y++) for (let x = c - c % f, j = y * l0.cols + x; x < Math.min(l0.cols, c - c % f + f); x++, j++) {
+    if (!l0.val[j]) continue;
+    n++;
+    if (l0.val[j] > v) v = l0.val[j];
+    if (l0.bits && (l0.bits[j >> 3] >> (j & 7)) & 1) clr++;
+  }
+  if (!v) return map.closeTooltip(cellTip);
+  const ch = (v / 255) ** 2, o = { y: grid.key, p: chanceText(ch), low: ch < PCUT[0], clr: f === 1 ? clr : clr && fmt(clr), n: fmt(n) };
+  const text = (f === 1 ? (l0.bits ? t().cellPast : t().cellFc) : l0.bits ? t().areaPast : t().areaFc)(o);
+  cellTip.setLatLng(e.latlng).setContent(text[0].toUpperCase() + text.slice(1));
+  map.openTooltip(cellTip);
+}
+map.on("mousemove click", cellSay);
+map.on("mouseout", () => map.closeTooltip(cellTip));
 function zoomed() {
   const z = map.getZoom();
   gridLayer._container.style.opacity = z < SAT_ZOOM ? 1 : 0.7;  // over imagery, let the ground show through
@@ -601,14 +728,15 @@ function zoomed() {
 }
 map.on("zoomend", zoomed);
 
-// ---------- sectors on the map: five classes of forecast risk per area, the lowest left as bare land ----------
+// ---------- sectors on the map: five classes of forecast risk per area. The lowest is left as the base map
+// shows it, green where there is forest; the others take the hazard's four steps, up to red for clearing. ----------
 let shown = null, outline = null, cuts = [];
 const calm = () => matchMedia("(prefers-reduced-motion: reduce)").matches;
 const density = it => expOf(it) / it.a;
 const classOf = it => { const d = density(it); let c = 0; while (c < cuts.length && d >= cuts[c]) c++; return c; };
 function styleOf(it) {
   const c = classOf(it), close = map.getZoom() >= SAT_ZOOM, thin = shown === "mun";
-  return { fillColor: `rgb(${steps()[Math.max(0, c - 1)]})`, fillOpacity: c ? (close ? 0.5 : 0.94) : 0, color: INK, opacity: thin ? 0.25 : 0.55, weight: thin ? 0.5 : 0.8 };
+  return { fillColor: `rgb(${steps()[Math.max(0, c - 1)]})`, fillOpacity: c ? (close ? 0.5 : 1) : 0, color: INK, opacity: thin ? 0.3 : 0.6, weight: thin ? 0.5 : 0.8 };
 }
 function tipOf(it, K) {
   const L_ = t(), v = { exp: approx(expOf(it)), act: km(actOf(it)), rank: L_.rank(rankOf(it, K)), n: K.items.length };
@@ -653,16 +781,23 @@ async function say() {
   const mine = ++turn, L_ = t(), I = info(), k = key(), yearly = typeof k === "number", past = isPast(), y = S.year, hz = S.hazard;
   const K = S.sel != null ? await sectors(S.kind) : null;  // the sector's numbers; the whole Amazon needs none
   if (mine !== turn) return;
-  const it = S.sel != null ? K.byId.get(S.sel) : null, here = it ? L_.here : "", pct = x => fmt(100 * x);
+  const it = S.sel != null ? K.byId.get(S.sel) : null, here = it ? L_.here : "";
   const v = { y, here, many: L_.many[S.kind], n: K?.items.length };
   if (it) v.rank = L_.rank(rankOf(it, K));
   let head, sub = "";
-  if (S.scale === "months" || hz !== "clear") {
+  if (hz === "fire") {
+    // fire: what burned against a year before. Three months by month; by year, the last twelve months against
+    // the twelve before, the same windows the timeline draws.
+    const mo = monthsOf(it), a = (it ? it.L[k] : R.amazon.L[k]) || [], sum3 = from => mo.obs(from) + mo.obs(from + 1) + mo.obs(from + 2);
+    const [now, prev] = S.scale === "months" ? [sum3(0), sum3(12)] : [a.at(-1) ?? 0, a.at(-2) ?? 0];
+    head = L_.burned[S.scale]({ km: km(now), prev: km(prev), here });
+    if (it) sub = L_.fireRank(v);
+  } else if (S.scale === "months" || hz !== "clear") {
     // what the model expects over the months ahead; where there is no monthly forecast, what was measured
     const mo = monthsOf(it), sum = ahead(mo, I.months);
     if (sum && (sum.km >= 0.05 || !it)) {
       head = L_.mfc[hz]({ km: approx(sum.km), here, h: I.months });
-      sub = mo.scaled ? L_.scaledSub(v) : sum.lo == null ? "" : sum.unsure ? L_.unsure({ lo: approx(sum.lo), hi: approx(sum.hi), miss: fmt(100 * sum.miss) }) : L_.fcSub({ lo: approx(sum.lo), hi: approx(sum.hi) });
+      sub = mo.scaled ? L_.scaledSub(v) : sum.lo == null ? "" : L_.fcSub({ lo: approx(sum.lo), hi: approx(sum.hi) });
     } else if (S.scale === "months") {
       head = L_.mobs[hz]({ km: km(mo.obs(0) + mo.obs(1) + mo.obs(2)), here });
       if (it) sub = L_.rankOnly(v);
@@ -673,9 +808,13 @@ async function say() {
     }
   } else if (past) {
     const act = it ? actOf(it) : I.actual_km2;
-    if (!it) { head = L_.past({ y, cap: pct(cap5(I)) }); sub = L_.pastSub({ naive: pct(naive5(I)) }); }
+    const Y = P?.years?.[y], n3 = x => fmt(round(x, 3));
+    // how the forecast did: cells expected to lose a hectare against cells that did, where the chances were
+    // checked for that year; otherwise what was cleared
+    if (!it && Y) head = L_.pastP({ y, exp: n3(Y.expected_cells), act: n3(Y.actual_cells) });
+    else if (!it) head = L_.past({ y, act: fmt(act) });
     else {
-      head = act < 0.05 ? L_.pastHereNone(v) : L_.pastHere({ y, act: km(act), inside: pct(Math.min(1, hitOf(it) / act)) });
+      head = act < 0.05 ? L_.pastHereNone(v) : L_.pastHere({ y, act: km(act) });
       sub = L_.pastHereSub({ ps: share(100 * expOf(it) / I.risk_km2), as: share(100 * act / I.actual_km2) });
     }
     if (y === PARTIAL) sub += L_.partial;
@@ -697,17 +836,27 @@ async function say() {
   $("scope").hidden = !it;
   $("say").textContent = head.replaceAll(" km²", "\u00a0km²");
   $("sub").textContent = sub.trim().replaceAll(" km²", "\u00a0km²");
-  $("hint").textContent = S.scale === "months" ? L_.deter : yearly ? L_.hintY({ first: R.hyears[0] }) : "";
+  $("hint").textContent = yearly ? L_.hintY({ first: R.hyears[0] }) : S.scale === "months" && hz === "clear" ? L_.deter : "";
   chart(it);
   signs(it);
-  // what the map colours mean
-  const sw = (c, s) => `<span class="sw" style="--c:${c}">${s}</span>`, tone = `rgb(${steps()[2]})`;
-  const what = `<span class="what">${glyph(hz)}${L_.legend[hz]}${yearly ? "" : ", " + L_.next(I.months)}</span>`;
-  $("legend").innerHTML = what + (S.mode === "cells"
-    ? `<span>${sw(tone, L_.flagged) + (past ? sw("var(--ink)", L_.hit) + sw("var(--miss)", L_.miss) : "")}</span>`
-    : `<span>${L_.lower}<span class="ramp"><i style="--c:rgb(172,199,166)"></i>${steps().slice(0, 4).map(c => `<i style="--c:rgb(${c})"></i>`).join("")}</span>${L_.higher}</span>`);
-  flaggedShare();
+  legend();
 }
+// what the map colours mean. In cells, for the yearly clearing forecast, the steps of chance are also the filter:
+// choosing one leaves only the cells at that chance or more.
+async function legend() {
+  const L_ = t(), I = info(), k = key(), yearly = typeof k === "number", past = isPast(), hz = S.hazard;
+  const prob = cellsOn() && hz === "clear" && yearly && await hasProb(k);
+  if (k !== key()) return;
+  const mapped = past && cellsOn() ? `<span class="sw" style="--c:rgb(${DARK})">${L_.mapped}</span>` : "";
+  const what = `<span class="what">${glyph(hz)}${prob ? (past ? L_.chanceFor(k) : L_.chanceBy(k)) : L_.legend[hz] + (yearly || hz === "fire" ? "" : ", " + L_.next(I.months))}</span>`;
+  const label = n => (n === 0 ? L_.stepLo(pct(PCUT[0])) : n === 4 ? L_.stepHi(pct(PCUT[3])) : L_.stepMid(fmt(100 * PCUT[n - 1], PCUT[n - 1] < 0.01 ? 1 : 0), pct(PCUT[n])));
+  $("legend").innerHTML = what + (prob
+    ? `<span class="steps" role="group" title="${L_.onlyFrom}" aria-label="${L_.onlyFrom}">${PCSS.map((c, n) => `<button data-min="${n}" aria-pressed="${n >= S.min}" style="--c:${c}">${label(n)}</button>`).join("")}${mapped}</span>`
+    : `<span>${L_.lower}<span class="ramp">${[FOREST, ...steps()].map(c => `<i style="--c:rgb(${c})"></i>`).join("")}</span>${L_.higher}</span>` + mapped);
+  $("legend").classList.toggle("prob", !!prob);
+  shareLine();
+}
+$("legend").onclick = e => { const b = e.target.closest("[data-min]"); if (b) { S.min = +b.dataset.min === S.min ? 0 : +b.dataset.min; refresh(); } };
 $("scope").onclick = e => { if (e.target.closest("button")) { select(null); if (mapOn()) { pristine = true; whole(!calm()); } } };
 
 // ---------- signals: what the model is reading, as small traces. Red only where it is rising. ----------
@@ -752,21 +901,22 @@ function series(it) {
     return Array.from({ length: 36 }, (_, s) => {
       const n = 23 - s, d = new Date(LY, LM - 1 - n, 1), sub = month(d.getFullYear(), d.getMonth()), f = n < 0 && mo.fc?.[-n - 1];  // n months back; negative is ahead
       return n >= 0 ? { key: s, d, v: mo.obs(n), cur: n < 3, sub }
-        : f ? { key: s, d, v: f.p50, fc: true, range: f.p10 == null || -n > I.months || mo.unsure(I.months) ? null : [f.p10, f.p90], dim: -n > I.months, unsure: mo.unsure(I.months), sub } : { key: s, d, v: null, sub };
-    });
+        : f ? { key: s, d, v: f.p50, fc: true, range: f.p10 == null || -n > I.months ? null : [f.p10, f.p90], dim: -n > I.months, sub } : { key: s, d, v: null, sub };
+    }).slice(0, mo.fc || S.hazard !== "fire" ? 36 : 24);  // fire has no months ahead
   }
   if (S.hazard !== "clear") {
     const vals = (it ? it.L[k] : R.amazon.L[k]) || [], sum = ahead(monthsOf(it), I.months);
     const span = w => { const [y, m_] = w.split("-").map(Number); return t().to(month(y, m_ - 1), month(y, m_ - 2 + I.months)); };
     const end = w => new Date(+w.slice(0, 4), +w.slice(5) - 2 + I.months, 1).getFullYear();
     // the last slot is the forecast: the months ahead added up, or only the window when there is no monthly forecast
-    const last = sum ? { v: sum.km, fc: true, on: true, range: sum.lo == null || sum.unsure ? null : [sum.lo, sum.hi], unsure: sum.unsure, sub: span(I.from) } : { v: null, win: true };
-    return [...(R.layers[k]?.windows || []).map((w, i) => ({ key: w, label: end(w), v: vals[i + 1] ?? 0, sub: span(w) })), { key: I.from, label: end(I.from), ...last }];
+    const last = sum ? { v: sum.km, fc: true, on: true, range: sum.lo == null ? null : [sum.lo, sum.hi], sub: span(I.from) } : { v: null, win: true };
+    const past = (R.layers[k]?.windows || []).map((w, i, a) => ({ key: w, label: end(w), v: vals[i + 1] ?? 0, sub: span(w), cur: S.hazard === "fire" && i === a.length - 1 }));  // fire: the last twelve months are the headline
+    return S.hazard === "fire" ? past : [...past, { key: I.from, label: end(I.from), ...last }];
   }
   const fy = M.forecast.year;
   const out = R.cyears.map((y, i) => {
     const Y = M.years[y], j = R.hyears.indexOf(y), v = it ? it.c[i] : Y?.actual_km2 ?? M.history[y] ?? 0;  // the replayed years use the total the headline quotes
-    return { key: y, label: y, v, can: !!Y, on: y === S.year, hit: j < 0 || y !== S.year ? null : it ? Math.min(v, it.h[j]) : v * cap5(Y) };
+    return { key: y, label: y, v, can: !!Y, on: y === S.year };
   });
   out.push({ key: fy, label: fy, v: it ? it.e[R.eyears.indexOf(fy)] : M.forecast.total_km2, fc: true, can: true, on: fy === S.year, range: it ? null : M.forecast.range_km2 });
   return out;
@@ -783,11 +933,11 @@ function chart(it = scope) {
   const tallest = Math.max(sector ? 0.5 : 1, ...bars.map(b => b.v ?? 0)), max = tallest * (bars.some(b => b.range && b.range[1] > tallest) ? 1.15 : 1);
   const Y = v => top + ph - ph * Math.min(v, max) / max, X = i => gut + i * pitch, y0 = Y(0);
   const [tk, dec] = ticks(max), skip = pitch < 18 ? 2 : 1, onAt = bars.findIndex(b => b.on);
-  let s = `<svg width="${W}" height="${H}" role="img"><defs><pattern id="hatch" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="6" height="6" fill="rgb(${steps()[0]})"/><rect width="3" height="6" fill="rgb(${steps()[3]})"/></pattern></defs><g class="grid">`;
+  let s = `<svg width="${W}" height="${H}" role="img"><defs><pattern id="hatch" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect class="h0" width="6" height="6"/><rect class="h1" width="3" height="6"/></pattern></defs><g class="grid">`;
   for (const v of tk) s += `<line x1="${gut}" x2="${W}" y1="${Y(v)}" y2="${Y(v)}"/><text x="${gut - 8}" y="${Y(v) + 4}" text-anchor="end">${fmt(v, dec)}</text>`;
   // what the axis counts, written on it
   s += `<text class="unit" x="0" y="${monthsView ? top - 10 : 13}">${monthsView ? L_.axisM[S.hazard] : S.hazard === "clear" ? L_.axisY : L_.axisW[S.hazard]}</text></g>`;
-  if (monthsView) {
+  if (monthsView && bars.length > 24) {
     // the window ahead: from now to the end of the chosen horizon, the months the headline adds up.
     // For clearing there are two to choose from.
     const I = info(), hs = S.hazard === "clear" ? [3, 6].filter(h => M.layers["clear" + h]) : [I.months], now = X(24);
@@ -799,30 +949,44 @@ function chart(it = scope) {
     const x = X(i) + (pitch - bw) / 2, cx = x + bw / 2, h = b.v > 0 ? Math.max(1.5, ph * Math.min(b.v, max) / max) : 0;
     const rect = (cls, yy, hh, fill = "") => `<rect class="${cls}" x="${x}" y="${yy}" width="${bw}" height="${Math.max(0, hh)}" ${fill}/>`;
     s += `<g class="bar${b.can ? " can" : ""}${b.on ? " on" : ""}${b.cur ? " cur" : ""}${b.dim ? " dim" : ""}" data-i="${i}"${b.can ? ` tabindex="0" role="button" aria-pressed="${!!b.on}" aria-label="${b.label}"` : ""}>`;
-    if (b.win) s += `<rect class="win" x="${X(i) + 1}" y="${top}" width="${pitch - 2}" height="${ph}"/><line class="winrule" x1="${X(i) + 1}" x2="${X(i) + pitch - 1}" y1="${top}" y2="${top}"/><text class="h on end" x="${X(i) + pitch}" y="${top - 10}">${L_.window}</text>`;
+    if (S.line && !b.win) { /* drawn below, as one line */ }
+    else if (b.win) s += `<rect class="win" x="${X(i) + 1}" y="${top}" width="${pitch - 2}" height="${ph}"/><line class="winrule" x1="${X(i) + 1}" x2="${X(i) + pitch - 1}" y1="${top}" y2="${top}"/><text class="h on end" x="${X(i) + pitch}" y="${top - 10}">${L_.window}</text>`;
     else if (b.fc) {
       s += rect("fc", y0 - h, h, 'fill="url(#hatch)"');
       if (b.range) s += `<path class="rng" fill="none" d="M${cx} ${Y(b.range[0])}V${Y(b.range[1])}M${cx - 4} ${Y(b.range[0])}h8${b.range[1] <= max ? `M${cx - 4} ${Y(b.range[1])}h8` : ""}"/>`;
-    } else if (b.hit != null) {
-      const hh = b.v > 0 ? h * b.hit / b.v : 0;
-      s += rect("in", y0 - hh, hh) + rect("out", y0 - h, h - hh);
-    } else if (b.v != null) s += rect("plain", y0 - h, h);
+    } else if (b.on && b.v != null) s += rect("in", y0 - h, h);
+    else if (b.v != null) s += rect("plain", y0 - h, h);
     if (monthsView) {
       s += `<text x="${cx}" y="${y0 + 15}"${pitch < 14 ? ' style="font-size:10px"' : ""}>${b.d.toLocaleDateString(loc(), { month: "narrow" })}</text>`;
       if (b.d.getMonth() === 0) s += `<text x="${cx}" y="${y0 + 30}">${b.d.getFullYear()}</text>`;
     } else if (skip === 1 || b.on || ((bars.length - 1 - i) % 2 === 0 && Math.abs(i - onAt) !== 1)) s += `<text x="${cx}" y="${H - 5}">${pitch < 40 ? String(b.label).slice(-2) : b.label}</text>`;  // four digits only where they fit
     s += `<rect class="hot" x="${X(i)}" y="${top - 12}" width="${pitch}" height="${H - top + 12}"/></g>`;
   });
+  if (S.line) {
+    // the same series as a line: measured values solid, the forecast dashed in the hazard's hue, its range a band
+    const at = ([b, i], v = b.v) => `${(X(i) + pitch / 2).toFixed(1)} ${Y(v).toFixed(1)}`, path = a => a.map((p, n) => (n ? "L" : "M") + at(p)).join("");
+    const all = bars.map((b, i) => [b, i]), obs = all.filter(([b]) => b.v != null && !b.fc), fcs = all.filter(([b]) => b.fc), band = fcs.filter(([b]) => b.range);
+    s += `<g class="line" pointer-events="none">`;
+    if (band.length > 1) s += `<path class="band" d="${band.map((p, n) => (n ? "L" : "M") + at(p, p[0].range[1])).join("")}${band.slice().reverse().map(p => "L" + at(p, p[0].range[0])).join("")}Z"/>`;
+    else for (const [b, i] of band) { const cx = X(i) + pitch / 2; s += `<path class="rng" fill="none" d="M${cx} ${Y(b.range[0])}V${Y(b.range[1])}M${cx - 4} ${Y(b.range[0])}h8${b.range[1] <= max ? `M${cx - 4} ${Y(b.range[1])}h8` : ""}"/>`; }
+    if (obs.length) s += `<path class="obs" d="${path(obs)}"/>`;
+    const near = fcs.filter(([b]) => !b.dim), far = fcs.filter(([b]) => b.dim);  // months beyond the chosen window are fainter
+    if (near.length) s += `<path class="fcl" d="${path([...obs.slice(-1), ...near])}"/>`;
+    if (far.length) s += `<path class="fcl dim" d="${path([...near.slice(-1), ...far])}"/>`;
+    for (const p of obs) if (p[0].on) s += `<circle class="ring" r="5" cx="${at(p).split(" ")[0]}" cy="${at(p).split(" ")[1]}"/>`; else if (p[0].can || p[0].cur) s += `<circle class="dot" r="2.6" cx="${at(p).split(" ")[0]}" cy="${at(p).split(" ")[1]}"/>`;
+    for (const p of fcs) if (!p[0].dim) s += `<circle class="fdot" r="3.4" cx="${at(p).split(" ")[0]}" cy="${at(p).split(" ")[1]}"/>`;
+    s += `</g>`;
+  }
   el.innerHTML = s + `<line class="axis" x1="${gut}" x2="${W}" y1="${y0}" y2="${y0}"/><g class="tip" pointer-events="none"><path/><text></text><text></text></g></svg>`;
-  pinned = onAt >= 0 && bars[onAt].hit != null ? onAt : -1;  // a replayed year keeps its label; the forecast is already the headline
+  pinned = onAt >= 0 && !bars[onAt].fc && !monthsView ? onAt : -1;  // a replayed year keeps its label; the forecast is already the headline
   tip(pinned);
   function tip(i) {
     const [t1, t2] = el.querySelectorAll(".tip text"), lead = el.querySelector(".tip path"), b = bars[i];
     if (!b || b.win || (b.v == null && !monthsView)) { t1.textContent = t2.textContent = ""; lead.setAttribute("d", ""); return; }
     const exact = x => `${sector || typeof key() !== "number" ? km(x) : fmt(x)} km²`;
-    const lines = b.fc ? [(monthsView ? b.sub + ", " : "") + L_.about_(approx(b.v)), b.range ? L_.range(approx(b.range[0]), approx(b.range[1])) : b.unsure ? L_.veryUnsure : ""]
+    const lines = b.fc ? [(monthsView ? b.sub + ", " : "") + L_.about_(approx(b.v)), b.range ? L_.range(approx(b.range[0]), approx(b.range[1])) : ""]
       : monthsView ? [b.v == null ? b.sub : `${b.sub}, ${exact(b.v)}`, ""]
-      : [exact(b.v), b.hit != null ? (b.v >= 0.05 ? L_.inside(fmt(100 * b.hit / b.v)) : "") : b.sub || ""];
+      : [exact(b.v), b.sub || ""];
     const x0 = X(i) + (pitch - bw) / 2, cx = x0 + bw / 2, yy = Y(b.v ?? 0);
     const hw = monthsView ? 96 : 74, [anchor, x, left] = cx < gut + hw ? ["start", x0, x0] : cx > W - hw ? ["end", x0 + bw, x0 + bw - 2 * hw] : ["middle", cx, cx - hw];
     // the label sits above every bar it spans, with a hairline down to its own
@@ -852,16 +1016,23 @@ function chrome() {
   document.documentElement.lang = lang;
   document.documentElement.dataset.hazard = S.hazard;
   document.documentElement.style.setProperty("--hue", `var(--${S.hazard})`);
-  $("hazard").className = $("scale").className = $("modes").className = $("kinds").className = "pick";
+  $("hazard").className = $("scale").className = $("kinds").className = "pick";
+  $("modes").className = "seg";  // the mode is a switch of its own, apart from the list of sector kinds
   $("hazard").innerHTML = hazards().map(k => btn(k, glyph(k) + L_.hazard[k], k === S.hazard)).join("");
   $("scale").innerHTML = ["years", "months"].map(k => btn(k, L_.scale[k], k === S.scale)).join("");
-  $("modes").innerHTML = ["sectors", "cells"].map(k => btn(k, L_.modes[k], k === S.mode)).join("");
+  $("modes").innerHTML = ["sectors", "cells", ...(M.years[M.forecast.year]?.flags500 ? ["prio"] : [])].map(k => btn(k, L_.modes[k], k === S.mode)).join("");
+  $("rank-btn").textContent = L_.ranking;
+  $("rank-btn").setAttribute("aria-pressed", S.rank);
+  $("rank-btn").hidden = S.mode !== "sectors";
+  document.documentElement.dataset.list = listOn();
+  // bars or a line: two small glyphs, no words
+  $("shape").innerHTML = [["bars", "M1 12V6h3v6zM6 12V2h3v6zM11 12V8h3v4z"], ["line", "M1 11L5 5l4 3 5-6"]].map(([k, d]) => `<button data-k="${k}" aria-pressed="${(k === "line") === S.line}" aria-label="${L_[k]}" title="${L_[k]}"><svg viewBox="0 0 15 13" aria-hidden="true"><path d="${d}"/></svg></button>`).join("");
   $("kinds").innerHTML = Object.keys(L_.kinds).map(k => btn(k, L_.kinds[k], k === S.kind)).join("");
   $("kinds").hidden = S.mode !== "sectors";
   // on a phone: the timeline or the map, the window ahead as buttons, and a stepper for the replay years
   document.documentElement.dataset.view = view;
   $("views").className = $("ahead").className = "pick";
-  $("views").innerHTML = ["chart", "map"].map(k => btn(k, L_.views[k], k === view)).join("");
+  $("views").innerHTML = ["chart", "map"].map(k => btn(k, k === "chart" && listOn() ? L_.views.list : L_.views[k], k === view)).join("");
   const hs = S.hazard === "clear" && S.scale === "months" ? [3, 6].filter(h => M.layers["clear" + h]) : [];
   $("ahead").innerHTML = hs.map(h => btn(h, L_.ahead(h), h === S.h)).join("");
   $("ahead").hidden = hs.length < 2;
@@ -878,17 +1049,86 @@ function chrome() {
 }
 async function refresh() {
   if (!hazards().includes(S.hazard)) S.hazard = "clear";
+  if (S.mode === "prio") { S.hazard = "clear"; S.scale = "years"; S.year = M.forecast.year; }  // the priority list is the yearly clearing forecast
   if (S.hazard === "clear" && S.scale === "months" && !M.layers["clear" + S.h]) S.scale = "years";
   chrome();
   link();
   say();  // the bulletin and the timeline need only the two small JSON files, so they come first
   if (mapOn()) { startMap(); paint(); drawSectors(); }
+  list();
 }
+
+// ---------- the ranked list, in the timeline's place: where to look first ----------
+// Priorities: the 500 blocks of 5 km where the most cells are expected to lose a hectare (data/priority.json),
+// drawn as outlines over the cells. Sectors: the same idea at a coarser scale, the sectors of the kind on screen
+// ranked by the forecast.
+let PRIO = null, blocks = null, blockSel = null, listed = "", flown = false;
+const priority = () => (PRIO ||= fetch("data/priority.json").then(r => r.json()));
+const blockBox = (PR, b) => { const h = PR.block_km * M.years[PR.year].flags500.cell; return [[b.lat - h, b.lon - h], [b.lat + h, b.lon + h]]; };  // 5 km is ten 500 m cells
+const row = (attr, rank, name, vals, on) => `<li><button ${attr}${on ? ' aria-current="true"' : ""}><b>${rank}</b><span class="nm">${name}</span>${vals.map(x => `<span class="v">${x}</span>`).join("")}</button></li>`;
+async function list() {
+  const el = $("list"), L_ = t(), k = key();
+  el.hidden = !listOn();
+  if (blocks && S.mode !== "prio") blocks.remove();
+  if (blockSel && (S.mode !== "prio" || !S.block)) { blockSel.remove(); blockSel = null; }
+  if (!listOn()) return;
+  if (S.mode === "prio") {
+    const PR = await priority();
+    if (S.mode !== "prio") return;
+    // the blocks on the map: a white outline inside a dark one, which reads on forest green and on red alike
+    blocks ||= L.layerGroup(PR.blocks.flatMap(b => [
+      L.rectangle(blockBox(PR, b), { renderer: cvSectors, color: INK, weight: 3.4, opacity: 1, fill: false, interactive: false }),
+      L.rectangle(blockBox(PR, b), { renderer: cvSectors, color: "#fff", weight: 1.4, opacity: 1, fillOpacity: 0 }).on("click", e => { L.DomEvent.stopPropagation(e); block(b.rank, false); })]));
+    if (mapOn()) blocks.addTo(map);
+    if (listed !== "prio" + lang) {
+      const y0 = Object.keys(PR.replay)[0], r0 = PR.replay[y0];
+      $("list-say").innerHTML = `${L_.prioSay({ top: PR.top, km: PR.block_km, y: y0, hit: fmt(100 * r0.lost_10ha), base: fmt(100 * r0.base_10ha, 1) })} <a href="data/priority.csv" download>${L_.csv}</a>`;
+      $("list-key").innerHTML = `<span class="lk"><i class="land ti"></i>${L_.land.ti}<i class="land uc"></i>${L_.land.uc}</span>${L_.prioCols.map(c => `<span class="v" title="${L_.prioColsTitle({ y: PR.year })}">${c}</span>`).join("")}`;
+      $("list-rows").innerHTML = PR.blocks.map(b => row(`data-b="${b.rank}"`, b.rank, `${esc(b.municipality)}, ${b.state}${b.land ? ` <i class="land ${b.land}" title="${L_.land[b.land]}"></i>` : ""}`, [fmt(b.expected_cells), pct(b.max_chance)])).join("");
+      listed = "prio" + lang;
+    }
+    $("list-rows").className = "two";
+    if (S.block) { block(S.block, !flown && !H.get("v"), false); flown = true; }  // a block in the link is brought into view once
+  } else {
+    const K = await sectors(S.kind), I = info(), yearly = typeof k === "number", past = isPast();
+    if (!(S.mode === "sectors" && S.rank) || k !== key()) return;
+    const top = [...K.items].sort((a, b) => expOf(b) - expOf(a)).slice(0, 100).filter(it => expOf(it) > 0);
+    $("list-say").textContent = L_.rankSay({ kind: L_.kinds[S.kind], what: yearly ? (past ? L_.rankWhat.past(k) : L_.rankWhat.fc(k)) : S.hazard === "fire" ? L_.rankWhat.fire : L_.rankWhat.risk });
+    $("list-key").innerHTML = "";
+    $("list-rows").className = "";
+    $("list-rows").innerHTML = top.map((it, n) => row(`data-id="${esc(it.id)}"`, n + 1, esc(it.n) + (it.s ? ", " + it.s : ""), [yearly ? `${approx(expOf(it))} km²` : `${share(100 * expOf(it) / I.risk_km2)}%`], String(it.id) === S.sel)).join("");
+    listed = "";
+  }
+}
+// choose a priority block: outline it, bring it into view, mark its row
+async function block(rank, fly = true, write = true) {
+  const PR = await priority(), b = PR.blocks.find(x => x.rank === rank);
+  if (!b || S.mode !== "prio") return;
+  S.block = rank;
+  if (blockSel) blockSel.remove();
+  const box = blockBox(PR, b);
+  blockSel = L.featureGroup([L.rectangle(box, { renderer: svgSel, fill: false, color: INK, weight: 7, interactive: false }), L.rectangle(box, { renderer: svgSel, fill: false, color: GROUND, weight: 3, interactive: false })]).addTo(map);
+  for (const el of $("list-rows").querySelectorAll("[aria-current]")) el.removeAttribute("aria-current");
+  const el = $("list-rows").querySelector(`[data-b="${rank}"]`);
+  if (el) { el.setAttribute("aria-current", "true"); if (!fly) el.scrollIntoView({ block: "nearest" }); }
+  if (fly) { pristine = false; map.flyToBounds(L.latLngBounds(box).pad(3), { ...FIT(), maxZoom: 11, duration: calm() ? 0 : 0.6 }); }
+  if (write) link();
+}
+$("list-rows").onclick = async e => {
+  const b = e.target.closest("button");
+  if (!b) return;
+  if (narrow()) { view = "map"; refresh(); await new Promise(r => setTimeout(r, 120)); }  // on a phone the row leads to the map
+  if (b.dataset.b) block(+b.dataset.b);
+  else if (b.dataset.id) select(b.dataset.id);
+};
 PHONE.addEventListener("change", refresh);
 const pressed = (id, fn) => ($(id).onclick = e => { const b = e.target.closest("button"); if (b) fn(b.dataset.k); });
-pressed("hazard", k => { S.hazard = k; refresh(); });
-pressed("scale", k => { S.scale = k; refresh(); });
-pressed("modes", k => { S.mode = k; refresh(); });
+const leavePrio = () => { if (S.mode === "prio") S.mode = "cells"; };  // the priority list is only the yearly clearing forecast
+pressed("hazard", k => { if (k !== "clear") leavePrio(); S.hazard = k; refresh(); });
+pressed("scale", k => { if (k === "months") leavePrio(); S.scale = k; refresh(); });
+pressed("modes", k => { S.mode = k; pristine = pristine || !S.block; refresh(); });
+pressed("shape", k => { S.line = k === "line"; refresh(); });
+$("rank-btn").onclick = () => { S.rank = !S.rank; refresh(); };
 pressed("kinds", k => { if (k !== S.kind) { S.kind = k; select(null); } });
 pressed("views", k => { view = k; refresh(); });
 pressed("ahead", k => { S.h = +k; refresh(); });
@@ -896,7 +1136,7 @@ $("step").onclick = e => {
   const b = e.target.closest("button"), ys = Object.keys(M.years).map(Number).sort();
   if (b && ys[ys.indexOf(S.year) + +b.dataset.d]) pick(ys[ys.indexOf(S.year) + +b.dataset.d]);
 };
-function pick(y) { S.year = y; refresh(); }
+function pick(y) { if (y !== M.forecast.year) leavePrio(); S.year = y; refresh(); }
 document.addEventListener("keydown", e => {
   if ($("about").open) return;
   if (e.key === "Escape" && S.sel != null) return select(null);
@@ -906,13 +1146,16 @@ document.addEventListener("keydown", e => {
 });
 $("lang-btn").onclick = () => { lang = localStorage.lang = lang === "pt" ? "en" : "pt"; langInLink = true; refresh(); };
 
-$("about-btn").onclick = () => {
+$("about-btn").onclick = async () => {
+  const PR = M.years[M.forecast.year]?.flags500 ? await priority().catch(() => null) : null, py = PR && Object.keys(PR.replay)[0];
   const hy = R.hyears, mean = f => hy.reduce((s, y) => s + f(M.years[y]), 0) / hy.length, tests = Object.values(M.layers).map(l => l.tests);
   $("about-body").innerHTML = t().aboutHtml({
     first: hy[0], last: hy.at(-1), cap: fmt(100 * mean(cap5)), naive: fmt(100 * mean(naive5)),
     mape: fmt(100 * M.forecast.mape), previsia: fmt(100 * M.forecast.previsia_mape), tmin: Math.min(...tests), tmax: Math.max(...tests),
     partial: PARTIAL, repo: REPO,
-    fire: (b => (b?.h3sum_mape > 0.6 ? fmt(100 * b.h3sum_mape) : ""))(MO?.hazards?.scar?.backtest),
+    prio: PR && { top: PR.top, km: PR.block_km, y: py, hit: fmt(100 * PR.replay[py].lost_10ha), base: fmt(100 * PR.replay[py].base_10ha, 1) },
+    rel: (y => { const Y = P?.years?.[y], pick = lo => Y?.reliability.find(b => b[0] === lo), bins = [0.02, 0.1, 0.2].map(pick), one = x => fmt(100 * x, x < 0.2 ? 1 : 0);
+      return Y && bins.every(Boolean) && { y, said: bins.map(b => one(b[2])), did: bins.map(b => one(b[3])), exp: fmt(Y.expected_cells), act: fmt(Y.actual_cells) }; })(Object.keys(P?.years || {})[0]),
     mo: (b => b && b.h3sum_mape != null && { origins: b.origins, h3: fmt(100 * b.h3sum_mape), n3: fmt(100 * b.naive_h3sum_mape) })(MO?.hazards?.clear?.backtest),
   });
   $("about").showModal();
@@ -931,7 +1174,11 @@ function link() {
   const c = map.getCenter(), q = new URLSearchParams({ y: S.year });
   if (typeof key() !== "number") q.set("k", key());
   if (S.hazard !== "clear" && S.scale === "months") q.set("t", "months");
-  if (S.mode === "cells") q.set("m", "cells");
+  if (S.mode !== "sectors") q.set("m", S.mode);
+  if (S.mode === "prio" && S.block) q.set("b", S.block);
+  if (S.mode === "sectors" && S.rank) q.set("g", 1);
+  if (S.line) q.set("c", "line");
+  if (S.min) q.set("p", S.min);
   if (S.kind !== "mun") q.set("s", S.kind);
   if (S.sel != null) q.set("r", S.sel);
   q.set("v", `${c.lat.toFixed(3)},${c.lng.toFixed(3)},${+map.getZoom().toFixed(2)}`);
