@@ -72,6 +72,8 @@ for T, train in ((2024, (2022, 2023)), (2025, (2023, 2024)), (2026, (2024, 2025)
     for r in rel:
         print(f"    chance {100 * r[0]:5.1f}% to {100 * r[1]:5.1f}%: said {100 * r[2]:6.2f}%, happened {100 * r[3]:6.2f}%  ({r[4]:,} cells, {r[5]:,} cleared)")
     paint(T, p, cand)
+    (ROOT / "benchmark/data/baseline_prob").mkdir(exist_ok=True)
+    np.savez_compressed(ROOT / "benchmark/data/baseline_prob" / f"{T}.npz", p=np.where(cand, p, 0).astype(np.float16))  # for benchmark/score_prob.py
 # the years before the truth files start, and the forecast: painted with the nearest honest mapping
 iso = fit((2024, 2025))
 for y in (2022, 2023, 2027):

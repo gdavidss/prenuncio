@@ -52,6 +52,26 @@ These definitions follow `score` in `pipeline/lab.py`, the project's internal la
 
 The lab's block bootstrap puts the noise on one year's cap5 near half a point. Treat a difference under one point on the four-year mean as unproven until it holds across seeds or resamples, and report the spread if you claim it.
 
+### The probability track
+
+A ranking says where to look first. A decision needs a number: how likely is this cell to be cleared? `benchmark/score_prob.py` scores maps of that chance, the probability that a cell loses at least one hectare in the PRODES year. The chances of year T may use outcomes up to T-1 only, so the scored years are 2024 and 2025, with 2026 reported apart; 2022 and 2023 are there to calibrate on.
+
+| Score | What it asks |
+|---|---|
+| brier_skill | How much better than giving every cell the year's base rate. 0 is no skill, 1 is perfect. Events are rare (under 1% of cells), so values are small. |
+| log_loss | The same question with a heavier penalty for confident misses. Lower is better. |
+| count_ratio | Cells expected to lose a hectare over cells that did. 1 is right. |
+| ece | The mean gap between the chance given and the share that happened, across ten bands of chance, as a share of the base rate. 0 is perfect. |
+
+The baseline's chances come from `pipeline/calibrate.py`, an isotonic map from its ranking score fitted on the two years before. They are the files `p2024.npz` to `p2026.npz` in the release `baseline-3`.
+
+| | brier_skill | log_loss | count_ratio | ece |
+|---|---|---|---|---|
+| Baseline, mean of 2024 and 2025 | 0.080 | 0.0233 | 0.995 | 0.094 |
+| Baseline, 2026 | 0.067 | 0.0172 | 1.056 | 0.075 |
+
+This track is not on the leaderboard yet. Report its scores in your submission's REPORT.md if you have them.
+
 ## The files
 
 ```sh
