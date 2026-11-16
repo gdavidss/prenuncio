@@ -6,6 +6,7 @@ A group that proves itself gets moved into model.features().
   AZ_F=50 python extras.py lags                      older clearing: the neighbourhood five years ago, its growth since, late-mapped clearing
   AZ_F=50 python extras.py aef <folder of emb_<year>.npy>   AlphaEarth satellite embeddings and their yearly change
   AZ_F=50 python extras.py tmf <tmf500.npz>          JRC Tropical Moist Forest first-disturbance year (unet/tmf.py)
+  AZ_F=50 python extras.py asv <permits.csv>         clearing permits valid on the forecast date (SINAFLOR; columns issued, valid_until, lat, lon, ha)
 """
 import sys
 from pathlib import Path
@@ -75,8 +76,49 @@ def tmf(y, src):
             m.box(np.minimum(t10, forest), 9), m.box(t1 - span(e - 1, e - 1), 9)]
 
 
+_asv = None
+
+
+def asv(y, src):
+    """Clearing permits (SINAFLOR authorisations of vegetation suppression) issued on or before 31 July of
+    y-1 and still valid then. The file gives a property's centre point and the authorised area, so each permit
+    is a disc of that area: authorised share of the cell, the same for permits of the last 12 months, the
+    neighbourhood, the distance to the nearest valid permit and months since the newest one. The register
+    is thin before 2020, so earlier forecast dates are unknown, not zero."""
+    global _asv
+    import pandas as pd
+    if _asv is None:
+        d = pd.read_csv(src, dtype=str)
+        num = lambda c: pd.to_numeric(d[c].str.replace(",", "."), errors="coerce")
+        d = d.assign(t0=pd.to_datetime(d.issued, format="%d/%m/%Y", errors="coerce"), t1=pd.to_datetime(d.valid_until, format="%d/%m/%Y", errors="coerce"),
+                     r=(m.N - num("lat")) / m.C, c=(num("lon") - m.W) / m.C, ha=num("ha")).dropna(subset=["t0", "r", "c", "ha"])
+        _asv = d[(d.r >= 0) & (d.r < m.NROW) & (d.c >= 0) & (d.c < m.NCOL) & (d.ha >= 5)]
+    if y - 1 < 2020:
+        return [NAN] * 7
+    cut = pd.Timestamp(y - 1, 7, 31)
+    sel = _asv[(_asv.t0 <= cut) & (_asv.t1.isna() | (_asv.t1 > cut))]
+    km = m.C * 111.0
+
+    def discs(rows, value=None):
+        out = np.zeros((m.NROW, m.NCOL), np.float32)
+        for k, (r0, c0, ha) in enumerate(zip(rows.r, rows.c, rows.ha)):
+            rad = np.sqrt(ha / 100 / np.pi) / km + 0.7
+            n, a, b = int(np.ceil(rad)), int(r0), int(c0)
+            ys, xs = slice(max(a - n, 0), min(a + n + 1, m.NROW)), slice(max(b - n, 0), min(b + n + 1, m.NCOL))
+            yy, xx = np.ogrid[ys, xs]
+            hit = (yy - r0) ** 2 + (xx - c0) ** 2 <= rad ** 2
+            out[ys, xs] = np.maximum(out[ys, xs], hit * (1.0 if value is None else value[k]))
+        return out
+
+    valid, new = discs(sel), discs(sel[sel.t0 > cut - pd.Timedelta(days=365)])
+    months = ((cut - sel.t0).dt.days / 30.4).to_numpy()
+    recency = discs(sel, 1 / (1 + months / 12))  # 1 for a permit issued today, 0.5 after a year
+    size = discs(sel, np.log10(sel.ha.to_numpy()))
+    return [valid, new, recency, size, m.box(valid, 3), m.box(new, 9), m.dist(valid > 0)]
+
+
 if __name__ == "__main__":
     m.load_2026()
-    group = {"glad2": glad2, "lags": lambda y, *_: lags(y), "aef": aef, "tmf": tmf}[sys.argv[1]]
+    group = {"glad2": glad2, "lags": lambda y, *_: lags(y), "aef": aef, "tmf": tmf, "asv": asv}[sys.argv[1]]
     for y in range(2011, 2027):
         save(sys.argv[1], y, group(y, *sys.argv[2:3]))
