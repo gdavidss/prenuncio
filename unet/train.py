@@ -293,8 +293,8 @@ def main():
                 pos[name], at = (at, n), at + n
             at = 0
             for name in os.environ["UNET_INIT_GROUPS"].split(","):
-                a, n = pos[name]
-                wide[:, a:a + n], at = sd[key][:, at:at + n], at + n
+                lo, n = pos[name]
+                wide[:, lo:lo + n], at = sd[key][:, at:at + n], at + n
             assert at == sd[key].shape[1], (at, sd[key].shape)
             sd[key] = wide
         net.load_state_dict(sd)
