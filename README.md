@@ -6,7 +6,7 @@ The code, the data pipeline and the benchmark are open. Anyone can propose a bet
 
 ## Results
 
-The published model blends gradient boosted trees with a U-Net. Flag the 5% of forest cells it ranks highest, and they hold 72.5% of the clearing that follows, on average over PRODES years 2022 to 2025. The top 1% hold 35.1% and the top 10% hold 87.2%. On 2026, which the model never saw and which INPE has mapped for its priority scenes only, the top 5% hold 72.7%.
+The published model blends gradient boosted trees with a U-Net. Flag the 5% of forest cells it ranks highest, and they hold 74.5% of the clearing that follows, on average over PRODES years 2022 to 2025. The top 1% hold 37.1% and the top 10% hold 88.3%. On 2026, which the model never saw and which INPE has mapped for its priority scenes only, the top 5% hold 73.5%.
 
 For scale, ranking cells by last year's clearing nearby catches about 50% at the same budget, and the first version of this model caught about 62%.
 
@@ -90,7 +90,7 @@ Prenúncio is an independent project. It does not replace INPE's official figure
 
 O Prenúncio prevê onde a Amazônia Legal vai ser desmatada no próximo ano PRODES, numa grade de 500 m. A previsão e a reprise dos anos passados estão em [prenuncio.com](https://prenuncio.com). O código, o pipeline de dados e o benchmark são abertos, e qualquer pessoa pode propor um modelo melhor.
 
-O modelo publicado combina árvores de gradient boosting com uma U-Net. Os 5% de células de floresta que ele aponta como mais arriscadas concentram 72,5% do desmate que acontece em seguida, na média dos anos PRODES de 2022 a 2025. Um mapa ingênuo, que repete o desmate recente da vizinhança, pega cerca de 50% com a mesma área. O total anual ainda é a parte fraca, com erro de cerca de um quarto.
+O modelo publicado combina árvores de gradient boosting com uma U-Net. Os 5% de células de floresta que ele aponta como mais arriscadas concentram 74,5% do desmate que acontece em seguida, na média dos anos PRODES de 2022 a 2025. Um mapa ingênuo, que repete o desmate recente da vizinhança, pega cerca de 50% com a mesma área. O total anual ainda é a parte fraca, com erro de cerca de um quarto.
 
 O benchmark aberto fica em [benchmark/](benchmark/README.md) e tem duas trilhas. Na retrospectiva, você prevê 2022 a 2025 usando só o que existia em 31 de julho do ano anterior. Na trilha ao vivo, você registra até 31 de dezembro de 2026 uma previsão para o ano PRODES 2027, e nós calculamos a nota quando o INPE publicar o mapa. Como esse resultado ainda não existe, ninguém consegue vazá-lo, e por isso essa é a prova que vale.
 

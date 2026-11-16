@@ -30,7 +30,9 @@ Means over 2022 to 2025. Every row is a real run.
 
 | Model | cap1 | cap5 | cap10 | auc | front5 |
 |---|---|---|---|---|---|
-| **Published 16 Nov**: tuned trees with the JRC disturbance record, blended 50/50 with the U-Net with embeddings | 35.6% | 73.5% | 87.8% | 0.954 | 78.1% |
+| **Published**: tuned trees with the JRC disturbance record, blended 50/50 with the U-Net reading the same record at 100 m | 37.0% | 74.6% | 88.3% | 0.956 | 79.4% |
+| U-Net with embeddings and the JRC disturbance record, alone | 35.5% | 72.9% | 87.2% | 0.951 | 75.5% |
+| Published for a few hours on 16 Nov: tuned trees with the JRC disturbance record, blended 50/50 with the U-Net with embeddings | 35.6% | 73.5% | 87.8% | 0.954 | 78.1% |
 | Tuned trees with embeddings and the JRC disturbance record, alone | 34.1% | 72.8% | 87.6% | 0.954 | 78.6% |
 | Tuned trees with embeddings (three fits, richer GLAD), blended with the wider U-Net | 35.3% | 73.0% | 87.6% | 0.953 | 79.5% |
 | Published until 15 Nov: production trees with embeddings blended 40/60 with the U-Net with embeddings | 35.1% | 72.6% | 87.2% | 0.953 | 76.7% |
@@ -55,9 +57,9 @@ Means over 2022 to 2025. Every row is a real run.
 | Trees without GLAD | 29.7% | 67.3% | 82.9% | 0.946 | 65.9% |
 | Trees, binary objective | 27.7% | 65.8% | 82.4% | 0.950 | 69.6% |
 
-With the budget counted in forest, the best blend holds 77.8% of the clearing in 5% of the standing forest (capf5).
+With the budget counted in forest, the published blend holds 79.3% of the clearing in 5% of the standing forest (capf5).
 
-The published model is half a point under the best lab row because its trees are a single untuned fit; folding the tuned settings into the production trees is a known, cheap follow-up. On the 2026 holdout the published blend scores 72.5% (cap1 33.7%, cap10 87.5%, capf5 78.6%).
+On the 2026 holdout the published blend scores 73.1% (cap1 34.9%, cap10 87.8%, capf5 78.7%). The holdout has been scored for five blends by now, none chosen by it.
 
 For reference, on the same four years the first version of the product (trees at 1 km, neither Hansen nor GLAD) scored about 62% on cap5, and the best naive map about 50%.
 
@@ -65,7 +67,7 @@ The blend's gain over the trees is real in every year (bootstrap: better in 95% 
 
 ## Where the misses are
 
-On 16 November the published maps were taken apart to see what the missing quarter is made of (`pipeline/anatomy.py`, means over 2022 to 2025, counted on every cell).
+On 16 November the maps published that morning (73.3% on this count, before the U-Net read the JRC record) were taken apart to see what the missing quarter is made of (`pipeline/anatomy.py`, means over 2022 to 2025, counted on every cell).
 
 The model knows where clearing can happen. Its top 20% of cells hold 96.6% of the year's clearing, the top 10% hold 87.7%, the top 5% hold 73.3% and the top 1% hold 35.6%. What it cannot do is say which of the cells at risk go this year. Only 11% of flagged cells lose forest in the year they are flagged for, and 18% within two years. Last year's flags, left unchanged, still catch 62% of this year's clearing.
 
@@ -101,7 +103,23 @@ Four ideas were measured against this and set aside.
 | Correct this year's forecast with last year's errors by distance, forest share, rank and state (`pipeline/recal.py`) | +0.1 points, the sign changes from year to year |
 | Re-issue the forecast in season with the DETER alerts of the first three months (`pipeline/inseason.py`) | 75.4% against 73.3%; on clearing in cells with no alert yet it stays at 70% |
 
-One thing does move the far clearing: the convolutional model reading the JRC disturbance record at 100 m. In 2022 it caught 50% of far clearing against 39% for the blend, and 77.0% overall against 73.8%; in 2021, 43% against 37%, and 74.6% against 73.2%. The trees given the same record as 500 m summaries gained a tenth of that on far clearing. Logging roads and skid trails are lines, and a line survives as a pattern of 100 m cells but not as a count inside a 500 m cell. That is the direction: more fine layers into the convolutional model, and less weight on the trees where clearing is far from the frontier.
+One thing does move the far clearing: the convolutional model reading the JRC disturbance record at 100 m. Over 2019 to 2025 it catches 40.5% of far clearing against 36.0% for the same network without the record, and 72.9% of all clearing against 70.8%. The trees given the same record as 500 m summaries catch 37.6% of far clearing. Logging roads and skid trails are lines, and a line survives as a pattern of 100 m cells but not as a count inside a 500 m cell.
+
+The gain is not even. It is two to five points in 2021 to 2023 and nothing in 2024 and 2025.
+
+| Forecast year | U-Net | U-Net with the JRC record | Trees with the JRC record | The two blended |
+|---|---|---|---|---|
+| 2019 | 70.1% | 71.6% | 71.3% | 73.1% |
+| 2020 | 71.0% | 72.5% | 72.8% | 74.4% |
+| 2021 | 70.4% | 74.6% | 72.6% | 75.2% |
+| 2022 | 71.3% | 76.7% | 73.7% | 76.6% |
+| 2023 | 72.5% | 75.2% | 74.6% | 76.8% |
+| 2024 | 69.5% | 69.8% | 71.1% | 72.4% |
+| 2025 | 71.2% | 69.6% | 71.0% | 72.2% |
+
+The reason was looked for and found. Among forest cells far from recent clearing that the JRC record marks as freshly disturbed, those that also carry a DETER fire scar used to turn into clearing less often than the rest (1.3% against 3.0% in the 2023 forecast year). From 2024 they turn into clearing more often (3.7% against 2.2% in 2024, 5.6% against 1.7% in 2025), and by 2026 they hold 12% of all far clearing. PRODES now counts forest lost to repeated fire, and the fires of 2023 and 2024 were the largest on record. The convolutional model has no fire input, so it cannot tell a burn from a logging track; the trees do, and they hold up better in those years. Fire-scar planes for the convolutional model are the next experiment.
+
+So the direction is more fine layers into the convolutional model (fire scars first, then land use of the neighbouring farmland for the Mato Grosso blocks), a loss that spends more on forest far from clearing, and sources that carry intent (clearing permits, the rural property registry).
 
 ## Alarm reliability of the published map
 

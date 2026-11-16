@@ -1,54 +1,54 @@
 {
  "name": "prenuncio-baseline",
  "title": "Prenúncio baseline: boosted trees blended with a U-Net",
- "summary": "Gradient boosted trees on a 500 m grid and a U-Net on 100 m tiles, blended 40/60 by geometric mean. This is the forecast shown on prenuncio.com.",
+ "summary": "Gradient boosted trees on a 500 m grid and a U-Net on 100 m tiles, both reading the JRC Tropical Moist Forest disturbance record, blended half and half by geometric mean. This is the forecast shown on prenuncio.com.",
  "authors": [
   "Prenúncio maintainers"
  ],
  "contact": "https://github.com/gdavidss/prenuncio/issues",
- "date": "2026-11-15",
+ "date": "2026-11-16",
  "benchmark_version": "1.0",
  "code": {
   "url": "https://github.com/gdavidss/prenuncio",
-  "commit": "bb3f7f38e67442a2c3736ec73000a42faf3d58e3",
+  "commit": "beafc85cb0897b44148987e2ea6db2edf78641f1",
   "license": "MIT"
  },
  "predictions": [
   {
    "year": 2022,
-   "url": "https://github.com/gdavidss/prenuncio/releases/download/baseline-1/2022.npz",
-   "sha256": "5535e9258a66644d39d6f69b1c51b01b30c87c7ac5654cc817ab4c1997add2e7",
-   "bytes": 17177828
+   "url": "https://github.com/gdavidss/prenuncio/releases/download/baseline-2/2022.npz",
+   "sha256": "420be2392abf365face1915da17b66702f0c21ab91ff5306f1e81d702cb84e1f",
+   "bytes": 19075646
   },
   {
    "year": 2023,
-   "url": "https://github.com/gdavidss/prenuncio/releases/download/baseline-1/2023.npz",
-   "sha256": "bc203b3f0b1795d08a0590fc59541d2c0febfddb1f2738bc571122435390b01b",
-   "bytes": 17551637
+   "url": "https://github.com/gdavidss/prenuncio/releases/download/baseline-2/2023.npz",
+   "sha256": "c90bacff46ab9aa54827c3963a1704dacdd87e9dfdb90dbe463bad7da6573534",
+   "bytes": 19017005
   },
   {
    "year": 2024,
-   "url": "https://github.com/gdavidss/prenuncio/releases/download/baseline-1/2024.npz",
-   "sha256": "0a5e8d90e1100ce00f5500ca8a1ccc240bdddb51aeb9e9f2e368c3ad14555165",
-   "bytes": 17786980
+   "url": "https://github.com/gdavidss/prenuncio/releases/download/baseline-2/2024.npz",
+   "sha256": "5ba8702d619f1709604b812460d8b5c0e04d71e41775a1d3780bb768476c1ab2",
+   "bytes": 18986795
   },
   {
    "year": 2025,
-   "url": "https://github.com/gdavidss/prenuncio/releases/download/baseline-1/2025.npz",
-   "sha256": "71e5c2aa509584defa88dbf3dc310dd0bc2dec220d97474774e581498244086b",
-   "bytes": 18291284
+   "url": "https://github.com/gdavidss/prenuncio/releases/download/baseline-2/2025.npz",
+   "sha256": "61b4d0d664a88e90f90498ca7c29732e919546a75ed95fda57494cff062476e2",
+   "bytes": 19126142
   },
   {
    "year": 2026,
-   "url": "https://github.com/gdavidss/prenuncio/releases/download/baseline-1/2026.npz",
-   "sha256": "c2dd60036259cd19ae26b76349204a1849a25d6bba5670f61985f4e239cb20bf",
-   "bytes": 18529765
+   "url": "https://github.com/gdavidss/prenuncio/releases/download/baseline-2/2026.npz",
+   "sha256": "9594cedf8508dad4a7746c75988e398793cae6a9efb7e1d1f9d28bd73fbadf1a",
+   "bytes": 19333930
   },
   {
    "year": 2027,
-   "url": "https://github.com/gdavidss/prenuncio/releases/download/baseline-1/2027.npz",
-   "sha256": "9a8902961b0ed6e66e0b481b6fb3239925f86aca62d66824fa36d50a40c437d0",
-   "bytes": 17155198,
+   "url": "https://github.com/gdavidss/prenuncio/releases/download/baseline-2/2027.npz",
+   "sha256": "b76070ebd3368c8d19b896da6400e24cbfeef0b911441fb8c4c1431bb67fd915",
+   "bytes": 18534587,
    "information_cutoff": "2026-07-31"
   }
  ],
@@ -84,6 +84,12 @@
    "license": "Open, with attribution to the GLAD laboratory, University of Maryland"
   },
   {
+   "name": "JRC Tropical Moist Forest v1 (2025 release), first degradation year and first deforestation year",
+   "url": "https://forobs.jrc.ec.europa.eu/TMF",
+   "dates": "Calendar years 1982 to 2025. A forecast of year T reads first-disturbance years up to calendar year T-2. Only the earlier of the two years is used.",
+   "license": "Open, with attribution to the European Commission Joint Research Centre (Vancutsem et al. 2021)"
+  },
+  {
    "name": "AlphaEarth Foundations Satellite Embedding, annual, Google and Google DeepMind",
    "url": "https://source.coop/tge-labs/aef",
    "dates": "Calendar years 2018 to 2025. A forecast of year T reads the embeddings of calendar years T-2 and T-3.",
@@ -110,8 +116,8 @@
  ],
  "compute": {
   "hardware": "One cloud machine with 16 vCPU, 64 GB of RAM and one NVIDIA L4 GPU (24 GB)",
-  "hours": 9.5,
-  "cost_usd": 11
+  "hours": 8,
+  "cost_usd": 9
  },
  "agents": {
   "used": true,

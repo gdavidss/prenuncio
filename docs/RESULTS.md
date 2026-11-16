@@ -12,22 +12,22 @@ The test is rolling origin. To score 2022 the model is trained only on outcomes 
 
 ## Where clearing falls, one year ahead
 
-The published forecast is a blend of two trained models. One is gradient boosted trees on a 500 m grid. The other is a U-Net that reads 25 km tiles at 100 m. Both see the clearing history plus three finer records of what the satellites saw: Hansen's 30 m forest loss, the GLAD Sentinel-2 alerts at 10 m (from 2020), and Google's AlphaEarth satellite embeddings (from 2018). The U-Net forecast for each year comes from a network that never saw that year or any later one. Figures are the share of the year's clearing inside the top 5% of forest cells.
+The published forecast is a blend of two trained models. One is gradient boosted trees on a 500 m grid. The other is a U-Net that reads 25 km tiles at 100 m. Both see the clearing history plus four finer records of what the satellites saw: Hansen's 30 m forest loss, the GLAD Sentinel-2 alerts at 10 m (from 2020), the JRC Tropical Moist Forest record of first disturbance at 30 m, and Google's AlphaEarth satellite embeddings (from 2018). The U-Net forecast for each year comes from a network that never saw that year or any later one. Figures are the share of the year's clearing inside the top 5% of forest cells.
 
 | Test year | Published blend, 500 m | Trees alone | U-Net alone | Blend as painted on the site, 1 km | First version, 1 km | Best naive map |
 |---|---|---|---|---|---|---|
-| 2019 | 72% | 70% | 70% | 68% | 65% | 54% |
-| 2020 | 72% | 71% | 71% | 69% | 64% | 54% |
-| 2021 | 73% | 71% | 71% | 68% | 65% | 53% |
-| 2022 | 73% | 72% | 71% | 69% | 65% | 54% |
-| 2023 | 73% | 72% | 72% | 70% | 62% | 52% |
-| 2024 | 71% | 70% | 70% | 67% | 58% | 47% |
-| 2025 | 73% | 70% | 72% | 69% | 60% | 50% |
-| 2026 | 72% | 70% | 70% | 72% | 63% | 52% |
+| 2019 | 73% | 71% | 72% | 69% | 65% | 54% |
+| 2020 | 74% | 73% | 72% | 70% | 64% | 54% |
+| 2021 | 75% | 73% | 75% | 71% | 65% | 53% |
+| 2022 | 77% | 74% | 77% | 73% | 65% | 54% |
+| 2023 | 77% | 75% | 75% | 72% | 62% | 52% |
+| 2024 | 72% | 71% | 70% | 68% | 58% | 47% |
+| 2025 | 72% | 71% | 70% | 69% | 60% | 50% |
+| 2026 | 74% | 70% | 72% | 73% | 63% | 52% |
 
-Averaged over 2019 to 2025 the published blend captures 72.5% of clearing in the top 5% of forest cells, 33.6% in the top 1% and 87.5% in the top 10%. The first version captured 62.9% and 25.4% at 5% and 1%. The best naive map captures 52% and 18%, and the forest-edge benchmark 27% and 5%. On 2026, which no model saw, the blend captures 72.5%, 33.7% and 87.5%, against 63.1% and 27.1% for the first version.
+Averaged over 2019 to 2025 the published blend captures 74.5% of clearing in the top 5% of forest cells, 35.3% in the top 1% and 88.8% in the top 10%. The first version captured 62.9% and 25.4% at 5% and 1%. The best naive map captures 52% and 18%, and the forest-edge benchmark 27% and 5%. On 2026, which no model saw, the blend captures 73.1%, 34.9% and 87.8%, against 63.1% and 27.1% for the first version.
 
-Counting the budget in forest instead of cells (the 5% of standing forest with the densest risk), the blend holds 77.7% of the clearing, and it separates cells that lost a hectare from those that did not with a ROC-AUC of 0.955.
+Counting the budget in forest instead of cells (the 5% of standing forest with the densest risk), the blend holds 79.7% of the clearing, and it separates cells that lost a hectare from those that did not with a ROC-AUC of 0.957.
 
 The site still paints on the 1 km grid, so it sums the 500 m forecast into 1 km cells. Painted that way the same forecast scores 68.5% on average, and that is the number the site quotes, because it describes the cells it actually shows. Painting at 500 m is the next change to the site.
 

@@ -8,7 +8,7 @@ Share of each year's clearing inside the cells a model flags. The table is sorte
 
 | # | Submission | cap5 | cap1 | cap10 | capf5 | auprc | auc | front5 | cap5 by year | Status | Agents | Date |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|
-| 1 | [Prenúncio baseline: boosted trees blended with a U-Net](submissions/prenuncio-baseline/REPORT.md) | 72.5% | 35.1% | 87.2% | 77.3% | 0.168 | 0.945 | 76.3% | 72.6 74.1 71.1 72.2 | re-scored | yes | 2026-11-15 |
+| 1 | [Prenúncio baseline: boosted trees blended with a U-Net](submissions/prenuncio-baseline/REPORT.md) | 74.5% | 37.1% | 88.3% | 79.2% | 0.179 | 0.948 | 78.6% | 76.6 76.8 72.4 72.2 | re-scored | yes | 2026-11-16 |
 
 ## 2026, priority scenes only
 
@@ -16,7 +16,7 @@ INPE has published 2026 for its priority scenes so far. These scores change when
 
 | Submission | cap5 | cap1 | cap10 | capf5 | auprc | auc | front5 | Status |
 |---|---|---|---|---|---|---|---|---|
-| [Prenúncio baseline: boosted trees blended with a U-Net](submissions/prenuncio-baseline/REPORT.md) | 72.7% | 34.0% | 88.1% | 78.6% | 0.109 | 0.952 | 88.5% | re-scored |
+| [Prenúncio baseline: boosted trees blended with a U-Net](submissions/prenuncio-baseline/REPORT.md) | 73.5% | 35.1% | 88.2% | 79.0% | 0.115 | 0.953 | 87.9% | re-scored |
 
 ## Live track, PRODES year 2027
 
@@ -24,7 +24,7 @@ Forecasts registered before the outcome exists. They get their scores when INPE 
 
 | Submission | Registered | Information cutoff | sha256 of the map | Agents | Score |
 |---|---|---|---|---|---|
-| [Prenúncio baseline: boosted trees blended with a U-Net](submissions/prenuncio-baseline/REPORT.md) | 2026-11-15 | 2026-07-31 | [`9a8902961b0ed6e6`](https://github.com/gdavidss/prenuncio/releases/download/baseline-1/2027.npz) | yes | pending |
+| [Prenúncio baseline: boosted trees blended with a U-Net](submissions/prenuncio-baseline/REPORT.md) | 2026-11-15 | 2026-07-31 | [`b76070ebd3368c8d`](https://github.com/gdavidss/prenuncio/releases/download/baseline-2/2027.npz) | yes | pending |
 
 ## Status
 

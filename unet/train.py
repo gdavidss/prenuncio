@@ -53,12 +53,17 @@ if "UNET_AEF" in os.environ:
         a = np.load(f, mmap_mode="r")
         EMB[int(f.stem[4:])] = np.stack([np.nan_to_num(np.clip(np.asarray(a[k], np.float32) * 127, -127, 127)).astype(np.int8) for k in range(64)])
         print("embeddings", f.stem, flush=True)
-DB = gpu("db") if (DATA / "db.npy").exists() and "UNET_DETER" in os.environ else None  # DETER alert bits (deter100.py)
+# DETER alert bits (deter100.py): clearing, degradation and fire scar in the 12 months before each 31 July. Kept in RAM.
+DB = np.load(DATA / "db.npy") if (DATA / "db.npy").exists() and "UNET_DETER" in os.environ else None
 CTX = "UNET_CTX" in os.environ  # three wide-context planes: clearing density over 3 km and 10 km
 # JRC TMF first-disturbance bits (tmf.py 100): logging, fire damage and small openings. Kept in RAM, cut per batch.
 TB = np.load(DATA / "tb.npy") if "UNET_TMF" in os.environ else None
-tmf_cut = lambda yy, xx: torch.from_numpy(TB[yy.cpu().numpy(), xx.cpu().numpy()]).to(dev)
-CIN = 12 + (5 if TB is not None else 0) + (4 if HB is not None else 0) + (5 + GB4 if GB is not None else 0) + (4 if DB is not None else 0) + (3 if CTX else 0) + (129 if EMB else 0)
+ram_cut = lambda a, yy, xx: torch.from_numpy(a[yy.cpu().numpy(), xx.cpu().numpy()]).to(dev)  # tiles of an array held in RAM
+# input planes by group, in the order channels() and batch() lay them out
+GROUPS = [("base", 12)] + ([("hb", 4)] if HB is not None else []) + ([("gb", 5 + GB4)] if GB is not None else []) + \
+         ([("db", 4)] if DB is not None else []) + ([("tb", 5)] if TB is not None else []) + ([("ctx", 3)] if CTX else []) + ([("emb", 129)] if EMB else [])
+CIN = sum(n for _, n in GROUPS)
+FARW = float(os.environ.get("UNET_FARW", 0))  # extra loss weight on forest with no clearing of the last three years within 1.5 km
 
 
 def aef_planes(y0, x0, tt, size):
@@ -175,9 +180,9 @@ def batch(draw, last_target, recent=0.0):
     c, l, r, tn = (aug(a[yy, xx]) for a in (cy, lc, res, ten))
     hb = aug(HB[yy, xx]) if HB is not None else None
     gb = aug(GB[yy, xx]) if GB is not None else None
-    db = aug(DB[yy, xx]) if DB is not None else None
+    db = aug(ram_cut(DB, yy, xx)) if DB is not None else None
     emb = aug(aef_planes(y0, x0, tt, TILE)) if EMB else None
-    tb = aug(tmf_cut(yy, xx)) if TB is not None else None
+    tb = aug(ram_cut(TB, yy, xx)) if TB is not None else None
     tt = tt.to(torch.uint8)[:, None, None]
     x, forest = channels(c, l, tn, tt, hb, gb, db, tb)
     if EMB:
@@ -206,8 +211,8 @@ def predict(net, year, out):
             l = torch.where(inside, lc[yy, xx], torch.full_like(lc[:1, :1], 3))  # beyond the raster counts as outside
             x, forest = channels(cy[yy, xx] * inside, l, ten[yy, xx] * inside, tt,
                                  HB[yy, xx] * inside if HB is not None else None, GB[yy, xx] * inside if GB is not None else None,
-                                 DB[yy, xx] * inside if DB is not None else None,
-                                 tmf_cut(yy, xx) * inside if TB is not None else None)
+                                 ram_cut(DB, yy, xx) * inside if DB is not None else None,
+                                 ram_cut(TB, yy, xx) * inside if TB is not None else None)
             if EMB:
                 x = torch.cat([x, aef_planes(torch.full_like(x0, y - m), x0 - m, tt.flatten().expand(len(x0)), core + 2 * m)], 1)
             def run(half):
@@ -249,7 +254,11 @@ def train(net, draw, last, steps, lr, recent=0.0):
         x, y, forest = batch(draw, last, recent)
         with torch.autocast("cuda", dtype=HALF):
             logit = net(x.contiguous(memory_format=torch.channels_last))
-        loss = (Fn.binary_cross_entropy_with_logits(logit.float(), y, reduction="none") * forest).sum() / forest.sum().clamp(min=1)
+        w = forest
+        if FARW:  # clearing beside recent clearing is close to solved; spend more of the loss where there is none nearby
+            near = Fn.max_pool2d(x[:, 1:4].sum(1, keepdim=True).clamp(max=1), 31, 1, 15)[:, 0]
+            w = forest * (1 + FARW * (1 - near))
+        loss = (Fn.binary_cross_entropy_with_logits(logit.float(), y, reduction="none") * w).sum() / w.sum().clamp(min=1)
         opt.zero_grad(set_to_none=True)
         sched.step()
         if not torch.isfinite(loss):  # a half-precision overflow once turned a whole run to NaN: drop the batch instead
@@ -275,7 +284,20 @@ def main():
     draw = sampler()
     tag = os.environ.get("UNET_TAG", "")
     if "UNET_INIT" in os.environ:  # restart from a checkpoint written by predict()
-        net.load_state_dict(torch.load(os.environ["UNET_INIT"]))
+        sd, key = torch.load(os.environ["UNET_INIT"]), "down.0.0.weight"
+        if sd[key].shape[1] != CIN:
+            # the checkpoint was trained without some of today's planes (UNET_INIT_GROUPS names the ones it had,
+            # in order): the new planes start with zero weights and are learned in the fine-tuning
+            wide, pos, at = torch.zeros(sd[key].shape[0], CIN, 3, 3, dtype=sd[key].dtype, device=sd[key].device), {}, 0
+            for name, n in GROUPS:
+                pos[name], at = (at, n), at + n
+            at = 0
+            for name in os.environ["UNET_INIT_GROUPS"].split(","):
+                a, n = pos[name]
+                wide[:, a:a + n], at = sd[key][:, at:at + n], at + n
+            assert at == sd[key].shape[1], (at, sd[key].shape)
+            sd[key] = wide
+        net.load_state_dict(sd)
     if mode == "ft":  # ft <last_target_year> <forecast_year> <steps>: one more fine-tune (or none) and a forecast
         if int(sys.argv[4]):
             train(net, draw, a, int(sys.argv[4]), 3e-4, recent=0.5)

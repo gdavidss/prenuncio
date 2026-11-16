@@ -7,7 +7,7 @@
    "authors": [
     "Prenúncio maintainers"
    ],
-   "date": "2026-11-15",
+   "date": "2026-11-16",
    "status": "re-scored",
    "flag": null,
    "note": "The maintainers' own model. The scores come from benchmark/score.py on the published maps. Nobody outside the project has reproduced it yet.",
@@ -15,29 +15,29 @@
    "code": "https://github.com/gdavidss/prenuncio",
    "benchmark_version": "1.0",
    "mean": {
-    "cap1": 0.350523,
-    "cap5": 0.725107,
-    "cap10": 0.87158,
-    "capf5": 0.772835,
-    "auprc": 0.167963,
-    "auc": 0.94455,
-    "front5": 0.763448
+    "cap1": 0.370693,
+    "cap5": 0.744821,
+    "cap10": 0.883374,
+    "capf5": 0.791898,
+    "auprc": 0.178573,
+    "auc": 0.947614,
+    "front5": 0.786242
    },
    "cap5_by_year": {
-    "2022": 0.726488,
-    "2023": 0.741199,
-    "2024": 0.710906,
-    "2025": 0.721833,
-    "2026": 0.727438
+    "2022": 0.765612,
+    "2023": 0.768162,
+    "2024": 0.723781,
+    "2025": 0.721729,
+    "2026": 0.735107
    },
    "y2026": {
-    "cap5": 0.727438,
-    "cap1": 0.340428,
-    "cap10": 0.881324,
-    "capf5": 0.786497,
-    "auprc": 0.108909,
-    "auc": 0.951826,
-    "front5": 0.884604
+    "cap5": 0.735107,
+    "cap1": 0.351469,
+    "cap10": 0.882363,
+    "capf5": 0.79033,
+    "auprc": 0.114585,
+    "auc": 0.952877,
+    "front5": 0.879276
    },
    "rank": 1
   }
@@ -48,8 +48,8 @@
    "name": "prenuncio-baseline",
    "title": "Prenúncio baseline: boosted trees blended with a U-Net",
    "year": 2027,
-   "sha256": "9a8902961b0ed6e66e0b481b6fb3239925f86aca62d66824fa36d50a40c437d0",
-   "url": "https://github.com/gdavidss/prenuncio/releases/download/baseline-1/2027.npz",
+   "sha256": "b76070ebd3368c8d19b896da6400e24cbfeef0b911441fb8c4c1431bb67fd915",
+   "url": "https://github.com/gdavidss/prenuncio/releases/download/baseline-2/2027.npz",
    "information_cutoff": "2026-07-31",
    "registered": "2026-11-15",
    "agents": true
