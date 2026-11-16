@@ -8,6 +8,9 @@ conservation unit.
 ## How to connect
 Plain HTTPS GET, static JSON, no key, no login, CORS open. Base: https://prenuncio.com/api/v1
 Start with https://prenuncio.com/api/v1/index.json, which lists every endpoint with a description.
+If prenuncio.com answers 403 with a browser check (its host does that to some clients that are not browsers),
+use the mirror, which holds the same files: https://raw.githubusercontent.com/gdavidss/prenuncio/api/v1
+for example https://raw.githubusercontent.com/gdavidss/prenuncio/api/v1/index.json
 
 ## Endpoints
 - amazon.json             the whole Amazon: forecast total, distribution of cell chances, yearly and monthly history

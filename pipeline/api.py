@@ -18,6 +18,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 from az import GRID, ROOT  # noqa: E402
 
 WEB, OUT, BASE = ROOT / "web/data", ROOT / "web/api/v1", "https://prenuncio.com/api/v1"
+MIRROR = "https://raw.githubusercontent.com/gdavidss/prenuncio/api/v1"  # the same files, pushed by scripts/publish_api.sh
 if OUT.exists():
     shutil.rmtree(OUT)
 (OUT / "municipality").mkdir(parents=True); (OUT / "cells/2027").mkdir(parents=True)
@@ -158,7 +159,7 @@ put("cells/grid.json", {"west": G["west"], "north": G["north"], "cell_degrees": 
                         "rasters": {str(y): f"https://prenuncio.com/data/p{y}.png" for y in range(2022, 2028)}},
     "The 500 m grid and how to read a cell's chance: whole-basin 8-bit PNGs per year, and 2027 cut into small binary tiles.")
 
-index = {"name": "Prenúncio API", "version": 1, "built": datetime.date.today().isoformat(), "base": BASE, "instructions": f"{BASE}/llms.txt",
+index = {"name": "Prenúncio API", "version": 1, "built": datetime.date.today().isoformat(), "base": BASE, "mirror": MIRROR, "mirror_note": "The same files on GitHub. Use it if prenuncio.com answers 403 with a browser check, which its host does to some clients that are not browsers.", "instructions": f"{BASE}/llms.txt",
          "what": "Forecast of deforestation in the Brazilian Amazon: for every 500 m forest cell, the chance it loses at least one hectare in the PRODES year 2027 (August 2026 to July 2027), with sums by municipality, state, Indigenous land and conservation unit.",
          "access": "Static JSON over HTTPS. No key, no rate limit beyond the host's, CORS open. GET only.",
          "licence": "CC BY-SA 4.0 for the data (derived from INPE PRODES and DETER); code MIT. Credit INPE and Prenúncio.", "source": "https://github.com/gdavidss/prenuncio",
@@ -176,6 +177,9 @@ conservation unit.
 ## How to connect
 Plain HTTPS GET, static JSON, no key, no login, CORS open. Base: {BASE}
 Start with {BASE}/index.json, which lists every endpoint with a description.
+If prenuncio.com answers 403 with a browser check (its host does that to some clients that are not browsers),
+use the mirror, which holds the same files: {MIRROR}
+for example {MIRROR}/index.json
 
 ## Endpoints
 - amazon.json             the whole Amazon: forecast total, distribution of cell chances, yearly and monthly history
