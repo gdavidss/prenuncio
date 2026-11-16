@@ -40,6 +40,10 @@ HB = gpu("hb") if (DATA / "hb.npy").exists() else None
 GB4 = (DATA / "gb4.npy").exists() and "UNET_GB4" in os.environ  # GLAD bits with a last-month flag
 GB = gpu("gb4") if GB4 else gpu("gb") if (DATA / "gb.npy").exists() else None
 TTA = "UNET_TTA" in os.environ  # average each forecast with its mirror image
+# float16 overflowed in fine-tuning once the weights before each batch norm had grown (they are scale-free, so
+# nothing holds them down); bfloat16 has the exponent range of full precision and cannot
+HALF = torch.bfloat16 if "UNET_BF16" in os.environ else torch.float16
+OUT100 = "UNET_OUT100" in os.environ  # also write each forecast at the network's own 100 m, as uint16
 # AlphaEarth satellite embeddings on the 500 m grid (aef.py), kept in RAM as int8 and cut per batch on the CPU.
 # UNET_AEF is the folder holding emb_<year>.npy. Planes: the last full calendar year before the forecast date
 # (64), its change from the year before (64), and one flag for "embeddings exist for this date".
@@ -190,6 +194,7 @@ def predict(net, year, out):
     tt = torch.tensor(year - 2001, dtype=torch.uint8, device=dev).view(1, 1, 1)
     core, m = 400, 40
     pred = torch.zeros(R // 5, C // 5, device=dev)
+    fine = np.zeros((R, C), np.uint16) if OUT100 else None
     ar = torch.arange(-m, core + m, device=dev)
     for y in range(0, R, core):
         xs = list(range(0, C, core))
@@ -205,17 +210,29 @@ def predict(net, year, out):
                                  tmf_cut(yy, xx) * inside if TB is not None else None)
             if EMB:
                 x = torch.cat([x, aef_planes(torch.full_like(x0, y - m), x0 - m, tt.flatten().expand(len(x0)), core + 2 * m)], 1)
-            with torch.autocast("cuda", dtype=torch.float16):
-                p = torch.sigmoid(net(x.contiguous(memory_format=torch.channels_last)).float())
-                if TTA:
-                    p = (p + torch.sigmoid(net(x.flip(-1).contiguous(memory_format=torch.channels_last)).float()).flip(-1)) / 2
+            def run(half):
+                with torch.autocast("cuda", dtype=HALF, enabled=half):
+                    q = torch.sigmoid(net(x.contiguous(memory_format=torch.channels_last)).float())
+                    if TTA:
+                        q = (q + torch.sigmoid(net(x.flip(-1).contiguous(memory_format=torch.channels_last)).float()).flip(-1)) / 2
+                return q
+            p = run(True)
+            if not bool(torch.isfinite(p).all()):  # half precision overflowed on these tiles (it killed a run once): redo them in full
+                p = run(False)
             p = p * forest
+            if OUT100:
+                q = (p[:, m:m + core, m:m + core].clamp(0, 1) * 65535).round().to(torch.int32).cpu().numpy().astype(np.uint16)
+                for j, xj in enumerate(xs[i:i + PB]):
+                    h, w = min(core, R - y), min(core, C - xj)
+                    fine[y:y + h, xj:xj + w] = q[j, :h, :w]
             p = p[:, m:m + core, m:m + core].reshape(-1, core // 5, 5, core // 5, 5).mean((2, 4))
             for j, xj in enumerate(xs[i:i + PB]):
                 h, w = min(core // 5, R // 5 - y // 5), min(core // 5, C // 5 - xj // 5)
                 pred[y // 5:y // 5 + h, xj // 5:xj // 5 + w] = p[j, :h, :w]
     assert bool(torch.isfinite(pred).all()), "the network produced non-finite values"
     np.save(out, pred.cpu().numpy().astype(np.float16))
+    if OUT100:
+        np.save(str(out).replace(".npy", "_100.npy"), fine)
     torch.save(net.state_dict(), str(out).replace(".npy", ".pt"))  # so a later year can restart from here
     print("wrote", out, "expected km2 about", round(float(pred.sum()) * 0.25), flush=True)
     net.train()
@@ -227,16 +244,22 @@ def train(net, draw, last, steps, lr, recent=0.0):
     scaler = torch.amp.GradScaler()
     t0, run = time.time(), 0.0
     net.train()
+    good = {k: v.clone() for k, v in net.named_buffers()}  # last batch-norm statistics known to be finite
     for step in range(1, steps + 1):
         x, y, forest = batch(draw, last, recent)
-        with torch.autocast("cuda", dtype=torch.float16):
+        with torch.autocast("cuda", dtype=HALF):
             logit = net(x.contiguous(memory_format=torch.channels_last))
         loss = (Fn.binary_cross_entropy_with_logits(logit.float(), y, reduction="none") * forest).sum() / forest.sum().clamp(min=1)
         opt.zero_grad(set_to_none=True)
         sched.step()
         if not torch.isfinite(loss):  # a half-precision overflow once turned a whole run to NaN: drop the batch instead
             print("  skipped a non-finite batch at step", step, flush=True)
+            with torch.no_grad():  # the forward pass already wrote the overflow into the batch-norm running statistics
+                for k, v in net.named_buffers():
+                    v.copy_(good[k])
             continue
+        if step % 20 == 0:
+            good = {k: v.clone() for k, v in net.named_buffers()}
         scaler.scale(loss).backward()
         scaler.unscale_(opt)
         torch.nn.utils.clip_grad_norm_(net.parameters(), 1.0)
@@ -257,6 +280,11 @@ def main():
         if int(sys.argv[4]):
             train(net, draw, a, int(sys.argv[4]), 3e-4, recent=0.5)
         predict(net, b, DATA / f"roll{tag}_{b}.npy")
+        return
+    if mode == "cont":  # cont <first> <last> <steps>: pick a rolling run up again from UNET_INIT, the checkpoint of year first-1
+        for y in range(a, b + 1):
+            train(net, draw, y - 1, int(sys.argv[4]), 3e-4, recent=0.5)
+            predict(net, y, DATA / f"roll{tag}_{y}.npy")
         return
     if mode == "one":
         train(net, draw, a, int(sys.argv[4]) if len(sys.argv) > 4 else 12000, 1e-3)

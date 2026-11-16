@@ -30,8 +30,10 @@ Means over 2022 to 2025. Every row is a real run.
 
 | Model | cap1 | cap5 | cap10 | auc | front5 |
 |---|---|---|---|---|---|
+| **Published 16 Nov**: tuned trees with the JRC disturbance record, blended 50/50 with the U-Net with embeddings | 35.6% | 73.5% | 87.8% | 0.954 | 78.1% |
+| Tuned trees with embeddings and the JRC disturbance record, alone | 34.1% | 72.8% | 87.6% | 0.954 | 78.6% |
 | Tuned trees with embeddings (three fits, richer GLAD), blended with the wider U-Net | 35.3% | 73.0% | 87.6% | 0.953 | 79.5% |
-| **Published**: production trees with embeddings blended 40/60 with the U-Net with embeddings | 35.1% | 72.6% | 87.2% | 0.953 | 76.7% |
+| Published until 15 Nov: production trees with embeddings blended 40/60 with the U-Net with embeddings | 35.1% | 72.6% | 87.2% | 0.953 | 76.7% |
 | Trees with satellite embeddings, blended with the wider U-Net | 35.1% | 72.7% | 87.5% | 0.953 | 78.7% |
 | Trees blended with the wider U-Net | 34.4% | 72.3% | 87.1% | 0.953 | 77.7% |
 | Trees blended with the rolling U-Net (published until 15 Nov) | 33.9% | 71.7% | 86.8% | 0.952 | 74.8% |
@@ -60,6 +62,46 @@ The published model is half a point under the best lab row because its trees are
 For reference, on the same four years the first version of the product (trees at 1 km, neither Hansen nor GLAD) scored about 62% on cap5, and the best naive map about 50%.
 
 The blend's gain over the trees is real in every year (bootstrap: better in 95% to 100% of resamples, by 0.5 to 3.9 points). The flatter loss is not distinguishable from the baseline.
+
+## Where the misses are
+
+On 16 November the published maps were taken apart to see what the missing quarter is made of (`pipeline/anatomy.py`, means over 2022 to 2025, counted on every cell).
+
+The model knows where clearing can happen. Its top 20% of cells hold 96.6% of the year's clearing, the top 10% hold 87.7%, the top 5% hold 73.3% and the top 1% hold 35.6%. What it cannot do is say which of the cells at risk go this year. Only 11% of flagged cells lose forest in the year they are flagged for, and 18% within two years. Last year's flags, left unchanged, still catch 62% of this year's clearing.
+
+The model also knows how unsure it is. From its own numbers it expects 77% of the clearing inside its flags, and 73% falls there. That four-point gap is the most that any better use of the same inputs can recover. Past it, the inputs have to change.
+
+| Distance from clearing of the last three years | Share of the year's clearing | Caught | Share of forest cells |
+|---|---|---|---|
+| Same cell | 28% | 94% | 2.5% |
+| Next cell | 30% | 87% | 4.2% |
+| To 1.5 km | 13% | 72% | 3.8% |
+| 1.5 to 3 km | 15% | 56% | 8.3% |
+| 3 to 6 km | 9% | 33% | 11.7% |
+| Beyond 6 km | 6% | 16% | 69.4% |
+
+Clearing next to recent clearing is close to solved. The 30% that opens 1.5 km or more away is caught four times in ten, and it accounts for 17 of the 27 missing points.
+
+| Who holds the land (CNFP registry) | Share of the year's clearing | Caught | Of which far from recent clearing | Caught |
+|---|---|---|---|---|
+| Not in the registry (private or unregistered) | 48% | 69% | 17% | 40% |
+| Undesignated public land | 23% | 82% | 5% | 52% |
+| Settlements | 18% | 84% | 2% | 47% |
+| Conservation units | 8% | 72% | 2% | 39% |
+| Indigenous lands | 5% | 36% | 3% | 10% |
+
+The largest single miss is clearing on private or unregistered land far from recent clearing, 17% of all clearing, caught 40% of the time. More than half of it is in Mato Grosso (10% of all Amazon clearing, caught 43% of the time). It comes in large blocks, 56% of it in patches over 5 km², on cells that were entirely forest, usually beside farmland cleared more than three years earlier. Nothing in a disturbance record announces it.
+
+Four ideas were measured against this and set aside.
+
+| Idea | Result |
+|---|---|
+| Flag at the network's own 100 m instead of 500 m cells, same flagged area (`unet/score100.py`, 2021) | 81.9% against 80.9%, one point |
+| Flag the neighbours of flagged cells | Worse than the model's own next-ranked cells (84.6% against 88.1% at the same area) |
+| Correct this year's forecast with last year's errors by distance, forest share, rank and state (`pipeline/recal.py`) | +0.1 points, the sign changes from year to year |
+| Re-issue the forecast in season with the DETER alerts of the first three months (`pipeline/inseason.py`) | 75.4% against 73.3%; on clearing in cells with no alert yet it stays at 70% |
+
+One thing does move the far clearing: the convolutional model reading the JRC disturbance record at 100 m. In 2022 it caught 50% of far clearing against 39% for the blend, and 77.0% overall against 73.8%; in 2021, 43% against 37%, and 74.6% against 73.2%. The trees given the same record as 500 m summaries gained a tenth of that on far clearing. Logging roads and skid trails are lines, and a line survives as a pattern of 100 m cells but not as a count inside a 500 m cell. That is the direction: more fine layers into the convolutional model, and less weight on the trees where clearing is far from the frontier.
 
 ## Alarm reliability of the published map
 
