@@ -71,6 +71,44 @@ def dist(mask):
     return np.minimum(ndi.distance_transform_edt(~mask) / K, 200).astype(np.float32)
 
 
+_asv = None
+
+
+def permits(mc, src=None):
+    """Clearing permits (SINAFLOR authorisations of vegetation suppression) issued up to the end of month mc
+    and still valid then, as seven maps. The register gives a property's centre point and the authorised
+    area, so each permit is a disc of that area: authorised or not, the same for permits of the last 12
+    months, how recent the newest is, its size, the neighbourhood, and the distance to the nearest one.
+    The register is thin before 2020, so earlier dates are unknown, not zero. The file read here is a copy
+    with dates, state, point and area only (columns issued, valid_until, lat, lon, ha)."""
+    global _asv
+    if _asv is None:
+        d = pd.read_csv(src or GRID / "asv.csv", dtype=str)
+        num = lambda c: pd.to_numeric(d[c].str.replace(",", "."), errors="coerce")
+        d = d.assign(t0=pd.to_datetime(d.issued, format="%d/%m/%Y", errors="coerce"), t1=pd.to_datetime(d.valid_until, format="%d/%m/%Y", errors="coerce"),
+                     r=(N - num("lat")) / C, c=(num("lon") - W) / C, ha=num("ha")).dropna(subset=["t0", "r", "c", "ha"])
+        _asv = d[(d.r >= 0) & (d.r < NROW) & (d.c >= 0) & (d.c < NCOL) & (d.ha >= 5)]
+    if mc < 246:  # before July 2020
+        return [np.full((NROW, NCOL), np.nan, np.float32)] * 7
+    cut = pd.Timestamp(2000 + mc // 12, mc % 12 + 1, 1) + pd.offsets.MonthEnd(0)
+    sel = _asv[(_asv.t0 <= cut) & (_asv.t1.isna() | (_asv.t1 > cut))]
+    km = C * 111.0
+
+    def discs(rows, value=None):
+        out = np.zeros((NROW, NCOL), np.float32)
+        for k, (r0, c0, ha) in enumerate(zip(rows.r, rows.c, rows.ha)):
+            rad = np.sqrt(ha / 100 / np.pi) / km + 0.7
+            n, a, b = int(np.ceil(rad)), int(r0), int(c0)
+            ys, xs = slice(max(a - n, 0), min(a + n + 1, NROW)), slice(max(b - n, 0), min(b + n + 1, NCOL))
+            yy, xx = np.ogrid[ys, xs]
+            out[ys, xs] = np.maximum(out[ys, xs], ((yy - r0) ** 2 + (xx - c0) ** 2 <= rad ** 2) * (1.0 if value is None else value[k]))
+        return out
+
+    valid, new = discs(sel), discs(sel[sel.t0 > cut - pd.Timedelta(days=365)])
+    recency = discs(sel, 1 / (1 + ((cut - sel.t0).dt.days / 30.4).to_numpy() / 12))  # 1 for a permit issued today, 0.5 after a year
+    return [valid, new, recency, discs(sel, np.log10(sel.ha.to_numpy())), box(valid, 3), box(new, 9), dist(valid > 0)]
+
+
 _deter = None
 
 
@@ -273,6 +311,9 @@ def features(y, mc=None, pick=None, extra=None):
         f["dist_t1"], f["dist_t3"] = dist(t1 >= 0.01), dist(t3 >= 0.01)
         f["t3_forest"], f["t3_forest_n3"] = np.minimum(t3, forest), box(np.minimum(t3, forest), 3)  # disturbed, still forest to PRODES
         f["t10_forest_n9"], f["t1_trend_n9"] = box(np.minimum(t10, forest), 9), box(t1 - span(e - 1, e - 1), 9)
+    if "asv" in X:  # clearing permits valid on the forecast date
+        for name, a in zip(("asv", "asv_new", "asv_recency", "asv_size", "asv_n3", "asv_new_n9", "dist_asv"), permits(mc)):
+            f[name] = a
     if "dir" in X:  # which side the clearing is on: neighbourhood means displaced one width each way
         for km in (3, 9):
             n = (km * K) | 1

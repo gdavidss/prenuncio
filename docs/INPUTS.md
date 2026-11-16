@@ -20,7 +20,8 @@ Scores are cap5 (share of the year's clearing in the 5% of cells ranked highest)
 | INPE fire detections, IBAMA notices and embargoes near the cell | trees | added to the first version | no gain for placement |
 | IBAMA notices and embargoed area per km2 alerted, by municipality | amount, by semester | `pipeline/panel.py`, fixed effects by municipality and semester | followed by 4% to 9% less clearing; an association, biased toward zero because inspectors go where clearing is |
 | State-level trend, notices, embargoes, fire | yearly total | fourteen combinations over 2014 to 2025 | none beats repeating last year (17%) |
-| Clearing permits (SINAFLOR ASV), valid on the forecast date | screen, `pipeline/permits.py` | cells inside the authorised area, forecast against outcome | the forecast expected 357 to 574 of those cells to lose a hectare each year and 1,061 to 1,454 did; in the lab now |
+| Clearing permits (SINAFLOR ASV), valid on the forecast date | screen, `pipeline/permits.py` | cells inside the authorised area, forecast against outcome | the forecast expected 357 to 574 of those cells to lose a hectare each year and 1,061 to 1,454 did |
+| Clearing permits, as seven features | trees | lab, against the same trees without them | +1.3 points (71.5% to 72.8%), better in all four years; production run under way |
 
 ## How to propose an input
 
