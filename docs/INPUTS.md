@@ -25,6 +25,7 @@ Scores are cap5 (share of the year's clearing in the 5% of cells ranked highest)
 | Embargoes split by kind: remote, collective, field | amount, by semester | `pipeline/panel2.py`, same design | remote embargoes of the last six months carry about three times the coefficient of field embargoes and notices (-0.048 against -0.016 and -0.015) |
 | Rural credit (SICOR), cattle and crops, by municipality and month | amount, by semester | `pipeline/credit.py`, same design | cattle working capital +0.035 (interval +0.001 to +0.069); investment and crop credit indistinguishable from zero |
 | Enforcement, credit and permits together | amount, next six months by municipality | `pipeline/amount.py`, 16 rolling origins from May 2022 | median error of the Amazon total 28.3% with clearing history alone, 23.6% with all three groups, 37.5% for the same months a year before; each group alone moves it by one to three points, inside the noise of 16 origins |
+| Commodity prices in reais (central bank farm and metal indices), the dollar, with each municipality's cattle herd and soy area of 2020 | amount, next six months by municipality | `pipeline/amount.py`, same 16 origins | worse: 34.5% against 28.3% with clearing history alone. A national series seen at a few dozen dates is fitted by accident; not adopted |
 
 ## How to propose an input
 

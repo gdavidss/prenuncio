@@ -7,6 +7,8 @@ origins whose six months had fully passed, then scored. Feature groups are added
   enforce   IBAMA notices, remote embargoes and field embargoes per km2 alerted, last 6 and 6 to 12 months
   credit    cattle and crop credit, investment and working capital, last 12 months and its change on the year
   permits   authorised clearing area of permits valid at the origin, and of those issued in the last 12 months
+  markets   the central bank's farm and metal commodity indices in reais and the dollar, each against a year
+            before, with the municipality's cattle herd and soy area of 2020 (IBGE) so trees can cross them
 Scores: error of the Amazon total, and the summed absolute error over municipalities as a share of the total
 (lower is better), next to "the same six months a year before".
 Run: .venv/bin/python -I pipeline/amount.py
@@ -44,6 +46,11 @@ p = pd.DataFrame({"t0": mon(p.DATA_DE_EMISSAO), "t1": mon(p.DATA_DE_VALIDADE).fi
 p = p[(p.r >= 0) & (p.r < g["rows"]) & (p.c >= 0) & (p.c < g["cols"])]
 p["mun"] = munmap[p.r.astype(int), p.c.astype(int)]
 
+MK = ROOT / "data/raw/markets"
+sgs = lambda c: (lambda d: pd.Series(pd.to_numeric(d.valor).to_numpy(), ((pd.to_datetime(d.data, format="%d/%m/%Y").dt.year - 2000) * 12 + pd.to_datetime(d.data, format="%d/%m/%Y").dt.month - 1).to_numpy()))(pd.read_json(MK / f"{c}.json", dtype=str))
+PRICE = {"agro": sgs("sgs27575"), "metal": sgs("sgs27576"), "usd": sgs("usd")}
+sidra = lambda f: (lambda d: pd.Series(pd.to_numeric(d.V, errors="coerce").fillna(0).to_numpy(), d.D1C.astype(int).to_numpy()))(pd.read_json(MK / f).iloc[1:])
+HERD, SOY = sidra("herd.json"), sidra("soy.json")
 T0, T1 = 199, 321
 ids = np.array(sorted(set(det.mun[det.mun > 0]))); pos = {m: i for i, m in enumerate(ids)}
 
@@ -60,7 +67,7 @@ C = {k: cube(cr, k) for k in ("cattle_inv", "cattle_work", "crop_inv", "crop_wor
 p = p[p.mun.isin(pos)]
 pm = p.mun.map(pos).to_numpy()
 L = np.log1p
-GROUPS = {"base": [], "enforce": [], "credit": [], "permits": []}
+GROUPS = {"base": [], "enforce": [], "credit": [], "permits": [], "markets": []}
 
 
 def rows(o):
@@ -80,6 +87,10 @@ def rows(o):
     f["asv"] = L(np.bincount(pm[valid], p.km2[valid], len(ids)))
     f["asv_new"] = L(np.bincount(pm[valid & (p.t0 > o - 12)], p.km2[valid & (p.t0 > o - 12)], len(ids)))
     GROUPS["permits"] = ["asv", "asv_new"]
+    for k, v in PRICE.items():  # the month before the origin is the newest published
+        f[k + "_yoy"] = np.full(len(ids), np.log(v[o - 1] / v[o - 13]))
+    f["herd"], f["soy"] = L(HERD.reindex(ids).fillna(0).to_numpy()), L(SOY.reindex(ids).fillna(0).to_numpy())
+    GROUPS["markets"] = ["agro_yoy", "metal_yoy", "usd_yoy", "herd", "soy"]
     return pd.DataFrame(f).assign(o=o, y=D[:, o + 1:o + 7].sum(1) if o + 6 <= T1 else np.nan)
 
 
@@ -87,7 +98,8 @@ origins = list(range(T0 + 24, T1 + 1, 3))
 T = pd.concat([rows(o) for o in origins])
 tests = [o for o in origins if o + 6 <= T1][-16:]
 P = dict(objective="regression", learning_rate=0.05, num_leaves=15, min_data_in_leaf=30, feature_fraction=0.8, bagging_fraction=0.8, bagging_freq=1, lambda_l2=1.0, verbose=-1, num_threads=4)
-sets = {"base": ["base"], "+ enforce": ["base", "enforce"], "+ credit": ["base", "credit"], "+ permits": ["base", "permits"], "all": ["base", "enforce", "credit", "permits"]}
+sets = {"base": ["base"], "+ enforce": ["base", "enforce"], "+ credit": ["base", "credit"], "+ permits": ["base", "permits"], "+ markets": ["base", "markets"],
+        "all but markets": ["base", "enforce", "credit", "permits"], "all": ["base", "enforce", "credit", "permits", "markets"]}
 res = {k: [] for k in list(sets) + ["a year before"]}
 for o in tests:
     tr, te = T[(T.o + 6 <= o)], T[T.o == o]
