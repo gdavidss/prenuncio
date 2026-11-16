@@ -15,29 +15,29 @@
    "code": "https://github.com/gdavidss/prenuncio",
    "benchmark_version": "1.0",
    "mean": {
-    "cap1": 0.370693,
-    "cap5": 0.744821,
-    "cap10": 0.883374,
-    "capf5": 0.791898,
-    "auprc": 0.178573,
-    "auc": 0.947614,
-    "front5": 0.786242
+    "cap1": 0.376171,
+    "cap5": 0.750643,
+    "cap10": 0.887275,
+    "capf5": 0.797845,
+    "auprc": 0.179946,
+    "auc": 0.947999,
+    "front5": 0.797563
    },
    "cap5_by_year": {
-    "2022": 0.765612,
-    "2023": 0.768162,
-    "2024": 0.723781,
-    "2025": 0.721729,
-    "2026": 0.735107
+    "2022": 0.768177,
+    "2023": 0.772828,
+    "2024": 0.732824,
+    "2025": 0.728743,
+    "2026": 0.742539
    },
    "y2026": {
-    "cap5": 0.735107,
-    "cap1": 0.351469,
-    "cap10": 0.882363,
-    "capf5": 0.79033,
-    "auprc": 0.114585,
-    "auc": 0.952877,
-    "front5": 0.879276
+    "cap5": 0.742539,
+    "cap1": 0.362063,
+    "cap10": 0.887137,
+    "capf5": 0.797898,
+    "auprc": 0.11796,
+    "auc": 0.95362,
+    "front5": 0.883559
    },
    "rank": 1
   }
@@ -48,8 +48,8 @@
    "name": "prenuncio-baseline",
    "title": "Prenúncio baseline: boosted trees blended with a U-Net",
    "year": 2027,
-   "sha256": "b76070ebd3368c8d19b896da6400e24cbfeef0b911441fb8c4c1431bb67fd915",
-   "url": "https://github.com/gdavidss/prenuncio/releases/download/baseline-2/2027.npz",
+   "sha256": "3180062462118990679dc44a0cf246e7494b88967191e8cf89d057dbe8efb639",
+   "url": "https://github.com/gdavidss/prenuncio/releases/download/baseline-3/2027.npz",
    "information_cutoff": "2026-07-31",
    "registered": "2026-11-15",
    "agents": true

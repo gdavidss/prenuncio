@@ -30,7 +30,9 @@ Means over 2022 to 2025. Every row is a real run.
 
 | Model | cap1 | cap5 | cap10 | auc | front5 |
 |---|---|---|---|---|---|
-| **Published**: tuned trees with the JRC disturbance record, blended 50/50 with the U-Net reading the same record at 100 m | 37.0% | 74.6% | 88.3% | 0.956 | 79.4% |
+| **Published**: tuned trees with the JRC record and clearing permits, blended 50/50 with the U-Net reading the JRC record at 100 m | 37.6% | 75.2% | 88.7% | 0.956 | 80.2% |
+| Tuned trees with the JRC record and clearing permits, alone | 35.2% | 73.6% | 88.0% | 0.954 | 78.4% |
+| Published until 16 Nov, 11:00 UTC: tuned trees with the JRC disturbance record, blended 50/50 with the U-Net reading the same record at 100 m | 37.0% | 74.6% | 88.3% | 0.956 | 79.4% |
 | U-Net with embeddings and the JRC disturbance record, alone | 35.5% | 72.9% | 87.2% | 0.951 | 75.5% |
 | Published for a few hours on 16 Nov: tuned trees with the JRC disturbance record, blended 50/50 with the U-Net with embeddings | 35.6% | 73.5% | 87.8% | 0.954 | 78.1% |
 | Tuned trees with embeddings and the JRC disturbance record, alone | 34.1% | 72.8% | 87.6% | 0.954 | 78.6% |
@@ -57,9 +59,9 @@ Means over 2022 to 2025. Every row is a real run.
 | Trees without GLAD | 29.7% | 67.3% | 82.9% | 0.946 | 65.9% |
 | Trees, binary objective | 27.7% | 65.8% | 82.4% | 0.950 | 69.6% |
 
-With the budget counted in forest, the published blend holds 79.3% of the clearing in 5% of the standing forest (capf5).
+With the budget counted in forest, the published blend holds 79.9% of the clearing in 5% of the standing forest (capf5).
 
-On the 2026 holdout the published blend scores 73.1% (cap1 34.9%, cap10 87.8%, capf5 78.7%). The holdout has been scored for five blends by now, none chosen by it.
+On the 2026 holdout the published blend scores 73.9% (cap1 36.2%, cap10 88.2%, capf5 79.5%). The holdout has been scored for six blends by now, none chosen by it.
 
 For reference, on the same four years the first version of the product (trees at 1 km, neither Hansen nor GLAD) scored about 62% on cap5, and the best naive map about 50%.
 
@@ -74,19 +76,19 @@ Chance the model gave, and how often it happened (said / happened):
 | Chance given | 2024 | 2025 | 2026 |
 |---|---|---|---|
 | 0% to 0.1% | 0.01% / 0.02% | 0.02% / 0.02% | 0.02% / 0.01% |
-| 0.1% to 0.5% | 0.24% / 0.34% | 0.25% / 0.22% | 0.22% / 0.15% |
-| 0.5% to 1% | 0.73% / 0.79% | 0.73% / 0.61% | 0.74% / 0.72% |
-| 1% to 2% | 1.47% / 1.50% | 1.48% / 1.27% | 1.52% / 1.54% |
-| 2% to 5% | 3.20% / 3.11% | 3.23% / 3.07% | 3.30% / 3.36% |
-| 5% to 10% | 7.02% / 6.67% | 6.83% / 7.73% | 6.95% / 6.86% |
-| 10% to 20% | 13.81% / 13.01% | 13.24% / 15.40% | 13.38% / 12.65% |
-| 20% to 40% | 25.15% / 23.75% | 25.04% / 25.28% | 25.55% / 25.26% |
-| 40% to 100% | 50.45% / 43.24% | 52.90% / 36.92% | 51.25% / 72.22% |
-| Cells expected to lose a hectare / cells that did | 92,918 / 92,111 | 69,141 / 70,011 | 59,153 / 55,717 |
+| 0.1% to 0.5% | 0.27% / 0.37% | 0.25% / 0.22% | 0.23% / 0.15% |
+| 0.5% to 1% | 0.74% / 0.80% | 0.75% / 0.64% | 0.72% / 0.69% |
+| 1% to 2% | 1.45% / 1.46% | 1.57% / 1.35% | 1.40% / 1.44% |
+| 2% to 5% | 3.10% / 3.01% | 3.24% / 3.06% | 3.11% / 3.19% |
+| 5% to 10% | 6.79% / 6.48% | 6.71% / 7.63% | 6.92% / 6.80% |
+| 10% to 20% | 13.70% / 13.11% | 13.40% / 15.52% | 12.97% / 12.50% |
+| 20% to 40% | 25.75% / 24.75% | 25.32% / 24.93% | 24.60% / 24.16% |
+| 40% to 100% | 49.23% / 46.33% | 53.18% / 32.12% | 46.11% / 80.46% |
+| Cells expected to lose a hectare / cells that did | 92,253 / 92,111 | 69,217 / 70,011 | 58,817 / 55,717 |
 
-The chances hold. Cells given about 3% lost a hectare about 3% of the time, cells given about 13% about 13% to 15% of the time. The top band holds a few hundred to two thousand cells a year and is the noisiest. 2026 is mapped for priority scenes only, so its "happened" column is a floor.
+The chances hold through the middle of the scale. The top band holds a few hundred to two thousand cells a year and is the noisiest. 2026 is mapped for priority scenes only, so its "happened" column is a floor.
 
-Most of the risk is thin. For 2027, 10,074,115 of 14,024,403 forest cells have a chance under 0.1%, and 18,632 have a chance over 20%. About 53,136 cells are expected to lose a hectare.
+Most of the risk is thin. For 2027, 10,192,691 of 14,024,403 forest cells have a chance under 0.1%, and 18,889 have a chance over 20%. About 52,917 cells are expected to lose a hectare.
 
 ## Where the misses are
 

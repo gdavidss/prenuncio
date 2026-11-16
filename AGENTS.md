@@ -4,7 +4,7 @@ You are working on Prenúncio, a forecast of where the Brazilian Legal Amazon wi
 
 ## The task in one paragraph
 
-For each test year T in 2022 to 2025, produce a map `<T>.npy`, float16 or float32, shape [5180, 6664], that ranks every 500 m cell by expected clearing in PRODES year T (August of T-1 to July of T). Use only information up to 31 July of T-1 and fit only on outcomes before T. `python benchmark/score.py <folder>` scores the maps. The number to raise is the mean of `cap5`. The baseline has 74.5%.
+For each test year T in 2022 to 2025, produce a map `<T>.npy`, float16 or float32, shape [5180, 6664], that ranks every 500 m cell by expected clearing in PRODES year T (August of T-1 to July of T). Use only information up to 31 July of T-1 and fit only on outcomes before T. `python benchmark/score.py <folder>` scores the maps. The number to raise is the mean of `cap5`. The baseline has 75.1%.
 
 ## Rules you must not break
 

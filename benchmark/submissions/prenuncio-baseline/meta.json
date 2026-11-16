@@ -1,7 +1,7 @@
 {
  "name": "prenuncio-baseline",
  "title": "Prenúncio baseline: boosted trees blended with a U-Net",
- "summary": "Gradient boosted trees on a 500 m grid and a U-Net on 100 m tiles, both reading the JRC Tropical Moist Forest disturbance record, blended half and half by geometric mean. This is the forecast shown on prenuncio.com.",
+ "summary": "Gradient boosted trees on a 500 m grid and a U-Net on 100 m tiles, both reading the JRC Tropical Moist Forest disturbance record, the trees also reading clearing permits, blended half and half by geometric mean. This is the forecast shown on prenuncio.com.",
  "authors": [
   "Prenúncio maintainers"
  ],
@@ -10,45 +10,45 @@
  "benchmark_version": "1.0",
  "code": {
   "url": "https://github.com/gdavidss/prenuncio",
-  "commit": "beafc85cb0897b44148987e2ea6db2edf78641f1",
+  "commit": "bfead815f2c8b41515230c46d66dd9f2d2204519",
   "license": "MIT"
  },
  "predictions": [
   {
    "year": 2022,
-   "url": "https://github.com/gdavidss/prenuncio/releases/download/baseline-2/2022.npz",
-   "sha256": "420be2392abf365face1915da17b66702f0c21ab91ff5306f1e81d702cb84e1f",
-   "bytes": 19075646
+   "url": "https://github.com/gdavidss/prenuncio/releases/download/baseline-3/2022.npz",
+   "sha256": "f620113b544f708509f58572430e82918b77570641bdf1634310188a22ed52b1",
+   "bytes": 19105347
   },
   {
    "year": 2023,
-   "url": "https://github.com/gdavidss/prenuncio/releases/download/baseline-2/2023.npz",
-   "sha256": "c90bacff46ab9aa54827c3963a1704dacdd87e9dfdb90dbe463bad7da6573534",
-   "bytes": 19017005
+   "url": "https://github.com/gdavidss/prenuncio/releases/download/baseline-3/2023.npz",
+   "sha256": "60c191a688a8cbcc61f5de2708ba686570b40199983f0001a978d8b6424590f0",
+   "bytes": 19036472
   },
   {
    "year": 2024,
-   "url": "https://github.com/gdavidss/prenuncio/releases/download/baseline-2/2024.npz",
-   "sha256": "5ba8702d619f1709604b812460d8b5c0e04d71e41775a1d3780bb768476c1ab2",
-   "bytes": 18986795
+   "url": "https://github.com/gdavidss/prenuncio/releases/download/baseline-3/2024.npz",
+   "sha256": "d6d4bba5e1505716ec9ea8dda6398bfd69e401867b6422ed44ab44421c0f81ba",
+   "bytes": 18861003
   },
   {
    "year": 2025,
-   "url": "https://github.com/gdavidss/prenuncio/releases/download/baseline-2/2025.npz",
-   "sha256": "61b4d0d664a88e90f90498ca7c29732e919546a75ed95fda57494cff062476e2",
-   "bytes": 19126142
+   "url": "https://github.com/gdavidss/prenuncio/releases/download/baseline-3/2025.npz",
+   "sha256": "7f0e8f6b60596a5de2458a3c17eacc62098381371d03d842d47b782fb60bff15",
+   "bytes": 19205232
   },
   {
    "year": 2026,
-   "url": "https://github.com/gdavidss/prenuncio/releases/download/baseline-2/2026.npz",
-   "sha256": "9594cedf8508dad4a7746c75988e398793cae6a9efb7e1d1f9d28bd73fbadf1a",
-   "bytes": 19333930
+   "url": "https://github.com/gdavidss/prenuncio/releases/download/baseline-3/2026.npz",
+   "sha256": "b7f2b5dc3d5e27080d2d7a22cfa18f68aa643352e3dbe81b3f9c7146aaaa1871",
+   "bytes": 19312173
   },
   {
    "year": 2027,
-   "url": "https://github.com/gdavidss/prenuncio/releases/download/baseline-2/2027.npz",
-   "sha256": "b76070ebd3368c8d19b896da6400e24cbfeef0b911441fb8c4c1431bb67fd915",
-   "bytes": 18534587,
+   "url": "https://github.com/gdavidss/prenuncio/releases/download/baseline-3/2027.npz",
+   "sha256": "3180062462118990679dc44a0cf246e7494b88967191e8cf89d057dbe8efb639",
+   "bytes": 18503167,
    "information_cutoff": "2026-07-31"
   }
  ],
@@ -108,6 +108,12 @@
    "license": "Open data of IBAMA, with attribution"
   },
   {
+   "name": "IBAMA SINAFLOR, authorisations of vegetation suppression (ASV)",
+   "url": "https://dadosabertos.ibama.gov.br/dataset/sinaflor-autorizacao-de-supressao-de-vegetacao",
+   "dates": "Issue and validity dates from 2018; usable from 2020. A forecast of year T reads permits issued up to 31 July of T-1 and still valid then. The file is today's snapshot of the register.",
+   "license": "Open data of IBAMA, with attribution"
+  },
+  {
    "name": "Indigenous lands, conservation units, municipalities and states, as distributed by INPE",
    "url": "https://terrabrasilis.dpi.inpe.br",
    "dates": "Conservation units enter by creation year. Indigenous lands and boundaries are a current snapshot.",
@@ -116,8 +122,8 @@
  ],
  "compute": {
   "hardware": "One cloud machine with 16 vCPU, 64 GB of RAM and one NVIDIA L4 GPU (24 GB)",
-  "hours": 8,
-  "cost_usd": 9
+  "hours": 12,
+  "cost_usd": 14
  },
  "agents": {
   "used": true,
