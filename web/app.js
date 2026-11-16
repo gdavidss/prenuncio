@@ -726,7 +726,8 @@ function signs(it) {
     return `<${tag}${hz ? ` data-go="${hz}"` : ""}${up} title="${L_.signTitle({ now: n(now), prev: n(prev) })}">${line(a)}<span>${L_.sign[name]}</span><b>${delta(now, prev, unit) ?? n(now)}</b></${tag}>`;
   };
   const e = enso();
-  $("signs").innerHTML = `<p>${L_.signs}</p>` + ["clear", "scar", "degr", "mine"].map(item).join("")
+  $("signs").title = L_.signs;
+  $("signs").innerHTML = ["clear", "scar", "degr", "mine"].map(item).join("")
     + `<div class="wide${e.x >= 1.5 && !it ? " up" : ""}" title="ONI ${fmt(e.x, 2)}">${line(R.months.oni.v, true)}<span>${L_.enso[e.side]}</span><b>${e.word}</b></div>` + item("autos");
 }
 $("signs").onclick = e => {
@@ -781,7 +782,7 @@ function chart(it = scope) {
   const peak = b => Math.max(b.v ?? 0, b.range ? b.range[1] : 0);
   const tallest = Math.max(sector ? 0.5 : 1, ...bars.map(b => b.v ?? 0)), max = tallest * (bars.some(b => b.range && b.range[1] > tallest) ? 1.15 : 1);
   const Y = v => top + ph - ph * Math.min(v, max) / max, X = i => gut + i * pitch, y0 = Y(0);
-  const [tk, dec] = ticks(max), skip = pitch < 26 ? 2 : 1, onAt = bars.findIndex(b => b.on);
+  const [tk, dec] = ticks(max), skip = pitch < 18 ? 2 : 1, onAt = bars.findIndex(b => b.on);
   let s = `<svg width="${W}" height="${H}" role="img"><defs><pattern id="hatch" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="6" height="6" fill="rgb(${steps()[0]})"/><rect width="3" height="6" fill="rgb(${steps()[3]})"/></pattern></defs><g class="grid">`;
   for (const v of tk) s += `<line x1="${gut}" x2="${W}" y1="${Y(v)}" y2="${Y(v)}"/><text x="${gut - 8}" y="${Y(v) + 4}" text-anchor="end">${fmt(v, dec)}</text>`;
   // what the axis counts, written on it
@@ -809,7 +810,7 @@ function chart(it = scope) {
     if (monthsView) {
       s += `<text x="${cx}" y="${y0 + 15}"${pitch < 14 ? ' style="font-size:10px"' : ""}>${b.d.toLocaleDateString(loc(), { month: "narrow" })}</text>`;
       if (b.d.getMonth() === 0) s += `<text x="${cx}" y="${y0 + 30}">${b.d.getFullYear()}</text>`;
-    } else if (skip === 1 || b.on || ((bars.length - 1 - i) % 2 === 0 && Math.abs(i - onAt) !== 1)) s += `<text x="${cx}" y="${H - 5}">${b.label}</text>`;
+    } else if (skip === 1 || b.on || ((bars.length - 1 - i) % 2 === 0 && Math.abs(i - onAt) !== 1)) s += `<text x="${cx}" y="${H - 5}">${pitch < 40 ? String(b.label).slice(-2) : b.label}</text>`;  // four digits only where they fit
     s += `<rect class="hot" x="${X(i)}" y="${top - 12}" width="${pitch}" height="${H - top + 12}"/></g>`;
   });
   el.innerHTML = s + `<line class="axis" x1="${gut}" x2="${W}" y1="${y0}" y2="${y0}"/><g class="tip" pointer-events="none"><path/><text></text><text></text></g></svg>`;
