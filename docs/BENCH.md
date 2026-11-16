@@ -65,6 +65,29 @@ For reference, on the same four years the first version of the product (trees at
 
 The blend's gain over the trees is real in every year (bootstrap: better in 95% to 100% of resamples, by 0.5 to 3.9 points). The flatter loss is not distinguishable from the baseline.
 
+## A probability for every cell
+
+The forecast is a number for every forest cell of the Amazon, about 14 million of them, and the 5% cut used above is only a yardstick for comparing models. `pipeline/calibrate.py` turns each cell's score into the chance that the cell loses at least one hectare in the PRODES year. The mapping keeps the ranking and is fitted on the forecasts of the two years before against their outcomes, so the chances of a year never see that year. It reads the published maps and the public truth files, so anyone can rerun it.
+
+Chance the model gave, and how often it happened (said / happened):
+
+| Chance given | 2024 | 2025 | 2026 |
+|---|---|---|---|
+| 0% to 0.1% | 0.01% / 0.02% | 0.02% / 0.02% | 0.02% / 0.01% |
+| 0.1% to 0.5% | 0.24% / 0.34% | 0.25% / 0.22% | 0.22% / 0.15% |
+| 0.5% to 1% | 0.73% / 0.79% | 0.73% / 0.61% | 0.74% / 0.72% |
+| 1% to 2% | 1.47% / 1.50% | 1.48% / 1.27% | 1.52% / 1.54% |
+| 2% to 5% | 3.20% / 3.11% | 3.23% / 3.07% | 3.30% / 3.36% |
+| 5% to 10% | 7.02% / 6.67% | 6.83% / 7.73% | 6.95% / 6.86% |
+| 10% to 20% | 13.81% / 13.01% | 13.24% / 15.40% | 13.38% / 12.65% |
+| 20% to 40% | 25.15% / 23.75% | 25.04% / 25.28% | 25.55% / 25.26% |
+| 40% to 100% | 50.45% / 43.24% | 52.90% / 36.92% | 51.25% / 72.22% |
+| Cells expected to lose a hectare / cells that did | 92,918 / 92,111 | 69,141 / 70,011 | 59,153 / 55,717 |
+
+The chances hold. Cells given about 3% lost a hectare about 3% of the time, cells given about 13% about 13% to 15% of the time. The top band holds a few hundred to two thousand cells a year and is the noisiest. 2026 is mapped for priority scenes only, so its "happened" column is a floor.
+
+Most of the risk is thin. For 2027, 10,074,115 of 14,024,403 forest cells have a chance under 0.1%, and 18,632 have a chance over 20%. About 53,136 cells are expected to lose a hectare.
+
 ## Where the misses are
 
 On 16 November the maps published that morning (73.3% on this count, before the U-Net read the JRC record) were taken apart to see what the missing quarter is made of (`pipeline/anatomy.py`, means over 2022 to 2025, counted on every cell).
