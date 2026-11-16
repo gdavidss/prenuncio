@@ -41,7 +41,11 @@ def fit(years):
         risk, cand, hit = year(y)
         idx = rng.choice(np.flatnonzero(cand), 4_000_000, replace=False)
         xs.append(risk.ravel()[idx]); ys.append(hit.ravel()[idx])
-    return IsotonicRegression(y_min=0, y_max=1, out_of_bounds="clip").fit(np.concatenate(xs), np.concatenate(ys).astype(np.float32))
+    x, y = np.concatenate(xs), np.concatenate(ys).astype(np.float32)
+    # the last step of an isotonic fit can rest on a handful of cells that all cleared and read as 100%:
+    # no chance may exceed the outcome rate of the 2,000 highest-scored cells it was fitted on
+    cap = float(y[np.argsort(x)[-2000:]].mean())
+    return IsotonicRegression(y_min=0, y_max=cap, out_of_bounds="clip").fit(x, np.minimum(y, 1))
 
 
 def paint(y, p, cand):

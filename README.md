@@ -59,6 +59,7 @@ On the site, links carry state: `#y=2023` replays a year, `#k=clear3` or `clear6
 ## What is where
 
 - `benchmark/` is the open benchmark: rules, scorer, submissions, leaderboard.
+- `pipeline/api.py` writes the public API, static JSON under `web/api/v1` (generated, not in git): the Amazon, states, municipalities, protected areas, clearing permits, priority blocks, monthly forecasts, calibration, and the chance of any cell. Instructions for agents are at https://prenuncio.com/llms.txt.
 - `docs/INPUTS.md` is the ledger of inputs: what was tested and what it was worth, how to propose a new one, and a screening of policy, credit and market sources. `docs/POLICY.md` is a dated study of what the federal government did from 2023 on and which public series trace each action.
 - `pipeline/` is the tree models and everything that feeds the site: the yearly map (`model.py`), the yearly total (`quantity.py`), the shorter windows and the other hazards (`horizons.py`), and the monthly totals for the four hazards (`monthly.py`). `pipeline/lab.py` is the model lab: it scores a model on cached feature tables in minutes (see [docs/BENCH.md](docs/BENCH.md)). `pipeline/extras.py` and `pipeline/tenure.py` build candidate inputs for it. `pipeline/benchdata.py` writes the benchmark's truth files.
 - `unet/` is the convolutional model, and the scripts that grid Hansen forest loss, GLAD alerts, the JRC disturbance record, AlphaEarth embeddings and DETER for both models.

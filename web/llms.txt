@@ -1,0 +1,45 @@
+# Prenúncio API, instructions for agents
+
+Prenúncio forecasts deforestation in the Brazilian Amazon. Every 500 m forest cell (about 14 million) gets the
+chance that it loses at least one hectare in the PRODES year 2027 (1 August 2026 to 31 July 2027). The forecast
+was made with information up to 31 July 2026. Sums are given by municipality, state, Indigenous land and
+conservation unit.
+
+## How to connect
+Plain HTTPS GET, static JSON, no key, no login, CORS open. Base: https://prenuncio.com/api/v1
+Start with https://prenuncio.com/api/v1/index.json, which lists every endpoint with a description.
+
+## Endpoints
+- amazon.json             the whole Amazon: forecast total, distribution of cell chances, yearly and monthly history
+- states.json             the nine states, full detail
+- municipalities.json     one summary row per municipality (id is the 7 digit IBGE code), sorted by rank
+- municipality/<id>.json  full detail for one municipality, for example municipality/1507300.json (São Félix do Xingu, rank 1)
+- indigenous-lands.json, conservation-units.json   the same for protected areas
+- priority.json, priority.csv   the 500 blocks of 5 km ranked highest, where to look first
+- permits.json            clearing permits (SINAFLOR), with dates, point and hectares
+- monthly-forecast.json   km2 per month for the next 12 months, by hazard, Amazon and states, with ranges
+- enforcement-effect.json clearing observed against clearing implied with enforcement held at its 2021 to 2022 level
+- calibration.json        the check of the chances against what happened in 2024 to 2026
+- benchmark.json          the open benchmark's leaderboard
+- cells/grid.json         the grid, and how to read the chance of any cell
+
+## The chance of one place
+row = floor((north - lat) / cell_degrees), col = floor((lon - west) / cell_degrees), from cells/grid.json.
+GET cells/2027/<floor(row/100)>_<floor(col/100)>.bin, a row-major array of bytes, 100 per row.
+byte = bytes[(row % 100) * width + (col % 100)], where width is 100 except in the last column of tiles.
+chance = (byte / 255) ** 2. Byte 0 means not forest. A 404 means no forest in that tile.
+
+## Reading the numbers
+- km2 figures by year are PRODES years (August to July), named by the year they end in.
+- Monthly figures are what INPE's DETER detects; the yearly PRODES count is larger.
+- "expected" values are forecasts. "cleared" and "observed" values are measurements by INPE.
+- The chances were checked: in 2024, cells given about 3% lost a hectare 3% of the time (calibration.json).
+- A chance is not a verdict. Most cells with a 10% chance are not cleared.
+- Fire amounts are not forecast; they depend on a drought that has not happened yet.
+- enforcement-effect.json is an association and a floor, not a causal estimate.
+- Permit points are property centres, not the clearing itself. Mato Grosso permits may have entered the federal
+  register after their issue date.
+
+## Licence and credit
+Data CC BY-SA 4.0, derived from INPE PRODES and DETER, IBAMA and Banco Central open data. Credit INPE and Prenúncio.
+Code and the open benchmark: https://github.com/gdavidss/prenuncio
