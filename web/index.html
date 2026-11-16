@@ -8,6 +8,7 @@
 <meta name="description" content="Where the Amazon forest will be cleared, burned, degraded or mined next, and how hard the pressure is now. Every past forecast can be checked against what happened.">
 <link rel="canonical" href="https://prenuncio.com/">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="alternate" type="text/plain" href="/llms.txt" title="API instructions for agents">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Prenúncio">
 <meta property="og:url" content="https://prenuncio.com/">
@@ -31,6 +32,7 @@
       <div class="brand"><svg viewBox="0 0 20 20" aria-hidden="true"><path class="f" d="M0 0h20v9.5L9.5 20H0z"/><path class="c" d="M20 13v7h-7z"/></svg>Prenúncio</div>
       <nav>
         <button id="about-btn"></button>
+        <button id="api-btn">API</button>
         <button id="lang-btn"></button>
       </nav>
     </header>
@@ -81,6 +83,12 @@
 <dialog id="about">
   <button id="about-close"></button>
   <div id="about-body"></div>
+</dialog>
+
+<dialog id="api">
+  <button id="api-close"></button>
+  <p id="api-top"><a id="api-base" href="api/v1/index.json">https://prenuncio.com/api/v1</a><button id="api-copy"></button></p>
+  <pre id="api-text"></pre>
 </dialog>
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>

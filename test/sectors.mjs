@@ -2,6 +2,8 @@
 // months, to another hazard, to cells and to the priority list, and checks the headline each time. It recounts
 // the alert level from the data and checks that the red band follows it, decodes the chance file to check what
 // a cell says about itself, and checks that fire shows no forecast amount and that the old wording is gone.
+// It opens the actions view (what measured enforcement accounts for) in both languages and checks its numbers
+// against data/actions.json, and opens the API panel, which must show api/v1/llms.txt as the file has it.
 // Run: python3 -m http.server 8878 -d web &   then   node test/sectors.mjs
 import { spawn } from "node:child_process";
 import { mkdtempSync, rmSync } from "node:fs";
@@ -343,8 +345,126 @@ try {
       assert.match(await js(`document.getElementById("about").textContent`), l === "en" ? /depends on a drought that has not happened yet/ : /depende de uma seca que ainda não aconteceu/, "About says why fire has no amount");
     }
   }
+  // ---------- actions: the third scale of the clearing timeline. What measured enforcement accounts for, every
+  // number from data/actions.json, and the limits of the claim on the screen itself.
+  const acts = await fetch(`${SITE}data/actions.json`).then(r => (r.ok ? r.json() : null)).catch(() => null);
+  let actions = "";
+  if (acts) {
+    const LOC = { en: "en-US", pt: "pt-BR" }, n = (x, l) => x.toLocaleString(LOC[l], { maximumFractionDigits: 0 });
+    const two = (x, l) => { const p = 10 ** (Math.floor(Math.log10(x)) - 1); return n(Math.round(x / p) * p, l); };  // two figures, as the site rounds an estimate
+    const monthOf = (ym, l, add = 0) => { const [y, m] = ym.split("-").map(Number); return new Date(y, m - 1 + add, 1).toLocaleDateString(LOC[l], { month: "long", year: "numeric" }); };
+    const part = (x, l) => { const i = [1 / 4, 1 / 3, 1 / 2, 2 / 3, 3 / 4].findIndex(f => Math.abs(x - f) < 0.03); return i < 0 ? n(100 * x, l) + "%" : { en: ["a quarter", "a third", "half", "two thirds", "three quarters"], pt: ["um quarto", "um terço", "metade", "dois terços", "três quartos"] }[l][i]; };
+    const sem = acts.semesters, A = acts.actions, last = [A.start.length - 2, A.start.length - 1], [r0, r1] = acts.reference.split(" to "), ref = A.start.flatMap((s, i) => (s >= r0 && s <= r1 ? [i] : []));
+    const tot = (v, ix) => ix.reduce((x, i) => x + v[i], 0), rate = ix => ix.reduce((x, i) => x + A.notices_per_100km2[i] * A.clearing_km2[i], 0) / tot(A.clearing_km2, ix);
+    assert.equal(acts.summary.avoided, sem.reduce((x, r) => x + r.held - r.observed, 0), "the file's total is the sum of its semesters");
+    assert.equal(ref.length, 2, "the reference year is two semesters of the actions series");
+    const count = sel => js(`document.querySelectorAll(${JSON.stringify(sel)}).length`);
+    const state = Object.keys(acts.states).sort((a, b) => acts.states[b].reduce((x, r) => x + r.observed, 0) - acts.states[a].reduce((x, r) => x + r.observed, 0))[0];  // the state with the most clearing
+    for (const l of ["en", "pt"]) {
+      const en = l === "en", since = monthOf(sem[0].start, l), share = acts.summary.fall_accounted_share;
+      await send("Page.navigate", { url: SITE + `#l=${l}` });
+      await until(`document.documentElement.lang === "${l}" && !/t=actions/.test(location.hash) && !!document.querySelector('#scale button[data-k="actions"]') && !!document.querySelector("#chart .bar .plain")`, `${l}: the actions tab beside years and months`);
+      assert.equal(await js(`[...document.querySelectorAll("#scale button")].map(b => b.textContent).join()`), en ? "Years,Months,Actions" : "Anos,Meses,Ações");
+      await clickOn('#scale button[data-k="actions"]');
+      await until(`/t=actions/.test(location.hash) && !!document.querySelector("#chart svg.acts")`, `${l}: the actions view`);
+      // the headline and its second line: the avoided clearing, and how much of the fall that is
+      assert.equal(await text("#say"), en ? `Enforcement accounts for ${two(acts.summary.avoided, l)} km² of clearing avoided since ${since}` : `A fiscalização responde por ${two(acts.summary.avoided, l)} km² de desmate evitado desde ${since}`, `${l}: the headline is the file's avoided clearing`);
+      assert.equal(await text("#sub"), en ? `About ${part(share, l)} of the fall since then. The rest fell everywhere at once.` : `Cerca de ${part(share, l)} da queda desde então. O resto caiu em toda parte ao mesmo tempo.`);
+      assert.equal(await text("#level"), en ? `EnforcementIBAMA notices and embargoes, ${n(acts.municipalities, l)} municipalities` : `Fiscalizaçãoautos e embargos do IBAMA, ${n(acts.municipalities, l)} municípios`, `${l}: the band says what is measured, and where`);
+      // good news is never red: no level, and the gap is the forest's green
+      assert.equal(await level(), "r");
+      await redFollows(0);
+      assert.deepEqual([await style("#chart .s1", "fill"), await style("#chart .acts .held", "stroke")], [GREEN, GREEN], "avoided clearing is forest green");
+      // the chart: per semester what was measured and what the model implies with enforcement held, with its interval, and the reference year as a rule
+      assert.equal(await text("#chart .unit"), en ? "km² cleared per six months" : "km² desmatados por semestre");
+      assert.deepEqual([await count("#chart .observed"), await count("#chart .held"), await count("#chart .bar .rng"), await count("#chart .refrule")], [sem.length, sem.length, sem.length, 1], `${l}: observed and held marks for every semester, an interval on each, one reference rule`);
+      assert.equal(await count('#chart .bar rect[fill="url(#spared)"]'), sem.filter(r => r.held > r.observed).length, "the gap is drawn where the model implies more clearing");
+      assert.equal(await text("#chart .key"), en ? "measuredmore, with enforcement as in 2021 to 2022" : "medidoa mais, com a fiscalização de 2021 a 2022", "the two marks are named on the chart");
+      assert.equal(await text("#chart .note.ref"), en ? `average of ${monthOf(r0, l)} to ${monthOf(r1, l)}` : `média de ${monthOf(r0, l)} a ${monthOf(r1, l)}`);
+      // the bars sit where the file says: the tallest observed bar against the shortest, in pixels
+      const hs = await js(`[...document.querySelectorAll("#chart .observed")].map(e => +e.getAttribute("height"))`), obs = sem.map(r => r.observed);
+      assert.ok(Math.abs(Math.max(...hs) / Math.min(...hs) - Math.max(...obs) / Math.min(...obs)) < 0.01, "bar heights are in proportion to the file");
+      // the limits of the claim, without a click
+      const hint = await text("#hint");
+      assert.match(hint, en ? /^A floor and an association, not proof of cause/ : /^É um piso e uma associação, não prova de causa/, `${l}: the honesty line`);
+      assert.ok(hint.includes(en ? `The rest, ${part(1 - share, l)} of the fall, is not attributed to anything.` : `O restante, ${part(1 - share, l)} da queda, não é atribuído a nada.`), `${l}: the part of the fall that is not attributed`);
+      assert.equal(await js(`getComputedStyle(document.getElementById("hint")).display !== "none" && document.getElementById("hint").getBoundingClientRect().height > 10`), true, "and it is on the screen");
+      // the actions themselves, in the signals' place: the last year against the reference year
+      assert.equal(await js(`[...document.querySelectorAll("#signs.acts > div")].map(d => d.dataset.k + "=" + d.querySelector("b").textContent + "|" + d.querySelector("b + span").textContent).join(";")`),
+        [`notices=${n(rate(last), l)}|${en ? "against" : "contra"} ${n(rate(ref), l)}`, ...["remote", "field", "collective"].map(k => `${k}=${n(tot(A[k + "_km2"], last), l)} km²|${en ? "against" : "contra"} ${n(tot(A[k + "_km2"], ref), l)}`)].join(";"), `${l}: four actions, each with its last year and the reference year`);
+      assert.equal(await count("#signs.acts svg path.end"), 4, "the same small traces as the signals");
+      assert.equal(await text("#signs > p"), en ? `IBAMA actions, year to ${monthOf(A.start.at(-1), l, 5)} against year to ${monthOf(r1, l)}` : `Ações do IBAMA, ano até ${monthOf(A.start.at(-1), l, 5)} contra o ano até ${monthOf(r1, l)}`);
+      assert.equal(await count("#signs .up, #chart .fc, #chart .h1"), 0, "nothing red in the view");
+      const seen = await js(`document.getElementById("app").innerText`);
+      assert.doesNotMatch(seen, /—|Amazônia Legal|Legal Amazon/, "no em dashes, and the Amazon by its name");
+      if (en) actions = await text("#level") + " | " + await text("#say") + " " + await text("#sub") + "\n" + hint;
+      // as a line, the same marks
+      await clickOn('#shape button[data-k="line"]');
+      await until(`!!document.querySelector("#chart .acts .line .obs") && !document.querySelector("#chart .acts rect.observed")`, `${l}: the actions view as a line`);
+      assert.deepEqual([await count("#chart .observed"), await count("#chart .held"), await count("#chart .bar .rng"), await style("#chart .acts .fcl", "stroke")], [sem.length, sem.length, sem.length, GREEN]);
+      await clickOn('#shape button[data-k="bars"]');
+      await until(`!!document.querySelector("#chart .acts rect.observed")`, "bars again");
+      // a state has its own two series and no interval
+      const rows = acts.states[state], gap = rows.reduce((x, r) => x + r.held - r.observed, 0);
+      await send("Page.navigate", { url: SITE + `#l=${l}&t=actions&s=uf&r=${state}` });
+      await until(`document.documentElement.lang === "${l}" && !document.getElementById("scope").hidden && /${en ? "here" : "aqui"}/.test(document.getElementById("say").textContent) && !!document.querySelector("#chart svg.acts")`, `${l}: the actions of ${state}`);
+      assert.equal(await text("#say"), en ? `Enforcement accounts for ${two(gap, l)} km² of clearing avoided here since ${since}` : `A fiscalização responde por ${two(gap, l)} km² de desmate evitado aqui desde ${since}`, `${l}: the state's own gap`);
+      assert.match(await text("#sub"), en ? /^\d+% on top of what was cleared here\. No range for a single state\.$/ : /^\d+% a mais do que foi desmatado aqui\. Sem faixa para um estado sozinho\.$/);
+      assert.deepEqual([await count("#chart .observed"), await count("#chart .held"), await count("#chart .bar .rng"), await count("#chart .refrule")], [rows.length, rows.length, 0, 0], "the state's marks, with no interval and no reference rule");
+      assert.match(await text("#hint"), en ? /A floor and an association.*is not attributed to anything\.$/ : /É um piso e uma associação.*a parte da queda que não é atribuída a nada chega a .+\.$/);
+      // About says how it is computed and where the method is
+      await clickOn("#about-btn");
+      await until(`document.getElementById("about").open`, "About");
+      const about = await js(`document.getElementById("about").textContent`);
+      assert.match(about, en ? /is a floor and an association/ : /é um piso e uma associação/);
+      assert.ok(about.includes(n(acts.summary.avoided, l) + " km²") && about.includes(n(acts.municipalities, l)), "About quotes the file");
+      assert.deepEqual(await js(`[...document.querySelectorAll("#about a")].map(a => a.getAttribute("href")).filter(h => h.includes("/docs/"))`), ["POLICY", "INPUTS"].map(d => `https://github.com/gdavidss/prenuncio/blob/HEAD/docs/${d}.md`), "and points to the method and the inputs in the repository");
+      assert.doesNotMatch(about, /—|Amazônia Legal/);
+      await js(`document.getElementById("about").close()`);
+    }
+    // a municipality has no figure of its own: the Amazon's is shown, and named
+    await send("Page.navigate", { url: SITE + "#l=en&t=actions&r=1500602" });
+    await until(`document.querySelector("#scope span")?.textContent === "Amazon" && !!document.querySelector("#chart svg.acts")`, "the actions view with a municipality selected");
+    assert.equal(await text("#scope span"), "Amazon");
+    assert.equal(await text("#say"), `Enforcement accounts for ${two(acts.summary.avoided, "en")} km² of clearing avoided since ${monthOf(sem[0].start, "en")}`);
+    assert.match(await text("#hint"), /Only states have a figure of their own\.$/);
+    assert.equal(await count("#chart .bar .rng"), sem.length);
+    // the view belongs to clearing: another hazard has no such tab, and a link that asks for it gets the years
+    await send("Page.navigate", { url: SITE + "#l=en&k=scar12&t=actions" });
+    await until(head("/burned in the last twelve months/") + ` && !/t=actions/.test(location.hash)`, "fire, which has no actions view");
+    assert.equal(await js(`[...document.querySelectorAll("#scale button")].map(b => b.textContent).join()`), "Years,Months");
+  }
+
+  // ---------- the API panel: the instructions for agents as the file has them, and one line above them
+  const llms = await fetch(`${SITE}api/v1/llms.txt`).then(r => (r.ok ? r.text() : null)).catch(() => null);
+  assert.ok(llms, "api/v1/llms.txt is served");
+  for (const l of ["en", "pt"]) {
+    await send("Page.navigate", { url: SITE + `#l=${l}&k=clear3` });
+    await until(`document.documentElement.lang === "${l}" && document.documentElement.dataset.hazard === "clear" && document.documentElement.dataset.scale === "months" && !!document.querySelector("#chart .bar")`, `${l}: the page before the API panel`);
+    assert.equal(await js(`[...document.querySelectorAll("#top nav button")].map(b => b.textContent).join()`), l === "en" ? "About,API,PT" : "Sobre,API,EN", `${l}: API sits next to About in the header`);
+    assert.equal(await js(`document.getElementById("api").open || !!document.getElementById("api-text").textContent`), false, "closed, and nothing fetched, until asked");
+    await clickOn("#api-btn");
+    await until(`document.getElementById("api").open && /How to connect/.test(document.getElementById("api-text").textContent)`, `${l}: the API panel`);
+    const shown = await text("#api-text");
+    assert.ok(shown.includes("How to connect") && shown.includes("municipality/"), "the instructions say how to connect and list the endpoints");
+    assert.equal(shown, llms, "the file, character for character");
+    assert.equal(await js(`document.getElementById("api-text").children.length`), 0, "plain text, not rendered");
+    assert.equal(await style("#api-text", "whiteSpace"), "pre-wrap");
+    assert.match(await style("#api-text", "fontFamily"), /monospace/);
+    assert.equal(await js(`document.getElementById("api").innerText.replace(document.getElementById("api-text").innerText, "").trim().split(/\\s+/).join(" ")`), l === "en" ? "CLOSE https://prenuncio.com/api/v1 COPY" : "FECHAR https://prenuncio.com/api/v1 COPIAR", `${l}: one line above the block, and no other copy`);
+    assert.equal((await fetch(await js(`document.getElementById("api-base").href`))).ok, true, "the base address links to index.json, and it is there");
+    assert.match(await js(`document.getElementById("api-base").href`), /\/api\/v1\/index\.json$/);
+    assert.equal(await js(`document.documentElement.scrollWidth <= innerWidth && document.getElementById("api-text").scrollWidth <= document.getElementById("api-text").clientWidth`), true, "nothing scrolls sideways");
+    await clickOn("#api-close");
+    await until(`!document.getElementById("api").open`, "the panel closed");
+  }
+  await send("Page.navigate", { url: SITE + "#l=en&api" });
+  await until(`document.getElementById("api")?.open && /municipality\\//.test(document.getElementById("api-text").textContent)`, "the API panel from a link");
+  assert.equal(await js(`document.querySelector('link[rel="alternate"][type="text/plain"]').getAttribute("href")`), "/llms.txt", "the page points agents to the instructions");
+  assert.equal(await fetch(`${SITE}llms.txt`).then(r => r.text()), llms, "and /llms.txt is the same text");
+
   assert.deepEqual(errors, [], "no script errors");
-  console.log(`ok, ${words} words on the default screen\n${fc}\n${past}\n${months}\n${fire}\n${cell}\n${calm}`);
+  console.log(`ok, ${words} words on the default screen\n${fc}\n${past}\n${months}\n${fire}\n${cell}\n${calm}\n${actions}`);
 } finally {
   chrome.kill();
   await sleep(300);

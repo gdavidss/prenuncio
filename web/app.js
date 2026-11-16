@@ -5,8 +5,8 @@ const $ = id => document.getElementById(id);
 
 const T = {
   en: {
-    hazard: { clear: "Clearing", fire: "Fire", degr: "Degradation", mine: "Mining" }, scale: { years: "Years", months: "Months" },
-    amazon: "Amazon", about: "About", close: "Close", views: { chart: "Timeline", map: "Map", list: "List" },
+    hazard: { clear: "Clearing", fire: "Fire", degr: "Degradation", mine: "Mining" }, scale: { years: "Years", months: "Months", actions: "Actions" },
+    amazon: "Amazon", about: "About", close: "Close", copy: "Copy", copied: "Copied", views: { chart: "Timeline", map: "Map", list: "List" },
     axisY: "km² cleared per year, August to July",
     // cells: every forest cell has its own chance
     chanceBy: y => `Chance each cell loses a hectare by July ${y}`, chanceFor: y => `Chance given to each cell for ${y}`, mapped: "clearing mapped",
@@ -85,6 +85,22 @@ const T = {
     legend: { clear: "Clearing risk", fire: "Where fire tends to occur", degr: "Degradation risk", mine: "Mining risk" }, lower: "lower", higher: "higher", next: n => `next ${n} months`,
     about_: x => `about ${x} km²`, range: (lo, hi) => `likely ${lo} to ${hi}`,
     tipFc: v => `about ${v.exp} km² expected`, tipPast: v => `${v.exp} km² expected, ${v.act} cleared`, tipRank: v => `${v.rank} of ${v.n}`,
+    // actions: what measured enforcement accounts for. A floor and an association, and the screen says so.
+    act: {
+      band: "Enforcement", bandSub: v => `IBAMA notices and embargoes${v.n ? `, ${v.n} municipalities` : ""}`,
+      say: v => `Enforcement accounts for ${v.km} km² of clearing avoided${v.here} since ${v.since}`,
+      none: v => `Enforcement accounts for no clearing avoided here since ${v.since}`,
+      sub: v => `About ${v.part} of the fall since then. The rest fell everywhere at once.`,
+      subHere: v => `${v.pct}% on top of what was cleared here. No range for a single state.`, noRange: "No range for a single state.",
+      parts: ["a quarter", "a third", "half", "two thirds", "three quarters"],
+      honest: v => `A floor and an association, not proof of cause, since inspectors go where clearing is. ${v.own ? `In the Amazon as a whole, ${v.rest} of the fall is not attributed to anything.` : `The rest, ${v.rest} of the fall, is not attributed to anything.`}`,
+      statesOnly: " Only states have a figure of their own.",
+      axis: "km² cleared per six months", measured: "measured", held: v => `more, with enforcement as in ${v.ref}`, ref: v => `average of ${v.from} to ${v.to}`,
+      tipObs: v => `${v.span}, ${v.obs} km² cleared`, tipHeld: v => `${v.held} with enforcement held${v.lo ? `, likely ${v.lo} to ${v.hi}` : ""}`,
+      signs: v => `IBAMA actions, year to ${v.now} against year to ${v.ref}`, against: x => `against ${x}`,
+      sign: { notices: "Notices per 100 km²", remote: "Remote embargoes", field: "Field embargoes", collective: "Collective embargoes" },
+      signTitle: { notices: "Infraction notices per 100 km² of clearing", remote: "Area embargoed by satellite, with no visit", field: "Area embargoed on a field visit", collective: "Whole Indigenous lands and other public areas embargoed at once" },
+    },
     credit: "Imagery: Esri, Maxar, Earthstar Geographics",
     aboutHtml: v => `
       <h2>The sign before the event</h2>
@@ -94,7 +110,8 @@ const T = {
         <li><b>The level.</b> Quiet, Watch, Warning or Alarm. It is counted from the hazard's last three months against a year before, a strong El Niño for the whole Amazon, and a sector's rank in the forecast. The red band follows the level.</li>
         <li><b>The timeline.</b> By year, clearing with the forecast at the end, and any year since ${v.first} can be replayed. By month, what was cleared and what the model expects for each month ahead, with its range.</li>
         <li><b>The map.</b> Green is forest, red is clearing. By sector or by cell. In cells, every 500 metre cell of forest carries its own chance of losing at least a hectare in the year, and the legend filters by minimum chance. Seen from far, a block takes the step a fifth of its cells reach. Shorter windows and other hazards show the 5% of forest with the highest risk, at one kilometre.</li>${v.prio ? `
-        <li><b>Priorities.</b> The ${v.prio.top} blocks of ${v.prio.km} km where the most cells are expected to lose a hectare, ranked, with the list to download. In ${v.prio.y}, ${v.prio.hit}% of the blocks ranked highest lost at least 10 hectares, against ${v.prio.base}% of all forest blocks.</li>` : ""}
+        <li><b>Priorities.</b> The ${v.prio.top} blocks of ${v.prio.km} km where the most cells are expected to lose a hectare, ranked, with the list to download. In ${v.prio.y}, ${v.prio.hit}% of the blocks ranked highest lost at least 10 hectares, against ${v.prio.base}% of all forest blocks.</li>` : ""}${v.act ? `
+        <li><b>Actions.</b> A model fitted on ${v.act.n} municipalities, six months at a time, relates clearing to IBAMA's notices and embargoes per km² cleared, and gives the clearing the same months imply had that answer stayed at each municipality's level of ${v.act.from} to ${v.act.to}. The gap to what was measured, ${v.act.km} km² since ${v.act.since}, is a floor and an association, since inspectors go where clearing is, and studies that correct for that find larger effects. The method is in <a href="${v.repo}/blob/HEAD/docs/POLICY.md">docs/POLICY.md</a> and the inputs in <a href="${v.repo}/blob/HEAD/docs/INPUTS.md">docs/INPUTS.md</a>.</li>` : ""}
       </ul>
       <h3>How sure</h3>
       <ul>
@@ -124,8 +141,8 @@ ${v.rel ? `        <li><b>The chances are checked.</b> In ${v.rel.y}, cells give
       <p>INPE PRODES and DETER, through TerraBrasilis, and INPE Queimadas fire detections. Global Forest Change by Hansen, UMD, Google, USGS and NASA. GLAD Sentinel-2 alerts, University of Maryland. IBAMA open enforcement records. NOAA's Oceanic Niño Index. Boundaries of states, municipalities, Indigenous lands and conservation units as INPE distributes them. Close-up imagery by Esri, Maxar and Earthstar Geographics. Map drawn with Leaflet.</p>`,
   },
   pt: {
-    hazard: { clear: "Desmatamento", fire: "Fogo", degr: "Degradação", mine: "Garimpo" }, scale: { years: "Anos", months: "Meses" },
-    amazon: "Amazônia", about: "Sobre", close: "Fechar", views: { chart: "Linha do tempo", map: "Mapa", list: "Lista" },
+    hazard: { clear: "Desmatamento", fire: "Fogo", degr: "Degradação", mine: "Garimpo" }, scale: { years: "Anos", months: "Meses", actions: "Ações" },
+    amazon: "Amazônia", about: "Sobre", close: "Fechar", copy: "Copiar", copied: "Copiado", views: { chart: "Linha do tempo", map: "Mapa", list: "Lista" },
     axisY: "km² desmatados por ano, de agosto a julho",
     chanceBy: y => `Chance de cada célula perder um hectare até julho de ${y}`, chanceFor: y => `Chance dada a cada célula para ${y}`, mapped: "desmatamento mapeado",
     onlyFrom: "Escolha um degrau para mostrar só as células com essa chance ou mais",
@@ -199,6 +216,21 @@ ${v.rel ? `        <li><b>The chances are checked.</b> In ${v.rel.y}, cells give
     legend: { clear: "Risco de desmatamento", fire: "Onde o fogo costuma ocorrer", degr: "Risco de degradação", mine: "Risco de garimpo" }, lower: "menor", higher: "maior", next: n => `próximos ${n} meses`,
     about_: x => `cerca de ${x} km²`, range: (lo, hi) => `provável de ${lo} a ${hi}`,
     tipFc: v => `cerca de ${v.exp} km² esperados`, tipPast: v => `${v.exp} km² esperados, ${v.act} desmatados`, tipRank: v => `${v.rank} entre ${v.n}`,
+    act: {
+      band: "Fiscalização", bandSub: v => `autos e embargos do IBAMA${v.n ? `, ${v.n} municípios` : ""}`,
+      say: v => `A fiscalização responde por ${v.km} km² de desmate evitado${v.here} desde ${v.since}`,
+      none: v => `A fiscalização não responde por desmate evitado aqui desde ${v.since}`,
+      sub: v => `Cerca de ${v.part} da queda desde então. O resto caiu em toda parte ao mesmo tempo.`,
+      subHere: v => `${v.pct}% a mais do que foi desmatado aqui. Sem faixa para um estado sozinho.`, noRange: "Sem faixa para um estado sozinho.",
+      parts: ["um quarto", "um terço", "metade", "dois terços", "três quartos"],
+      honest: v => `É um piso e uma associação, não prova de causa, porque o fiscal vai aonde o desmate está. ${v.own ? `Na Amazônia inteira, a parte da queda que não é atribuída a nada chega a ${v.rest}.` : `O restante, ${v.rest} da queda, não é atribuído a nada.`}`,
+      statesOnly: " Só os estados têm número próprio.",
+      axis: "km² desmatados por semestre", measured: "medido", held: v => `a mais, com a fiscalização de ${v.ref}`, ref: v => `média de ${v.from} a ${v.to}`,
+      tipObs: v => `${v.span}, ${v.obs} km² desmatados`, tipHeld: v => `${v.held} com a fiscalização mantida${v.lo ? `, provável de ${v.lo} a ${v.hi}` : ""}`,
+      signs: v => `Ações do IBAMA, ano até ${v.now} contra o ano até ${v.ref}`, against: x => `contra ${x}`,
+      sign: { notices: "Autos por 100 km²", remote: "Embargos remotos", field: "Embargos em campo", collective: "Embargos coletivos" },
+      signTitle: { notices: "Autos de infração por 100 km² de desmatamento", remote: "Área embargada por satélite, sem visita", field: "Área embargada em visita a campo", collective: "Terras indígenas inteiras e outras áreas públicas embargadas de uma vez" },
+    },
     credit: "Imagens: Esri, Maxar, Earthstar Geographics",
     aboutHtml: v => `
       <h2>O sinal antes do acontecimento</h2>
@@ -208,7 +240,8 @@ ${v.rel ? `        <li><b>The chances are checked.</b> In ${v.rel.y}, cells give
         <li><b>O nível.</b> Calmo, Atenção, Alerta ou Alarme. Ele é contado a partir dos últimos três meses daquele risco contra um ano antes, de um El Niño forte para a Amazônia inteira e da posição do setor na previsão. A faixa vermelha segue o nível.</li>
         <li><b>A linha do tempo.</b> Por ano, o desmatamento com a previsão no fim, e qualquer ano desde ${v.first} pode ser revisto. Por mês, o que foi desmatado e o que o modelo espera para cada mês à frente, com a faixa.</li>
         <li><b>O mapa.</b> Verde é floresta, vermelho é desmatamento. Por setor ou por célula. Nas células, cada célula de floresta de 500 metros tem a sua própria chance de perder pelo menos um hectare no ano, e a legenda filtra pela chance mínima. De longe, um bloco assume o degrau que um quinto das suas células alcança. As janelas curtas e os outros riscos mostram os 5% de floresta de maior risco, a um quilômetro.</li>${v.prio ? `
-        <li><b>Prioridades.</b> Os ${v.prio.top} blocos de ${v.prio.km} km onde mais células devem perder um hectare, em ordem, com a lista para baixar. Em ${v.prio.y}, ${v.prio.hit}% dos blocos no topo perderam pelo menos 10 hectares, contra ${v.prio.base}% de todos os blocos de floresta.</li>` : ""}
+        <li><b>Prioridades.</b> Os ${v.prio.top} blocos de ${v.prio.km} km onde mais células devem perder um hectare, em ordem, com a lista para baixar. Em ${v.prio.y}, ${v.prio.hit}% dos blocos no topo perderam pelo menos 10 hectares, contra ${v.prio.base}% de todos os blocos de floresta.</li>` : ""}${v.act ? `
+        <li><b>Ações.</b> Um modelo ajustado em ${v.act.n} municípios, semestre a semestre, relaciona o desmatamento aos autos e embargos do IBAMA por km² desmatado e dá quanto desmatamento os mesmos meses implicam se essa resposta tivesse ficado no nível que cada município tinha de ${v.act.from} a ${v.act.to}. A diferença para o medido, ${v.act.km} km² desde ${v.act.since}, é um piso e uma associação, porque o fiscal vai aonde o desmate está, e os estudos que corrigem isso encontram efeitos maiores. O método está em <a href="${v.repo}/blob/HEAD/docs/POLICY.md">docs/POLICY.md</a> e as fontes em <a href="${v.repo}/blob/HEAD/docs/INPUTS.md">docs/INPUTS.md</a>.</li>` : ""}
       </ul>
       <h3>Quão certo</h3>
       <ul>
@@ -252,7 +285,7 @@ const share = x => (x < 0.1 ? t().tiny : fmt(x, 1));
 const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
 const css = name => getComputedStyle(document.documentElement).getPropertyValue(name).trim();
 
-const [M, R, MO, P] = await Promise.all(["meta", "regions", "monthly", "prob"].map(f => fetch(`data/${f}.json`).then(r => (r.ok ? r.json() : null)).catch(() => null)));  // monthly.json may not be there yet
+const [M, R, MO, P, ACT] = await Promise.all(["meta", "regions", "monthly", "prob", "actions"].map(f => fetch(`data/${f}.json`).then(r => (r.ok ? r.json() : null)).catch(() => null)));  // monthly.json, prob.json and actions.json may not be there yet
 M.layers ||= {};
 if (Math.abs(R.total_km2 / M.forecast.total_km2 - 1) > 1e-6) console.warn("Sector numbers are older than the forecast, run pipeline/regions.py");
 const PARTIAL = 2026;  // the year whose outcome is INPE's priority scenes only, until the full map is out
@@ -272,7 +305,8 @@ const HAZ = {
 const hazards = () => Object.keys(HAZ).filter(k => k === "clear" || M.layers[HAZ[k].layer]);  // only the ones that have a layer
 const glyph = k => `<svg class="glyph" viewBox="0 0 12 12" style="--c:var(--${k})" aria-hidden="true"><path d="${HAZ[k].glyph}"/></svg>`;
 
-// hazard: one of the above. scale: years or months. h: months ahead, in the monthly clearing view.
+// hazard: one of the above. scale: years, months, or actions (what enforcement accounts for, clearing only).
+// h: months ahead, in the monthly clearing view.
 const S = { year: M.forecast.year, hazard: "clear", scale: "years", h: 3, mode: "sectors", kind: "mun", sel: null, min: 0, block: null, rank: false, line: false };
 // mode: what the map shows (sectors, cells, or the priority blocks over the cells). min: the lowest chance step shown.
 // block: the priority block selected. rank: the sector ranking is open. line: the timeline as a line instead of bars.
@@ -280,7 +314,7 @@ const cellsOn = () => S.mode !== "sectors";  // the priority list sits on top of
 if (M.years[H.get("y")]) S.year = +H.get("y");
 S.hazard = hazards().find(k => HAZ[k].layer && HAZ[k].layer === H.get("k")) || "clear";
 if (/^clear[36]$/.test(H.get("k") || "")) { S.scale = "months"; S.h = +H.get("k").slice(5); }
-if (H.get("t") === "months") S.scale = "months";
+if (["months", "actions"].includes(H.get("t"))) S.scale = H.get("t");
 if (["cells", "prio"].includes(H.get("m"))) S.mode = H.get("m");
 if (H.get("b") > 0) S.block = +H.get("b");
 S.rank = H.get("g") === "1"; S.line = H.get("c") === "line";
@@ -349,6 +383,22 @@ function ahead(mo, n) {
   const t_ = mo.sums?.[n], add = k => mo.fc.slice(0, n).reduce((x, f) => x + f[k], 0), ranged = !mo.scaled && (t_ || mo.fc[0].p10 != null);
   return { km: t_ ? t_.p50 * mo.part : add("p50"), lo: ranged ? (t_ ? t_.p10 : add("p10")) : null, hi: ranged ? (t_ ? t_.p90 : add("p90")) : null };
 }
+
+// ---------- actions: what measured enforcement accounts for (data/actions.json, from pipeline/actions.py) ----------
+// Per six months since the reference year: the clearing measured, and the clearing the panel implies had IBAMA's
+// answer per km² cleared stayed at each municipality's level of that year. The gap is the part of the fall that
+// measured enforcement accounts for. A state has its own two series and no interval; a municipality, an
+// Indigenous land or a conservation unit has none, so the Amazon is shown.
+const acting = () => S.scale === "actions";
+const ymOf = s => s.split("-").map(Number);
+function actsOf(it) {
+  const own = (it && S.kind === "uf" && ACT.states?.[it.id]) || null, rows = own || ACT.semesters, sum = k => rows.reduce((x, r) => x + r[k], 0);
+  const avoided = own ? sum("held") - sum("observed") : ACT.summary.avoided, [a, b] = ACT.reference.split(" to ").map(ymOf);
+  return { own: !!own, rows, avoided, over: own ? avoided / Math.max(1, sum("observed")) : ACT.summary.avoided_share,
+    since: month(ymOf(rows[0].start)[0], ymOf(rows[0].start)[1] - 1), from: month(a[0], a[1] - 1), to: month(b[0], b[1] - 1), years: t().to(a[0], b[0]) };
+}
+// a share in plain words where it is close to a simple fraction, as a percentage otherwise
+const partOf = x => { const i = [1 / 4, 1 / 3, 1 / 2, 2 / 3, 3 / 4].findIndex(f => Math.abs(x - f) < 0.03); return i < 0 ? fmt(100 * x) + "%" : t().act.parts[i]; };
 
 // ---------- the alert level (docs/BRAND.md): counted from the hazard's own alerts, plus El Niño for the
 // whole Amazon or the forecast rank for a sector. 0 quiet, 1 watch, 2 warning, 3 alarm.
@@ -784,8 +834,15 @@ async function say() {
   const it = S.sel != null ? K.byId.get(S.sel) : null, here = it ? L_.here : "";
   const v = { y, here, many: L_.many[S.kind], n: K?.items.length };
   if (it) v.rank = L_.rank(rankOf(it, K));
-  let head, sub = "";
-  if (hz === "fire") {
+  let head, sub = "", hint = yearly ? L_.hintY({ first: R.hyears[0] }) : S.scale === "months" && hz === "clear" ? L_.deter : "";
+  const D = acting() ? actsOf(it) : null;
+  if (D) {
+    // what enforcement accounts for, and in the same breath what it does not
+    const o = { km: approx(D.avoided), here: D.own ? L_.here : "", since: D.since };
+    head = D.avoided < 0.5 ? L_.act.none(o) : L_.act.say(o);
+    sub = !D.own ? L_.act.sub({ part: partOf(ACT.summary.fall_accounted_share) }) : D.avoided < 0.5 ? L_.act.noRange : L_.act.subHere({ pct: fmt(100 * D.over) });
+    hint = L_.act.honest({ own: D.own, rest: partOf(1 - ACT.summary.fall_accounted_share) }) + (it && !D.own ? L_.act.statesOnly : "");
+  } else if (hz === "fire") {
     // fire: what burned against a year before. Three months by month; by year, the last twelve months against
     // the twelve before, the same windows the timeline draws.
     const mo = monthsOf(it), a = (it ? it.L[k] : R.amazon.L[k]) || [], sum3 = from => mo.obs(from) + mo.obs(from + 1) + mo.obs(from + 2);
@@ -826,17 +883,19 @@ async function say() {
     head = L_.fc({ ...v, km: approx(M.forecast.total_km2) });
     sub = L_.fcSub({ lo: approx(M.forecast.range_km2[0]), hi: approx(M.forecast.range_km2[1]) });
   }
-  // the level sets how much red there is. A replayed year has none: the alarm is about now.
-  const A = past ? null : alarm(it, K), l = A ? A.l : "r";
+  // the level sets how much red there is. A replayed year has none: the alarm is about now. Nor has the actions
+  // view, which looks back and whose news is good.
+  const A = past || D ? null : alarm(it, K), l = A ? A.l : "r", named = D && !D.own ? null : it;
   document.documentElement.dataset.level = $("lead").dataset.l = l;
   $("level").innerHTML = (A ? `<span class="meter" aria-hidden="true">${[1, 2, 3].map(n => `<i${n <= A.l ? ' class="on"' : ""}></i>`).join("")}</span>` : "")
-    + `<b>${A ? L_.level[A.l] : L_.replay}</b><span>${A ? A.why.join(", ") : L_.made(y)}</span>`;
-  // the whole Amazon needs no label; a sector is named, with a way back
-  $("scope").innerHTML = it ? `<span>${esc(it.n)}${it.s ? ", " + it.s : ""}</span><button aria-label="${L_.whole}" title="${L_.whole}">×</button>` : "";
+    + `<b>${A ? L_.level[A.l] : D ? L_.act.band : L_.replay}</b><span>${A ? A.why.join(", ") : D ? L_.act.bandSub({ n: D.own ? 0 : fmt(ACT.municipalities) }) : L_.made(y)}</span>`;
+  // the whole Amazon needs no label; a sector is named, with a way back. In the actions view a sector that has
+  // no figure of its own is not named: the numbers are the Amazon's, and the label says so.
+  $("scope").innerHTML = it ? `<span>${named ? esc(it.n) + (it.s ? ", " + it.s : "") : L_.amazon}</span><button aria-label="${L_.whole}" title="${L_.whole}">×</button>` : "";
   $("scope").hidden = !it;
   $("say").textContent = head.replaceAll(" km²", "\u00a0km²");
   $("sub").textContent = sub.trim().replaceAll(" km²", "\u00a0km²");
-  $("hint").textContent = yearly ? L_.hintY({ first: R.hyears[0] }) : S.scale === "months" && hz === "clear" ? L_.deter : "";
+  $("hint").textContent = hint;
   chart(it);
   signs(it);
   legend();
@@ -860,13 +919,28 @@ $("legend").onclick = e => { const b = e.target.closest("[data-min]"); if (b) { 
 $("scope").onclick = e => { if (e.target.closest("button")) { select(null); if (mapOn()) { pristine = true; whole(!calm()); } } };
 
 // ---------- signals: what the model is reading, as small traces. Red only where it is rising. ----------
+// a small trace: the series thin, its last points heavy
+function trace(a, zero, tail = 3) {
+  const W = 100, Hh = 28, v = a.slice(-36), lo = Math.min(0, ...v), hi = Math.max(1e-9, ...v), X = i => (i / (v.length - 1)) * W, Y = x => Hh - 2 - (Hh - 4) * (x - lo) / (hi - lo);
+  const path = (from, cls) => `<path class="${cls}" d="${v.slice(from).map((x, i) => `${i ? "L" : "M"}${X(i + from).toFixed(1)} ${Y(x).toFixed(1)}`).join("")}"/>`;
+  return `<svg viewBox="0 0 ${W} ${Hh}" preserveAspectRatio="none" aria-hidden="true">${zero ? `<line x1="0" x2="${W}" y1="${Y(0)}" y2="${Y(0)}"/>` : ""}${path(0, "")}${path(v.length - tail, "end")}</svg>`;
+}
+// the actions themselves, in the signals' place: each one's last year (August to July) against the reference year.
+// Notices are per 100 km² cleared, so a year's rate weighs each semester by its clearing.
+function actSigns() {
+  const L_ = t().act, a = ACT.actions, n = a.start.length, [r0, r1] = ACT.reference.split(" to "), ref = a.start.flatMap((s, i) => (s >= r0 && s <= r1 ? [i] : [])), now = [n - 2, n - 1];
+  const tot = (v, ix) => ix.reduce((x, i) => x + v[i], 0), rate = ix => ix.reduce((x, i) => x + a.notices_per_100km2[i] * a.clearing_km2[i], 0) / tot(a.clearing_km2, ix);
+  const end = s => { const [y, m_] = ymOf(s); return month(y, m_ + 4); };  // a semester ends five months after it starts
+  const item = (k, v, x, x0, unit) => `<div data-k="${k}" title="${L_.signTitle[k]}">${trace(v, false, 2)}<span>${L_.sign[k]}</span><b>${fmt(x)}${unit}</b><span>${L_.against(fmt(x0))}</span></div>`;
+  $("signs").className = "acts";
+  $("signs").removeAttribute("title");
+  $("signs").innerHTML = `<p>${L_.signs({ now: end(a.start[n - 1]), ref: end(a.start[ref.at(-1)]) })}</p>` + item("notices", a.notices_per_100km2, rate(now), rate(ref), "")
+    + ["remote", "field", "collective"].map(k => item(k, a[k + "_km2"], tot(a[k + "_km2"], now), tot(a[k + "_km2"], ref), " km²")).join("");
+}
 function signs(it) {
-  const L_ = t(), W = 100, Hh = 28;
-  const line = (a, zero) => {
-    const v = a.slice(-36), lo = Math.min(0, ...v), hi = Math.max(1e-9, ...v), X = i => (i / (v.length - 1)) * W, Y = x => Hh - 2 - (Hh - 4) * (x - lo) / (hi - lo);
-    const path = (from, cls) => `<path class="${cls}" d="${v.slice(from).map((x, i) => `${i ? "L" : "M"}${X(i + from).toFixed(1)} ${Y(x).toFixed(1)}`).join("")}"/>`;
-    return `<svg viewBox="0 0 ${W} ${Hh}" preserveAspectRatio="none" aria-hidden="true">${zero ? `<line x1="0" x2="${W}" y1="${Y(0)}" y2="${Y(0)}"/>` : ""}${path(0, "")}${path(v.length - 3, "end")}</svg>`;
-  };
+  if (acting()) return actSigns();
+  const L_ = t(), line = trace;
+  $("signs").className = "";
   const item = name => {
     const a = monthly(it, name), unit = name === "autos" ? "" : " km²";
     if (!a) return "";
@@ -921,10 +995,70 @@ function series(it) {
   out.push({ key: fy, label: fy, v: it ? it.e[R.eyears.indexOf(fy)] : M.forecast.total_km2, fc: true, can: true, on: fy === S.year, range: it ? null : M.forecast.range_km2 });
   return out;
 }
+// The actions view, per six months: the clearing measured as bars, and above each the clearing the model
+// implies with enforcement held at the reference year's level, with its 90% interval. The gap between the two
+// is hatched forest green: it is modelled, and it is forest left standing. A thin rule marks the reference
+// year's average, so the whole fall is on the chart and the gap can be read against it. As a line, the same.
+function actsChart(it) {
+  const el = $("chart"), W = el.clientWidth, H = el.clientHeight, L_ = t().act, D = actsOf(it), rows = D.rows, ref = D.own ? null : ACT.reference_km2;
+  const gut = 42, top = 58, pw = W - gut, pitch = pw / rows.length, tight = pitch < 50, bot = tight ? 36 : 22, ph = H - top - bot, bw = Math.max(3, pitch * 0.56);  // tight: the year goes under the month
+  const peak = r => Math.max(r.observed, r.held, r.held_hi ?? 0), max = Math.max(D.own ? 0.5 : 1, ref ?? 0, ...rows.map(peak)) * 1.06;
+  const Y = v => top + ph - ph * Math.min(v, max) / max, X = i => gut + i * pitch, mid = i => X(i) + pitch / 2, y0 = Y(0), [tk, dec] = ticks(max / 1.06);
+  const span = r => { const [y, m_] = ymOf(r.start), o = { month: "short", year: "numeric" }; return t().to(month(y, m_ - 1, o), month(y, m_ + 4, o)); };
+  const label = r => { const [y, m_] = ymOf(r.start); return [month(y, m_ - 1, { month: "short" }).replace(".", ""), String(y).slice(-2)]; };
+  let s = `<svg class="acts" width="${W}" height="${H}" role="img"><defs><pattern id="spared" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect class="s0" width="6" height="6"/><rect class="s1" width="3" height="6"/></pattern></defs><g class="grid">`;
+  for (const v of tk) s += `<line x1="${gut}" x2="${W}" y1="${Y(v)}" y2="${Y(v)}"/><text x="${gut - 8}" y="${Y(v) + 4}" text-anchor="end">${fmt(v, dec)}</text>`;
+  // what the axis counts, and under it the two marks, named once
+  s += `<text class="unit" x="0" y="13">${L_.axis}</text></g><g class="key"><rect class="plain" x="0" y="22" width="11" height="11"/><text x="17" y="32">${L_.measured}</text><g><rect x="0" y="22" width="11" height="11" fill="url(#spared)"/><text x="17" y="32">${L_.held({ ref: D.years })}</text></g></g>`;
+  rows.forEach((r, i) => {
+    const x = X(i) + (pitch - bw) / 2, cx = mid(i);
+    s += `<g class="bar" data-i="${i}">`;
+    if (!S.line) {
+      s += `<rect class="plain observed" x="${x}" y="${Y(r.observed)}" width="${bw}" height="${y0 - Y(r.observed)}"/>`;
+      if (r.held > r.observed) s += `<rect x="${x}" y="${Y(r.held)}" width="${bw}" height="${Y(r.observed) - Y(r.held)}" fill="url(#spared)"/>`;
+      s += `<line class="held" x1="${x}" x2="${x + bw}" y1="${Y(r.held)}" y2="${Y(r.held)}"/>`;
+    }
+    if (r.held_lo != null) s += `<path class="rng" fill="none" d="M${cx} ${Y(r.held_lo)}V${Y(r.held_hi)}M${cx - 4} ${Y(r.held_lo)}h8M${cx - 4} ${Y(r.held_hi)}h8"/>`;
+    s += (tight ? label(r).map((x, n) => `<text x="${cx}" y="${y0 + 15 + 15 * n}">${x}</text>`).join("") : `<text x="${cx}" y="${H - 5}">${label(r).join(" ")}</text>`) + `<rect class="hot" x="${X(i)}" y="${top}" width="${pitch}" height="${H - top}"/></g>`;
+  });
+  if (S.line) {
+    const at = (i, k) => `${mid(i).toFixed(1)} ${Y(rows[i][k]).toFixed(1)}`, path = k => rows.map((r, i) => (i ? "L" : "M") + at(i, k)).join("");
+    s += `<g class="line" pointer-events="none"><path class="gap" d="${path("held")}${rows.map((r, i) => "L" + at(rows.length - 1 - i, "observed")).join("")}Z"/><path class="obs" d="${path("observed")}"/><path class="fcl" d="${path("held")}"/>`
+      + rows.map((r, i) => `<circle class="dot observed" r="2.6" cx="${mid(i)}" cy="${Y(r.observed)}"/><circle class="fdot held" r="3.4" cx="${mid(i)}" cy="${Y(r.held)}"/>`).join("") + `</g>`;
+  }
+  if (ref != null) s += `<line class="refrule" x1="${gut}" x2="${W}" y1="${Y(ref)}" y2="${Y(ref)}"/><text class="note ref" x="${W}" y="${Y(ref) - 6}" text-anchor="end">${L_.ref(D)}</text>`;
+  el.innerHTML = s + `<line class="axis" x1="${gut}" x2="${W}" y1="${y0}" y2="${y0}"/><g class="tip" pointer-events="none"><rect class="back"/><path/><text></text><text></text></g></svg>`;
+  const k2 = el.querySelector(".key g");  // the second mark of the key sits after the first, on the next line if it does not fit
+  const w1 = 17 + el.querySelector(".key > text").getComputedTextLength() + 18, w2 = 17 + k2.querySelector("text").getComputedTextLength();
+  k2.setAttribute("transform", w1 + w2 <= W ? `translate(${w1} 0)` : "translate(0 17)");
+  const [t1, t2] = el.querySelectorAll(".tip text"), lead = el.querySelector(".tip path"), back = el.querySelector(".tip .back");
+  const tip = i => {
+    const r = rows[i];
+    back.setAttribute("width", 0);
+    el.querySelector(".note.ref")?.setAttribute("visibility", r ? "hidden" : "visible");  // its caption would show through beside the label
+    if (!r) { t1.textContent = t2.textContent = ""; lead.setAttribute("d", ""); return; }
+    const n = x => (D.own ? km(x) : fmt(x)), hw = Math.min(150, W / 2 - 4), cx = mid(i), [anchor, x, left] = cx < hw ? ["start", 0, 0] : cx > W - hw ? ["end", W, W - 2 * hw] : ["middle", cx, cx - hw];
+    let up = Y(peak(r));
+    rows.forEach((c, j) => { if (X(j) + pitch > left && X(j) < left + 2 * hw) up = Math.min(up, Y(peak(c))); });
+    up = Math.max(up, top + 38);  // stay clear of the key along the top
+    t1.textContent = L_.tipObs({ span: span(r), obs: n(r.observed) });
+    t2.textContent = L_.tipHeld({ held: n(r.held), lo: r.held_lo != null && n(r.held_lo), hi: r.held_hi != null && n(r.held_hi) });
+    for (const [el_, dy] of [[t1, -27], [t2, -9]]) { el_.setAttribute("x", x); el_.setAttribute("y", up + dy); el_.setAttribute("text-anchor", anchor); }
+    lead.setAttribute("d", Y(peak(r)) - up > 8 ? `M${cx} ${Y(peak(r)) - 3}V${up - 3}` : "");
+    // the label lies over the reference rule and its caption, so it gets the ground behind it
+    const b1 = t1.getBBox(), b2 = t2.getBBox(), bx = Math.min(b1.x, b2.x) - 5;
+    for (const [k, v] of [["x", bx], ["y", b1.y - 2], ["width", Math.max(b1.x + b1.width, b2.x + b2.width) + 5 - bx], ["height", b2.y + b2.height + 3 - b1.y]]) back.setAttribute(k, v);
+  };
+  bars = []; pinned = -1;
+  el.onpointermove = el.onpointerdown = e => tip(Math.floor((e.clientX - el.getBoundingClientRect().left - gut) / pitch));
+  el.onpointerleave = () => tip(-1);
+  el.onfocusin = null;
+}
 function chart(it = scope) {
   scope = it;
   const el = $("chart"), W = el.clientWidth, H = el.clientHeight, L_ = t();
   if (W < 60 || H < 60) return;
+  if (acting()) return actsChart(it);
   bars = series(it);
   const monthsView = S.scale === "months", sector = !!it;
   const gut = 42, top = monthsView ? 40 : 46, bot = monthsView ? 34 : 22, pw = W - gut, ph = H - top - bot, pitch = pw / bars.length, bw = Math.max(3, pitch * (monthsView ? 0.62 : 0.72));
@@ -1015,11 +1149,12 @@ function chrome() {
   const L_ = t(), btn = (k, label, on) => `<button data-k="${k}" aria-pressed="${on}">${label}</button>`;
   document.documentElement.lang = lang;
   document.documentElement.dataset.hazard = S.hazard;
+  document.documentElement.dataset.scale = S.scale;
   document.documentElement.style.setProperty("--hue", `var(--${S.hazard})`);
   $("hazard").className = $("scale").className = $("kinds").className = "pick";
   $("modes").className = "seg";  // the mode is a switch of its own, apart from the list of sector kinds
   $("hazard").innerHTML = hazards().map(k => btn(k, glyph(k) + L_.hazard[k], k === S.hazard)).join("");
-  $("scale").innerHTML = ["years", "months"].map(k => btn(k, L_.scale[k], k === S.scale)).join("");
+  $("scale").innerHTML = ["years", "months", ...(S.hazard === "clear" && ACT ? ["actions"] : [])].map(k => btn(k, L_.scale[k], k === S.scale)).join("");
   $("modes").innerHTML = ["sectors", "cells", ...(M.years[M.forecast.year]?.flags500 ? ["prio"] : [])].map(k => btn(k, L_.modes[k], k === S.mode)).join("");
   $("rank-btn").textContent = L_.ranking;
   $("rank-btn").setAttribute("aria-pressed", S.rank);
@@ -1037,12 +1172,13 @@ function chrome() {
   $("ahead").innerHTML = hs.map(h => btn(h, L_.ahead(h), h === S.h)).join("");
   $("ahead").hidden = hs.length < 2;
   const ys = Object.keys(M.years).map(Number).sort(), at = ys.indexOf(S.year), [prev, , next] = $("step").children;
-  $("step").hidden = typeof key() !== "number";
+  $("step").hidden = typeof key() !== "number" || acting();
   $("step").children[1].textContent = S.year;
   prev.disabled = at <= 0; next.disabled = at >= ys.length - 1;
   prev.setAttribute("aria-label", L_.prevYear); next.setAttribute("aria-label", L_.nextYear);
   $("about-btn").textContent = L_.about;
-  $("about-close").textContent = L_.close;
+  $("about-close").textContent = $("api-close").textContent = L_.close;
+  $("api-copy").textContent = L_.copy;
   $("lang-btn").textContent = lang === "pt" ? "EN" : "PT";
   $("lang-btn").setAttribute("aria-label", lang === "pt" ? "English" : "Português");
   $("credit").textContent = L_.credit;
@@ -1051,6 +1187,8 @@ async function refresh() {
   if (!hazards().includes(S.hazard)) S.hazard = "clear";
   if (S.mode === "prio") { S.hazard = "clear"; S.scale = "years"; S.year = M.forecast.year; }  // the priority list is the yearly clearing forecast
   if (S.hazard === "clear" && S.scale === "months" && !M.layers["clear" + S.h]) S.scale = "years";
+  if (acting() && (S.hazard !== "clear" || !ACT)) S.scale = "years";
+  if (acting()) S.year = M.forecast.year;  // the actions view looks back on its own; the map stays on the forecast
   chrome();
   link();
   say();  // the bulletin and the timeline need only the two small JSON files, so they come first
@@ -1138,9 +1276,9 @@ $("step").onclick = e => {
 };
 function pick(y) { if (y !== M.forecast.year) leavePrio(); S.year = y; refresh(); }
 document.addEventListener("keydown", e => {
-  if ($("about").open) return;
+  if ($("about").open || $("api").open) return;
   if (e.key === "Escape" && S.sel != null) return select(null);
-  if (typeof key() !== "number" || !["ArrowLeft", "ArrowRight"].includes(e.key)) return;
+  if (typeof key() !== "number" || acting() || !["ArrowLeft", "ArrowRight"].includes(e.key)) return;
   const ys = Object.keys(M.years).map(Number).sort(), i = ys.indexOf(S.year) + (e.key === "ArrowLeft" ? -1 : 1);
   if (ys[i]) pick(ys[i]);
 });
@@ -1153,6 +1291,7 @@ $("about-btn").onclick = async () => {
     first: hy[0], last: hy.at(-1), cap: fmt(100 * mean(cap5)), naive: fmt(100 * mean(naive5)),
     mape: fmt(100 * M.forecast.mape), previsia: fmt(100 * M.forecast.previsia_mape), tmin: Math.min(...tests), tmax: Math.max(...tests),
     partial: PARTIAL, repo: REPO,
+    act: ACT && (D => ({ n: fmt(ACT.municipalities), from: D.from, to: D.to, since: D.since, km: fmt(ACT.summary.avoided) }))(actsOf(null)),
     prio: PR && { top: PR.top, km: PR.block_km, y: py, hit: fmt(100 * PR.replay[py].lost_10ha), base: fmt(100 * PR.replay[py].base_10ha, 1) },
     rel: (y => { const Y = P?.years?.[y], pick = lo => Y?.reliability.find(b => b[0] === lo), bins = [0.02, 0.1, 0.2].map(pick), one = x => fmt(100 * x, x < 0.2 ? 1 : 0);
       return Y && bins.every(Boolean) && { y, said: bins.map(b => one(b[2])), did: bins.map(b => one(b[3])), exp: fmt(Y.expected_cells), act: fmt(Y.actual_cells) }; })(Object.keys(P?.years || {})[0]),
@@ -1163,8 +1302,26 @@ $("about-btn").onclick = async () => {
 };
 $("about-close").onclick = () => $("about").close();
 $("about").onclick = e => { if (e.target === $("about")) $("about").close(); };
+// the API panel: the instructions for agents, shown as the file has them (api/v1/llms.txt), fetched when opened
+let apiText = null;
+$("api-btn").onclick = async () => {
+  $("api").showModal();
+  apiText ??= await fetch("api/v1/llms.txt").then(r => (r.ok ? r.text() : null)).catch(() => null);
+  $("api-text").textContent = apiText ?? "";
+  $("api-text").scrollTop = 0;
+};
+$("api-copy").onclick = async () => {
+  let ok = true;
+  try { await navigator.clipboard.writeText(apiText ?? ""); }
+  catch (err) { getSelection().selectAllChildren($("api-text")); ok = document.execCommand("copy"); }  // no clipboard access: select the text and copy that
+  if (!ok) return;  // the text stays selected, ready to be copied by hand
+  $("api-copy").textContent = t().copied;
+  setTimeout(() => ($("api-copy").textContent = t().copy), 1600);
+};
+$("api-close").onclick = () => $("api").close();
+$("api").onclick = e => { if (e.target === $("api")) $("api").close(); };
 
-// shareable state: #y=2023&k=scar12&t=months&m=cells&s=ti&r=<sector id>&v=lat,lng,zoom&l=pt
+// shareable state (t=actions is the actions view): #y=2023&k=scar12&t=months&m=cells&s=ti&r=<sector id>&v=lat,lng,zoom&l=pt
 // (k is the forecast layer when it is not a PRODES year: clear3 or clear6 for the months ahead of clearing,
 // or another hazard's layer, such as scar12 for fire)
 let leaving = false;
@@ -1173,7 +1330,7 @@ function link() {
   if (leaving) return;
   const c = map.getCenter(), q = new URLSearchParams({ y: S.year });
   if (typeof key() !== "number") q.set("k", key());
-  if (S.hazard !== "clear" && S.scale === "months") q.set("t", "months");
+  if ((S.hazard !== "clear" && S.scale === "months") || acting()) q.set("t", S.scale);
   if (S.mode !== "sectors") q.set("m", S.mode);
   if (S.mode === "prio" && S.block) q.set("b", S.block);
   if (S.mode === "sectors" && S.rank) q.set("g", 1);
@@ -1189,3 +1346,4 @@ map.on("moveend", link);
 
 if (S.sel != null) select(S.sel, !H.get("v")); else refresh();
 if (H.has("about")) $("about-btn").click();
+if (H.has("api")) $("api-btn").click();

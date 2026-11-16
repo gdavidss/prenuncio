@@ -45,7 +45,7 @@ A forest green square with its corner coming away in red. It is the clearing gly
 
 ## Type
 
-Barlow Condensed and Barlow, one family drawn from highway signs and number plates. Condensed at weight 800 sets the wordmark, the level and the headline, because a warning is read from a distance. Regular width sets everything small, with tabular figures. Capitals are for the wordmark, the level and controls.
+Barlow Condensed and Barlow, one family drawn from highway signs and number plates. Condensed at weight 800 sets the wordmark, the level and the headline, because a warning is read from a distance. Regular width sets everything small, with tabular figures. Capitals are for the wordmark, the level and controls. The API panel is the one exception: it shows the instructions file for agents exactly as it is, in the reader's system monospace.
 
 ## How urgency scales
 
@@ -64,9 +64,13 @@ The level is counted, never chosen. For the hazard and place on screen:
 
 On the timeline, measured values are ink and the forecast is in the hazard's hue, hatched as bars or dashed as a line. In the signals, red marks only what is rising for the place on screen. A replayed past year has no level: the alarm is about now.
 
+### Avoided clearing
+
+The actions view shows what measured enforcement accounts for. It has no level and no red: it looks back, and its news is good. Clearing measured is ink. Above it stands the clearing the model implies had enforcement stayed at its 2021 to 2022 level, in forest green `#0b6b3a`, hatched as bars or dashed as a line. Hatched or dashed because it is modelled, as a forecast is. Green because the gap between the two is forest left standing. The interval and the rule of the reference year are ink. The view says on the screen that it is a floor and an association, and how much of the fall it does not explain.
+
 ## Never
 
-- Red for anything that is not clearing or the alert level. Green for anything that is not forest or the brand.
+- Red for anything that is not clearing or the alert level. Green for anything that is not forest or the brand. Clearing that was avoided is forest, so it is green and never red.
 - A level the data does not earn, in either direction.
 - Fire in red, or a forecast amount of fire.
 - The same tone for clearing that happened and clearing that is likely.
