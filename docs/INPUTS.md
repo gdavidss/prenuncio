@@ -22,6 +22,9 @@ Scores are cap5 (share of the year's clearing in the 5% of cells ranked highest)
 | State-level trend, notices, embargoes, fire | yearly total | fourteen combinations over 2014 to 2025 | none beats repeating last year (17%) |
 | Clearing permits (SINAFLOR ASV), valid on the forecast date | screen, `pipeline/permits.py` | cells inside the authorised area, forecast against outcome | the forecast expected 357 to 574 of those cells to lose a hectare each year and 1,061 to 1,454 did |
 | Clearing permits, as seven features | trees | lab, against the same trees without them | +1.3 points (71.5% to 72.8%), better in all four years; production run under way |
+| Embargoes split by kind: remote, collective, field | amount, by semester | `pipeline/panel2.py`, same design | remote embargoes of the last six months carry about three times the coefficient of field embargoes and notices (-0.048 against -0.016 and -0.015) |
+| Rural credit (SICOR), cattle and crops, by municipality and month | amount, by semester | `pipeline/credit.py`, same design | cattle working capital +0.035 (interval +0.001 to +0.069); investment and crop credit indistinguishable from zero |
+| Enforcement, credit and permits together | amount, next six months by municipality | `pipeline/amount.py`, 16 rolling origins from May 2022 | median error of the Amazon total 28.3% with clearing history alone, 23.6% with all three groups, 37.5% for the same months a year before; each group alone moves it by one to three points, inside the noise of 16 origins |
 
 ## How to propose an input
 
