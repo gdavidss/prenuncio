@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" data-story-version="2">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -19,6 +19,18 @@
 <meta property="og:image:height" content="630">
 <meta property="og:image:alt" content="Prenúncio. The Amazon drawn in forest green, with the cells most likely to be cleared in red.">
 <meta name="twitter:card" content="summary_large_image">
+<script>
+// The opening story plays on a first visit to the bare address. A link with a fragment goes straight to the
+// tool, and so does ?story=0; ?story=1 plays it again. Decided here, before the first paint, so the tool is
+// never flashed whole and then taken apart: data-story is on, and data-has, the list of the pieces of the
+// interface the story has brought in so far, is empty. The version is part of the key: a rewritten story is
+// shown once more.
+(function () {
+  var root = document.documentElement, q = new URLSearchParams(location.search).get("story"), seen = null;
+  try { seen = localStorage.getItem("story"); } catch (e) {}
+  if (q === "1" || (q !== "0" && location.hash.length < 2 && seen !== root.dataset.storyVersion)) root.dataset.story = root.dataset.has = "";
+})();
+</script>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -26,62 +38,97 @@
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
+<header id="top">
+  <div class="brand"><svg viewBox="0 0 20 20" aria-hidden="true"><path class="f" d="M0 0h20v9.5L9.5 20H0z"/><path class="c" d="M20 13v7h-7z"/></svg>Prenúncio</div>
+  <nav id="nav">
+    <button id="story-btn"></button>
+    <button id="about-btn"></button>
+    <button id="api-btn">API</button>
+    <button id="lang-btn"></button>
+  </nav>
+  <button id="skip-btn"></button>
+  <button id="menu-btn" aria-expanded="false" aria-controls="nav"><svg viewBox="0 0 18 14" aria-hidden="true"><path d="M1 2h16M1 7h16M1 12h16"/></svg></button>
+</header>
+
 <main id="app">
-  <section id="col">
-    <header id="top">
-      <div class="brand"><svg viewBox="0 0 20 20" aria-hidden="true"><path class="f" d="M0 0h20v9.5L9.5 20H0z"/><path class="c" d="M20 13v7h-7z"/></svg>Prenúncio</div>
-      <nav>
-        <button id="about-btn"></button>
-        <button id="api-btn">API</button>
-        <button id="lang-btn"></button>
-      </nav>
-    </header>
-    <div id="hazard" role="group"></div>
-
-    <div id="lead">
-      <div id="level"></div>
-      <p id="scope"></p>
-      <h1 id="say" aria-live="polite"></h1>
-      <p id="sub"></p>
-    </div>
-
-    <div id="body">
-      <div id="bar">
-        <div id="scale" role="group"></div>
-        <div id="shape" role="group"></div>
-        <div id="ahead" role="group"></div>
-        <div id="step"><button data-d="-1">‹</button><span></span><button data-d="1">›</button></div>
-      </div>
-      <div id="chart"></div>
-      <p id="hint"></p>
-      <div id="signs"></div>
-    </div>
-    <div id="list" hidden>
-      <p id="list-say"></p>
-      <p id="list-key"></p>
-      <ol id="list-rows"></ol>
-    </div>
+  <!-- the map is the page. With the timeline on the stage it is a small picture of itself in the lower right corner. -->
+  <section id="mapbox" class="box" data-as="stage">
+    <div id="mapin" class="in"><div id="map"></div></div>
+    <button id="map-front" class="front"><svg viewBox="0 0 14 14" aria-hidden="true"><path d="M12 12L3 3M3 9V3h6"/></svg></button>
   </section>
 
-  <section id="stage">
-    <div id="map"></div>
+  <!-- what the map shows and how to read it -->
+  <div id="mappanel">
     <div id="mapctl">
       <div id="modes" role="group"></div>
       <button id="rank-btn"></button>
       <div id="kinds" role="group"></div>
     </div>
     <div id="foot">
-      <p id="share"></p>
       <p id="legend"></p>
+      <p id="share"></p>
     </div>
-    <p id="credit" hidden></p>
-  </section>
+  </div>
+  <p id="credit" hidden></p>
 
-  <div id="views" role="group"></div>
+  <!-- the ranked list: where to look first, and why -->
+  <aside id="list" hidden>
+    <div id="list-bar"><button id="list-grab"><span id="list-title"></span></button><button id="list-close" class="x"></button></div>
+    <div id="list-in">
+      <p id="list-say"></p>
+      <p id="list-key"></p>
+      <ol id="list-rows"></ol>
+    </div>
+  </aside>
+
+  <!-- the bulletin and its timeline: which hazard, how bad, what to expect, month by month or year by year -->
+  <section id="chartbox" class="box" data-as="dock">
+    <div id="chartin" class="in">
+      <button id="sheet-grab" aria-hidden="true" tabindex="-1"></button>
+      <div id="hazrow">
+        <div id="hazard" role="group"></div>
+        <button id="chart-front" class="front"><svg class="out" viewBox="0 0 14 14" aria-hidden="true"><path d="M2 12L11 3M5 3h6v6"/></svg><svg class="shut" viewBox="0 0 14 14" aria-hidden="true"><path d="M2 2l10 10M12 2L2 12"/></svg></button>
+      </div>
+      <div id="lead">
+        <div id="level"></div>
+        <p id="scope"></p>
+        <h1 id="say" aria-live="polite"></h1>
+        <p id="sub"></p>
+      </div>
+      <div id="body">
+        <div id="bar">
+          <div id="scale" role="group"></div>
+          <div id="shape" role="group"></div>
+          <div id="ahead" role="group"></div>
+          <div id="step"><button data-d="-1">‹</button><span></span><button data-d="1">›</button></div>
+        </div>
+        <div id="chart"></div>
+        <div id="under">
+          <p id="hint"></p>
+          <div id="signs"></div>
+        </div>
+      </div>
+    </div>
+  </section>
 </main>
 
+<!-- the opening story: a caption, one line at a time, while the interface is put together around the map -->
+<section id="story" hidden>
+  <div id="story-text">
+    <p id="story-line" aria-live="polite"></p>
+    <p id="story-note"></p>
+    <div id="story-extra"></div>
+  </div>
+  <div id="story-nav">
+    <button id="story-next"></button>
+    <ol id="story-marks" aria-hidden="true"></ol>
+    <button id="story-back"></button>
+  </div>
+</section>
+
+<!-- About: the model, how it is checked, the open board. A panel beside the map. -->
 <dialog id="about">
-  <button id="about-close"></button>
+  <div id="about-bar"><button id="about-close" class="x"></button></div>
   <div id="about-body"></div>
 </dialog>
 
