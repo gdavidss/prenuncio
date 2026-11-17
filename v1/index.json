@@ -1,0 +1,75 @@
+{
+ "name": "Prenúncio API",
+ "version": 1,
+ "built": "2026-11-16",
+ "base": "https://prenuncio.com/api/v1",
+ "mirror": "https://raw.githubusercontent.com/gdavidss/prenuncio/api/v1",
+ "mirror_note": "The same files on GitHub. Use it if prenuncio.com answers 403 with a browser check, which its host does to some clients that are not browsers.",
+ "instructions": "https://prenuncio.com/api/v1/llms.txt",
+ "what": "Forecast of deforestation in the Brazilian Amazon: for every 500 m forest cell, the chance it loses at least one hectare in the PRODES year 2027 (August 2026 to July 2027), with sums by municipality, state, Indigenous land and conservation unit.",
+ "access": "Static JSON over HTTPS. No key, no rate limit beyond the host's, CORS open. GET only.",
+ "licence": "CC BY-SA 4.0 for the data (derived from INPE PRODES and DETER); code MIT. Credit INPE and Prenúncio.",
+ "source": "https://github.com/gdavidss/prenuncio",
+ "endpoints": {
+  "states.json": {
+   "url": "https://prenuncio.com/api/v1/states.json",
+   "about": "The nine states, full detail each."
+  },
+  "municipalities.json": {
+   "url": "https://prenuncio.com/api/v1/municipalities.json",
+   "about": "Every municipality with forest, one summary row each. Full detail in municipality/<id>.json."
+  },
+  "indigenous-lands.json": {
+   "url": "https://prenuncio.com/api/v1/indigenous-lands.json",
+   "about": "Indigenous lands, full detail each."
+  },
+  "conservation-units.json": {
+   "url": "https://prenuncio.com/api/v1/conservation-units.json",
+   "about": "Conservation units, full detail each."
+  },
+  "amazon.json": {
+   "url": "https://prenuncio.com/api/v1/amazon.json",
+   "about": "The whole Amazon: the 2027 forecast, the distribution of cell chances, yearly and monthly history."
+  },
+  "monthly-forecast.json": {
+   "url": "https://prenuncio.com/api/v1/monthly-forecast.json",
+   "about": "km2 per month for the next 12 months, by hazard, for the Amazon and each state, with ranges and the backtest of the model chosen. Fire has no usable forecast (see backtest)."
+  },
+  "calibration.json": {
+   "url": "https://prenuncio.com/api/v1/calibration.json",
+   "about": "How the cell chances were checked: for 2024 to 2026, the chance given against the share of cells that lost a hectare."
+  },
+  "priority.json": {
+   "url": "https://prenuncio.com/api/v1/priority.json",
+   "about": "The 500 blocks of 5 km ranked highest for 2027, with centre, municipality, land type and the replay of the same ranking on past years. Also priority.csv."
+  },
+  "enforcement-effect.json": {
+   "url": "https://prenuncio.com/api/v1/enforcement-effect.json",
+   "about": "Clearing observed against clearing implied had IBAMA enforcement stayed at its 2021 to 2022 level, by semester, with the action series. A floor, not a causal estimate."
+  },
+  "permits.json": {
+   "url": "https://prenuncio.com/api/v1/permits.json",
+   "about": "Clearing permits (SINAFLOR authorisations of vegetation suppression, IBAMA open data) inside the grid: dates, point, hectares, purpose, municipality. No holder names or tax numbers."
+  },
+  "benchmark.json": {
+   "url": "https://prenuncio.com/api/v1/benchmark.json",
+   "about": "The open benchmark's leaderboard."
+  },
+  "cells/grid.json": {
+   "url": "https://prenuncio.com/api/v1/cells/grid.json",
+   "about": "The 500 m grid and how to read a cell's chance: whole-basin 8-bit PNGs per year, and 2027 cut into small binary tiles."
+  },
+  "municipality/{id}.json": {
+   "url": "https://prenuncio.com/api/v1/municipality/{id}.json",
+   "about": "Full detail for one municipality by IBGE code (7 digits): yearly clearing since 2008, past and current forecasts, 36 months of alerts, enforcement and rural credit by year, clearing permits, priority blocks, cell chance counts, GeoJSON outline."
+  },
+  "cells/2027/{r}_{c}.bin": {
+   "url": "https://prenuncio.com/api/v1/cells/2027/{r}_{c}.bin",
+   "about": "One tile of cell chances, see cells/grid.json."
+  },
+  "priority.csv": {
+   "url": "https://prenuncio.com/api/v1/priority.csv",
+   "about": "The priority blocks as CSV."
+  }
+ }
+}
