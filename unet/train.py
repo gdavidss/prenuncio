@@ -60,10 +60,10 @@ CTX = "UNET_CTX" in os.environ  # three wide-context planes: clearing density ov
 TB = np.load(DATA / "tb.npy") if "UNET_TMF" in os.environ else None
 ram_cut = lambda a, yy, xx: torch.from_numpy(a[yy.cpu().numpy(), xx.cpu().numpy()]).to(dev)  # tiles of an array held in RAM
 # clearing permits valid on the forecast date (permits100.py): two bits per year from 2020. Kept in RAM.
-PB = np.load(DATA / "pb.npy") if "UNET_ASV" in os.environ else None
+ASV = np.load(DATA / "pb.npy") if "UNET_ASV" in os.environ else None  # not PB: that is the forecast batch size
 # input planes by group, in the order channels() and batch() lay them out
 GROUPS = [("base", 12)] + ([("hb", 4)] if HB is not None else []) + ([("gb", 5 + GB4)] if GB is not None else []) + \
-         ([("db", 4)] if DB is not None else []) + ([("tb", 5)] if TB is not None else []) + ([("pb", 3)] if PB is not None else []) + ([("ctx", 3)] if CTX else []) + ([("emb", 129)] if EMB else [])
+         ([("db", 4)] if DB is not None else []) + ([("tb", 5)] if TB is not None else []) + ([("pb", 3)] if ASV is not None else []) + ([("ctx", 3)] if CTX else []) + ([("emb", 129)] if EMB else [])
 CIN = sum(n for _, n in GROUPS)
 FARW = float(os.environ.get("UNET_FARW", 0))  # extra loss weight on forest with no clearing of the last three years within 1.5 km
 
@@ -190,7 +190,7 @@ def batch(draw, last_target, recent=0.0):
     db = aug(ram_cut(DB, yy, xx)) if DB is not None else None
     emb = aug(aef_planes(y0, x0, tt, TILE)) if EMB else None
     tb = aug(ram_cut(TB, yy, xx)) if TB is not None else None
-    pb = aug(ram_cut(PB, yy, xx)) if PB is not None else None
+    pb = aug(ram_cut(ASV, yy, xx)) if ASV is not None else None
     tt = tt.to(torch.uint8)[:, None, None]
     x, forest = channels(c, l, tn, tt, hb, gb, db, tb, pb)
     if EMB:
@@ -221,7 +221,7 @@ def predict(net, year, out):
                                  HB[yy, xx] * inside if HB is not None else None, GB[yy, xx] * inside if GB is not None else None,
                                  ram_cut(DB, yy, xx) * inside if DB is not None else None,
                                  ram_cut(TB, yy, xx) * inside if TB is not None else None,
-                                 ram_cut(PB, yy, xx) * inside if PB is not None else None)
+                                 ram_cut(ASV, yy, xx) * inside if ASV is not None else None)
             if EMB:
                 x = torch.cat([x, aef_planes(torch.full_like(x0, y - m), x0 - m, tt.flatten().expand(len(x0)), core + 2 * m)], 1)
             def run(half):
