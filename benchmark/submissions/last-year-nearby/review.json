@@ -1,0 +1,9 @@
+{
+ "status": "re-scored",
+ "by": "maintainers",
+ "date": "2026-11-17",
+ "note": "The maintainers' own reference row. The maps were downloaded, their hashes matched and benchmark/score.py run on them. Nobody outside the project has reproduced it yet.",
+ "live": {
+  "2027": "2026-11-17"
+ }
+}

@@ -1,6 +1,6 @@
 # Prenúncio results, first version
 
-14 November 2026. Everything here comes from runs on real INPE data, forecast forward in time, never fitted and scored on the same year. The numbers are reproducible with the commands in the README.
+14 November 2026. Everything here comes from runs on real INPE data, forecast forward in time, never fitted and scored on the same year. The numbers are reproducible with the commands in [PIPELINE.md](PIPELINE.md). The scores of the published model on the open benchmark are in the [leaderboard](../benchmark/LEADERBOARD.md).
 
 ## How accuracy is measured
 
@@ -12,7 +12,7 @@ The test is rolling origin. To score 2022 the model is trained only on outcomes 
 
 ## Where clearing falls, one year ahead
 
-The published forecast is a blend of two trained models. One is gradient boosted trees on a 500 m grid. The other is a U-Net that reads 25 km tiles at 100 m. Both see the clearing history plus four finer records of what the satellites saw: Hansen's 30 m forest loss, the GLAD Sentinel-2 alerts at 10 m (from 2020), the JRC Tropical Moist Forest record of first disturbance at 30 m, and Google's AlphaEarth satellite embeddings (from 2018). The trees also read the clearing permits valid on the forecast date. The U-Net forecast for each year comes from a network that never saw that year or any later one. Figures are the share of the year's clearing inside the top 5% of forest cells.
+The published model, prenuncio-3, is one model built as an ensemble of two parts. One is gradient boosted trees on a 500 m grid. The other is a U-Net that reads 25 km tiles at 100 m. Both see the clearing history plus four finer records of what the satellites saw: Hansen's 30 m forest loss, the GLAD Sentinel-2 alerts at 10 m (from 2020), the JRC Tropical Moist Forest record of first disturbance at 30 m, and Google's AlphaEarth satellite embeddings (from 2018). The trees also read the clearing permits valid on the forecast date. The U-Net forecast for each year comes from a network that never saw that year or any later one. Figures are the share of the year's clearing inside the top 5% of forest cells.
 
 | Test year | Published blend, 500 m | Trees alone | U-Net alone | Blend as painted on the site, 1 km | First version, 1 km | Best naive map |
 |---|---|---|---|---|---|---|

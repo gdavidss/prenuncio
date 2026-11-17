@@ -4,7 +4,7 @@ The forecast gives every forest cell a chance of being cleared. What moves that 
 
 ## Tested
 
-Scores are cap5 (share of the year's clearing in the 5% of cells ranked highest), means of 2022 to 2025, from `docs/BENCH.md`.
+Scores are cap5 (share of the year's clearing in the 5% of cells ranked highest), means of 2022 to 2025, from the lab notebook, [LAB.md](LAB.md).
 
 | Input | Where it enters | Test | Result |
 |---|---|---|---|
@@ -21,7 +21,7 @@ Scores are cap5 (share of the year's clearing in the 5% of cells ranked highest)
 | IBAMA notices and embargoed area per km2 alerted, by municipality | amount, by semester | `pipeline/panel.py`, fixed effects by municipality and semester | followed by 4% to 9% less clearing; an association, biased toward zero because inspectors go where clearing is |
 | State-level trend, notices, embargoes, fire | yearly total | fourteen combinations over 2014 to 2025 | none beats repeating last year (17%) |
 | Clearing permits (SINAFLOR ASV), valid on the forecast date | screen, `pipeline/permits.py` | cells inside the authorised area, forecast against outcome | the forecast expected 357 to 574 of those cells to lose a hectare each year and 1,061 to 1,454 did |
-| Clearing permits, as seven features | trees | lab, against the same trees without them | +1.3 points (71.5% to 72.8%), better in all four years; production run under way |
+| Clearing permits, as seven features | trees | lab, against the same trees without them | +1.3 points (71.5% to 72.8%), better in all four years; adopted in prenuncio-3 |
 | Embargoes split by kind: remote, collective, field | amount, by semester | `pipeline/panel2.py`, same design | remote embargoes of the last six months carry about three times the coefficient of field embargoes and notices (-0.048 against -0.016 and -0.015) |
 | Rural credit (SICOR), cattle and crops, by municipality and month | amount, by semester | `pipeline/credit.py`, same design | cattle working capital +0.035 (interval +0.001 to +0.069); investment and crop credit indistinguishable from zero |
 | Enforcement, credit and permits together | amount, next six months by municipality | `pipeline/amount.py`, 16 rolling origins from May 2022 | median error of the Amazon total 28.3% with clearing history alone, 23.6% with all three groups, 37.5% for the same months a year before; each group alone moves it by one to three points, inside the noise of 16 origins |
@@ -36,13 +36,9 @@ Scores are cap5 (share of the year's clearing in the 5% of cells ranked highest)
 
 ## Candidates, screened on 15 November 2026
 
-The notes below screen inputs that are not satellite products: regulation and enforcement, credit, markets, land registries. "Verified" means the request was made and the response seen that day. Effect sizes marked (memory) were not re-checked against the paper.
+The notes below screen inputs that are not satellite products: regulation and enforcement, credit, markets, land registries. All requests were made on 15 November 2026 with curl, anonymous and without keys. "Verified" means the request was made and the response seen that day. "Unverified" means the host refused, timed out or had no file. Effect sizes marked (memory) were not re-checked and should be confirmed against the paper before being quoted. The forecast date convention is 31 July of year Y.
 
-All requests below were made on 2026-11-15 with curl, anonymous and without keys. "Verified" means I saw the response myself. "Unverified" means the host refused, timed out or I found no file. The forecast date convention is 31 July of year Y.
-
-These hosts failed from here, so everything on them is unverified. `app.anm.gov.br` reset the connection, `certificacao.incra.gov.br` and `acervofundiario.incra.gov.br` did not resolve, `servicos.dnit.gov.br/dnitgeo` and `monitoramento.sema.mt.gov.br` timed out, `www.fundoamazonia.gov.br` and `dadosabertos.bndes.gov.br` refused the connection. They may be geoblocked outside Brazil and are worth retrying from a Brazilian IP.
-
-Effect sizes marked (memory) were not re-checked and should be confirmed against the paper before being quoted.
+These hosts failed that day, so everything on them is unverified. `app.anm.gov.br` reset the connection, `certificacao.incra.gov.br` and `acervofundiario.incra.gov.br` did not resolve, `servicos.dnit.gov.br/dnitgeo` and `monitoramento.sema.mt.gov.br` timed out, `www.fundoamazonia.gov.br` and `dadosabertos.bndes.gov.br` refused the connection. They may be geoblocked outside Brazil and are worth retrying from a Brazilian IP.
 
 ---
 

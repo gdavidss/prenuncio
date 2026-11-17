@@ -1,16 +1,19 @@
-# Prenúncio baseline: boosted trees blended with a U-Net
+# prenuncio-3
 
-This is the forecast shown on prenuncio.com since 16 November 2026, submitted by the maintainers as the first row of the leaderboard. It replaces two earlier baselines whose maps remain in the releases `baseline-1` (15 November, 72.5% on cap5) and `baseline-2` (16 November, before clearing permits, 74.5%). `docs/RESULTS.md` and `docs/BENCH.md` hold the longer account.
+prenuncio-3 is one model, built as an ensemble of gradient boosted trees and a convolutional network whose forecasts are blended into one map. It is the forecast shown on [prenuncio.com](https://prenuncio.com) since 16 November 2026, and it supersedes [prenuncio-2](../prenuncio-2/REPORT.md) and [prenuncio-1](../prenuncio-1/REPORT.md).
 
-The scores of every year are in [scores.json](scores.json) and in the [leaderboard](../../LEADERBOARD.md). `benchmark/score.py` computed them over every candidate cell. The project's lab scores the same maps on a fixed quarter of the cells and lands within a point of cap5 in every year.
+- Its scores are in [scores.json](scores.json), computed by `benchmark/score.py` over every candidate cell, and on the [leaderboard](../../LEADERBOARD.md).
+- Its code is at [commit bfead81](https://github.com/gdavidss/prenuncio/tree/bfead815f2c8b41515230c46d66dd9f2d2204519).
+- Its forecast maps for 2022 to 2027 are in the [release baseline-3](https://github.com/gdavidss/prenuncio/releases/tag/baseline-3).
+- The longer account is in [docs/RESULTS.md](../../../docs/RESULTS.md) and in the lab notebook, [docs/LAB.md](../../../docs/LAB.md).
 
 ## Method
 
-Two models forecast the same thing, and the published map is their blend.
+The model has two parts that forecast the same thing, and its output is their blend. The same procedure produces the map of every year.
 
-The first is gradient boosted trees (LightGBM, Tweedie loss with power 1.1, 400 rounds, 127 leaves, three fits averaged) on the 500 m grid. Each row is one forest cell on one forecast date, and the target is the share of the cell cleared in the following PRODES year. The inputs are the clearing history of the cell and of its neighbourhood at 3, 9, 25 and 75 km, distances to recent clearing and to the forest edge, DETER alerts, Hansen forest loss, GLAD Sentinel-2 alerts over five windows, the JRC Tropical Moist Forest first-disturbance year, clearing permits valid on the forecast date, AlphaEarth embeddings, fire detections, IBAMA records, tenure and location. To forecast year T the trees are fitted on target years 2015 to T-1. `pipeline/model.py` builds the features and fits.
+The first part is gradient boosted trees (LightGBM, Tweedie loss with power 1.1, 400 rounds, 127 leaves, three fits averaged) on the 500 m grid. Each row is one forest cell on one forecast date, and the target is the share of the cell cleared in the following PRODES year. The inputs are the clearing history of the cell and of its neighbourhood at 3, 9, 25 and 75 km, distances to recent clearing and to the forest edge, DETER alerts, Hansen forest loss, GLAD Sentinel-2 alerts over five windows, the JRC Tropical Moist Forest first-disturbance year, clearing permits valid on the forecast date, AlphaEarth embeddings, fire detections, IBAMA records, tenure and location. To forecast year T the trees are fitted on target years 2015 to T-1. `pipeline/model.py` builds the features and fits.
 
-The second is a U-Net that reads 25 km tiles at 100 m: the year each cell was cleared, land classes, tenure, Hansen, GLAD and JRC disturbance bit planes, and the embeddings repeated from 500 m. It predicts the cleared share of every 500 m cell. One network is trained on targets up to the year before the first test year, then fine-tuned with one more year of outcomes before each later forecast, so the network that forecasts year T has never seen T or any later year. `unet/train.py roll` does this.
+The second part is a U-Net that reads 25 km tiles at 100 m: the year each cell was cleared, land classes, tenure, Hansen, GLAD and JRC disturbance bit planes, and the embeddings repeated from 500 m. It predicts the cleared share of every 500 m cell. One network is trained on targets up to the year before the first test year, then fine-tuned with one more year of outcomes before each later forecast, so the network that forecasts year T has never seen T or any later year. `unet/train.py roll` does this.
 
 The blend is a geometric mean of the two expected areas with equal weights (`pipeline/blendmaps.py`).
 
@@ -35,7 +38,7 @@ The 2027 forecast uses the same code with inputs cut at 31 July 2026, and INPE's
 
 Every feature is a function of the forecast date, and the code that builds a year's table takes that date as its only time argument (`features` in `pipeline/model.py`, `batch` in `unet/train.py`). The trees for year T are fitted on tables of earlier target years only. The U-Net rule is described above.
 
-What we chose by looking at 2019 to 2025: the tree settings, the inputs kept after ablation, the U-Net's width and input planes, and the blend weight (equal weights did best among 0.5, 0.65 and 0.8 on the U-Net). These choices are fitted to the benchmark years. 2026 is the holdout. It has now been scored for five blends on the way here, the first baseline included; none was chosen by it, and it should no longer be read as untouched. The 2027 forecast is registered in the live track.
+What we chose by looking at 2019 to 2025: the tree settings, the inputs kept after ablation, the U-Net's width and input planes, and the blend weight (equal weights did best among 0.5, 0.65 and 0.8 on the U-Net). These choices are fitted to the benchmark years. 2026 is the holdout. It has now been scored for five blends on the way here, prenuncio-1 included; none was chosen by it, and it should no longer be read as untouched. The 2027 forecast is registered in the live track.
 
 Soft spots we know of:
 
@@ -48,7 +51,7 @@ Soft spots we know of:
 
 ## What was tried and failed
 
-Numbers are means of cap5 over 2022 to 2025 on the lab's quarter sample, from `docs/BENCH.md`, against a tree baseline of 69.5%.
+Numbers are means of cap5 over 2022 to 2025 from the lab notebook, `docs/LAB.md`, which scores a fixed quarter of the cells and lands within a point of the benchmark's cap5 in every year. The tree baseline there is 69.5%.
 
 - Public-forest tenure from the CNFP registry: 69.4%. Nothing for placement.
 - Older-clearing lags: 69.4%. Recent years weighted up: 69.3%. Training on 2017 onward only: 69.3%.
@@ -65,11 +68,11 @@ Numbers are means of cap5 over 2022 to 2025 on the lab's quarter sample, from `d
 - Correcting a year's forecast with the previous year's errors by distance, forest share, rank and state: 0.1 points, with the sign changing from year to year.
 - Re-issuing the forecast with the DETER alerts of the season's first three months: two points, all of it from clearing already detected.
 
-What helped: the 500 m grid, Hansen (removing it costs 1.5 points), GLAD (2.2 points), the embeddings (1.5 points in the trees), the JRC disturbance record (1.2 points in the trees, 2.0 in the U-Net), clearing permits (1.3 points in the trees on the lab, 0.4 to 1.0 in the production trees from 2022 on), and the blend. `docs/BENCH.md` has the anatomy of what is still missed.
+What helped: the 500 m grid, Hansen (removing it costs 1.5 points), GLAD (2.2 points), the embeddings (1.5 points in the trees), the JRC disturbance record (1.2 points in the trees, 2.0 in the U-Net), clearing permits (1.3 points in the trees on the lab, 0.4 to 1.0 in the production trees from 2022 on), and the blend. `docs/LAB.md` has the anatomy of what is still missed.
 
 ## How to reproduce
 
-With Python 3.13 and the packages named in the README, on a machine with a GPU for the U-Net steps.
+With Python 3.13 and the packages named in [docs/PIPELINE.md](../../../docs/PIPELINE.md), on a machine with a GPU for the U-Net steps. The trained weights are not published yet, so reproducing means training.
 
 Inputs on the 500 m grid:
 
@@ -118,8 +121,8 @@ One cloud machine with 16 vCPU, 64 GB of RAM and one NVIDIA L4 GPU (24 GB).
 
 The published trees took about 4 hours on its CPUs. The published U-Net took about 5 GPU hours: the first stage, two yearly stages in float16, and six in bfloat16. That is about 12 machine hours and 14 US dollars for the published model, counting the tree run that was repeated with permits. Three U-Net runs lost to the float16 overflow cost another 4 hours.
 
-All the experimentation behind `docs/BENCH.md` so far comes to roughly 44 machine hours, about 50 US dollars.
+All the experimentation behind `docs/LAB.md` so far comes to roughly 44 machine hours, about 50 US dollars.
 
 ## Agent disclosure
 
-AI coding agents (Claude Code, from Anthropic) wrote most of the pipeline, ran the experiments recorded in `docs/BENCH.md` and drafted this report. The maintainer set the goals, decided what to try and what to publish, and read the results. The scores in this report come from `benchmark/score.py` run on the published maps.
+AI coding agents (Claude Code, from Anthropic) wrote most of the pipeline, ran the experiments recorded in `docs/LAB.md` and drafted this report. The maintainer set the goals, decided what to try and what to publish, and read the results. The scores in this report come from `benchmark/score.py` run on the published maps.

@@ -1,4 +1,4 @@
-# TODO title of the submission
+# TODO the model's name
 
 <!-- Keep every heading below. The check fails on a missing or empty section and on any TODO left in.
      Write for someone who wants to repeat your work or find the flaw in it. Short is fine. -->
@@ -6,7 +6,8 @@
 ## Method
 
 <!-- What the model is, what it predicts, how it is fitted, and how one year's map is produced.
-     Which years it was fitted on for each forecast year. -->
+     Which years it was fitted on for each forecast year. One model makes every year's map. If it is an
+     ensemble, say how its parts become one map. Say so if anything differed between years. -->
 
 TODO
 
@@ -33,7 +34,8 @@ TODO
 
 ## How to reproduce
 
-<!-- The exact commands from a clean checkout of the stated commit to the maps, with expected run time. -->
+<!-- The exact commands from a clean checkout of the stated commit to the maps, with expected run time.
+     Link the trained weights if you publish them, or say that you do not. -->
 
 TODO
 

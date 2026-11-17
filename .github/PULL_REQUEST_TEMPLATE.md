@@ -8,6 +8,7 @@ Folder: `benchmark/submissions/<name>`
 - [ ] The maps are at public https links, and `meta.json` holds the sha256 of each
 - [ ] `scores.json` was written by `benchmark/score.py` (through `submission.py fill`) and not edited
 - [ ] The code is public at the commit in `meta.json`, under an open-source licence
+- [ ] One model made every year's map by the same procedure (an ensemble packaged as one model counts)
 - [ ] A forecast of year T uses only information up to 31 July of T-1, and the model for T was fitted only on outcomes before T
 - [ ] Every input is public and dated, and `REPORT.md` lists the last date used
 - [ ] `REPORT.md` says what was chosen by looking at the 2022 to 2025 scores, and what was tried and failed

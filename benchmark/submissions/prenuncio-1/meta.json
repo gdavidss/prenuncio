@@ -1,0 +1,126 @@
+{
+ "name": "prenuncio-1",
+ "kind": "model",
+ "summary": "first public version, before the JRC disturbance record",
+ "superseded_by": "prenuncio-3",
+ "authors": [
+  "Prenúncio"
+ ],
+ "contact": "https://github.com/gdavidss/prenuncio/issues",
+ "date": "2026-11-15",
+ "benchmark_version": "1.0",
+ "code": {
+  "url": "https://github.com/gdavidss/prenuncio",
+  "commit": "bb3f7f38e67442a2c3736ec73000a42faf3d58e3",
+  "license": "MIT"
+ },
+ "predictions": [
+  {
+   "year": 2022,
+   "url": "https://github.com/gdavidss/prenuncio/releases/download/baseline-1/2022.npz",
+   "sha256": "5535e9258a66644d39d6f69b1c51b01b30c87c7ac5654cc817ab4c1997add2e7",
+   "bytes": 17177828
+  },
+  {
+   "year": 2023,
+   "url": "https://github.com/gdavidss/prenuncio/releases/download/baseline-1/2023.npz",
+   "sha256": "bc203b3f0b1795d08a0590fc59541d2c0febfddb1f2738bc571122435390b01b",
+   "bytes": 17551637
+  },
+  {
+   "year": 2024,
+   "url": "https://github.com/gdavidss/prenuncio/releases/download/baseline-1/2024.npz",
+   "sha256": "0a5e8d90e1100ce00f5500ca8a1ccc240bdddb51aeb9e9f2e368c3ad14555165",
+   "bytes": 17786980
+  },
+  {
+   "year": 2025,
+   "url": "https://github.com/gdavidss/prenuncio/releases/download/baseline-1/2025.npz",
+   "sha256": "71e5c2aa509584defa88dbf3dc310dd0bc2dec220d97474774e581498244086b",
+   "bytes": 18291284
+  },
+  {
+   "year": 2026,
+   "url": "https://github.com/gdavidss/prenuncio/releases/download/baseline-1/2026.npz",
+   "sha256": "c2dd60036259cd19ae26b76349204a1849a25d6bba5670f61985f4e239cb20bf",
+   "bytes": 18529765
+  },
+  {
+   "year": 2027,
+   "url": "https://github.com/gdavidss/prenuncio/releases/download/baseline-1/2027.npz",
+   "sha256": "9a8902961b0ed6e66e0b481b6fb3239925f86aca62d66824fa36d50a40c437d0",
+   "bytes": 17155198,
+   "information_cutoff": "2026-07-31"
+  }
+ ],
+ "data_sources": [
+  {
+   "name": "INPE PRODES raster, Legal Amazon, 2025 release (v20261019)",
+   "url": "https://terrabrasilis.dpi.inpe.br",
+   "dates": "Clearing by PRODES year, 2008 to 2025. A forecast of year T reads years up to T-1.",
+   "license": "CC BY-SA 4.0"
+  },
+  {
+   "name": "INPE PRODES 2026 increments, priority scenes (v20261016)",
+   "url": "https://terrabrasilis.dpi.inpe.br",
+   "dates": "August 2025 to July 2026. Used as the 2026 outcome and as the last year of history for the 2027 forecast.",
+   "license": "CC BY-SA 4.0"
+  },
+  {
+   "name": "INPE DETER-B alerts",
+   "url": "https://terrabrasilis.dpi.inpe.br",
+   "dates": "Daily since August 2016. A forecast of year T reads alerts detected up to 31 July of T-1.",
+   "license": "CC BY-SA 4.0"
+  },
+  {
+   "name": "Hansen Global Forest Change v1.13, loss year",
+   "url": "https://storage.googleapis.com/earthenginepartners-hansen/GFC-2025-v1.13/download.html",
+   "dates": "Calendar years 2001 to 2025. A forecast of year T reads loss up to calendar year T-2.",
+   "license": "CC BY 4.0"
+  },
+  {
+   "name": "GLAD Sentinel-2 forest disturbance alerts, University of Maryland",
+   "url": "https://storage.googleapis.com/earthenginepartners-hansen/S2alert/",
+   "dates": "Alert dates from 2019. A forecast of year T reads alerts up to 31 July of T-1, from T-1 = 2020 on.",
+   "license": "Open, with attribution to the GLAD laboratory, University of Maryland"
+  },
+  {
+   "name": "AlphaEarth Foundations Satellite Embedding, annual, Google and Google DeepMind",
+   "url": "https://source.coop/tge-labs/aef",
+   "dates": "Calendar years 2018 to 2025. A forecast of year T reads the embeddings of calendar years T-2 and T-3.",
+   "license": "CC BY 4.0"
+  },
+  {
+   "name": "INPE Queimadas active fire detections, reference satellite",
+   "url": "https://dataserver-coids.inpe.br/queimadas/queimadas/focos/csv/",
+   "dates": "2003 on. A forecast of year T reads detections up to July of T-1.",
+   "license": "Open data of INPE, with attribution"
+  },
+  {
+   "name": "IBAMA open data: embargoes and flora infraction notices",
+   "url": "https://stibamadadosabertosprd.blob.core.windows.net/dados-abertos/dados/",
+   "dates": "A forecast of year T reads records dated up to July of T-1. The file is today's snapshot of those records.",
+   "license": "Open data of IBAMA, with attribution"
+  },
+  {
+   "name": "Indigenous lands, conservation units, municipalities and states, as distributed by INPE",
+   "url": "https://terrabrasilis.dpi.inpe.br",
+   "dates": "Conservation units enter by creation year. Indigenous lands and boundaries are a current snapshot.",
+   "license": "CC BY-SA 4.0"
+  }
+ ],
+ "compute": {
+  "hardware": "One cloud machine with 16 vCPU, 64 GB of RAM and one NVIDIA L4 GPU (24 GB)",
+  "hours": 9.5,
+  "cost_usd": 11
+ },
+ "agents": {
+  "used": true,
+  "tools": [
+   {
+    "name": "Claude Code (Anthropic), coding agents",
+    "how": "Agents wrote most of the pipeline, ran the experiments in docs/LAB.md and drafted this report. The maintainer set the goals, chose what to try and what to publish, and read the results."
+   }
+  ]
+ }
+}

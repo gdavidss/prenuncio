@@ -23,6 +23,10 @@ LIVE_YEAR = 2027
 YEARS = (2022, 2023, 2024, 2025, 2026, LIVE_YEAR)
 SECTIONS = ("Method", "Inputs and their dates", "How leakage was avoided", "What was tried and failed",
             "How to reproduce", "Compute and cost", "Agent disclosure")
+# A reference row has nothing fitted, and a version its authors have superseded shares the rest with its
+# successor's report, which it must link. Both keep these three sections.
+BRIEF = ("Method", "How to reproduce", "Agent disclosure")
+KINDS = ("model", "reference")
 STATUSES = ("self-reported", "re-scored", "reproduced")
 FLAGS = (None, "disputed", "withdrawn")
 ALLOWED = {".json", ".md", ".png", ".jpg", ".svg"}
@@ -59,9 +63,17 @@ def check(name, root=ROOT):
     text = lambda v: isinstance(v, str) and v.strip() and "TODO" not in v
     if m.get("name") != name:
         say("meta.json `name` must equal the folder name")
-    for k in ("title", "summary", "benchmark_version"):
-        if not text(m.get(k)):
-            say(f"meta.json `{k}` is missing")
+    if not text(m.get("benchmark_version")):
+        say("meta.json `benchmark_version` is missing")
+    if not (text(m.get("summary")) and len(m["summary"]) <= 100 and "\n" not in m["summary"] and "|" not in m["summary"]):
+        say("meta.json `summary` must be one line of at most 100 characters")
+    if m.get("kind", "model") not in KINDS:
+        say(f"meta.json `kind` must be one of {KINDS}")
+    newer = m.get("superseded_by")
+    if newer is not None and (newer == name or not re.fullmatch(r"[a-z0-9][a-z0-9-]{1,48}", str(newer)) or not (Path(root) / newer / "meta.json").exists()):
+        say("meta.json `superseded_by` must name another submission folder")
+    if m.get("weights") and not str(m["weights"]).startswith("https://"):
+        say("meta.json `weights` must be an https link, or be left out")
     if not (isinstance(m.get("authors"), list) and m["authors"] and all(text(a) for a in m["authors"])):
         say("meta.json `authors` must list at least one name")
     if not DATE.match(str(m.get("date", ""))):
@@ -106,9 +118,11 @@ def check(name, root=ROOT):
         body = re.sub(r"<!--.*?-->", "", rep.read_text(), flags=re.S)
         parts = re.split(r"^## +(.+?)\s*$", body, flags=re.M)
         found = {parts[i].strip(): parts[i + 1] for i in range(1, len(parts) - 1, 2)}
-        for s in SECTIONS:
+        for s in (BRIEF if newer or m.get("kind") == "reference" else SECTIONS):
             if len(found.get(s, "").strip()) < 40:
                 say(f"REPORT.md: the section `## {s}` is missing or empty")
+        if newer and f"../{newer}/REPORT.md" not in body:
+            say(f"REPORT.md of a superseded version must link ../{newer}/REPORT.md")
         if "TODO" in body:
             say("REPORT.md still has TODO in it")
 
@@ -140,7 +154,7 @@ def fill(name, folder, url_base):
     has_scored = any(score.find_prediction(folder, y) for y in score.SCORED_YEARS)
     res = score.score_folder(folder) if has_scored else {"benchmark_version": score.VERSION}
     if has_scored:
-        json.dump(res, open(d / "scores.json", "w"), indent=1)
+        (d / "scores.json").write_text(json.dumps(res, indent=1) + "\n")
     preds = []
     for y in YEARS:
         f = score.find_prediction(folder, y)
@@ -151,7 +165,7 @@ def fill(name, folder, url_base):
             p["information_cutoff"] = old.get(y, {}).get("information_cutoff", "TODO")
         preds.append(p)
     m["predictions"], m["benchmark_version"] = preds, res["benchmark_version"]
-    json.dump(m, open(d / "meta.json", "w"), indent=1, ensure_ascii=False)
+    (d / "meta.json").write_text(json.dumps(m, indent=1, ensure_ascii=False) + "\n")
     print(f"wrote {d / 'scores.json'} and the predictions of {d / 'meta.json'}")
 
 
@@ -176,7 +190,7 @@ def rescore(name, write=False, root=ROOT, keep=None):
         return []
     res = score.score_folder(tmp)
     if write:
-        json.dump(res, open(d / "scores.json", "w"), indent=1)
+        (d / "scores.json").write_text(json.dumps(res, indent=1) + "\n")
         print("wrote", d / "scores.json")
         return []
     if mine is None:

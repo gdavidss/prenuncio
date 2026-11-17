@@ -1,0 +1,83 @@
+{
+ "name": "last-year-nearby",
+ "kind": "reference",
+ "summary": "no model, only last year's clearing within 9 km",
+ "authors": [
+  "Prenúncio"
+ ],
+ "contact": "https://github.com/gdavidss/prenuncio/issues",
+ "date": "2026-11-17",
+ "benchmark_version": "1.0",
+ "code": {
+  "url": "https://github.com/gdavidss/prenuncio",
+  "commit": "0f3d250688c8ae8822dd9286b2b4ad5c86ea75de",
+  "license": "MIT"
+ },
+ "predictions": [
+  {
+   "year": 2022,
+   "url": "https://github.com/gdavidss/prenuncio/releases/download/reference-1/2022.npz",
+   "sha256": "5d2957176021033a4055e203caa47ad77cabb0a5483e451103c21ef4785438cc",
+   "bytes": 1703553
+  },
+  {
+   "year": 2023,
+   "url": "https://github.com/gdavidss/prenuncio/releases/download/reference-1/2023.npz",
+   "sha256": "6c58c7dc8b1729447613d68f6c43598a88a740d618c3f05967c913d373aead33",
+   "bytes": 1546078
+  },
+  {
+   "year": 2024,
+   "url": "https://github.com/gdavidss/prenuncio/releases/download/reference-1/2024.npz",
+   "sha256": "8d23a6521e7259895de987f8d0e77176a9f8f20b86ec961200eb700bcdece08b",
+   "bytes": 1322225
+  },
+  {
+   "year": 2025,
+   "url": "https://github.com/gdavidss/prenuncio/releases/download/reference-1/2025.npz",
+   "sha256": "92d3465014214ff14ad5d3814e56ca1dfe9ef11d5060806112fd9e7ea60a1201",
+   "bytes": 1239449
+  },
+  {
+   "year": 2026,
+   "url": "https://github.com/gdavidss/prenuncio/releases/download/reference-1/2026.npz",
+   "sha256": "b01657dac3b13bad541ab8a0d01ff3f0870da6f4501a9a3ca0c524d3f97f6460",
+   "bytes": 931085
+  },
+  {
+   "year": 2027,
+   "url": "https://github.com/gdavidss/prenuncio/releases/download/reference-1/2027.npz",
+   "sha256": "75b18dd9b0175294b504dc55d68aec21065d6cdd4281b985be6e7ebf23506e21",
+   "bytes": 585191,
+   "information_cutoff": "2026-07-31"
+  }
+ ],
+ "data_sources": [
+  {
+   "name": "INPE PRODES raster, Legal Amazon, 2025 release (v20261019)",
+   "url": "https://terrabrasilis.dpi.inpe.br",
+   "dates": "Clearing by PRODES year, 2021 to 2025. A map for year T reads year T-1 only.",
+   "license": "CC BY-SA 4.0"
+  },
+  {
+   "name": "INPE PRODES 2026 increments, priority scenes (v20261016)",
+   "url": "https://terrabrasilis.dpi.inpe.br",
+   "dates": "August 2025 to July 2026. Used as the 2026 outcome and as last year's clearing for the 2027 map.",
+   "license": "CC BY-SA 4.0"
+  }
+ ],
+ "compute": {
+  "hardware": "A laptop, a few seconds per map",
+  "hours": 0,
+  "cost_usd": 0
+ },
+ "agents": {
+  "used": true,
+  "tools": [
+   {
+    "name": "Claude Code (Anthropic), coding agent",
+    "how": "The agent built the maps and wrote the report at the maintainer's request, then rebuilt the maps from the commands in the report and compared them cell for cell."
+   }
+  ]
+ }
+}

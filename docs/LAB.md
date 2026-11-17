@@ -1,6 +1,8 @@
-# The internal benchmark
+# Lab notebook
 
-This is the yardstick every model change is measured against. It lives in `pipeline/lab.py` and runs on the cloud machine, where the cached feature tables are.
+This is our lab notebook. It records every run tried on the way to the published model, with its score, and what the misses are made of. It is a working record, kept in the open. The public benchmark, with its rules and its leaderboard, is in [benchmark/](../benchmark/README.md).
+
+The lab is `pipeline/lab.py`. It scores a model on cached feature tables in minutes, and every model change is measured there first.
 
 ## The task
 
@@ -24,23 +26,23 @@ Scoring uses a fixed random quarter of all forest cells, about 3.5 million per y
 
 cap5 is strict on purpose. A perfect forecast scores 100% on it, and a quarter of each year's clearing opens two kilometres or more from recent clearing, spread over 87% of the forest.
 
-## Leaderboard
+## Runs
 
-Means over 2022 to 2025. Every row is a real run.
+Means over 2022 to 2025, on the lab's quarter sample. Every row is a real run. Three of them are on the public leaderboard under the names in bold.
 
 | Model | cap1 | cap5 | cap10 | auc | front5 |
 |---|---|---|---|---|---|
-| **Published**: tuned trees with the JRC record and clearing permits, blended 50/50 with the U-Net reading the JRC record at 100 m | 37.6% | 75.2% | 88.7% | 0.956 | 80.2% |
+| **prenuncio-3**, the published model. Tuned trees with the JRC record and clearing permits, blended 50/50 with the U-Net reading the JRC record at 100 m | 37.6% | 75.2% | 88.7% | 0.956 | 80.2% |
 | Tuned trees with the JRC record and clearing permits, alone | 35.2% | 73.6% | 88.0% | 0.954 | 78.4% |
-| Published until 16 Nov, 11:00 UTC: tuned trees with the JRC disturbance record, blended 50/50 with the U-Net reading the same record at 100 m | 37.0% | 74.6% | 88.3% | 0.956 | 79.4% |
+| **prenuncio-2**. Tuned trees with the JRC disturbance record, blended 50/50 with the U-Net reading the same record at 100 m | 37.0% | 74.6% | 88.3% | 0.956 | 79.4% |
 | U-Net with embeddings and the JRC disturbance record, alone | 35.5% | 72.9% | 87.2% | 0.951 | 75.5% |
-| Published for a few hours on 16 Nov: tuned trees with the JRC disturbance record, blended 50/50 with the U-Net with embeddings | 35.6% | 73.5% | 87.8% | 0.954 | 78.1% |
+| Tuned trees with the JRC disturbance record, blended 50/50 with the U-Net with embeddings (on the site for a few hours on 16 Nov, never submitted) | 35.6% | 73.5% | 87.8% | 0.954 | 78.1% |
 | Tuned trees with embeddings and the JRC disturbance record, alone | 34.1% | 72.8% | 87.6% | 0.954 | 78.6% |
 | Tuned trees with embeddings (three fits, richer GLAD), blended with the wider U-Net | 35.3% | 73.0% | 87.6% | 0.953 | 79.5% |
-| Published until 15 Nov: production trees with embeddings blended 40/60 with the U-Net with embeddings | 35.1% | 72.6% | 87.2% | 0.953 | 76.7% |
+| **prenuncio-1**. Production trees with embeddings blended 40/60 with the U-Net with embeddings | 35.1% | 72.6% | 87.2% | 0.953 | 76.7% |
 | Trees with satellite embeddings, blended with the wider U-Net | 35.1% | 72.7% | 87.5% | 0.953 | 78.7% |
 | Trees blended with the wider U-Net | 34.4% | 72.3% | 87.1% | 0.953 | 77.7% |
-| Trees blended with the rolling U-Net (published until 15 Nov) | 33.9% | 71.7% | 86.8% | 0.952 | 74.8% |
+| Trees blended with the rolling U-Net (on the site before prenuncio-1) | 33.9% | 71.7% | 86.8% | 0.952 | 74.8% |
 | Wider U-Net alone (1.5 times the channels, longer training) | 33.9% | 71.4% | 86.3% | 0.949 | 73.7% |
 | Rolling U-Net alone (100 m, Hansen and GLAD planes) | 33.2% | 71.0% | 85.9% | 0.948 | 70.4% |
 | Trees with the U-Net forecast as an input (stacking) | 33.1% | 70.9% | 86.2% | 0.953 | 72.6% |
@@ -156,7 +158,7 @@ Of the 500 five-kilometre blocks ranked highest each year, the share that lost a
 
 Reliability follows the base rate. In 2019, 9% of all blocks lost that much; in 2026, under 4%, and the 2026 outcome so far covers INPE's priority scenes only. The top 500 blocks hold about a tenth of each year's clearing.
 
-## What the leaderboard says
+## What the runs say
 
 Tree-side changes are worth half a point at most. The trees are at their limit for these inputs.
 

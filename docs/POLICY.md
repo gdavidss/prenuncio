@@ -1,5 +1,7 @@
 # Amazon deforestation 2023+: what was done, what is known, what can be measured
 
+A study of what the federal government did about Amazon deforestation from 2023 on, what the literature says each action is worth, and which public series could carry it into a forecast. It feeds the search for inputs in [INPUTS.md](INPUTS.md).
+
 Checked 15 Nov 2026. Marks: [V] confirmed by a request made that day against the primary text or file. [S] secondary source only (press, search summary, government slide). [M] from memory, not re-checked. PRODES rates used: 2022 11,594 km2, 2023 9,064, 2024 6,288, 2025 5,796 [M], and the 2026 estimate of 3,335 km2 (about -42%), released 16 Oct 2026 [S; the MMA/INPE slide deck sits behind a login during the electoral blackout, so not confirmed at source].
 
 ## 1. Timeline

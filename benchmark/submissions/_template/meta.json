@@ -1,7 +1,7 @@
 {
- "name": "TODO-folder-name",
- "title": "TODO a short name for the leaderboard row",
- "summary": "TODO one sentence on what the model is",
+ "name": "TODO-folder-name, which is the model's name on the leaderboard",
+ "kind": "model",
+ "summary": "TODO one line on what the model is, at most 100 characters",
  "authors": ["TODO name or handle"],
  "contact": "TODO a GitHub handle or a link, optional",
  "date": "TODO YYYY-MM-DD",
@@ -11,6 +11,7 @@
   "commit": "TODO the commit that produced the maps",
   "license": "TODO for example MIT"
  },
+ "weights": "",
  "predictions": [],
  "data_sources": [
   {
