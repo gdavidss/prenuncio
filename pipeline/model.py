@@ -353,7 +353,7 @@ def train_rows(y, rng, n_neg=300_000):
     return X, target[idx], w[0], names, idx
 
 
-# AZ_TW and AZ_SEEDS carry the two tree settings the lab found worth having (docs/BENCH.md):
+# AZ_TW and AZ_SEEDS carry the two tree settings the lab found worth having (docs/LAB.md):
 # a flatter Tweedie loss (1.1) and the average of three fits
 PARAMS = dict(objective="tweedie", tweedie_variance_power=float(os.environ.get("AZ_TW", 1.3)), learning_rate=0.08, num_leaves=127,
               min_data_in_leaf=200, feature_fraction=0.8, bagging_fraction=0.8, bagging_freq=1,

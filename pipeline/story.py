@@ -35,7 +35,7 @@ out = {
     "check": {"year": 2024, "expected_cells": prob["years"]["2024"]["expected_cells"], "actual_cells": prob["years"]["2024"]["actual_cells"],
               "reliability": prob["years"]["2024"]["reliability"],
               "priority_blocks_that_lost_10ha": prio["replay"]["2024"]["lost_10ha"], "all_blocks_that_lost_10ha": prio["replay"]["2024"]["base_10ha"]},
-    "model": {"what": "two models, blended half and half", "parts": ["gradient boosted trees on a 500 m grid, more than 300 numbers per cell", "a convolutional network (U-Net) reading 25 km tiles at 100 m"],
+    "model": {"name": "prenuncio-3", "what": "one model, an ensemble of boosted trees and a convolutional network", "parts": ["gradient boosted trees on a 500 m grid, more than 300 numbers per cell", "a convolutional network (U-Net) reading 25 km tiles at 100 m"],
               "trained_on": {"first_outcome_year": 2015, "last_outcome_year": 2026, "rule": "the model that forecasts a year has never seen that year or any later one"},
               "inputs": [{"en": "clearing history since 2008 (INPE PRODES)", "pt": "histórico de desmate desde 2008 (INPE PRODES)"},
                          {"en": "daily alerts (INPE DETER)", "pt": "alertas diários (INPE DETER)"},
