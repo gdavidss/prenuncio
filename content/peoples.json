@@ -1,0 +1,2536 @@
+{
+ "mebengokre": {
+  "name": "Mẽbêngôkre (Kayapó)",
+  "aliases": [
+   "Kayapó",
+   "Kaiapó",
+   "Mebengôkre"
+  ],
+  "pt": "Os Mẽbêngôkre, mais conhecidos como Kayapó, vivem em aldeias ao longo dos rios Iriri, Bacajá e Fresco, afluentes do Xingu, no Pará e em Mato Grosso. São 9.762 pessoas (Siasi/Sesai, 2014) e falam uma língua da família Jê. Seu território é quase tão grande quanto a Áustria, e a floresta cobre a maior parte dele.",
+  "en": "The Mẽbêngôkre, better known as the Kayapó, live in villages along the Iriri, Bacajá and Fresco rivers, tributaries of the Xingu, in Pará and Mato Grosso. They number 9,762 (Siasi/Sesai, 2014) and speak a Jê language. Their territory is almost as large as Austria, and forest covers most of it.",
+  "sources": [
+   "https://pib.socioambiental.org/pt/Povo:Mebengôkre_(Kayapó)",
+   "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos"
+  ],
+  "photo": {
+   "file": "img/peoples/mebengokre.jpg",
+   "author": "Edgar Kanaykõ Xakriaba",
+   "license": "CC BY-SA 4.0",
+   "source_url": "https://commons.wikimedia.org/wiki/File:Mulheres_ind%C3%ADgenas_do_povo_Kayap%C3%B3.jpg",
+   "caption_pt": "Mulheres Kayapó em um encontro nacional de povos indígenas, 2021.",
+   "caption_en": "Kayapó women at a national gathering of Indigenous peoples, 2021."
+  },
+  "confidence": "checked"
+ },
+ "kawaiwete": {
+  "name": "Kawaiwete (Kaiabi)",
+  "aliases": [
+   "Kaiabi",
+   "Kayabi"
+  ],
+  "pt": "Os Kawaiwete, também chamados Kaiabi, são 2.734 pessoas (Siasi/Sesai, 2020) em Mato Grosso e falam uma língua Tupi-Guarani. A partir dos anos 1950 suas terras nos rios Arinos, dos Peixes e Teles Pires viraram fazendas, e a maioria foi transferida para o Xingu. São agricultores que cultivam uma enorme diversidade de plantas e trançam peneiras de arumã com desenhos complexos.",
+  "en": "The Kawaiwete, also called Kaiabi, number 2,734 (Siasi/Sesai, 2020) in Mato Grosso and speak a Tupi-Guarani language. From the 1950s their lands on the Arinos, Peixes and Teles Pires rivers were turned into ranches, and most of them were moved to the Xingu. They are farmers who grow a great diversity of plants and weave arumã sieves with intricate patterns.",
+  "sources": [
+   "https://pib.socioambiental.org/pt/Povo:Kawaiwete_(Kaiabi)",
+   "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos"
+  ],
+  "photo": null,
+  "confidence": "checked"
+ },
+ "yudja": {
+  "name": "Yudja (Juruna)",
+  "aliases": [
+   "Yudjá",
+   "Juruna",
+   "Yuruna"
+  ],
+  "pt": "Os Yudja, também conhecidos como Juruna, são um povo do rio Xingu que caça e viaja de canoa. Parte vive no norte do Território Indígena do Xingu, em Mato Grosso, onde são 950 pessoas (Siasi/Sesai, 2020), e parte no médio Xingu, perto de Altamira, no Pará. Falam uma língua da família Juruna e dizem que têm esse nome porque foram criados nesse rio.",
+  "en": "The Yudja, also known as Juruna, are a people of the Xingu river who hunt and travel by canoe. Some live in the north of the Xingu Indigenous Territory in Mato Grosso, where they number 950 (Siasi/Sesai, 2020), and others on the middle Xingu near Altamira, in Pará. They speak a language of the Juruna family and say they carry their name because they were raised on this river.",
+  "sources": [
+   "https://pib.socioambiental.org/pt/Povo:Yudja",
+   "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos"
+  ],
+  "photo": {
+   "file": "img/peoples/yudja.jpg",
+   "author": "Cícero Pedrosa Neto / Amazônia Real",
+   "license": "CC BY 2.0",
+   "source_url": "https://commons.wikimedia.org/wiki/File:AMAZONIA_REAL_ALDEIA_SAO_FRANCISCO_SOUZEL_PEDROSA_NETO-167_(49594691882).jpg",
+   "caption_pt": "Francisco Juruna com a esposa, Socorro, e a filha, Márcia, na varanda de casa, na aldeia São Francisco, 2020.",
+   "caption_en": "Francisco Juruna with his wife, Socorro, and daughter, Márcia, on the porch of their house in the village of São Francisco, 2020."
+  },
+  "confidence": "checked"
+ },
+ "wauja": {
+  "name": "Wauja",
+  "aliases": [
+   "Waurá"
+  ],
+  "pt": "Os Wauja vivem no Território Indígena do Xingu, em Mato Grosso. São 672 pessoas (Siasi/Sesai, 2020) e falam uma língua Aruak. São conhecidos pela cerâmica, pelos desenhos de seus cestos e pelas máscaras rituais.",
+  "en": "The Wauja live in the Xingu Indigenous Territory in Mato Grosso. They number 672 (Siasi/Sesai, 2020) and speak an Arawak language. They are known for their pottery, the designs of their baskets and their ritual masks.",
+  "sources": [
+   "https://pib.socioambiental.org/pt/Povo:Wauja",
+   "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos"
+  ],
+  "photo": null,
+  "confidence": "checked"
+ },
+ "kisedje": {
+  "name": "Kĩsêdjê",
+  "aliases": [
+   "Kisêdjê",
+   "Khisêtjê",
+   "Suyá"
+  ],
+  "pt": "Os Kĩsêdjê são o único povo de língua Jê do Território Indígena do Xingu, em Mato Grosso, e somam 536 pessoas (Siasi/Sesai, 2020). Adotaram muitos costumes dos vizinhos do Alto Xingu sem abrir mão do que os distingue. Seu emblema é um estilo próprio de canto ritual, e cantar e ouvir estão no centro de sua vida.",
+  "en": "The Kĩsêdjê are the only Jê-speaking people in the Xingu Indigenous Territory in Mato Grosso, and number 536 (Siasi/Sesai, 2020). They took up many customs of their Upper Xingu neighbours without giving up what sets them apart. Their emblem is a style of ritual song of their own, and singing and listening are at the centre of their life.",
+  "sources": [
+   "https://pib.socioambiental.org/pt/Povo:Khisêtjê",
+   "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos"
+  ],
+  "photo": null,
+  "confidence": "checked"
+ },
+ "trumai": {
+  "name": "Trumai",
+  "aliases": [
+   "Trumái"
+  ],
+  "pt": "Os Trumai vivem na área central do Território Indígena do Xingu, em Mato Grosso, e são 260 pessoas (Siasi/Sesai, 2020). Foram o último povo a chegar à região dos formadores do Xingu, na primeira metade do século XIX. Sua língua, o trumai, forma uma família própria.",
+  "en": "The Trumai live in the central part of the Xingu Indigenous Territory in Mato Grosso and number 260 (Siasi/Sesai, 2020). They were the last people to arrive at the headwaters of the Xingu, in the first half of the 19th century. Their language, Trumai, is classified in a family of its own.",
+  "sources": [
+   "https://pib.socioambiental.org/pt/Povo:Trumai",
+   "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos"
+  ],
+  "photo": null,
+  "confidence": "checked"
+ },
+ "yawalapiti": {
+  "name": "Yawalapiti",
+  "aliases": [
+   "Yawalapití"
+  ],
+  "pt": "Os Yawalapiti vivem no sul do Território Indígena do Xingu, o Alto Xingu, em Mato Grosso. São 309 pessoas (Siasi/Sesai, 2020) e falam uma língua Aruak. Com vizinhos que falam outras línguas, compartilham um modo de vida ligado por trocas, casamentos e cerimônias entre aldeias.",
+  "en": "The Yawalapiti live in the south of the Xingu Indigenous Territory, the Upper Xingu, in Mato Grosso. They number 309 (Siasi/Sesai, 2020) and speak an Arawak language. With neighbours who speak other languages they share a way of life tied together by trade, marriages and ceremonies between villages.",
+  "sources": [
+   "https://pib.socioambiental.org/pt/Povo:Yawalapiti",
+   "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos"
+  ],
+  "photo": null,
+  "confidence": "checked"
+ },
+ "mehinako": {
+  "name": "Mehinako",
+  "aliases": [
+   "Mehináku",
+   "Mehinaku"
+  ],
+  "pt": "Os Mehinako vivem no Alto Xingu, dentro do Território Indígena do Xingu, em Mato Grosso. São 341 pessoas (Siasi/Sesai, 2020) e falam uma língua Aruak. Participam das trocas, dos rituais e dos casamentos entre os povos da região, mas se consideram antes de tudo Mehinako.",
+  "en": "The Mehinako live on the Upper Xingu, inside the Xingu Indigenous Territory in Mato Grosso. They number 341 (Siasi/Sesai, 2020) and speak an Arawak language. They take part in the trade, rituals and marriages that link the peoples of the region, but see themselves first of all as Mehinako.",
+  "sources": [
+   "https://pib.socioambiental.org/pt/Povo:Mehinako",
+   "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos"
+  ],
+  "photo": null,
+  "confidence": "checked"
+ },
+ "aweti": {
+  "name": "Aweti",
+  "aliases": [
+   "Awytyza"
+  ],
+  "pt": "Os Aweti vivem no centro do Alto Xingu, em Mato Grosso, e falam uma língua tupi. São 221 pessoas (Siasi/Sesai, 2020). Nas primeiras décadas do século XX quase desapareceram como povo, e com a recuperação da população retomaram muito de sua vida cultural.",
+  "en": "The Aweti live at the centre of the Upper Xingu, in Mato Grosso, and speak a Tupi language. They number 221 (Siasi/Sesai, 2020). In the first decades of the 20th century they almost disappeared as a people, and as their population recovered they took up much of their cultural life again.",
+  "sources": [
+   "https://pib.socioambiental.org/pt/Povo:Aweti",
+   "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos"
+  ],
+  "photo": null,
+  "confidence": "checked"
+ },
+ "ikpeng": {
+  "name": "Ikpeng",
+  "aliases": [
+   "Txicão"
+  ],
+  "pt": "Os Ikpeng vivem no Território Indígena do Xingu, em Mato Grosso. São 584 pessoas (Siasi/Sesai, 2020) e falam uma língua Karib. O contato com os não indígenas, no início dos anos 1960, reduziu sua população a menos da metade por doenças e armas de fogo, e depois disso foram transferidos para o Xingu.",
+  "en": "The Ikpeng live in the Xingu Indigenous Territory in Mato Grosso. They number 584 (Siasi/Sesai, 2020) and speak a Carib language. Contact with non-Indigenous people in the early 1960s cut their population to less than half through disease and gunfire, and they were then moved to the Xingu.",
+  "sources": [
+   "https://pib.socioambiental.org/pt/Povo:Ikpeng",
+   "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos"
+  ],
+  "photo": null,
+  "confidence": "checked"
+ },
+ "matipu": {
+  "name": "Matipu",
+  "aliases": [
+   "Matipú"
+  ],
+  "pt": "Os Matipu vivem no sul do Território Indígena do Xingu, em Mato Grosso. São 189 pessoas (Siasi/Sesai, 2020) e falam uma língua Karib. Têm laços estreitos de casamento e comércio com os Kalapalo, os Kuikuro e os Nahukwá, que falam línguas da mesma família.",
+  "en": "The Matipu live in the south of the Xingu Indigenous Territory in Mato Grosso. They number 189 (Siasi/Sesai, 2020) and speak a Carib language. They have close ties of marriage and trade with the Kalapalo, Kuikuro and Nahukwá, who speak languages of the same family.",
+  "sources": [
+   "https://pib.socioambiental.org/pt/Povo:Matipu",
+   "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos"
+  ],
+  "photo": null,
+  "confidence": "checked"
+ },
+ "kuikuro": {
+  "name": "Kuikuro",
+  "aliases": [],
+  "pt": "Os Kuikuro são hoje o povo mais numeroso do Alto Xingu, em Mato Grosso, com 802 pessoas (Siasi/Sesai, 2020). Falam uma língua Karib. Fazem os colares e cintos de caramujo que circulam nas trocas e nos pagamentos entre os povos da região.",
+  "en": "The Kuikuro are today the largest people of the Upper Xingu, in Mato Grosso, with 802 members (Siasi/Sesai, 2020). They speak a Carib language. They make the snail-shell necklaces and belts that circulate in exchanges and payments among the peoples of the region.",
+  "sources": [
+   "https://pib.socioambiental.org/pt/Povo:Kuikuro",
+   "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos"
+  ],
+  "photo": {
+   "file": "img/peoples/kuikuro.jpg",
+   "author": "Valter Campanato / Agência Brasil",
+   "license": "CC BY 3.0 BR",
+   "source_url": "https://commons.wikimedia.org/wiki/File:%C3%8Dndios_da_etnia_Kuikuro.jpg",
+   "caption_pt": "Homens Kuikuro no encerramento dos Jogos dos Povos Indígenas, em Olinda, 2007.",
+   "caption_en": "Kuikuro men at the closing ceremony of the Indigenous Peoples Games in Olinda, 2007."
+  },
+  "confidence": "checked"
+ },
+ "nahukwa": {
+  "name": "Nahukwá",
+  "aliases": [
+   "Nahukuá",
+   "Nafukuá"
+  ],
+  "pt": "Os Nahukwá são o menor dos povos do Alto Xingu, em Mato Grosso, com 169 pessoas (Siasi/Sesai, 2020). Falam uma língua Karib. Estão ligados aos vizinhos por trocas, rituais e casamentos entre aldeias.",
+  "en": "The Nahukwá are the smallest of the peoples of the Upper Xingu, in Mato Grosso, with 169 members (Siasi/Sesai, 2020). They speak a Carib language. They are tied to their neighbours by trade, rituals and marriages between villages.",
+  "sources": [
+   "https://pib.socioambiental.org/pt/Povo:Nahukwá",
+   "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos"
+  ],
+  "photo": null,
+  "confidence": "checked"
+ },
+ "tapayuna": {
+  "name": "Kajkwakratxi (Tapayuna)",
+  "aliases": [
+   "Tapayuna",
+   "Beiço de Pau"
+  ],
+  "pt": "Os Kajkwakratxi, ou Tapayuna, viviam na região do rio Arinos, em Mato Grosso, e falam uma língua Jê. Na década de 1970 foram envenenados com carne de anta oferecida por invasores, e os 41 sobreviventes foram levados para o Xingu. Hoje são 432 pessoas (Amigos da Terra, 2024), parte no Território Indígena do Xingu e parte com os Mẽbêngôkre na Terra Indígena Capoto-Jarina.",
+  "en": "The Kajkwakratxi, or Tapayuna, used to live in the Arinos river region of Mato Grosso and speak a Jê language. In the 1970s they were poisoned with tapir meat offered by invaders, and the 41 survivors were taken to the Xingu. Today they number 432 (Amigos da Terra, 2024), some in the Xingu Indigenous Territory and some with the Mẽbêngôkre in the Capoto-Jarina Indigenous Land.",
+  "sources": [
+   "https://pib.socioambiental.org/pt/Povo:Kajkwakratxi_(Tapayuna)",
+   "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos"
+  ],
+  "photo": null,
+  "confidence": "checked"
+ },
+ "kamaiura": {
+  "name": "Kamaiurá",
+  "aliases": [
+   "Kamayurá",
+   "Kamayrurá"
+  ],
+  "pt": "Os Kamaiurá vivem no Alto Xingu, em Mato Grosso. São 710 pessoas (Siasi/Sesai, 2020) e falam uma língua Tupi-Guarani. Os grandes rituais que reúnem os povos da região ficaram conhecidos pelos nomes que têm na língua kamaiurá, como o Kwarup e o Jawari.",
+  "en": "The Kamaiurá live on the Upper Xingu, in Mato Grosso. They number 710 (Siasi/Sesai, 2020) and speak a Tupi-Guarani language. The great rituals that bring the peoples of the region together became known by their Kamaiurá names, such as Kwarup and Jawari.",
+  "sources": [
+   "https://pib.socioambiental.org/pt/Povo:Kamaiurá",
+   "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos"
+  ],
+  "photo": {
+   "file": "img/peoples/kamaiura.jpg",
+   "author": "Marcello Casal Jr. / Agência Brasil",
+   "license": "CC BY 3.0 BR",
+   "source_url": "https://commons.wikimedia.org/wiki/File:Festa_do_Kuarup_dan%C3%A7a_em_frente_dos_troncos.jpg",
+   "caption_pt": "Dança diante dos troncos na festa do Kuarup, aldeia Kamaiurá, Alto Xingu, 2004.",
+   "caption_en": "Dance before the trunks at the Kuarup ceremony, Kamaiurá village, Upper Xingu, 2004."
+  },
+  "confidence": "checked"
+ },
+ "kalapalo": {
+  "name": "Kalapalo",
+  "aliases": [],
+  "pt": "Os Kalapalo vivem no Alto Xingu, em Mato Grosso. São 855 pessoas (Siasi/Sesai, 2020) e falam uma língua Karib. Na estação seca, de maio a setembro, a comida é farta e é tempo de rituais com música e convidados de outras aldeias. Participam ativamente da vigilância dos limites do território contra a invasão de fazendeiros vizinhos.",
+  "en": "The Kalapalo live on the Upper Xingu, in Mato Grosso. They number 855 (Siasi/Sesai, 2020) and speak a Carib language. In the dry season, from May to September, food is plentiful and it is the time for rituals with music and guests from other villages. They take an active part in watching the borders of the territory against invasion by neighbouring ranchers.",
+  "sources": [
+   "https://pib.socioambiental.org/pt/Povo:Kalapalo",
+   "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos"
+  ],
+  "photo": null,
+  "confidence": "checked"
+ },
+ "nambikwara": {
+  "name": "Nambikwara",
+  "aliases": [
+   "Nambikwára",
+   "Nambiquara",
+   "Halotesu",
+   "Negarotê",
+   "Wasusu",
+   "Latundê",
+   "Sararé"
+  ],
+  "pt": "Os Nambikwara vivem em pequenas aldeias nas cabeceiras dos rios Juruena e Guaporé, em Mato Grosso e Rondônia, tanto no cerrado quanto na floresta. São 2.332 pessoas (Siasi/Sesai, 2014), em vários grupos, e suas línguas formam uma família própria. Em 1992 havia 8.000 garimpeiros dentro da Terra Indígena Sararé.",
+  "en": "The Nambikwara live in small villages at the headwaters of the Juruena and Guaporé rivers, in Mato Grosso and Rondônia, in both savanna and forest. They number 2,332 (Siasi/Sesai, 2014), in several groups, and their languages form a family of their own. In 1992 there were 8,000 gold miners inside the Sararé Indigenous Land.",
+  "sources": [
+   "https://pib.socioambiental.org/pt/Povo:Nambikwara",
+   "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos"
+  ],
+  "photo": null,
+  "confidence": "checked"
+ },
+ "cinta-larga": {
+  "name": "Cinta Larga",
+  "aliases": [
+   "Cinta-Larga",
+   "Matetamãe"
+  ],
+  "pt": "Os Cinta Larga vivem perto da divisa entre Rondônia e Mato Grosso. São 1.954 pessoas (Siasi/Sesai, 2014) e falam uma língua da família Mondé, do tronco Tupi. A caça é sua atividade central e é partilhada em grandes festas. Esse equilíbrio vem sendo abalado pela entrada de garimpeiros em suas terras.",
+  "en": "The Cinta Larga live near the border between Rondônia and Mato Grosso. They number 1,954 (Siasi/Sesai, 2014) and speak a language of the Mondé family, of the Tupi stock. Hunting is their central activity and the game is shared at large feasts. That balance has been shaken by the entry of miners into their lands.",
+  "sources": [
+   "https://pib.socioambiental.org/pt/Povo:Cinta_larga",
+   "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos"
+  ],
+  "photo": null,
+  "confidence": "checked"
+ },
+ "xikrin": {
+  "name": "Xikrin (Mẽbêngôkre)",
+  "aliases": [
+   "Xikrin",
+   "Kayapó Xikrin"
+  ],
+  "pt": "Os Xikrin são um povo de língua Mẽbêngôkre, da família Jê, e vivem nas Terras Indígenas Cateté e Trincheira Bacajá, no Pará. São 2.267 pessoas (Siasi/Sesai, 2020). Dão grande valor a ouvir e a falar bem, e os discursos são feitos no centro da aldeia. A área do Cateté é rica em mogno e castanheiras.",
+  "en": "The Xikrin speak Mẽbêngôkre, a Jê language, and live in the Cateté and Trincheira Bacajá Indigenous Lands in Pará. They number 2,267 (Siasi/Sesai, 2020). They place great value on listening and on speaking well, and speeches are made at the centre of the village. The Cateté area is rich in mahogany and Brazil nut trees.",
+  "sources": [
+   "https://pib.socioambiental.org/pt/Povo:Xikrin_Mebengôkre",
+   "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos"
+  ],
+  "photo": null,
+  "confidence": "checked"
+ },
+ "tembe": {
+  "name": "Tembé",
+  "aliases": [
+   "Tembé Tenetehara",
+   "Tenetehara"
+  ],
+  "pt": "Os Tembé vivem no Pará e no Maranhão, são 2.096 pessoas (Siasi/Sesai, 2020) e falam uma língua Tupi-Guarani. Chamam a si mesmos Tenetehara. Têm sido obrigados a conviver com centenas de famílias de posseiros em suas terras e com a ação irregular de madeireiros e fazendeiros, e lutam pela desocupação de seu território.",
+  "en": "The Tembé live in Pará and Maranhão, number 2,096 (Siasi/Sesai, 2020) and speak a Tupi-Guarani language. They call themselves Tenetehara. They have been forced to live with hundreds of squatter families on their lands and with the irregular activity of loggers and ranchers, and they fight to have their territory cleared of occupants.",
+  "sources": [
+   "https://pib.socioambiental.org/pt/Povo:Tembé",
+   "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos"
+  ],
+  "photo": null,
+  "confidence": "checked"
+ },
+ "timbira": {
+  "name": "Timbira",
+  "aliases": [],
+  "pt": "Timbira é o nome de um conjunto de povos de língua Jê, entre eles os Apinayé, os Canela, os Gavião, os Krahô e os Krikati. Algumas famílias timbira, como os Krenyê, vivem hoje entre os Tembé e os Guajajara, e é o caso da Terra Indígena Alto Rio Guamá, no Pará.",
+  "en": "Timbira is the name of a group of Jê-speaking peoples that includes the Apinayé, Canela, Gavião, Krahô and Krikati. Some Timbira families, such as the Krenyê, now live among the Tembé and the Guajajara, as in the Alto Rio Guamá Indigenous Land in Pará.",
+  "sources": [
+   "https://pib.socioambiental.org/pt/Povo:Timbira",
+   "https://pib.socioambiental.org/pt/Povo:Tembé"
+  ],
+  "photo": null,
+  "confidence": "checked"
+ },
+ "yanomami": {
+  "name": "Yanomami",
+  "aliases": [
+   "Yanomámi",
+   "Ianomâmi"
+  ],
+  "pt": "Os Yanomami vivem na floresta entre o Amazonas e Roraima, e também na Venezuela. No Brasil são 30.390 pessoas (Dsei Yanomami, 2023) e suas línguas formam uma família própria. Para eles a floresta, urihi, é um ser vivo, e não um espaço a explorar. Entre 1987 e 1990 cerca de 30 a 40 mil garimpeiros entraram em suas terras em Roraima, e até hoje há garimpos dentro delas.",
+  "en": "The Yanomami live in the forest between Amazonas and Roraima, and also in Venezuela. In Brazil they number 30,390 (Dsei Yanomami, 2023) and their languages form a family of their own. To them the forest, urihi, is a living being and not a space to be exploited. Between 1987 and 1990 some 30 to 40 thousand gold miners entered their lands in Roraima, and mining camps remain inside them to this day.",
+  "sources": [
+   "https://pib.socioambiental.org/pt/Povo:Yanomami",
+   "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos"
+  ],
+  "photo": {
+   "file": "img/peoples/yanomami.jpg",
+   "author": "Fabio Rodrigues Pozzebom / Agência Brasil",
+   "license": "CC BY 3.0 BR",
+   "source_url": "https://commons.wikimedia.org/wiki/File:Indio_Yanomami.jpg",
+   "caption_pt": "Homem Yanomami, 2008.",
+   "caption_en": "Yanomami man, 2008."
+  },
+  "confidence": "checked"
+ },
+ "arara": {
+  "name": "Arara",
+  "aliases": [
+   "Arara do Pará",
+   "Ukarãngmã",
+   "Ukaragma"
+  ],
+  "pt": "Os Arara vivem no médio Xingu e no rio Iriri, no Pará. São 377 pessoas (Siasi/Sesai, 2014) e falam uma língua Karib. No início dos anos 1970 a rodovia Transamazônica cortou suas roças, trilhas e acampamentos de caça. Um dos grupos só foi contatado em 1987 e vive na Terra Indígena Cachoeira Seca.",
+  "en": "The Arara live on the middle Xingu and the Iriri river, in Pará. They number 377 (Siasi/Sesai, 2014) and speak a Carib language. In the early 1970s the Trans-Amazonian highway cut through their gardens, trails and hunting camps. One of their groups was contacted only in 1987 and lives in the Cachoeira Seca Indigenous Land.",
+  "sources": [
+   "https://pib.socioambiental.org/pt/Povo:Arara",
+   "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos"
+  ],
+  "photo": null,
+  "confidence": "checked"
+ },
+ "isolados": {
+  "name": "Povos isolados",
+  "aliases": [
+   "Isolados",
+   "Isolated peoples"
+  ],
+  "pt": "Povos isolados são povos indígenas que decidiram viver afastados de todos os outros grupos, muitas vezes depois de sofrer violência, doenças e massacres. Contatos forçados já mataram povos inteiros por epidemias, e por isso a política do Brasil desde 1987 é não fazer contato e proteger seus territórios de invasores.",
+  "en": "Isolated peoples are Indigenous peoples who have chosen to live apart from all other groups, often after suffering violence, disease and massacres. Forced contact has wiped out entire peoples through epidemics, which is why Brazil's policy since 1987 has been to make no contact and to protect their territories from invaders.",
+  "sources": [
+   "https://pib.socioambiental.org/pt/Povos_isolados"
+  ],
+  "photo": null,
+  "confidence": "checked"
+ },
+ "apiaka": {
+  "name": "Apiaká",
+  "aliases": [
+   "Apiacá"
+  ],
+  "pt": "Os Apiaká vivem em Mato Grosso e no Pará, são 1.050 pessoas (Siasi/Sesai, 2020) e falam uma língua Tupi-Guarani. Em meados do século XX dois etnólogos os deram por extintos, mas eles nunca deixaram de se ver como um povo. Uma serra, dois rios e um município do norte de Mato Grosso levam seu nome.",
+  "en": "The Apiaká live in Mato Grosso and Pará, number 1,050 (Siasi/Sesai, 2020) and speak a Tupi-Guarani language. In the mid-20th century two ethnologists declared them extinct, but they never stopped seeing themselves as a people. A mountain range, two rivers and a municipality in northern Mato Grosso carry their name.",
+  "sources": [
+   "https://pib.socioambiental.org/pt/Povo:Apiaká",
+   "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos"
+  ],
+  "photo": null,
+  "confidence": "checked"
+ },
+ "parakana": {
+  "name": "Parakanã",
+  "aliases": [
+   "Awaeté"
+  ],
+  "pt": "Os Parakanã vivem no Pará, em terras das bacias do Tocantins e do Xingu, entre elas a Terra Indígena Apyterewa. São 2.042 pessoas (Siasi/Sesai, 2020) e falam uma língua Tupi-Guarani. Chamam a si mesmos awaeté, gente de verdade. São um povo de terra firme, caçadores de mamíferos terrestres, contatado entre 1971 e 1984, a partir da construção da Transamazônica.",
+  "en": "The Parakanã live in Pará, on lands in the Tocantins and Xingu basins, among them the Apyterewa Indigenous Land. They number 2,042 (Siasi/Sesai, 2020) and speak a Tupi-Guarani language. They call themselves awaeté, real people. They are an upland forest people, hunters of land mammals, contacted between 1971 and 1984, beginning with the construction of the Trans-Amazonian highway.",
+  "sources": [
+   "https://pib.socioambiental.org/pt/Povo:Parakanã",
+   "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos"
+  ],
+  "photo": null,
+  "confidence": "checked"
+ },
+ "munduruku": {
+  "name": "Munduruku",
+  "aliases": [
+   "Mundurukú",
+   "Wuyjuyu"
+  ],
+  "pt": "Os Munduruku vivem no vale do Tapajós, no Pará e no Amazonas. São 17.997 pessoas (Siasi/Sesai, 2020) e sua língua dá nome à família Munduruku. No século XIX a região era conhecida como Mundurukânia. Hoje lutam para manter seu território inteiro diante do garimpo ilegal de ouro e de projetos de hidrelétricas e de uma hidrovia no Tapajós.",
+  "en": "The Munduruku live in the Tapajós valley, in Pará and Amazonas. They number 17,997 (Siasi/Sesai, 2020) and their language gives its name to the Munduruku family. In the 19th century the region was known as Mundurukânia. Today they fight to keep their territory whole in the face of illegal gold mining and of plans for dams and a waterway on the Tapajós.",
+  "sources": [
+   "https://pib.socioambiental.org/pt/Povo:Munduruku",
+   "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos"
+  ],
+  "photo": {
+   "file": "img/peoples/munduruku.jpg",
+   "author": "Fabio Rodrigues Pozzebom / Agência Brasil",
+   "license": "CC BY 3.0 BR",
+   "source_url": "https://commons.wikimedia.org/wiki/File:Ind%C3%ADgenas_mundurukus_se_re%C3%BAnem_com_o_ministro_da_Secretaria-Geral_da_Presid%C3%AAncia_Gilberto_Carvalho_2.jpg",
+   "caption_pt": "Homens Munduruku em Brasília, 2013, quando cerca de 140 Munduruku foram discutir com o governo a suspensão de obras de energia na Amazônia.",
+   "caption_en": "Munduruku men in Brasília, 2013, when about 140 Munduruku went to discuss with the government the suspension of energy projects in the Amazon."
+  },
+  "confidence": "checked"
+ },
+ "wari": {
+  "name": "Wari'",
+  "aliases": [
+   "Pakaa Nova",
+   "Pacaás Novos"
+  ],
+  "pt": "Os Wari' vivem em Rondônia, na região de Guajará-Mirim. São 4.461 pessoas (Siasi/Sesai, 2020) e falam uma língua da família Txapakura. Wari' quer dizer gente, nós, e é assim que preferem ser chamados, em vez de Pakaa Nova. Tradicionalmente escolhiam o lugar das aldeias pela terra preta, boa para plantar milho.",
+  "en": "The Wari' live in Rondônia, in the Guajará-Mirim region. They number 4,461 (Siasi/Sesai, 2020) and speak a language of the Txapakura family. Wari' means people, we, and it is the name they prefer over Pakaa Nova. Traditionally they chose where to build their villages by the dark earth that is good for growing maize.",
+  "sources": [
+   "https://pib.socioambiental.org/pt/Povo:Wari'",
+   "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos"
+  ],
+  "photo": null,
+  "confidence": "checked"
+ },
+ "kaapor": {
+  "name": "Ka'apor",
+  "aliases": [
+   "Ka´apor",
+   "Kaapor",
+   "Urubu Kaapor"
+  ],
+  "pt": "Os Ka'apor vivem no Maranhão, são 1.914 pessoas (Siasi/Sesai, 2020) e falam uma língua Tupi-Guarani. Chegaram ao Maranhão por volta de 1870, depois de uma longa migração vinda do Pará pelo rio Gurupi. Seus cocares de penas coloridas já impressionavam quem os via por volta de 1900. Invasões recentes de sua terra voltaram a pôr em risco sua sobrevivência como povo.",
+  "en": "The Ka'apor live in Maranhão, number 1,914 (Siasi/Sesai, 2020) and speak a Tupi-Guarani language. They reached Maranhão around 1870, after a long migration from Pará across the Gurupi river. Their headdresses of coloured feathers already impressed those who saw them around 1900. Recent invasions of their land have again put their survival as a people at risk.",
+  "sources": [
+   "https://pib.socioambiental.org/pt/Povo:Ka'apor",
+   "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos"
+  ],
+  "photo": null,
+  "confidence": "checked"
+ },
+ "apyawa": {
+  "name": "Apyãwa (Tapirapé)",
+  "aliases": [
+   "Tapirapé"
+  ],
+  "pt": "Os Apyãwa, conhecidos como Tapirapé, vivem na região da serra do Urubu Branco, em Mato Grosso, e também no Tocantins. São 917 pessoas (Siasi/Sesai, 2020) e falam uma língua Tupi-Guarani. Seu território foi ocupado por fazendas de gado e só nos anos 1990 tiveram duas terras reconhecidas. Na Terra Indígena Urubu Branco ainda enfrentam invasões de fazendeiros e garimpeiros.",
+  "en": "The Apyãwa, known as Tapirapé, live in the Urubu Branco hills of Mato Grosso, and also in Tocantins. They number 917 (Siasi/Sesai, 2020) and speak a Tupi-Guarani language. Their territory was taken over by cattle ranches and only in the 1990s were two lands recognised as theirs. In the Urubu Branco Indigenous Land they still face invasions by ranchers and miners.",
+  "sources": [
+   "https://pib.socioambiental.org/pt/Povo:Apyãwa",
+   "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos"
+  ],
+  "photo": null,
+  "confidence": "checked"
+ },
+ "paiter-surui": {
+  "name": "Paiter Suruí",
+  "aliases": [
+   "Suruí de Rondônia",
+   "Suruí Paiter",
+   "Paiter"
+  ],
+  "pt": "Os Paiter Suruí vivem em Rondônia e Mato Grosso. São 1.375 pessoas (Siasi/Sesai, 2014) e falam uma língua da família Mondé. O contato oficial foi em 1969, e desde então seu território foi ameaçado por colonos, madeireiras e mineradoras. Sua vida se organiza em duas metades que se alternam entre a aldeia e a mata, a roça e a caça, o trabalho e a festa.",
+  "en": "The Paiter Suruí live in Rondônia and Mato Grosso. They number 1,375 (Siasi/Sesai, 2014) and speak a language of the Mondé family. Official contact came in 1969, and since then their territory has been threatened by settlers, logging and mining companies. Their life is organised in two halves that alternate between village and forest, garden and hunt, work and feast.",
+  "sources": [
+   "https://pib.socioambiental.org/pt/Povo:Surui_Paiter",
+   "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos"
+  ],
+  "photo": null,
+  "confidence": "checked"
+ },
+ "satere-mawe": {
+  "name": "Sateré-Mawé",
+  "aliases": [
+   "Sateré Mawé"
+  ],
+  "pt": "Os Sateré-Mawé vivem no Amazonas e são 16.312 pessoas (Siasi/Sesai, 2020). Sua língua pertence à família Mawé. Foram eles que domesticaram o guaraná, uma trepadeira silvestre, e criaram o modo de beneficiar a planta que hoje é consumida no mundo inteiro.",
+  "en": "The Sateré-Mawé live in Amazonas and number 16,312 (Siasi/Sesai, 2020). Their language belongs to the Mawé family. It was they who domesticated guaraná, a wild vine, and created the way of processing the plant that is now consumed all over the world.",
+  "sources": [
+   "https://pib.socioambiental.org/pt/Povo:Sateré_Mawé",
+   "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos"
+  ],
+  "photo": null,
+  "confidence": "checked"
+ },
+ "uru-eu-wau-wau": {
+  "name": "Uru-Eu-Wau-Wau (Jupaú)",
+  "aliases": [
+   "Jupaú",
+   "Uru-Eu-Wau-Wau"
+  ],
+  "pt": "Os Jupaú, conhecidos como Uru-Eu-Wau-Wau, vivem em Rondônia. São 127 pessoas (Siasi/Sesai, 2020) e falam uma língua Tupi-Guarani. Nos anos 1970 a frente de colonização avançou sobre suas terras, e os conflitos com invasores continuaram pelo menos até 1985, mesmo depois do contato com a Funai.",
+  "en": "The Jupaú, known as Uru-Eu-Wau-Wau, live in Rondônia. They number 127 (Siasi/Sesai, 2020) and speak a Tupi-Guarani language. In the 1970s the colonisation front advanced over their lands, and conflicts with invaders went on at least until 1985, even after contact with Funai.",
+  "sources": [
+   "https://pib.socioambiental.org/pt/Povo:Uru-Eu-Wau-Wau",
+   "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos"
+  ],
+  "photo": null,
+  "confidence": "checked"
+ },
+ "xavante": {
+  "name": "Xavante",
+  "aliases": [
+   "A'uwẽ",
+   "A´uwe"
+  ],
+  "pt": "Os Xavante, que chamam a si mesmos A'uwẽ, gente, vivem no leste de Mato Grosso. São 22.256 pessoas (Siasi/Sesai, 2020) e falam uma língua Jê. Fazendeiros desmataram vastas áreas de cerrado ao redor deles para arroz, soja e gado. Desde o fim dos anos 1970 lutam para recuperar terras ancestrais, como Marãiwatsédé.",
+  "en": "The Xavante, who call themselves A'uwẽ, people, live in eastern Mato Grosso. They number 22,256 (Siasi/Sesai, 2020) and speak a Jê language. Ranchers cleared vast areas of savanna around them for rice, soy and cattle. Since the late 1970s they have fought to recover ancestral lands such as Marãiwatsédé.",
+  "sources": [
+   "https://pib.socioambiental.org/pt/Povo:Xavante",
+   "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos"
+  ],
+  "photo": {
+   "file": "img/peoples/xavante.jpg",
+   "author": "Roosewelt Pinheiro / Agência Brasil",
+   "license": "CC BY 3.0 BR",
+   "source_url": "https://commons.wikimedia.org/wiki/File:Xavante07032007.jpg",
+   "caption_pt": "Xavante em Brasília, 2007, pedindo a reabertura do posto da Funai em Xavantina, Mato Grosso.",
+   "caption_en": "Xavante in Brasília, 2007, asking for the Funai post in Xavantina, Mato Grosso, to be reopened."
+  },
+  "confidence": "checked"
+ },
+ "arawete": {
+  "name": "Araweté",
+  "aliases": [
+   "Bïde"
+  ],
+  "pt": "Os Araweté vivem no Pará, são 568 pessoas (Siasi/Sesai, 2020) e falam uma língua Tupi-Guarani. São caçadores e agricultores da floresta de terra firme. Dizem viver hoje na beira da terra, depois de sucessivas fugas diante de inimigos mais fortes.",
+  "en": "The Araweté live in Pará, number 568 (Siasi/Sesai, 2020) and speak a Tupi-Guarani language. They are hunters and farmers of the upland forest. They say they now live at the edge of the earth, after fleeing again and again from stronger enemies.",
+  "sources": [
+   "https://pib.socioambiental.org/pt/Povo:Araweté",
+   "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos"
+  ],
+  "photo": null,
+  "confidence": "checked"
+ },
+ "asurini-do-xingu": {
+  "name": "Asurini do Xingu",
+  "aliases": [
+   "Assurini",
+   "Awaete"
+  ],
+  "pt": "Os Asurini do Xingu vivem no Pará, são 219 pessoas (Siasi/Sesai, 2020) e falam uma língua Tupi-Guarani. Depois do contato, em 1971, perderam grande parte de sua população. Mantêm longos rituais, o xamanismo e uma arte gráfica elaborada.",
+  "en": "The Asurini of the Xingu live in Pará, number 219 (Siasi/Sesai, 2020) and speak a Tupi-Guarani language. After contact in 1971 they lost a large part of their population. They keep up long rituals, shamanism and an elaborate graphic art.",
+  "sources": [
+   "https://pib.socioambiental.org/pt/Povo:Asurini_do_Xingu",
+   "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos"
+  ],
+  "photo": null,
+  "confidence": "checked"
+ },
+ "zoro": {
+  "name": "Zoró",
+  "aliases": [
+   "Pangyjej"
+  ],
+  "pt": "Os Zoró vivem no noroeste de Mato Grosso e no sul de Rondônia. São 787 pessoas (Siasi/Sesai, 2020) e falam uma língua da família Mondé. Foram contatados em 1977, e um ano depois sua população tinha caído pela metade. A retirada dos invasores nos anos 1990 não acabou com o roubo de madeira, e sua associação, a APIZ, atua na proteção da terra.",
+  "en": "The Zoró live in north-western Mato Grosso and southern Rondônia. They number 787 (Siasi/Sesai, 2020) and speak a language of the Mondé family. They were contacted in 1977, and a year later their population had fallen by half. The removal of invaders in the 1990s did not end illegal logging, and their association, APIZ, works to protect the land.",
+  "sources": [
+   "https://pib.socioambiental.org/pt/Povo:Zoró",
+   "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos"
+  ],
+  "photo": null,
+  "confidence": "checked"
+ },
+ "awa-guaja": {
+  "name": "Awa Guajá",
+  "aliases": [
+   "Guajá",
+   "Awá",
+   "Awá-Guajá"
+  ],
+  "pt": "Os Awa Guajá vivem nos últimos refúgios de floresta amazônica do Maranhão. São 520 pessoas (Siasi/Sesai, 2020) e falam uma língua Tupi-Guarani. A maioria vive em aldeias, mas há grupos em isolamento voluntário nas Terras Indígenas Awá, Caru e Araribóia. Seu território foi cortado pela rodovia BR-222 nos anos 1960 e pela Estrada de Ferro Carajás nos anos 1980.",
+  "en": "The Awa Guajá live in the last refuges of Amazon forest in Maranhão. They number 520 (Siasi/Sesai, 2020) and speak a Tupi-Guarani language. Most live in villages, but some groups remain in voluntary isolation in the Awá, Caru and Araribóia Indigenous Lands. Their territory was cut by the BR-222 highway in the 1960s and by the Carajás railway in the 1980s.",
+  "sources": [
+   "https://pib.socioambiental.org/pt/Povo:Awa_Guajá",
+   "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos"
+  ],
+  "photo": null,
+  "confidence": "checked"
+ },
+ "bare": {
+  "name": "Baré",
+  "aliases": [],
+  "pt": "Os Baré vivem ao longo do rio Xié e do alto rio Negro, no Amazonas, para onde muitos foram levados à força. São 11.472 pessoas no Brasil (Siasi/Sesai, 2014). De origem Aruak, hoje falam o nheengatu, língua franca difundida por missionários no período colonial. Sua história é marcada pela violência e pelo trabalho forçado no extrativismo.",
+  "en": "The Baré live along the Xié river and the upper Rio Negro in Amazonas, where many were taken by force. They number 11,472 in Brazil (Siasi/Sesai, 2014). Of Arawak origin, today they speak Nheengatu, a lingua franca spread by missionaries in colonial times. Their history is marked by violence and forced labour in the extractive trades.",
+  "sources": [
+   "https://pib.socioambiental.org/pt/Povo:Baré",
+   "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos"
+  ],
+  "photo": null,
+  "confidence": "checked"
+ },
+ "arapaso": {
+  "name": "Arapaso",
+  "aliases": [
+   "Arapáso",
+   "Arapaço"
+  ],
+  "pt": "Os Arapaso vivem no médio rio Uaupés, no alto rio Negro, Amazonas. São 448 pessoas (Siasi/Sesai, 2014), da família Tukano Oriental. Conflitos antigos os levaram a perder sua língua original, e hoje falam tukano, a língua da maioria de suas esposas e cunhados.",
+  "en": "The Arapaso live on the middle Uaupés river, in the upper Rio Negro region of Amazonas. They number 448 (Siasi/Sesai, 2014) and belong to the Eastern Tukanoan family. Old conflicts led them to lose their original language, and today they speak Tukano, the language of most of their wives and in-laws.",
+  "sources": [
+   "https://pib.socioambiental.org/pt/Povo:Arapaso",
+   "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos"
+  ],
+  "photo": null,
+  "confidence": "checked"
+ },
+ "karapana": {
+  "name": "Karapanã",
+  "aliases": [],
+  "pt": "Os Karapanã são um dos povos de língua Tukano Oriental da bacia do rio Uaupés, no noroeste do Amazonas, e vivem também na Colômbia. No Brasil são 111 pessoas (Siasi/Sesai, 2014). Os grupos do Uaupés casam com pessoas de outros grupos, de preferência falantes de outra língua, e os filhos pertencem ao grupo do pai.",
+  "en": "The Karapanã are one of the Eastern Tukanoan peoples of the Uaupés river basin, in north-western Amazonas, and also live in Colombia. In Brazil they number 111 (Siasi/Sesai, 2014). The groups of the Uaupés marry people from other groups, ideally speakers of another language, and children belong to their father's group.",
+  "sources": [
+   "https://pib.socioambiental.org/pt/Povo:Karapanã",
+   "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos"
+  ],
+  "photo": null,
+  "confidence": "checked"
+ },
+ "barasana": {
+  "name": "Barasana",
+  "aliases": [
+   "Barasána",
+   "Panenoá"
+  ],
+  "pt": "Os Barasana são um dos povos de língua Tukano Oriental da bacia do rio Uaupés e vivem sobretudo na Colômbia. No Brasil, no noroeste do Amazonas, são 55 pessoas (Siasi/Sesai, 2014). Os grupos do Uaupés casam com pessoas de outros grupos, de preferência falantes de outra língua, e os filhos pertencem ao grupo do pai.",
+  "en": "The Barasana are one of the Eastern Tukanoan peoples of the Uaupés river basin and live mostly in Colombia. In Brazil, in north-western Amazonas, they number 55 (Siasi/Sesai, 2014). The groups of the Uaupés marry people from other groups, ideally speakers of another language, and children belong to their father's group.",
+  "sources": [
+   "https://pib.socioambiental.org/pt/Povo:Barasana",
+   "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos"
+  ],
+  "photo": null,
+  "confidence": "checked"
+ },
+ "kotiria": {
+  "name": "Kotiria (Wanano)",
+  "aliases": [
+   "Wanana",
+   "Wanano",
+   "Kotiria"
+  ],
+  "pt": "Os Kotiria, também chamados Wanano, são um dos povos de língua Tukano Oriental do rio Uaupés, no noroeste do Amazonas e na Colômbia. No Brasil são 735 pessoas (Dsei/Foirn, 2005). Os grupos do Uaupés casam com pessoas de outros grupos, de preferência falantes de outra língua, e os filhos pertencem ao grupo do pai.",
+  "en": "The Kotiria, also called Wanano, are one of the Eastern Tukanoan peoples of the Uaupés river, in north-western Amazonas and in Colombia. In Brazil they number 735 (Dsei/Foirn, 2005). The groups of the Uaupés marry people from other groups, ideally speakers of another language, and children belong to their father's group.",
+  "sources": [
+   "https://pib.socioambiental.org/pt/Povo:Kotiria",
+   "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos"
+  ],
+  "photo": null,
+  "confidence": "checked"
+ },
+ "apurina": {
+  "name": "Apurinã",
+  "aliases": [
+   "Popukare"
+  ],
+  "pt": "Os Apurinã vivem em muitas comunidades perto das margens do rio Purus, sobretudo no Amazonas. São 10.228 pessoas (Siasi/Sesai, 2020) e falam uma língua Aruak. Sua história foi marcada pela violência dos dois ciclos da borracha. Ainda lutam pelo reconhecimento de terras que são invadidas por madeireiros.",
+  "en": "The Apurinã live in many communities near the banks of the Purus river, mostly in Amazonas. They number 10,228 (Siasi/Sesai, 2020) and speak an Arawak language. Their history was marked by the violence of the two rubber booms. They are still fighting for recognition of lands that are invaded by loggers.",
+  "sources": [
+   "https://pib.socioambiental.org/pt/Povo:Apurinã",
+   "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos"
+  ],
+  "photo": null,
+  "confidence": "checked"
+ },
+ "ticuna": {
+  "name": "Ticuna",
+  "aliases": [
+   "Tikuna",
+   "Magüta",
+   "Maguta",
+   "Tikúna"
+  ],
+  "pt": "Os Ticuna são o povo indígena mais numeroso da Amazônia brasileira, com 57.571 pessoas no Amazonas (Siasi/Sesai, 2020), e vivem também na Colômbia e no Peru. Sua língua forma a família Tikuna. Depois da entrada violenta de seringueiros, pescadores e madeireiros no rio Solimões, só nos anos 1990 tiveram a maioria de suas terras reconhecida. Suas máscaras, desenhos e pinturas são conhecidos no mundo todo.",
+  "en": "The Ticuna are the most numerous Indigenous people of the Brazilian Amazon, with 57,571 members in Amazonas (Siasi/Sesai, 2020), and also live in Colombia and Peru. Their language forms the Tikuna family. After the violent arrival of rubber tappers, fishermen and loggers on the Solimões river, it was only in the 1990s that most of their lands were recognised. Their masks, drawings and paintings are known around the world.",
+  "sources": [
+   "https://pib.socioambiental.org/pt/Povo:Ticuna",
+   "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos"
+  ],
+  "photo": null,
+  "confidence": "checked"
+ },
+ "mura": {
+  "name": "Mura",
+  "aliases": [
+   "Múra"
+  ],
+  "pt": "Os Mura vivem em terras indígenas e em cidades como Manaus, Autazes e Borba, na região dos rios Madeira, Amazonas e Purus. São 18.511 pessoas (Siasi/Sesai, 2020). Desde o século XVII são descritos como um povo navegante, que conhece como poucos os caminhos entre igarapés, furos, ilhas e lagos. O português é hoje sua língua principal.",
+  "en": "The Mura live in Indigenous lands and in towns such as Manaus, Autazes and Borba, in the region of the Madeira, Amazon and Purus rivers. They number 18,511 (Siasi/Sesai, 2020). Since the 17th century they have been described as a people of the water, with rare knowledge of the routes between streams, channels, islands and lakes. Portuguese is now their main language.",
+  "sources": [
+   "https://pib.socioambiental.org/pt/Povo:Mura",
+   "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos"
+  ],
+  "photo": null,
+  "confidence": "checked"
+ },
+ "piraha": {
+  "name": "Pirahã",
+  "aliases": [
+   "Hiaitsiihi",
+   "Mura-Pirahã"
+  ],
+  "pt": "Os Pirahã vivem no rio Maici, no Amazonas. São 592 pessoas (Siasi/Sesai, 2014) e sua língua pertence à família Mura. Chamam a si mesmos hiaitsiihi. Cada pessoa recebe vários nomes ao longo da vida, o primeiro ainda no ventre da mãe.",
+  "en": "The Pirahã live on the Maici river in Amazonas. They number 592 (Siasi/Sesai, 2014) and their language belongs to the Mura family. They call themselves hiaitsiihi. Each person receives several names over a lifetime, the first while still in the womb.",
+  "sources": [
+   "https://pib.socioambiental.org/pt/Povo:Pirahã",
+   "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos"
+  ],
+  "photo": {
+   "file": "img/peoples/piraha.jpg",
+   "author": "Caleb Everett",
+   "license": "CC BY-SA 4.0",
+   "source_url": "https://commons.wikimedia.org/wiki/File:A_Pirah%C3%A3_family.jpg",
+   "caption_pt": "Uma família Pirahã em sua canoa.",
+   "caption_en": "A Pirahã family in their canoe."
+  },
+  "confidence": "checked"
+ },
+ "makurap": {
+  "name": "Makurap",
+  "aliases": [
+   "Makuráp",
+   "Macurap"
+  ],
+  "pt": "Os Makurap vivem em Rondônia, na margem direita do rio Guaporé. São 579 pessoas (Siasi/Sesai, 2014) e falam uma língua da família Tupari. Desde o início do século XX, quando os seringais tomaram a região, sua língua virou a língua comum entre os povos vizinhos, e ainda é a mais ouvida nas festas de chicha.",
+  "en": "The Makurap live in Rondônia, on the right bank of the Guaporé river. They number 579 (Siasi/Sesai, 2014) and speak a language of the Tupari family. From the early 20th century, when rubber estates took over the region, their language became the common tongue among neighbouring peoples, and it is still the one most heard at chicha feasts.",
+  "sources": [
+   "https://pib.socioambiental.org/pt/Povo:Makurap",
+   "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos"
+  ],
+  "photo": null,
+  "confidence": "checked"
+ },
+ "matses": {
+  "name": "Matsés",
+  "aliases": [
+   "Mayoruna"
+  ],
+  "pt": "Os Matsés, também conhecidos como Mayoruna, vivem na bacia do rio Javari, na fronteira entre o Brasil e o Peru. No Brasil são cerca de 1.700 pessoas (CTI, 2016), na Terra Indígena Vale do Javari, e falam uma língua Pano. Alternam os lugares de caça, pesca e roça para não esgotar o solo e os animais, e assim também vigiam suas terras.",
+  "en": "The Matsés, also known as Mayoruna, live in the Javari river basin, on the border between Brazil and Peru. In Brazil they number about 1,700 (CTI, 2016), in the Vale do Javari Indigenous Land, and speak a Panoan language. They rotate their hunting, fishing and garden sites so as not to exhaust the soil and the animals, and in doing so they also keep watch over their lands.",
+  "sources": [
+   "https://pib.socioambiental.org/pt/Povo:Matsés",
+   "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos"
+  ],
+  "photo": null,
+  "confidence": "checked"
+ },
+ "matis": {
+  "name": "Matis",
+  "aliases": [
+   "Matís"
+  ],
+  "pt": "Os Matis vivem na Terra Indígena Vale do Javari, no Amazonas, são 529 pessoas (Siasi/Sesai, 2020) e falam uma língua Pano. Eram várias centenas na época do contato, no fim dos anos 1970, e em 1983 restavam 87, depois de uma série de epidemias. Desde então a população voltou a crescer e alguns rituais foram retomados.",
+  "en": "The Matis live in the Vale do Javari Indigenous Land in Amazonas, number 529 (Siasi/Sesai, 2020) and speak a Panoan language. They were several hundred at the time of contact in the late 1970s, and by 1983 only 87 remained after a series of epidemics. Since then the population has grown again and some rituals have been taken up once more.",
+  "sources": [
+   "https://pib.socioambiental.org/pt/Povo:Matis",
+   "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos"
+  ],
+  "photo": {
+   "file": "img/peoples/matis.jpg",
+   "author": "Marcelo Camargo / Agência Brasil",
+   "license": "CC BY 3.0 BR",
+   "source_url": "https://commons.wikimedia.org/wiki/File:Matis.jpg",
+   "caption_pt": "Homem Matis nos Jogos Mundiais dos Povos Indígenas, 2015.",
+   "caption_en": "Matis man at the World Indigenous Games, 2015."
+  },
+  "confidence": "checked"
+ },
+ "kulina-pano": {
+  "name": "Kulina Pano",
+  "aliases": [
+   "Kulina Páno"
+  ],
+  "pt": "Os Kulina Pano vivem no Amazonas, na Terra Indígena Vale do Javari, e falam uma língua da família Pano.",
+  "en": "The Kulina Pano live in Amazonas, in the Vale do Javari Indigenous Land, and speak a language of the Panoan family.",
+  "sources": [
+   "https://pib.socioambiental.org/pt/Povo:Kulina_Pano",
+   "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos"
+  ],
+  "photo": null,
+  "confidence": "thin"
+ },
+ "amanaye": {
+  "name": "Amanayé",
+  "aliases": [
+   "Amanagé",
+   "Amanaié"
+  ],
+  "pt": "Os Amanayé vivem no alto rio Capim, no Pará. São 174 pessoas (Siasi/Sesai, 2017) e sua língua é da família Tupi-Guarani. Hoje se chamam Amanagé, nome que significaria associação de pessoas.",
+  "en": "The Amanayé live on the upper Capim river in Pará. They number 174 (Siasi/Sesai, 2017) and their language belongs to the Tupi-Guarani family. Today they call themselves Amanagé, a name said to mean an association of people.",
+  "sources": [
+   "https://pib.socioambiental.org/pt/Povo:Amanayé",
+   "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos"
+  ],
+  "photo": null,
+  "confidence": "checked"
+ },
+ "enawene-nawe": {
+  "name": "Enawenê-Nawê",
+  "aliases": [
+   "Enawenê-nawê",
+   "Salumã"
+  ],
+  "pt": "Os Enawenê-Nawê vivem em uma única grande aldeia perto do rio Iquê, afluente do Juruena, no noroeste de Mato Grosso. São 951 pessoas (Siasi/Sesai, 2020) e falam uma língua Aruak. Todo ano fazem um longo ritual em que oferecem peixe, mandioca, sal e mel aos seres do subterrâneo e do céu. Projetos de pequenas hidrelétricas ao redor de sua terra ameaçam os rios de que esse ritual depende.",
+  "en": "The Enawenê-Nawê live in a single large village near the Iquê river, a tributary of the Juruena, in north-western Mato Grosso. They number 951 (Siasi/Sesai, 2020) and speak an Arawak language. Every year they hold a long ritual in which they offer fish, manioc, salt and honey to the beings of the underworld and the sky. Plans for small hydroelectric dams around their land threaten the rivers this ritual depends on.",
+  "sources": [
+   "https://pib.socioambiental.org/pt/Povo:Enawenê-nawê",
+   "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos"
+  ],
+  "photo": null,
+  "confidence": "checked"
+ },
+ "tenharim": {
+  "name": "Tenharim",
+  "aliases": [
+   "Kagwahiva"
+  ],
+  "pt": "Os Tenharim são três grupos que vivem na região do médio rio Madeira, no sul do Amazonas, e chamam a si mesmos Kagwahiva. São 828 pessoas (Siasi/Sesai, 2014) e falam uma língua Tupi-Guarani. A aldeia do rio Marmelos é cortada pela rodovia Transamazônica, por onde escoam sua castanha, copaíba e farinha de mandioca.",
+  "en": "The Tenharim are three groups who live in the middle Madeira river region, in southern Amazonas, and call themselves Kagwahiva. They number 828 (Siasi/Sesai, 2014) and speak a Tupi-Guarani language. The village on the Marmelos river is cut by the Trans-Amazonian highway, along which they send out their Brazil nuts, copaiba and manioc flour.",
+  "sources": [
+   "https://pib.socioambiental.org/pt/Povo:Tenharim",
+   "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos"
+  ],
+  "photo": null,
+  "confidence": "checked"
+ },
+ "canela-apanyekra": {
+  "name": "Canela Apanyekrá",
+  "aliases": [
+   "Kanela",
+   "Apanyekrá",
+   "Apãnjekra"
+  ],
+  "pt": "Os Apanyekrá são um dos dois povos Timbira conhecidos como Canela e vivem no Maranhão. São 1.076 pessoas (Siasi/Sesai, 2012) e falam uma língua Jê, a mesma dos vizinhos Memortumré. Mantêm uma vida ritual complexa e buscam recuperar a autonomia de suas atividades produtivas.",
+  "en": "The Apanyekrá are one of the two Timbira peoples known as Canela and live in Maranhão. They number 1,076 (Siasi/Sesai, 2012) and speak a Jê language, the same as their Memortumré neighbours. They keep up a complex ritual life and seek to regain autonomy over how they produce their living.",
+  "sources": [
+   "https://pib.socioambiental.org/pt/Povo:Canela_Apanyekrá",
+   "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos"
+  ],
+  "photo": null,
+  "confidence": "checked"
+ },
+ "canela": {
+  "name": "Canela Memortumré",
+  "aliases": [
+   "Kanela",
+   "Canela Ramkokamekrá",
+   "Ramkokamekrá"
+  ],
+  "pt": "Os Memortumré, antes chamados Ramkokamekrá, são um dos dois povos Timbira conhecidos como Canela e vivem no Maranhão. São 2.175 pessoas (Siasi/Sesai, 2012) e falam uma língua Jê. Mantêm uma vida ritual complexa e buscam recuperar a autonomia de suas atividades produtivas.",
+  "en": "The Memortumré, formerly called Ramkokamekrá, are one of the two Timbira peoples known as Canela and live in Maranhão. They number 2,175 (Siasi/Sesai, 2012) and speak a Jê language. They keep up a complex ritual life and seek to regain autonomy over how they produce their living.",
+  "sources": [
+   "https://pib.socioambiental.org/pt/Povo:Canela_Memortumré",
+   "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos"
+  ],
+  "photo": null,
+  "confidence": "checked"
+ },
+ "karaja": {
+  "name": "Karajá (Iny)",
+  "aliases": [
+   "Iny",
+   "Carajá",
+   "Karajá"
+  ],
+  "pt": "Os Karajá, que chamam a si mesmos Iny, vivem há séculos nas margens do rio Araguaia, em Goiás, Tocantins, Mato Grosso e Pará. São 4.373 pessoas (Siasi/Sesai, 2020) e sua língua forma a família Karajá. Mantêm as pescarias em família, as bonecas de cerâmica, a festa de Aruanã e a pintura de dois círculos no rosto.",
+  "en": "The Karajá, who call themselves Iny, have lived for centuries on the banks of the Araguaia river, in Goiás, Tocantins, Mato Grosso and Pará. They number 4,373 (Siasi/Sesai, 2020) and their language forms the Karajá family. They keep up family fishing trips, ceramic dolls, the Aruanã festival and the two circles painted on the face.",
+  "sources": [
+   "https://pib.socioambiental.org/pt/Povo:Iny_Karajá",
+   "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos"
+  ],
+  "photo": {
+   "file": "img/peoples/karaja.jpg",
+   "author": "Edgar Kanaykõ Xakriaba",
+   "license": "CC BY-SA 4.0",
+   "source_url": "https://commons.wikimedia.org/wiki/File:Iny_Karaj%C3%A1.jpg",
+   "caption_pt": "Homens Iny Karajá com seus cocares, 2015.",
+   "caption_en": "Iny Karajá men in their headdresses, 2015."
+  },
+  "confidence": "checked"
+ },
+ "karaja-do-norte": {
+  "name": "Karajá do Norte (Xambioá)",
+  "aliases": [
+   "Xambioá",
+   "Karajá"
+  ],
+  "pt": "Os Karajá do Norte, mais conhecidos como Xambioá, vivem em duas aldeias na margem direita do rio Araguaia, no Tocantins. São 287 pessoas (Siasi/Sesai, 2014). Falam a mesma língua que os Karajá e os Javaé da Ilha do Bananal.",
+  "en": "The Northern Karajá, better known as Xambioá, live in two villages on the right bank of the Araguaia river in Tocantins. They number 287 (Siasi/Sesai, 2014). They speak the same language as the Karajá and the Javaé of Bananal Island.",
+  "sources": [
+   "https://pib.socioambiental.org/pt/Povo:Karajá_do_Norte",
+   "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos"
+  ],
+  "photo": null,
+  "confidence": "checked"
+ },
+ "javae": {
+  "name": "Javaé",
+  "aliases": [
+   "Itya Mahãdu"
+  ],
+  "pt": "Os Javaé vivem nas margens do rio Araguaia, no Tocantins e em Goiás. São 1.510 pessoas (Siasi/Sesai, 2020) e falam um dialeto da língua Karajá. São um dos poucos povos da antiga Capitania de Goiás que sobreviveram às capturas dos bandeirantes, às epidemias e à invasão de seu território.",
+  "en": "The Javaé live on the banks of the Araguaia river, in Tocantins and Goiás. They number 1,510 (Siasi/Sesai, 2020) and speak a dialect of the Karajá language. They are one of the few peoples of the old Captaincy of Goiás to have survived the slave raids of the bandeirantes, the epidemics and the invasion of their territory.",
+  "sources": [
+   "https://pib.socioambiental.org/pt/Povo:Javaé",
+   "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos"
+  ],
+  "photo": null,
+  "confidence": "checked"
+ },
+ "panara": {
+  "name": "Panará",
+  "aliases": [
+   "Krenakore",
+   "Kreen-Akarore"
+  ],
+  "pt": "Os Panará vivem em Mato Grosso, são 704 pessoas (DSEI, 2022) e falam uma língua Jê. Foram contatados em 1973, quando a estrada Cuiabá-Santarém cortou seu território, e perderam dois terços da população por doenças e massacres. Depois de 20 anos de exílio no Xingu, reconquistaram a parte ainda preservada de sua terra e, em 2000, ganharam na Justiça uma indenização do Estado brasileiro.",
+  "en": "The Panará live in Mato Grosso, number 704 (DSEI, 2022) and speak a Jê language. They were contacted in 1973, when the Cuiabá-Santarém road cut through their territory, and lost two thirds of their population to disease and massacres. After 20 years of exile in the Xingu they won back the part of their land that was still preserved and, in 2000, won compensation from the Brazilian state in court.",
+  "sources": [
+   "https://pib.socioambiental.org/pt/Povo:Panará",
+   "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos"
+  ],
+  "photo": null,
+  "confidence": "checked"
+ },
+ "myky": {
+  "name": "Mỹky",
+  "aliases": [
+   "Mynky",
+   "Myky",
+   "Menky",
+   "Menky Manoki"
+  ],
+  "pt": "Os Mỹky vivem em Mato Grosso e são 131 pessoas (Siasi/Sesai, 2020). Sua língua, a mesma dos Manoki, não tem parentesco com outras famílias. Mantiveram-se isolados até 1971 e desde então vivem cercados pela especulação de terras. Reivindicam a ampliação de sua terra.",
+  "en": "The Mỹky live in Mato Grosso and number 131 (Siasi/Sesai, 2020). Their language, shared with the Manoki, is unrelated to any other family. They kept apart from national society until 1971 and since then have lived hemmed in by land speculation. They are claiming an enlargement of their land.",
+  "sources": [
+   "https://pib.socioambiental.org/pt/Povo:Menky_Manoki",
+   "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos"
+  ],
+  "photo": null,
+  "confidence": "checked"
+ },
+ "manoki": {
+  "name": "Manoki (Irantxe)",
+  "aliases": [
+   "Irántxe",
+   "Irantxe",
+   "Iranxe"
+  ],
+  "pt": "Os Manoki, mais conhecidos como Irantxe, vivem em Mato Grosso e são 413 pessoas (Siasi/Sesai, 2020). Sua língua não tem parentesco com outras famílias. Quase dizimados por massacres e doenças, em meados do século XX os sobreviventes foram viver em uma missão jesuítica, e em 1968 receberam uma terra fora de sua área histórica. Reivindicam a ampliação de suas terras.",
+  "en": "The Manoki, better known as Irantxe, live in Mato Grosso and number 413 (Siasi/Sesai, 2020). Their language is unrelated to any other family. Nearly wiped out by massacres and disease, in the mid-20th century the survivors went to live at a Jesuit mission, and in 1968 they were given a land outside their historical area. They are claiming an enlargement of their lands.",
+  "sources": [
+   "https://pib.socioambiental.org/pt/Povo:Iranxe_Manoki",
+   "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos"
+  ],
+  "photo": null,
+  "confidence": "checked"
+ },
+ "wapichana": {
+  "name": "Wapichana",
+  "aliases": [
+   "Wapixana",
+   "Wapishana"
+  ],
+  "pt": "Os Wapichana vivem em Roraima, entre os rios Branco e Rupununi, na fronteira com a Guiana, onde também vivem. No Brasil são 11.309 pessoas (Siasi/Sesai, 2020). São a maior população de língua Aruak do norte da Amazônia.",
+  "en": "The Wapichana live in Roraima, between the Branco and Rupununi rivers, on the border with Guyana, where they also live. In Brazil they number 11,309 (Siasi/Sesai, 2020). They are the largest Arawak-speaking population in the northern Amazon.",
+  "sources": [
+   "https://pib.socioambiental.org/pt/Povo:Wapichana",
+   "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos"
+  ],
+  "photo": {
+   "file": "img/peoples/wapichana.jpg",
+   "author": "Geraldo Magela / Agência Senado",
+   "license": "CC BY 2.0",
+   "source_url": "https://commons.wikimedia.org/wiki/File:Jo%C3%AAnia_Wapixana_CDH_2.jpg",
+   "caption_pt": "Joênia Wapichana em audiência pública no Senado, 2018.",
+   "caption_en": "Joênia Wapichana at a public hearing in the Senate, 2018."
+  },
+  "confidence": "checked"
+ },
+ "macuxi": {
+  "name": "Macuxi",
+  "aliases": [
+   "Makuxí",
+   "Makuxi"
+  ],
+  "pt": "Os Macuxi vivem em Roraima, e também na Guiana. No Brasil são 37.250 pessoas (Siasi/Sesai, 2020) e falam uma língua Karib. Desde o século XVIII enfrentam aldeamentos forçados, fazendas de gado, garimpeiros e grileiros. Com outros povos da região, lutaram por décadas pela Terra Indígena Raposa Serra do Sol, homologada em 2005 e confirmada pelo Supremo Tribunal Federal em 2009.",
+  "en": "The Macuxi live in Roraima, and also in Guyana. In Brazil they number 37,250 (Siasi/Sesai, 2020) and speak a Carib language. Since the 18th century they have faced forced resettlement, cattle ranches, gold miners and land grabbers. Together with other peoples of the region they fought for decades for the Raposa Serra do Sol Indigenous Land, ratified in 2005 and upheld by the Supreme Court in 2009.",
+  "sources": [
+   "https://pib.socioambiental.org/pt/Povo:Macuxi",
+   "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos"
+  ],
+  "photo": null,
+  "confidence": "checked"
+ },
+ "taurepang": {
+  "name": "Taurepang",
+  "aliases": [
+   "Taulipáng",
+   "Taulipang",
+   "Pemon"
+  ],
+  "pt": "A maioria dos Taurepang vive na savana venezuelana. No Brasil são 849 pessoas (Siasi/Sesai, 2020), em aldeias das Terras Indígenas São Marcos e Raposa Serra do Sol, em Roraima, e falam uma língua Karib. A rodovia BR-174, nos anos 1970, e depois uma linha de transmissão de energia cortaram a Terra Indígena São Marcos.",
+  "en": "Most Taurepang live on the Venezuelan savanna. In Brazil they number 849 (Siasi/Sesai, 2020), in villages of the São Marcos and Raposa Serra do Sol Indigenous Lands in Roraima, and speak a Carib language. The BR-174 highway in the 1970s, and later a power transmission line, cut through the São Marcos Indigenous Land.",
+  "sources": [
+   "https://pib.socioambiental.org/pt/Povo:Taurepang",
+   "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos"
+  ],
+  "photo": null,
+  "confidence": "checked"
+ },
+ "ingariko": {
+  "name": "Ingarikó (Kapon)",
+  "aliases": [
+   "Ingarikó",
+   "Kapon"
+  ],
+  "pt": "Os Ingarikó vivem na região de serras junto ao monte Roraima, no extremo norte do Brasil, e também na Guiana e na Venezuela. No Brasil são 1.728 pessoas (Coping, 2020) e falam uma língua Karib. Chamam a si mesmos Kapon.",
+  "en": "The Ingarikó live in the highlands beside Mount Roraima, at the northern tip of Brazil, and also in Guyana and Venezuela. In Brazil they number 1,728 (Coping, 2020) and speak a Carib language. They call themselves Kapon.",
+  "sources": [
+   "https://pib.socioambiental.org/pt/Povo:Ingarikó",
+   "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos"
+  ],
+  "photo": null,
+  "confidence": "checked"
+ },
+ "yaminawa": {
+  "name": "Yaminawá",
+  "aliases": [
+   "Yaminawa",
+   "Jaminawa"
+  ],
+  "pt": "Os Yaminawá vivem no Acre, e também no Peru e na Bolívia. No Brasil são 1.454 pessoas (Siasi/Sesai, 2014) e falam uma língua Pano. Parte vive em aldeias na mata e parte na periferia de cidades como Rio Branco.",
+  "en": "The Yaminawá live in Acre, and also in Peru and Bolivia. In Brazil they number 1,454 (Siasi/Sesai, 2014) and speak a Panoan language. Some live in forest villages and others on the outskirts of towns such as Rio Branco.",
+  "sources": [
+   "https://pib.socioambiental.org/pt/Povo:Yaminawá",
+   "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos"
+  ],
+  "photo": null,
+  "confidence": "checked"
+ },
+ "manchineri": {
+  "name": "Manchineri (Yine)",
+  "aliases": [
+   "Machineri",
+   "Manxineru",
+   "Yine"
+  ],
+  "pt": "Os Manchineri vivem no Acre, a maioria na Terra Indígena Mamoadate, e há famílias em seringais dentro da Reserva Extrativista Chico Mendes. São 1.332 pessoas no Brasil (Siasi/Sesai, 2020). Falam uma língua Aruak, a mesma dos Piro do Peru.",
+  "en": "The Manchineri live in Acre, most of them in the Mamoadate Indigenous Land, with some families on rubber estates inside the Chico Mendes Extractive Reserve. They number 1,332 in Brazil (Siasi/Sesai, 2020). They speak an Arawak language, the same as the Piro of Peru.",
+  "sources": [
+   "https://pib.socioambiental.org/pt/Povo:Manchineri",
+   "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos"
+  ],
+  "photo": null,
+  "confidence": "checked"
+ },
+ "deni": {
+  "name": "Deni",
+  "aliases": [
+   "Dení"
+  ],
+  "pt": "Os Deni vivem entre os rios Juruá e Purus, no Amazonas, são 2.064 pessoas (Siasi/Sesai, 2020) e falam uma língua da família Arawá. Depois de décadas de espera, começaram eles mesmos a demarcar sua terra, e a demarcação oficial só foi concluída em 2003. Ainda enfrentam invasões para pesca e retirada de madeira.",
+  "en": "The Deni live between the Juruá and Purus rivers in Amazonas, number 2,064 (Siasi/Sesai, 2020) and speak a language of the Arawá family. After decades of waiting they began to mark the boundaries of their land themselves, and official demarcation was completed only in 2003. They still face invasions for fishing and logging.",
+  "sources": [
+   "https://pib.socioambiental.org/pt/Povo:Deni",
+   "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos"
+  ],
+  "photo": null,
+  "confidence": "checked"
+ },
+ "kaxarari": {
+  "name": "Kaxarari",
+  "aliases": [],
+  "pt": "Os Kaxarari vivem na divisa entre Rondônia e Amazonas, perto da rodovia BR-364. São 522 pessoas (Siasi/Sesai, 2020) e falam uma língua Pano. Eram cerca de 2 mil em 1910 e chegaram a menos de 200 no início dos anos 1980, depois de ataques de caucheiros e seringalistas e de epidemias.",
+  "en": "The Kaxarari live on the border between Rondônia and Amazonas, near the BR-364 highway. They number 522 (Siasi/Sesai, 2020) and speak a Panoan language. They were about 2,000 in 1910 and fewer than 200 by the early 1980s, after attacks by rubber gatherers and estate owners and after epidemics.",
+  "sources": [
+   "https://pib.socioambiental.org/pt/Povo:Kaxarari",
+   "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos"
+  ],
+  "photo": null,
+  "confidence": "checked"
+ },
+ "guajajara": {
+  "name": "Guajajara (Tenetehara)",
+  "aliases": [
+   "Tenetehara",
+   "Guajajara"
+  ],
+  "pt": "Os Guajajara são um dos povos indígenas mais numerosos do Brasil, com 28.858 pessoas (Siasi/Sesai, 2020). Vivem em mais de dez terras indígenas no Maranhão, na borda leste da Amazônia, e falam uma língua Tupi-Guarani. A partir dos anos 1980 suas terras passaram a sofrer a pressão do Programa Grande Carajás e de madeireiras da região.",
+  "en": "The Guajajara are one of the most numerous Indigenous peoples in Brazil, with 28,858 members (Siasi/Sesai, 2020). They live in more than ten Indigenous lands in Maranhão, on the eastern edge of the Amazon, and speak a Tupi-Guarani language. From the 1980s their lands came under pressure from the Grande Carajás programme and from logging companies in the region.",
+  "sources": [
+   "https://pib.socioambiental.org/pt/Povo:Guajajara",
+   "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos"
+  ],
+  "photo": {
+   "file": "img/peoples/guajajara.jpg",
+   "author": "Xuthoria",
+   "license": "CC BY-SA 4.0",
+   "source_url": "https://commons.wikimedia.org/wiki/File:COP30_-_S%C3%B4nia_Guajajara_01.jpg",
+   "caption_pt": "Sônia Guajajara na COP30, em Belém, 2025.",
+   "caption_en": "Sônia Guajajara at COP30 in Belém, 2025."
+  },
+  "confidence": "checked"
+ },
+ "hixkaryana": {
+  "name": "Hixkaryana",
+  "aliases": [
+   "Hixkaryána"
+  ],
+  "pt": "Os Hixkaryana vivem no rio Nhamundá, entre o Pará e o Amazonas. São 1.242 pessoas (Siasi/Sesai, 2012) e falam uma língua Karib. Seus avós fugiram rio acima da perseguição dos brancos, e hoje eles voltam a ocupar o território rio abaixo.",
+  "en": "The Hixkaryana live on the Nhamundá river, between Pará and Amazonas. They number 1,242 (Siasi/Sesai, 2012) and speak a Carib language. Their grandparents fled upriver from persecution by settlers, and today they are returning to their territory downstream.",
+  "sources": [
+   "https://pib.socioambiental.org/pt/Povo:Hixkaryana",
+   "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos"
+  ],
+  "photo": null,
+  "confidence": "checked"
+ },
+ "waiwai": {
+  "name": "Waiwai",
+  "aliases": [
+   "Wai Wai"
+  ],
+  "pt": "Os Waiwai vivem no Pará, no Amazonas e em Roraima, e também na Guiana. No Brasil são 2.691 pessoas (Siasi/Sesai, 2020), a maioria de língua Karib. São conhecidos como grandes viajantes e fornecedores de raladores de mandioca, papagaios falantes e cães de caça. Em suas comunidades vivem pessoas de vários povos, como Mawayana, Katuenayana e Xerewyana.",
+  "en": "The Waiwai live in Pará, Amazonas and Roraima, and also in Guyana. In Brazil they number 2,691 (Siasi/Sesai, 2020), most of them speakers of a Carib language. They are known as great travellers and as suppliers of manioc graters, talking parrots and hunting dogs. People of several peoples, such as the Mawayana, Katuenayana and Xerewyana, live in their communities.",
+  "sources": [
+   "https://pib.socioambiental.org/pt/Povo:Waiwai",
+   "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos"
+  ],
+  "photo": {
+   "file": "img/peoples/waiwai.jpg",
+   "author": "Marcelo Camargo / Agência Brasil",
+   "license": "CC BY 3.0 BR",
+   "source_url": "https://commons.wikimedia.org/wiki/File:Waiwai.jpg",
+   "caption_pt": "Homem Waiwai nos Jogos Mundiais dos Povos Indígenas, 2015.",
+   "caption_en": "Waiwai man at the World Indigenous Games, 2015."
+  },
+  "confidence": "checked"
+ },
+ "waimiri-atroari": {
+  "name": "Waimiri Atroari (Kinja)",
+  "aliases": [
+   "Kinja",
+   "Kiña",
+   "Waimiri Atroari"
+  ],
+  "pt": "Os Waimiri Atroari, que chamam a si mesmos Kinja, vivem no Amazonas. São 2.394 pessoas (PWA, 2022) e falam uma língua Karib. A abertura da rodovia BR-174 pelo Exército quase os levou à extinção, e depois vieram uma mineradora e uma hidrelétrica que alagou parte de seu território. Hoje têm os limites de sua terra assegurados e a população cresce.",
+  "en": "The Waimiri Atroari, who call themselves Kinja, live in Amazonas. They number 2,394 (PWA, 2022) and speak a Carib language. The building of the BR-174 highway by the army brought them close to extinction, and it was followed by a mining company and a dam that flooded part of their territory. Today the limits of their land are secure and their population is growing.",
+  "sources": [
+   "https://pib.socioambiental.org/pt/Povo:Waimiri_Atroari",
+   "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos"
+  ],
+  "photo": null,
+  "confidence": "checked"
+ },
+ "katuenayana": {
+  "name": "Katuenayana",
+  "aliases": [
+   "Katuena",
+   "Katwena"
+  ],
+  "pt": "Os Katuenayana são um povo de língua Karib do Amazonas e do Pará, com 140 pessoas (Siasi/Sesai, 2014), e parte deles vive em comunidades Waiwai.",
+  "en": "The Katuenayana are a Carib-speaking people of Amazonas and Pará, numbering 140 (Siasi/Sesai, 2014), and some of them live in Waiwai communities.",
+  "sources": [
+   "https://pib.socioambiental.org/pt/Povo:Katuenayana",
+   "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos",
+   "https://pib.socioambiental.org/pt/Povo:Waiwai"
+  ],
+  "photo": null,
+  "confidence": "thin"
+ },
+ "xerewyana": {
+  "name": "Xerewyana",
+  "aliases": [
+   "Xereu",
+   "Xerew"
+  ],
+  "pt": "Os Xerewyana são um povo de língua Karib do Pará, e parte deles vive em comunidades Waiwai.",
+  "en": "The Xerewyana are a Carib-speaking people of Pará, and some of them live in Waiwai communities.",
+  "sources": [
+   "https://pib.socioambiental.org/pt/Povo:Xerewyana",
+   "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos",
+   "https://pib.socioambiental.org/pt/Povo:Waiwai"
+  ],
+  "photo": null,
+  "confidence": "thin"
+ },
+ "tunayana": {
+  "name": "Tunayana",
+  "aliases": [],
+  "pt": "Os Tunayana são um povo de língua Karib do Pará e do Amazonas, com 107 pessoas (IBGE, 2010).",
+  "en": "The Tunayana are a Carib-speaking people of Pará and Amazonas, numbering 107 (IBGE, 2010).",
+  "sources": [
+   "https://pib.socioambiental.org/pt/Povo:Tunayana",
+   "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos"
+  ],
+  "photo": null,
+  "confidence": "thin"
+ },
+ "txikiyana": {
+  "name": "Txikiyana",
+  "aliases": [
+   "Sikiyana",
+   "Cikiyana"
+  ],
+  "pt": "Os Txikiyana são um povo de língua Karib do Pará.",
+  "en": "The Txikiyana are a Carib-speaking people of Pará.",
+  "sources": [
+   "https://pib.socioambiental.org/pt/Povo:Txikiyana",
+   "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos"
+  ],
+  "photo": null,
+  "confidence": "thin"
+ },
+ "karapawyana": {
+  "name": "Karapawyana",
+  "aliases": [
+   "Karafawyana"
+  ],
+  "pt": "Os Karapawyana são um dos povos que vivem nas comunidades Waiwai.",
+  "en": "The Karapawyana are one of the peoples who live in the Waiwai communities.",
+  "sources": [
+   "https://pib.socioambiental.org/pt/Povo:Waiwai"
+  ],
+  "photo": null,
+  "confidence": "thin"
+ },
+ "mawayana": {
+  "name": "Mawayana",
+  "aliases": [
+   "Mawayána"
+  ],
+  "pt": "Os Mawayana são um povo de língua Aruak do Pará, e parte deles vive em comunidades Waiwai.",
+  "en": "The Mawayana are an Arawak-speaking people of Pará, and some of them live in Waiwai communities.",
+  "sources": [
+   "https://pib.socioambiental.org/pt/Povo:Mawayana",
+   "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos",
+   "https://pib.socioambiental.org/pt/Povo:Waiwai"
+  ],
+  "photo": null,
+  "confidence": "thin"
+ },
+ "katxuyana": {
+  "name": "Katxuyana",
+  "aliases": [
+   "Kaxuyana"
+  ],
+  "pt": "Os Katxuyana são um povo de língua Karib do Pará e do Amazonas, com 540 pessoas (Siasi/Sesai, 2020).",
+  "en": "The Katxuyana are a Carib-speaking people of Pará and Amazonas, numbering 540 (Siasi/Sesai, 2020).",
+  "sources": [
+   "https://pib.socioambiental.org/pt/Povo:Katxuyana",
+   "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos"
+  ],
+  "photo": null,
+  "confidence": "thin"
+ },
+ "aikana": {
+  "name": "Aikanã",
+  "aliases": [
+   "Aikaná"
+  ],
+  "pt": "Os Aikanã vivem no sudeste de Rondônia, são 350 pessoas (Siasi/Sesai, 2014) e sua língua forma uma família própria. A terra onde a maioria vive não é seu território tradicional, pois foram levados para lá pelo órgão indigenista em 1970, com outros dois povos. O solo é pouco fértil, e eles mantêm a língua viva com escola bilíngue e projetos culturais.",
+  "en": "The Aikanã live in south-eastern Rondônia, number 350 (Siasi/Sesai, 2014), and their language forms a family of its own. The land where most of them live is not their traditional territory, as the government agency moved them there in 1970 together with two other peoples. The soil is poor, and they keep their language alive through bilingual schooling and cultural projects.",
+  "sources": [
+   "https://pib.socioambiental.org/pt/Povo:Aikanã",
+   "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos"
+  ],
+  "photo": null,
+  "confidence": "checked"
+ },
+ "paresi": {
+  "name": "Paresí (Haliti)",
+  "aliases": [
+   "Paresí",
+   "Pareci",
+   "Haliti"
+  ],
+  "pt": "Os Paresí vivem em Mato Grosso, são 2.138 pessoas (Siasi/Sesai, 2014) e falam uma língua Aruak. Têm contato com não indígenas desde o fim do século XVII, muitas vezes com consequências devastadoras. Hoje buscam manter seus costumes, encontrar novas fontes de renda e conservar suas áreas.",
+  "en": "The Paresí live in Mato Grosso, number 2,138 (Siasi/Sesai, 2014) and speak an Arawak language. They have been in contact with non-Indigenous people since the late 17th century, often with devastating results. Today they work to keep their customs, find new sources of income and conserve their lands.",
+  "sources": [
+   "https://pib.socioambiental.org/pt/Povo:Paresí",
+   "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos"
+  ],
+  "photo": null,
+  "confidence": "checked"
+ },
+ "arara-do-rio-branco": {
+  "name": "Arara do Rio Branco",
+  "aliases": [
+   "Arara do Aripuanã",
+   "Arara do Beiradão"
+  ],
+  "pt": "Os Arara do Rio Branco vivem em Mato Grosso e são 249 pessoas (Siasi/Sesai, 2014). Viveram por décadas sob o domínio dos patrões nos seringais e, com o fim da borracha e a grilagem de terras, ficaram sem trabalho e sem lugar. O reconhecimento de sua terra só veio depois de muitos anos de luta.",
+  "en": "The Arara do Rio Branco live in Mato Grosso and number 249 (Siasi/Sesai, 2014). For decades they lived under the rule of rubber estate bosses and, when rubber declined and land grabbing spread, they were left without work or land. Recognition of their land came only after many years of struggle.",
+  "sources": [
+   "https://pib.socioambiental.org/pt/Povo:Arara_do_Rio_Branco",
+   "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos"
+  ],
+  "photo": null,
+  "confidence": "checked"
+ },
+ "ikolen": {
+  "name": "Ikolen (Gavião de Rondônia)",
+  "aliases": [
+   "Gavião de Rondônia",
+   "Gavião Ikolen",
+   "Digut"
+  ],
+  "pt": "Os Ikolen, também conhecidos como Gavião, vivem em Rondônia, perto da divisa com Mato Grosso. São 691 pessoas (Siasi/Sesai, 2020) e falam uma língua da família Mondé. Suas seis aldeias ficam na Terra Indígena Igarapé Lourdes, que dividem com o povo Karo.",
+  "en": "The Ikolen, also known as Gavião, live in Rondônia, near the border with Mato Grosso. They number 691 (Siasi/Sesai, 2020) and speak a language of the Mondé family. Their six villages are in the Igarapé Lourdes Indigenous Land, which they share with the Karo people.",
+  "sources": [
+   "https://pib.socioambiental.org/pt/Povo:Ikolen",
+   "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos"
+  ],
+  "photo": null,
+  "confidence": "checked"
+ },
+ "karipuna-de-rondonia": {
+  "name": "Karipuna de Rondônia",
+  "aliases": [
+   "Karipuna",
+   "Ahé"
+  ],
+  "pt": "Os Karipuna de Rondônia vivem no rio Jaci-Paraná e falam uma língua Tupi-Guarani. Em 2004 restavam catorze sobreviventes de uma história de doenças e invasões que começou com a borracha e a ferrovia Madeira-Mamoré. Em 2014 eram 55 pessoas (Siasi/Sesai). Procuram proteger sua terra das constantes invasões de madeireiros, caçadores, pescadores e posseiros.",
+  "en": "The Karipuna of Rondônia live on the Jaci-Paraná river and speak a Tupi-Guarani language. In 2004 there were fourteen survivors of a history of disease and invasions that began with rubber and the Madeira-Mamoré railway. In 2014 they numbered 55 (Siasi/Sesai). They work to protect their land from constant invasions by loggers, hunters, fishermen and squatters.",
+  "sources": [
+   "https://pib.socioambiental.org/pt/Povo:Karipuna_de_Rondônia",
+   "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos"
+  ],
+  "photo": null,
+  "confidence": "checked"
+ },
+ "jiahui": {
+  "name": "Jiahui",
+  "aliases": [
+   "Diahói",
+   "Diahui"
+  ],
+  "pt": "Os Jiahui vivem na região do médio rio Madeira, no sul do Amazonas. São 115 pessoas (Siasi/Sesai, 2014) e falam uma língua Tupi-Guarani do grupo Kagwahiva. Suas terras foram ocupadas por fazendeiros e o povo quase se desfez, vivendo entre os Tenharim ou em cidades. Em 1998 começaram a retomar seu território.",
+  "en": "The Jiahui live in the middle Madeira river region, in southern Amazonas. They number 115 (Siasi/Sesai, 2014) and speak a Tupi-Guarani language of the Kagwahiva group. Their lands were taken over by ranchers and the people almost dissolved, living among the Tenharim or in towns. In 1998 they began to take back their territory.",
+  "sources": [
+   "https://pib.socioambiental.org/pt/Povo:Jiahui",
+   "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos"
+  ],
+  "photo": null,
+  "confidence": "checked"
+ },
+ "parintintin": {
+  "name": "Parintintin",
+  "aliases": [
+   "Kagwahiva"
+  ],
+  "pt": "Os Parintintin vivem em duas terras indígenas no município de Humaitá, no Amazonas, chamadas Ipixuna e Nove de Janeiro. São 480 pessoas (Siasi/Sesai, 2014) e falam uma língua Tupi-Guarani. Fazem parte dos povos que se chamam Kagwahiva e se organizam em duas metades com nomes de pássaros.",
+  "en": "The Parintintin live in two Indigenous lands in the municipality of Humaitá, in Amazonas, called Ipixuna and Nove de Janeiro. They number 480 (Siasi/Sesai, 2014) and speak a Tupi-Guarani language. They are one of the peoples who call themselves Kagwahiva and are organised in two halves named after birds.",
+  "sources": [
+   "https://pib.socioambiental.org/pt/Povo:Parintintin",
+   "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos"
+  ],
+  "photo": null,
+  "confidence": "checked"
+ },
+ "terena": {
+  "name": "Terena",
+  "aliases": [],
+  "pt": "Os Terena são 26.065 pessoas (Siasi/Sesai, 2014) e falam uma língua Aruak. A maior parte vive em Mato Grosso do Sul, e há comunidades em Mato Grosso e em São Paulo. A convivência intensa com as cidades lhes rendeu o rótulo de índios urbanos, que esconde séculos de resistência para manter sua cultura.",
+  "en": "The Terena number 26,065 (Siasi/Sesai, 2014) and speak an Arawak language. Most live in Mato Grosso do Sul, with communities in Mato Grosso and São Paulo. Their close contact with towns earned them the label of urban Indians, which hides centuries of resistance to keep their culture alive.",
+  "sources": [
+   "https://pib.socioambiental.org/pt/Povo:Terena",
+   "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos"
+  ],
+  "photo": {
+   "file": "img/peoples/terena.jpg",
+   "author": "Valter Campanato / Agência Brasil",
+   "license": "CC BY 3.0 BR",
+   "source_url": "https://commons.wikimedia.org/wiki/File:%C3%8Dndios_da_etnia_Terena.jpg",
+   "caption_pt": "Dança Terena no encerramento dos Jogos dos Povos Indígenas, em Olinda, 2007.",
+   "caption_en": "Terena dance at the closing ceremony of the Indigenous Peoples Games in Olinda, 2007."
+  },
+  "confidence": "checked"
+ },
+ "tupaiu": {
+  "name": "Tupaiú",
+  "aliases": [
+   "Tupaiu"
+  ],
+  "pt": "Os Tupaiú vivem no Pará e são 546 pessoas (Saúde e Alegria, 2014).",
+  "en": "The Tupaiú live in Pará and number 546 (Saúde e Alegria, 2014).",
+  "sources": [
+   "https://pib.socioambiental.org/pt/Povo:Tupaiú",
+   "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos"
+  ],
+  "photo": null,
+  "confidence": "thin"
+ },
+ "gaviao-parkateje": {
+  "name": "Gavião Parkatêjê",
+  "aliases": [
+   "Gavião Parkatejê",
+   "Parkatêjê"
+  ],
+  "pt": "Os Gavião Parkatêjê vivem no Pará, são 646 pessoas (Siasi/Sesai, 2014) e falam uma língua Jê. São um povo Timbira. Perderam 70% da população no contato dos anos 1970 e depois reconstruíram seu modo de vida. A aldeia Kaikoturé, de 1984, repete o desenho circular das aldeias timbira.",
+  "en": "The Gavião Parkatêjê live in Pará, number 646 (Siasi/Sesai, 2014) and speak a Jê language. They are a Timbira people. They lost 70% of their population during contact in the 1970s and then rebuilt their way of life. The village of Kaikoturé, built in 1984, repeats the circular layout of Timbira villages.",
+  "sources": [
+   "https://pib.socioambiental.org/pt/Povo:Gavião_Parkatêjê",
+   "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos"
+  ],
+  "photo": null,
+  "confidence": "checked"
+ },
+ "tukano": {
+  "name": "Tukano (Ye'pâ-masa)",
+  "aliases": [
+   "Tukano",
+   "Tucano"
+  ],
+  "pt": "Os Tukano vivem no rio Uaupés e seus afluentes, no noroeste do Amazonas, e também na Colômbia. No Brasil são 5.731 pessoas (Siasi/Sesai, 2014), e sua língua dá nome à família Tukano. Os grupos do Uaupés casam com pessoas de outros grupos, de preferência falantes de outra língua, e os filhos pertencem ao grupo do pai.",
+  "en": "The Tukano live on the Uaupés river and its tributaries, in north-western Amazonas, and also in Colombia. In Brazil they number 5,731 (Siasi/Sesai, 2014), and their language gives its name to the Tukanoan family. The groups of the Uaupés marry people from other groups, ideally speakers of another language, and children belong to their father's group.",
+  "sources": [
+   "https://pib.socioambiental.org/pt/Povo:Tukano",
+   "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos"
+  ],
+  "photo": {
+   "file": "img/peoples/tukano.jpg",
+   "author": "Pedro França / Agência Senado (Senado Federal)",
+   "license": "CC BY 2.0",
+   "source_url": "https://commons.wikimedia.org/wiki/File:Procuradoria_Especial_da_Mulher_(26602985692).jpg",
+   "caption_pt": "Daiara Tukano, artista e comunicadora, em audiência no Senado sobre a saúde da mulher indígena, 2016.",
+   "caption_en": "Daiara Tukano, artist and broadcaster, at a Senate hearing on Indigenous women's health, 2016."
+  },
+  "confidence": "checked"
+ },
+ "desana": {
+  "name": "Desana",
+  "aliases": [
+   "Desána",
+   "Desano"
+  ],
+  "pt": "Os Desana são um dos povos de língua Tukano Oriental da bacia do rio Uaupés, no noroeste do Amazonas e na Colômbia. No Brasil são 1.699 pessoas (ISA/Foirn, 2017). Os grupos do Uaupés casam com pessoas de outros grupos, de preferência falantes de outra língua, e os filhos pertencem ao grupo do pai.",
+  "en": "The Desana are one of the Eastern Tukanoan peoples of the Uaupés river basin, in north-western Amazonas and in Colombia. In Brazil they number 1,699 (ISA/Foirn, 2017). The groups of the Uaupés marry people from other groups, ideally speakers of another language, and children belong to their father's group.",
+  "sources": [
+   "https://pib.socioambiental.org/pt/Povo:Desana",
+   "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos"
+  ],
+  "photo": null,
+  "confidence": "checked"
+ },
+ "naduhup": {
+  "name": "Povos Naduhup (Hupd'äh, Yuhupdeh, Dâw, Nadëb)",
+  "aliases": [
+   "Makú",
+   "Maku"
+  ],
+  "pt": "Maku é o nome dado na região do rio Negro, no Amazonas, a povos da família linguística Naduhup, que são os Hupd'äh (cerca de 1.000 pessoas, 2012), os Yuhupdeh (1.058, Siasi/Sesai 2020), os Nadëb (483, Siasi/Sesai 2014) e os Dâw (142, 2020). Vivem entre os grandes rios, longe das margens, e são grandes conhecedores dos caminhos da floresta e da caça.",
+  "en": "Maku is the name given in the Rio Negro region of Amazonas to peoples of the Naduhup language family, namely the Hupd'äh (about 1,000 people, 2012), the Yuhupdeh (1,058, Siasi/Sesai 2020), the Nadëb (483, Siasi/Sesai 2014) and the Dâw (142, 2020). They live between the great rivers, away from the banks, and have deep knowledge of forest paths and of hunting.",
+  "sources": [
+   "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos",
+   "https://pib.socioambiental.org/pt/Povo:Hupd'äh",
+   "https://pib.socioambiental.org/pt/Povo:Yuhupdeh",
+   "https://pib.socioambiental.org/pt/Povo:Dâw",
+   "https://pib.socioambiental.org/pt/Povo:Nadöb"
+  ],
+  "photo": null,
+  "confidence": "checked"
+ },
+ "nadeb": {
+  "name": "Nadëb",
+  "aliases": [
+   "Nadöb",
+   "Maku Nadëb"
+  ],
+  "pt": "Os Nadëb vivem no Amazonas, na região do rio Negro, e são 483 pessoas (Siasi/Sesai, 2014). São um dos povos que os vizinhos chamam de Maku, gente do mato, em contraste com os povos das margens dos rios.",
+  "en": "The Nadëb live in Amazonas, in the Rio Negro region, and number 483 (Siasi/Sesai, 2014). They are one of the peoples their neighbours call Maku, forest people, in contrast with the peoples of the riverbanks.",
+  "sources": [
+   "https://pib.socioambiental.org/pt/Povo:Nadöb",
+   "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos"
+  ],
+  "photo": null,
+  "confidence": "checked"
+ },
+ "tariana": {
+  "name": "Tariana",
+  "aliases": [
+   "Tariano"
+  ],
+  "pt": "Os Tariana vivem às margens do rio Uaupés, no Amazonas, a maioria no povoado de Iauaretê e em comunidades vizinhas. No Brasil são 2.684 pessoas (Siasi/Sesai, 2014). De origem Aruak, hoje quase todos falam a língua tukano. Entre os povos do Uaupés são conhecidos como filhos do sangue do trovão.",
+  "en": "The Tariana live on the banks of the Uaupés river in Amazonas, most of them in the settlement of Iauaretê and nearby communities. In Brazil they number 2,684 (Siasi/Sesai, 2014). Of Arawak origin, today almost all of them speak Tukano. Among the peoples of the Uaupés they are known as children of the blood of thunder.",
+  "sources": [
+   "https://pib.socioambiental.org/pt/Povo:Tariana",
+   "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos"
+  ],
+  "photo": null,
+  "confidence": "checked"
+ },
+ "baniwa": {
+  "name": "Baniwa",
+  "aliases": [
+   "Walimanai"
+  ],
+  "pt": "Os Baniwa vivem no rio Içana e seus afluentes, na fronteira do Brasil com a Colômbia e a Venezuela, e em cidades como São Gabriel da Cachoeira. No Brasil são 7.145 pessoas (Siasi/Sesai, 2014) e falam uma língua Aruak. São mestres na cestaria de arumã, que hoje também vendem no mercado brasileiro.",
+  "en": "The Baniwa live on the Içana river and its tributaries, on the border of Brazil with Colombia and Venezuela, and in towns such as São Gabriel da Cachoeira. In Brazil they number 7,145 (Siasi/Sesai, 2014) and speak an Arawak language. They are masters of arumã basketry, which they now also sell on the Brazilian market.",
+  "sources": [
+   "https://pib.socioambiental.org/pt/Povo:Baniwa",
+   "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos"
+  ],
+  "photo": null,
+  "confidence": "checked"
+ },
+ "koripako": {
+  "name": "Koripako",
+  "aliases": [
+   "Kuripako",
+   "Curripaco"
+  ],
+  "pt": "Os Koripako vivem no alto rio Içana, no Amazonas, e na Colômbia e na Venezuela. No Brasil são 1.673 pessoas (Siasi/Sesai, 2014). Falam um dialeto da língua baniwa, da família Aruak, e como os Baniwa são mestres na cestaria de arumã.",
+  "en": "The Koripako live on the upper Içana river in Amazonas, and in Colombia and Venezuela. In Brazil they number 1,673 (Siasi/Sesai, 2014). They speak a dialect of the Baniwa language, of the Arawak family, and like the Baniwa they are masters of arumã basketry.",
+  "sources": [
+   "https://pib.socioambiental.org/pt/Povo:Koripako",
+   "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos"
+  ],
+  "photo": null,
+  "confidence": "checked"
+ },
+ "wayana": {
+  "name": "Wayana",
+  "aliases": [],
+  "pt": "Os Wayana vivem no rio Paru de Leste, no Pará, e também no Suriname e na Guiana Francesa. No Brasil são 374 pessoas (Siasi/Sesai, 2020) e falam uma língua Karib. Há pelo menos cem anos dividem as mesmas aldeias com os Aparai e casam entre si, mas cada povo afirma sua própria história.",
+  "en": "The Wayana live on the Paru de Leste river in Pará, and also in Suriname and French Guiana. In Brazil they number 374 (Siasi/Sesai, 2020) and speak a Carib language. For at least a hundred years they have shared villages with the Aparai and intermarried with them, yet each people affirms its own history.",
+  "sources": [
+   "https://pib.socioambiental.org/pt/Povo:Wayana",
+   "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos"
+  ],
+  "photo": null,
+  "confidence": "checked"
+ },
+ "aparai": {
+  "name": "Aparai",
+  "aliases": [
+   "Apalaí",
+   "Apalai"
+  ],
+  "pt": "Os Aparai vivem no rio Paru de Leste, no Pará. No Brasil são 647 pessoas (Siasi/Sesai, 2020) e falam uma língua Karib. Há pelo menos cem anos dividem as mesmas aldeias com os Wayana e casam entre si, mas cada povo afirma sua própria história.",
+  "en": "The Aparai live on the Paru de Leste river in Pará. In Brazil they number 647 (Siasi/Sesai, 2020) and speak a Carib language. For at least a hundred years they have shared villages with the Wayana and intermarried with them, yet each people affirms its own history.",
+  "sources": [
+   "https://pib.socioambiental.org/pt/Povo:Aparai",
+   "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos"
+  ],
+  "photo": null,
+  "confidence": "checked"
+ },
+ "karipuna-do-amapa": {
+  "name": "Karipuna do Amapá",
+  "aliases": [
+   "Karipuna"
+  ],
+  "pt": "Os Karipuna do Amapá vivem na região do baixo rio Oiapoque, no Amapá. São 3.030 pessoas (Siasi/Sesai, 2020) e falam uma língua crioula. Chamam de nosso sistema o conjunto de práticas e conhecimentos que consideram próprios, e que reúne saberes xamânicos e católicos.",
+  "en": "The Karipuna of Amapá live in the lower Oiapoque river region, in Amapá. They number 3,030 (Siasi/Sesai, 2020) and speak a creole language. They call our system the set of practices and knowledge they consider their own, which brings together shamanic and Catholic learning.",
+  "sources": [
+   "https://pib.socioambiental.org/pt/Povo:Karipuna_do_Amapá",
+   "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos"
+  ],
+  "photo": {
+   "file": "img/peoples/karipuna-do-amapa.jpg",
+   "author": "Márcia do Carmo / GEA (Governo do Amapá)",
+   "license": "CC BY 3.0",
+   "source_url": "https://commons.wikimedia.org/wiki/File:20240929_Assembleia_Geral_do_Povo_Karipuna_05.jpg",
+   "caption_pt": "13ª Assembleia Geral do Povo Karipuna, na comunidade Benoá, em Oiapoque, 2024.",
+   "caption_en": "13th General Assembly of the Karipuna People, in the community of Benoá, Oiapoque, 2024."
+  },
+  "confidence": "checked"
+ },
+ "huni-kuin": {
+  "name": "Huni Kuin (Kaxinawá)",
+  "aliases": [
+   "Kaxinawá",
+   "Cashinahua"
+  ],
+  "pt": "Os Huni Kuin, também conhecidos como Kaxinawá, vivem no Acre e no Peru. No Brasil são 11.729 pessoas (Siasi/Sesai, 2020) e falam uma língua Pano. As mulheres tecem e desenham o kene kuin, seu estilo de desenho geométrico.",
+  "en": "The Huni Kuin, also known as Kaxinawá, live in Acre and in Peru. In Brazil they number 11,729 (Siasi/Sesai, 2020) and speak a Panoan language. The women weave and draw kene kuin, their style of geometric design.",
+  "sources": [
+   "https://pib.socioambiental.org/pt/Povo:Huni_Kuin_(Kaxinawá)",
+   "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos"
+  ],
+  "photo": {
+   "file": "img/peoples/huni-kuin.jpg",
+   "author": "Ilex Duca",
+   "license": "CC BY-SA 4.0",
+   "source_url": "https://commons.wikimedia.org/wiki/File:Lideran%C3%A7a_jovem_Siriani_Huni_Kuin_com_a_sua_flauta_m%C3%A1gica.jpg",
+   "caption_pt": "Siriani Huni Kuin, jovem liderança, com sua flauta, 2023.",
+   "caption_en": "Siriani Huni Kuin, a young leader, with a flute, 2023."
+  },
+  "confidence": "checked"
+ },
+ "kulina": {
+  "name": "Kulina (Madiha)",
+  "aliases": [
+   "Madiha",
+   "Kulina Madijá",
+   "Kulina Páno",
+   "Madija"
+  ],
+  "pt": "Os Kulina, que chamam a si mesmos Madiha, vivem nas margens dos rios Juruá e Purus, e também no Peru. No Brasil são 7.211 pessoas (Siasi/Sesai, 2014) e falam uma língua da família Arawá. Mantêm com vigor sua música e seu xamanismo, e não se tem notícia de nenhum Kulina vivendo fora de suas terras.",
+  "en": "The Kulina, who call themselves Madiha, live on the banks of the Juruá and Purus rivers, and also in Peru. In Brazil they number 7,211 (Siasi/Sesai, 2014) and speak a language of the Arawá family. They keep their music and shamanism strong, and no Kulina is known to live away from their lands.",
+  "sources": [
+   "https://pib.socioambiental.org/pt/Povo:Kulina",
+   "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos"
+  ],
+  "photo": null,
+  "confidence": "checked"
+ },
+ "katukina-do-rio-bia": {
+  "name": "Katukina do Rio Biá (Tükuna)",
+  "aliases": [
+   "Katukina",
+   "Tukuna"
+  ],
+  "pt": "Os Katukina do Rio Biá vivem no Amazonas, são 2.004 pessoas (Siasi/Sesai, 2020) e falam uma língua da família Katukina, próxima da dos Kanamari. Chamam a si mesmos Tükuna, gente. A cerâmica é trabalho exclusivo das mulheres.",
+  "en": "The Katukina of the Biá river live in Amazonas, number 2,004 (Siasi/Sesai, 2020) and speak a language of the Katukina family, close to that of the Kanamari. They call themselves Tükuna, people. Pottery is the work of women only.",
+  "sources": [
+   "https://pib.socioambiental.org/pt/Povo:Katukina_do_Rio_Biá",
+   "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos"
+  ],
+  "photo": null,
+  "confidence": "checked"
+ },
+ "jamamadi": {
+  "name": "Jamamadi",
+  "aliases": [
+   "Jamamadí",
+   "Yamamadi"
+  ],
+  "pt": "Os Jamamadi vivem na região dos rios Juruá e Purus, no Amazonas. São 1.138 pessoas (Siasi/Sesai, 2020) e falam uma língua da família Arawá. Sobreviveram aos dois ciclos da borracha. Nos anos 1960 previa-se seu desaparecimento como povo, mas desde então se recuperaram em número e em cultura.",
+  "en": "The Jamamadi live in the region of the Juruá and Purus rivers, in Amazonas. They number 1,138 (Siasi/Sesai, 2020) and speak a language of the Arawá family. They survived the two rubber booms. In the 1960s their disappearance as a people was predicted, but since then they have recovered in numbers and in culture.",
+  "sources": [
+   "https://pib.socioambiental.org/pt/Povo:Jamamadi",
+   "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos"
+  ],
+  "photo": null,
+  "confidence": "checked"
+ },
+ "jarawara": {
+  "name": "Jarawara",
+  "aliases": [
+   "Jarauara"
+  ],
+  "pt": "Os Jarawara vivem na região dos rios Juruá e Purus, no Amazonas, e são 271 pessoas (Jarawara, 2014). Falam uma língua da família Arawá. Vivem apenas na Terra Indígena Jarawara/Jamamadi/Kanamanti, constantemente invadida por pescadores e madeireiros.",
+  "en": "The Jarawara live in the region of the Juruá and Purus rivers, in Amazonas, and number 271 (Jarawara, 2014). They speak a language of the Arawá family. They live only in the Jarawara/Jamamadi/Kanamanti Indigenous Land, which is constantly invaded by fishermen and loggers.",
+  "sources": [
+   "https://pib.socioambiental.org/pt/Povo:Jarawara",
+   "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos"
+  ],
+  "photo": null,
+  "confidence": "checked"
+ },
+ "kokama": {
+  "name": "Kokama",
+  "aliases": [
+   "Cocama"
+  ],
+  "pt": "Os Kokama vivem no rio Solimões, no Amazonas, e também no Peru e na Colômbia. No Brasil são 19.052 pessoas (Siasi/Sesai, 2020), e sua língua é da família Tupi-Guarani. Missões e frentes extrativistas os deslocaram à força, e por muitas décadas tiveram de negar que eram indígenas. Desde os anos 1980 a identidade kokama vem sendo cada vez mais valorizada na luta por terra, saúde e educação.",
+  "en": "The Kokama live on the Solimões river in Amazonas, and also in Peru and Colombia. In Brazil they number 19,052 (Siasi/Sesai, 2020), and their language belongs to the Tupi-Guarani family. Missions and extractive fronts displaced them by force, and for many decades they had to deny being Indigenous. Since the 1980s Kokama identity has been valued more and more in their struggle for land, health care and education.",
+  "sources": [
+   "https://pib.socioambiental.org/pt/Povo:Kokama",
+   "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos"
+  ],
+  "photo": {
+   "file": "img/peoples/kokama.jpg",
+   "author": "Fábio Pontes / Amazônia Real",
+   "license": "CC BY 2.0",
+   "source_url": "https://commons.wikimedia.org/wiki/File:CACIQUE_KOKAMA_JACINTO_MORAES_PANURO_FOTO_FABIO_PONTES_(36956801383).jpg",
+   "caption_pt": "O cacique kokama Jacinto Moraes Panuro em São Paulo de Olivença, Amazonas, 2017.",
+   "caption_en": "The Kokama leader Jacinto Moraes Panuro in São Paulo de Olivença, Amazonas, 2017."
+  },
+  "confidence": "checked"
+ },
+ "rikbaktsa": {
+  "name": "Rikbaktsa",
+  "aliases": [
+   "Rikbaktsá",
+   "Erigbaktsa"
+  ],
+  "pt": "Os Rikbaktsa vivem na bacia do rio Juruena, no noroeste de Mato Grosso. São 1.600 pessoas (Siasi/Sesai, 2020) e sua língua forma uma família própria. Na década de 1960 perderam 75% de seu povo. Recuperaram-se e são respeitados na região pela firmeza com que defendem seu território e seu modo de vida.",
+  "en": "The Rikbaktsa live in the Juruena river basin, in north-western Mato Grosso. They number 1,600 (Siasi/Sesai, 2020) and their language forms a family of its own. In the 1960s they lost 75% of their people. They recovered and are respected in the region for the firmness with which they defend their territory and way of life.",
+  "sources": [
+   "https://pib.socioambiental.org/pt/Povo:Rikbaktsa",
+   "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos"
+  ],
+  "photo": {
+   "file": "img/peoples/rikbaktsa.jpg",
+   "author": "Valter Campanato / Agência Brasil",
+   "license": "CC BY 3.0 BR",
+   "source_url": "https://commons.wikimedia.org/wiki/File:%C3%8Dndios_da_etnia_da_Rikbaksta.jpg",
+   "caption_pt": "Rikbaktsa no encerramento dos Jogos dos Povos Indígenas, em Olinda, 2007.",
+   "caption_en": "Rikbaktsa at the closing ceremony of the Indigenous Peoples Games in Olinda, 2007."
+  },
+  "confidence": "checked"
+ },
+ "kanamari": {
+  "name": "Kanamari (Tukuna)",
+  "aliases": [
+   "Kanamarí",
+   "Tukuna"
+  ],
+  "pt": "Os Kanamari vivem no Amazonas, a maioria nos afluentes do alto e médio rio Juruá, e também no Javari e no Japurá. São 4.684 pessoas (Siasi/Sesai, 2020) e falam uma língua da família Katukina. Chamam a si mesmos Tukuna, gente. Apesar da presença crescente e violenta de não indígenas no século XX, mantêm a riqueza de sua língua, de seus mitos e rituais.",
+  "en": "The Kanamari live in Amazonas, most of them on the tributaries of the upper and middle Juruá river, and also on the Javari and the Japurá. They number 4,684 (Siasi/Sesai, 2020) and speak a language of the Katukina family. They call themselves Tukuna, people. Despite the growing and violent presence of non-Indigenous people in the 20th century, they have kept the richness of their language, myths and rituals.",
+  "sources": [
+   "https://pib.socioambiental.org/pt/Povo:Kanamari",
+   "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos"
+  ],
+  "photo": null,
+  "confidence": "checked"
+ },
+ "noke-koi": {
+  "name": "Noke Kuin (Katukina)",
+  "aliases": [
+   "Katukina",
+   "Katukina Pano",
+   "Noke Koî",
+   "Noke Koi"
+  ],
+  "pt": "Os Katukina do Acre vivem em duas terras indígenas, nos rios Campinas e Gregório, e são 1.154 pessoas (Siasi/Sesai, 2014). Falam uma língua Pano. Nos últimos anos, por iniciativa de jovens lideranças, passaram a usar o nome Noke Kuin, gente verdadeira. A rodovia BR-364 passa junto à aldeia do Campinas.",
+  "en": "The Katukina of Acre live in two Indigenous lands, on the Campinas and Gregório rivers, and number 1,154 (Siasi/Sesai, 2014). They speak a Panoan language. In recent years, at the initiative of young leaders, they have taken up the name Noke Kuin, true people. The BR-364 highway runs beside the village on the Campinas.",
+  "sources": [
+   "https://pib.socioambiental.org/pt/Povo:Katukina_Pano",
+   "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos"
+  ],
+  "photo": null,
+  "confidence": "checked"
+ },
+ "gaviao-pykopje": {
+  "name": "Gavião Pykopjê",
+  "aliases": [
+   "Gavião Pukobiê",
+   "Pykopcatejê"
+  ],
+  "pt": "Os Gavião Pykopjê vivem no Maranhão, são 769 pessoas (Siasi/Sesai, 2014) e falam uma língua Jê. São um povo Timbira. Continuam falando sua língua, furando a orelha e fazendo suas festas, que é quando as crianças aprendem quem é quem na aldeia. A pressão em torno de sua terra é grande.",
+  "en": "The Gavião Pykopjê live in Maranhão, number 769 (Siasi/Sesai, 2014) and speak a Jê language. They are a Timbira people. They go on speaking their language, piercing ears and holding their festivals, which is when children learn who is who in the village. The pressure around their land is heavy.",
+  "sources": [
+   "https://pib.socioambiental.org/pt/Povo:Gavião_Pykopjê",
+   "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos"
+  ],
+  "photo": null,
+  "confidence": "checked"
+ },
+ "ava-canoeiro": {
+  "name": "Avá-Canoeiro (Ãwa)",
+  "aliases": [
+   "Ava-Canoeiro",
+   "Ãwa"
+  ],
+  "pt": "Os Avá-Canoeiro vivem no Tocantins e em Goiás e falam uma língua Tupi-Guarani. Ficaram conhecidos como o povo que mais resistiu aos colonizadores no Brasil Central, e os dois grupos que restam têm em comum a experiência do genocídio. Eram 25 pessoas em 2012 (Siasi/Sesai).",
+  "en": "The Avá-Canoeiro live in Tocantins and Goiás and speak a Tupi-Guarani language. They became known as the people who most resisted the colonisers in Central Brazil, and the two groups that remain share the experience of genocide. They numbered 25 in 2012 (Siasi/Sesai).",
+  "sources": [
+   "https://pib.socioambiental.org/pt/Povo:Avá-Canoeiro",
+   "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos"
+  ],
+  "photo": null,
+  "confidence": "checked"
+ },
+ "yawanawa": {
+  "name": "Yawanawá",
+  "aliases": [
+   "Yawanawa"
+  ],
+  "pt": "Os Yawanawá vivem nas margens do rio Gregório, no Acre, na Terra Indígena Rio Gregório. No Brasil são 849 pessoas (Siasi/Sesai, 2020) e falam uma língua Pano. Dizem que são como as queixadas, todos juntos. A aldeia Nova Esperança foi aberta em 1992, depois que deixaram o seringal onde trabalhavam para os patrões.",
+  "en": "The Yawanawá live on the banks of the Gregório river in Acre, in the Rio Gregório Indigenous Land. In Brazil they number 849 (Siasi/Sesai, 2020) and speak a Panoan language. They say they are like white-lipped peccaries, all together. The village of Nova Esperança was opened in 1992, after they left the rubber estate where they had worked for the bosses.",
+  "sources": [
+   "https://pib.socioambiental.org/pt/Povo:Yawanawá",
+   "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos"
+  ],
+  "photo": null,
+  "confidence": "checked"
+ },
+ "umutina": {
+  "name": "Balatiponé (Umutina)",
+  "aliases": [
+   "Umutina"
+  ],
+  "pt": "Os Balatiponé, conhecidos como Umutina, vivem em Mato Grosso, na região do alto rio Paraguai. São 515 pessoas (Siasi/Sesai, 2014), e sua língua é da família Bororo. O contato lhes custou a língua, a terra tradicional e grande parte da população. Hoje trabalham para recuperar suas tradições.",
+  "en": "The Balatiponé, known as Umutina, live in Mato Grosso, in the upper Paraguay river region. They number 515 (Siasi/Sesai, 2014), and their language belongs to the Bororo family. Contact cost them their language, their traditional land and a large part of their population. Today they are working to recover their traditions.",
+  "sources": [
+   "https://pib.socioambiental.org/pt/Povo:Balatiponé_(Umutina)",
+   "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos"
+  ],
+  "photo": {
+   "file": "img/peoples/umutina.jpg",
+   "author": "Valter Campanato / Agência Brasil",
+   "license": "CC BY 3.0 BR",
+   "source_url": "https://commons.wikimedia.org/wiki/File:Umutina.jpg",
+   "caption_pt": "Creusa Soipa, cacique Umutina, 2007.",
+   "caption_en": "Creusa Soipa, Umutina leader, 2007."
+  },
+  "confidence": "checked"
+ },
+ "suruwaha": {
+  "name": "Suruwaha (Zuruahã)",
+  "aliases": [
+   "Zuruahã"
+  ],
+  "pt": "Os Suruwaha vivem no médio rio Purus, no Amazonas, longe das principais vias de navegação. São 171 pessoas (Siasi/Sesai, 2014) e falam uma língua da família Arawá. Mantiveram um isolamento cauteloso até o fim dos anos 1970, quando sorveiros invadiram seu território.",
+  "en": "The Suruwaha live on the middle Purus river in Amazonas, away from the main waterways. They number 171 (Siasi/Sesai, 2014) and speak a language of the Arawá family. They kept a cautious isolation until the late 1970s, when latex gatherers invaded their territory.",
+  "sources": [
+   "https://pib.socioambiental.org/pt/Povo:Zuruahã",
+   "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos"
+  ],
+  "photo": null,
+  "confidence": "checked"
+ },
+ "arekuna": {
+  "name": "Arekuna",
+  "aliases": [
+   "Jaricuna",
+   "Pemon"
+  ],
+  "pt": "Os Arekuna, que fontes antigas chamam de Jaricuna, são um povo Pemon, registrado nos anos 1930 na região do monte Roraima. Em Roraima eram 57 pessoas no censo de 2022 (IBGE).",
+  "en": "The Arekuna, called Jaricuna in older sources, are a Pemon people, recorded in the 1930s in the Mount Roraima region. In Roraima they numbered 57 in the 2022 census (IBGE).",
+  "sources": [
+   "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos",
+   "https://pib.socioambiental.org/pt/Povo:Ingarikó"
+  ],
+  "photo": null,
+  "confidence": "thin"
+ },
+ "wajapi": {
+  "name": "Wajãpi",
+  "aliases": [
+   "Waiãpy",
+   "Waiãpi"
+  ],
+  "pt": "Os Wajãpi vivem no Amapá e no Pará, entre os rios Oiapoque, Jari e Araguari, e também na Guiana Francesa. No Brasil são 1.612 pessoas (Siasi/Sesai, 2020) e falam uma língua Tupi-Guarani. Em 1994 começaram eles mesmos a demarcar sua terra e fundaram o Conselho das Aldeias Wajãpi, o Apina.",
+  "en": "The Wajãpi live in Amapá and Pará, between the Oiapoque, Jari and Araguari rivers, and also in French Guiana. In Brazil they number 1,612 (Siasi/Sesai, 2020) and speak a Tupi-Guarani language. In 1994 they began to mark the boundaries of their land themselves and founded the Council of Wajãpi Villages, Apina.",
+  "sources": [
+   "https://pib.socioambiental.org/pt/Povo:Wajãpi",
+   "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos"
+  ],
+  "photo": null,
+  "confidence": "checked"
+ },
+ "anambe": {
+  "name": "Anambé",
+  "aliases": [],
+  "pt": "Os Anambé vivem na região do rio Cairari, no Pará. São 182 pessoas (Siasi/Sesai, 2020), de língua Tupi-Guarani. Suas casas e seu dia a dia se parecem com os dos vizinhos da região, mas eles resistem a qualquer tentativa de tirá-los do Cairari.",
+  "en": "The Anambé live in the Cairari river region of Pará. They number 182 (Siasi/Sesai, 2020) and their language is Tupi-Guarani. Their houses and daily life resemble those of their neighbours in the region, but they resist any attempt to move them away from the Cairari.",
+  "sources": [
+   "https://pib.socioambiental.org/pt/Povo:Anambé",
+   "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos"
+  ],
+  "photo": null,
+  "confidence": "checked"
+ },
+ "sakurabiat": {
+  "name": "Sakurabiat",
+  "aliases": [
+   "Sakirabiar",
+   "Mequéns"
+  ],
+  "pt": "Os Sakurabiat vivem em Rondônia, são 219 pessoas (Siasi/Sesai, 2014) e falam uma língua da família Tupari. Trabalharam por muito tempo na borracha e tiveram a terra invadida por madeireiras, até que ela foi demarcada em 1996. Os mais velhos contam as histórias dos antigos na língua sakurabiat, e o povo busca maneiras de voltar a ensiná-la às crianças.",
+  "en": "The Sakurabiat live in Rondônia, number 219 (Siasi/Sesai, 2014) and speak a language of the Tupari family. They worked for a long time in rubber and had their land invaded by logging companies, until it was demarcated in 1996. The elders tell the stories of the old ones in the Sakurabiat language, and the people are looking for ways to teach it to their children again.",
+  "sources": [
+   "https://pib.socioambiental.org/pt/Povo:Sakurabiat",
+   "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos"
+  ],
+  "photo": null,
+  "confidence": "checked"
+ },
+ "nukini": {
+  "name": "Nukini",
+  "aliases": [
+   "Nukiní"
+  ],
+  "pt": "Os Nukini vivem no vale do Juruá, no Acre, são 726 pessoas (Siasi/Sesai, 2020) e pertencem aos povos de língua Pano. Sua terra é vizinha do Parque Nacional da Serra do Divisor, numa área sempre ameaçada por madeireiros e caçadores. Reivindicam a ampliação de seu território.",
+  "en": "The Nukini live in the Juruá valley in Acre, number 726 (Siasi/Sesai, 2020) and belong to the Panoan-speaking peoples. Their land borders the Serra do Divisor National Park, in an area always under threat from loggers and hunters. They are claiming an enlargement of their territory.",
+  "sources": [
+   "https://pib.socioambiental.org/pt/Povo:Nukini",
+   "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos"
+  ],
+  "photo": null,
+  "confidence": "checked"
+ },
+ "ashaninka": {
+  "name": "Ashaninka",
+  "aliases": [
+   "Kampa",
+   "Asháninka"
+  ],
+  "pt": "A grande maioria dos Ashaninka vive no Peru. No Brasil são 1.720 pessoas (Siasi/Sesai, 2020), em terras da região do Alto Juruá, no Acre, e falam uma língua Aruak. Do lado brasileiro combatem a exploração de madeira em suas terras desde 1980.",
+  "en": "The great majority of the Ashaninka live in Peru. In Brazil they number 1,720 (Siasi/Sesai, 2020), on lands in the Upper Juruá region of Acre, and speak an Arawak language. On the Brazilian side they have been fighting logging on their lands since 1980.",
+  "sources": [
+   "https://pib.socioambiental.org/pt/Povo:Ashaninka",
+   "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos"
+  ],
+  "photo": {
+   "file": "img/peoples/ashaninka.jpg",
+   "author": "Antônio Milena / Agência Brasil",
+   "license": "CC BY 3.0 BR",
+   "source_url": "https://commons.wikimedia.org/wiki/File:Ash%C3%A1ninka.jpg",
+   "caption_pt": "Ashaninka de Marechal Thaumaturgo, no Acre, 2004.",
+   "caption_en": "Ashaninka of Marechal Thaumaturgo, Acre, 2004."
+  },
+  "confidence": "checked"
+ },
+ "shawadawa": {
+  "name": "Shawãdawa (Arara)",
+  "aliases": [
+   "Arara do Acre",
+   "Arara Shawãdawa",
+   "Shawanaua"
+  ],
+  "pt": "Os Shawãdawa, também chamados Arara, vivem no Acre, são 677 pessoas (Siasi/Sesai, 2014) e falam uma língua Pano. Desde o fim do século XIX foram explorados nos seringais. Nos últimos anos trabalham para revalorizar sua língua e suas tradições e para garantir seus direitos à terra.",
+  "en": "The Shawãdawa, also called Arara, live in Acre, number 677 (Siasi/Sesai, 2014) and speak a Panoan language. From the late 19th century they were exploited on the rubber estates. In recent years they have worked to restore the standing of their language and traditions and to secure their land rights.",
+  "sources": [
+   "https://pib.socioambiental.org/pt/Povo:Arara_Shawãdawa",
+   "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos"
+  ],
+  "photo": null,
+  "confidence": "checked"
+ },
+ "kuruaya": {
+  "name": "Kuruaya",
+  "aliases": [
+   "Kuruáya",
+   "Kuruaia"
+  ],
+  "pt": "Os Kuruaya vivem no Pará, são 283 pessoas (Siasi/Sesai, 2020), e sua língua é da família Munduruku. O trabalho forçado nos seringais e castanhais desfez a vida em suas aldeias no rio Curuá, e nos anos 1960 chegaram a ser dados por extintos. A conquista de suas terras garantiu o reconhecimento de sua identidade, e hoje vivem entre a aldeia e a cidade.",
+  "en": "The Kuruaya live in Pará, number 283 (Siasi/Sesai, 2020), and their language belongs to the Munduruku family. Forced labour on rubber and Brazil nut estates broke up life in their villages on the Curuá river, and in the 1960s they were declared extinct. Winning their lands secured recognition of their identity, and today they live between village and town.",
+  "sources": [
+   "https://pib.socioambiental.org/pt/Povo:Kuruaya",
+   "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos"
+  ],
+  "photo": null,
+  "confidence": "checked"
+ },
+ "juma": {
+  "name": "Juma",
+  "aliases": [],
+  "pt": "Os Juma vivem no Amazonas e falam uma língua Tupi-Guarani do grupo Kagwahiva. No século XVIII eram provavelmente de 12 a 15 mil. Depois de sucessivos massacres, em 2002 restavam cinco pessoas. Hoje são 28 (Associação do Povo Indígena Juma, 2026).",
+  "en": "The Juma live in Amazonas and speak a Tupi-Guarani language of the Kagwahiva group. In the 18th century they probably numbered 12 to 15 thousand. After successive massacres, five people remained in 2002. Today they are 28 (Juma Indigenous People's Association, 2026).",
+  "sources": [
+   "https://pib.socioambiental.org/pt/Povo:Juma",
+   "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos"
+  ],
+  "photo": null,
+  "confidence": "checked"
+ },
+ "arara-da-volta-grande": {
+  "name": "Arara da Volta Grande do Xingu",
+  "aliases": [
+   "Arara do Maia",
+   "Arara do Pará"
+  ],
+  "pt": "Os Arara da Volta Grande do Xingu vivem no Pará e são 293 pessoas (Verthic, 2019). Segundo os mais velhos, descendem dos Arara do rio Bacajá. Viveram o avanço dos seringais e a abertura da Transamazônica, e a chegada da usina de Belo Monte trouxe impactos ainda maiores sobre seu modo de vida.",
+  "en": "The Arara of the Volta Grande do Xingu live in Pará and number 293 (Verthic, 2019). According to their elders, they descend from the Arara of the Bacajá river. They lived through the advance of the rubber estates and the opening of the Trans-Amazonian highway, and the arrival of the Belo Monte dam brought even greater impacts on their way of life.",
+  "sources": [
+   "https://pib.socioambiental.org/pt/Povo:Arara_da_Volta_Grande_do_Xingu",
+   "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos"
+  ],
+  "photo": null,
+  "confidence": "checked"
+ },
+ "puyanawa": {
+  "name": "Puyanawa",
+  "aliases": [
+   "Poyanáwa",
+   "Poyanawa"
+  ],
+  "pt": "Os Puyanawa vivem no Acre, são 745 pessoas (Siasi/Sesai, 2014), e sua língua é da família Pano. No início do século XX foram forçados a trabalhar nos seringais, perderam suas terras e foram educados em escolas que proibiam sua cultura. Com a demarcação de seu território, passaram a retomar a língua, que tem poucos falantes.",
+  "en": "The Puyanawa live in Acre, number 745 (Siasi/Sesai, 2014), and their language belongs to the Panoan family. In the early 20th century they were forced to work on the rubber estates, lost their lands and were taught in schools that forbade their culture. With the demarcation of their territory they began to take up their language again, though few speakers remain.",
+  "sources": [
+   "https://pib.socioambiental.org/pt/Povo:Puyanawa",
+   "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos"
+  ],
+  "photo": {
+   "file": "img/peoples/puyanawa.jpg",
+   "author": "Sergio Amaral / MDS (Ministério do Desenvolvimento Social)",
+   "license": "CC BY-SA 2.0",
+   "source_url": "https://commons.wikimedia.org/wiki/File:Mais_Educa%C3%A7%C3%A3o_Ind%C3%ADgena_(16077544717).jpg",
+   "caption_pt": "Atividade da Escola Estadual Ixuay Rabui Puyanawa, na aldeia Barão, Mâncio Lima, Acre, 2014.",
+   "caption_en": "Activity at the Ixuay Rabui Puyanawa State School, Barão village, Mâncio Lima, Acre, 2014."
+  },
+  "confidence": "checked"
+ },
+ "apinaje": {
+  "name": "Apinajé",
+  "aliases": [
+   "Apinayé"
+  ],
+  "pt": "Os Apinajé vivem no Tocantins, são 2.699 pessoas (Siasi/Sesai, 2020) e falam uma língua Jê. São um povo Timbira. Na segunda metade do século XX seu território foi invadido por centenas de famílias de migrantes e cortado por estradas como a Belém-Brasília e a Transamazônica. Buscam recuperar a parte de sua terra que ficou fora da demarcação.",
+  "en": "The Apinajé live in Tocantins, number 2,699 (Siasi/Sesai, 2020) and speak a Jê language. They are a Timbira people. In the second half of the 20th century their territory was invaded by hundreds of migrant families and cut by roads such as the Belém-Brasília and the Trans-Amazonian. They seek to recover the part of their land that was left out of the demarcation.",
+  "sources": [
+   "https://pib.socioambiental.org/pt/Povo:Apinayé",
+   "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos"
+  ],
+  "photo": {
+   "file": "img/peoples/apinaje.jpg",
+   "author": "Frans Harren",
+   "license": "CC BY 2.0",
+   "source_url": "https://commons.wikimedia.org/wiki/File:Apinaj%C3%A9_father_and_son.jpg",
+   "caption_pt": "Pai e filho Apinajé, 2012.",
+   "caption_en": "Apinajé father and son, 2012."
+  },
+  "confidence": "checked"
+ },
+ "miranha": {
+  "name": "Miranha",
+  "aliases": [
+   "Miránha",
+   "Mirana"
+  ],
+  "pt": "Os Miranha vivem no Amazonas, e também na Colômbia. No Brasil são 1.685 pessoas (Siasi/Sesai, 2020). Sua língua é muito próxima do bora. No século XX seus descendentes foram tratados como grupos estigmatizados.",
+  "en": "The Miranha live in Amazonas, and also in Colombia. In Brazil they number 1,685 (Siasi/Sesai, 2020). Their language is very close to Bora. In the 20th century their descendants were treated as stigmatised groups.",
+  "sources": [
+   "https://pib.socioambiental.org/pt/Povo:Miranha",
+   "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos"
+  ],
+  "photo": null,
+  "confidence": "checked"
+ },
+ "waikhana": {
+  "name": "Waikhana (Pira-tapuya)",
+  "aliases": [
+   "Piratapuya",
+   "Pira-tapuya",
+   "Piratapuyo"
+  ],
+  "pt": "Os Waikhana, conhecidos na região como Pira-tapuya, vivem nos rios Papuri e Uaupés, na fronteira entre o Brasil e a Colômbia. No Brasil são 756 pessoas (Siasi/Sesai, 2020) e falam uma língua da família Tukano. Waikhana quer dizer povo peixe.",
+  "en": "The Waikhana, known in the region as Pira-tapuya, live on the Papuri and Uaupés rivers, on the border between Brazil and Colombia. In Brazil they number 756 (Siasi/Sesai, 2020) and speak a language of the Tukanoan family. Waikhana means fish people.",
+  "sources": [
+   "https://pib.socioambiental.org/pt/Povo:Waikhana_(Pira-tapuya)",
+   "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos"
+  ],
+  "photo": null,
+  "confidence": "checked"
+ },
+ "apolima-arara": {
+  "name": "Apolima-Arara",
+  "aliases": [
+   "Arara do Rio Amônia",
+   "Arara Apolima",
+   "Arara do Acre"
+  ],
+  "pt": "Os Apolima-Arara, ou Arara do Rio Amônia, vivem no Acre e são 434 pessoas (Siasi/Sesai, 2014).",
+  "en": "The Apolima-Arara, or Arara of the Amônia river, live in Acre and number 434 (Siasi/Sesai, 2014).",
+  "sources": [
+   "https://pib.socioambiental.org/pt/Povo:Arara_do_Rio_Amônia",
+   "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos"
+  ],
+  "photo": null,
+  "confidence": "thin"
+ },
+ "chiquitano": {
+  "name": "Chiquitano",
+  "aliases": [
+   "Chiquitáno"
+  ],
+  "pt": "A grande maioria dos Chiquitano vive na Bolívia. No Brasil são 473 pessoas (Siasi/Funasa, 2012), em Mato Grosso, na região da fronteira. O povo se formou a partir de vários grupos reunidos em missões jesuíticas no século XVII. No Brasil foram explorados como mão de obra barata por fazendeiros e lutam pelo direito a uma terra indígena.",
+  "en": "The great majority of the Chiquitano live in Bolivia. In Brazil they number 473 (Siasi/Funasa, 2012), in Mato Grosso, in the border region. The people took shape from several groups gathered in Jesuit missions in the 17th century. In Brazil they have been exploited as cheap labour by ranchers and are fighting for the right to an Indigenous land.",
+  "sources": [
+   "https://pib.socioambiental.org/pt/Povo:Chiquitano",
+   "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos"
+  ],
+  "photo": null,
+  "confidence": "checked"
+ },
+ "karitiana": {
+  "name": "Karitiana",
+  "aliases": [
+   "Yjxa"
+  ],
+  "pt": "Os Karitiana vivem em Rondônia e eram 333 pessoas em 2014 (Siasi/Sesai). Sua língua é a única que resta da família Arikém. Investem na escola para reforçar o ensino da língua, e suas aldeias passaram de duas em 2005 para sete em 2021.",
+  "en": "The Karitiana live in Rondônia and numbered 333 in 2014 (Siasi/Sesai). Their language is the only one left of the Arikém family. They invest in schooling to strengthen the teaching of the language, and their villages grew from two in 2005 to seven in 2021.",
+  "sources": [
+   "https://pib.socioambiental.org/pt/Povo:Karitiana",
+   "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos"
+  ],
+  "photo": null,
+  "confidence": "checked"
+ },
+ "krepynkateje": {
+  "name": "Krepynkatejê",
+  "aliases": [
+   "Krepumkateyê",
+   "Timbira"
+  ],
+  "pt": "Os Krepynkatejê são um povo de língua Jê do Maranhão, com 960 pessoas (CTI, 2022).",
+  "en": "The Krepynkatejê are a Jê-speaking people of Maranhão, numbering 960 (CTI, 2022).",
+  "sources": [
+   "https://pib.socioambiental.org/pt/Povo:Krepynkatejê",
+   "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos"
+  ],
+  "photo": null,
+  "confidence": "thin"
+ },
+ "zoe": {
+  "name": "Zo'é",
+  "aliases": [
+   "Zo´é",
+   "Poturu"
+  ],
+  "pt": "Os Zo'é vivem numa área de floresta densa entre os rios Cuminapanema e Erepecuru, no norte do Pará. São 350 pessoas (Iepé, 2025) e falam uma língua Tupi-Guarani. São um povo de recente contato, que mantém com vigor sua organização social e territorial. Por meio de sua organização, a Tekohara, cuidam da gestão de sua terra.",
+  "en": "The Zo'é live in an area of dense forest between the Cuminapanema and Erepecuru rivers, in northern Pará. They number 350 (Iepé, 2025) and speak a Tupi-Guarani language. They are a people of recent contact who keep their social and territorial organisation strong. Through their organisation, Tekohara, they look after the management of their land.",
+  "sources": [
+   "https://pib.socioambiental.org/pt/Povo:Zo'é",
+   "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos"
+  ],
+  "photo": null,
+  "confidence": "checked"
+ },
+ "naruvotu": {
+  "name": "Naruvotu",
+  "aliases": [
+   "Naravute",
+   "Naruvôtu"
+  ],
+  "pt": "Os Naruvotu são um povo de língua Karib do Alto Xingu, em Mato Grosso, com 81 pessoas em 2003 (Fiorini). Depois das epidemias de 1946 e 1954 ficaram reduzidos a cerca de dez pessoas, que passaram a viver nas aldeias dos Kalapalo e dos Kuikuro. Chegaram a ser dados por extintos, e sua terra, Pequizal do Naruvotu, só foi identificada em 2006.",
+  "en": "The Naruvotu are a Carib-speaking people of the Upper Xingu, in Mato Grosso, with 81 members in 2003 (Fiorini). After the epidemics of 1946 and 1954 they were reduced to about ten people, who went to live in Kalapalo and Kuikuro villages. They were declared extinct, and their land, Pequizal do Naruvotu, was identified only in 2006.",
+  "sources": [
+   "https://pib.socioambiental.org/pt/Povo:Naruvotu",
+   "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos"
+  ],
+  "photo": null,
+  "confidence": "checked"
+ },
+ "tora": {
+  "name": "Torá",
+  "aliases": [],
+  "pt": "Os Torá vivem perto da foz do rio Marmelos, no Amazonas, e são 330 pessoas (Siasi/Sesai, 2014). Sua língua, da família Txapakura, se perdeu, e hoje falam português. No século XVIII foram duramente reprimidos por tentar impedir a invasão de suas terras e quase desapareceram.",
+  "en": "The Torá live near the mouth of the Marmelos river in Amazonas and number 330 (Siasi/Sesai, 2014). Their language, of the Txapakura family, was lost, and today they speak Portuguese. In the 18th century they were harshly repressed for trying to stop the invasion of their lands and almost disappeared.",
+  "sources": [
+   "https://pib.socioambiental.org/pt/Povo:Torá",
+   "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos"
+  ],
+  "photo": null,
+  "confidence": "checked"
+ },
+ "guarani": {
+  "name": "Guarani",
+  "aliases": [
+   "Guarani Mbya",
+   "Guaraní",
+   "Mbya"
+  ],
+  "pt": "Os Guarani vivem em um território que se estende por Brasil, Bolívia, Paraguai e Argentina. No Brasil são 85.255 pessoas (Mapa Guarani Continental, 2016), a maior parte no Sul, no Sudeste e em Mato Grosso do Sul, com comunidades também no Pará. Falam guarani, da família Tupi-Guarani, e chamam a si mesmos Avá, pessoa.",
+  "en": "The Guarani live in a territory that stretches across Brazil, Bolivia, Paraguay and Argentina. In Brazil they number 85,255 (Mapa Guarani Continental, 2016), most of them in the South, the Southeast and Mato Grosso do Sul, with communities in Pará as well. They speak Guarani, of the Tupi-Guarani family, and call themselves Avá, person.",
+  "sources": [
+   "https://pib.socioambiental.org/pt/Povo:Guarani",
+   "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos"
+  ],
+  "photo": null,
+  "confidence": "checked"
+ },
+ "arapium": {
+  "name": "Arapium",
+  "aliases": [
+   "Arapiun"
+  ],
+  "pt": "Os Arapium vivem no Pará e são 2.204 pessoas (Siasi/Sesai, 2012).",
+  "en": "The Arapium live in Pará and number 2,204 (Siasi/Sesai, 2012).",
+  "sources": [
+   "https://pib.socioambiental.org/pt/Povo:Arapium",
+   "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos"
+  ],
+  "photo": null,
+  "confidence": "thin"
+ },
+ "hi-merima": {
+  "name": "Hi-Merimã",
+  "aliases": [
+   "Himarimã",
+   "Hi-merimã"
+  ],
+  "pt": "Os Hi-Merimã vivem em isolamento voluntário entre os rios Juruá e Purus, no Amazonas, e sua língua é classificada na família Arawá. Não se sabe quantos são. Como para todos os povos isolados, o contato forçado e as invasões trazem risco de epidemias e de morte.",
+  "en": "The Hi-Merimã live in voluntary isolation between the Juruá and Purus rivers in Amazonas, and their language is classified in the Arawá family. Their number is not known. As for all isolated peoples, forced contact and invasions bring the risk of epidemics and death.",
+  "sources": [
+   "https://pib.socioambiental.org/pt/Povo:Hi-merimã",
+   "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos",
+   "https://pt.wikipedia.org/wiki/Hi-Merimã",
+   "https://en.wikipedia.org/wiki/Himarimã",
+   "https://pib.socioambiental.org/pt/Povos_isolados"
+  ],
+  "photo": null,
+  "confidence": "checked"
+ },
+ "krikati": {
+  "name": "Krĩkati",
+  "aliases": [
+   "Krikati",
+   "Krikatí"
+  ],
+  "pt": "Os Krĩkati vivem no Maranhão, são 1.031 pessoas (Siasi/Sesai, 2020) e falam uma língua Jê. São um povo Timbira. Suas terras foram invadidas por fazendas de gado desde o século XIX, e só em 2004, depois de décadas de conflito, o Estado brasileiro reconheceu plenamente seus direitos sobre elas.",
+  "en": "The Krĩkati live in Maranhão, number 1,031 (Siasi/Sesai, 2020) and speak a Jê language. They are a Timbira people. Their lands were invaded by cattle ranches from the 19th century, and only in 2004, after decades of conflict, did the Brazilian state fully recognise their rights to them.",
+  "sources": [
+   "https://pib.socioambiental.org/pt/Povo:Krikatí",
+   "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos"
+  ],
+  "photo": null,
+  "confidence": "checked"
+ },
+ "aikewara": {
+  "name": "Aikewara (Suruí do Pará)",
+  "aliases": [
+   "Suruí do Pará",
+   "Suruí Aikewara"
+  ],
+  "pt": "Os Aikewara vivem no Pará, são 470 pessoas (Siasi/Sesai, 2020) e falam uma língua Tupi-Guarani. Em 1960, no contato definitivo com os brancos, uma epidemia de gripe matou dois terços do povo, que ficou reduzido a 40 pessoas. Desde então a população se recuperou.",
+  "en": "The Aikewara live in Pará, number 470 (Siasi/Sesai, 2020) and speak a Tupi-Guarani language. In 1960, at the time of lasting contact with outsiders, a flu epidemic killed two thirds of the people, leaving 40. Since then the population has recovered.",
+  "sources": [
+   "https://pib.socioambiental.org/pt/Povo:Aikewara",
+   "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos"
+  ],
+  "photo": null,
+  "confidence": "checked"
+ },
+ "xipaya": {
+  "name": "Xipaya",
+  "aliases": [
+   "Xipáya",
+   "Xipaia"
+  ],
+  "pt": "Os Xipaya vivem no Pará, entre a cidade de Altamira e as aldeias. São 241 pessoas (Siasi/Sesai, 2020), e sua língua é da família Juruna. Desde o século XVII foram perseguidos e forçados a trabalhar no extrativismo, e em Altamira tiveram seus direitos negados. Lutam por seus direitos territoriais.",
+  "en": "The Xipaya live in Pará, between the town of Altamira and their villages. They number 241 (Siasi/Sesai, 2020), and their language belongs to the Juruna family. From the 17th century they were persecuted and forced to work in the extractive trades, and in Altamira their rights were denied. They are fighting for their territorial rights.",
+  "sources": [
+   "https://pib.socioambiental.org/pt/Povo:Xipaya",
+   "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos"
+  ],
+  "photo": null,
+  "confidence": "checked"
+ },
+ "bororo": {
+  "name": "Boe (Bororo)",
+  "aliases": [
+   "Bororo",
+   "Boróro"
+  ],
+  "pt": "Os Bororo, que chamam a si mesmos Boe, vivem em Mato Grosso e são 1.817 pessoas (Siasi/Sesai, 2014). Sua língua dá nome à família Bororo. A palavra bororo quer dizer pátio da aldeia. As casas formam um círculo, e o pátio no centro é o lugar dos rituais. Hoje têm direito a um território descontínuo, depois de pelo menos 300 anos de contato.",
+  "en": "The Bororo, who call themselves Boe, live in Mato Grosso and number 1,817 (Siasi/Sesai, 2014). Their language gives its name to the Bororo family. The word bororo means village courtyard. The houses form a circle, and the courtyard at the centre is the place of ritual. Today they hold rights to a fragmented territory, after at least 300 years of contact.",
+  "sources": [
+   "https://pib.socioambiental.org/pt/Povo:Boe_(Bororo)",
+   "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos"
+  ],
+  "photo": {
+   "file": "img/peoples/bororo.jpg",
+   "author": "Valter Campanato / Agência Brasil",
+   "license": "CC BY 3.0 BR",
+   "source_url": "https://commons.wikimedia.org/wiki/File:%C3%8Dndios_da_etnia_Bororo-Boe.jpg",
+   "caption_pt": "Homens Bororo no encerramento dos Jogos dos Povos Indígenas, em Olinda, 2007.",
+   "caption_en": "Bororo men at the closing ceremony of the Indigenous Peoples Games in Olinda, 2007."
+  },
+  "confidence": "checked"
+ },
+ "kambeba": {
+  "name": "Kambeba (Omágua)",
+  "aliases": [
+   "Kambéba",
+   "Omágua"
+  ],
+  "pt": "Os Kambeba, também conhecidos como Omágua, vivem no Amazonas e no Peru. No Brasil são 875 pessoas (Siasi/Sesai, 2014), e sua língua é da família Tupi-Guarani. Por causa da violência e da discriminação, deixaram por muito tempo de se dizer indígenas. A partir dos anos 1980 voltaram a se afirmar como povo.",
+  "en": "The Kambeba, also known as Omágua, live in Amazonas and in Peru. In Brazil they number 875 (Siasi/Sesai, 2014), and their language belongs to the Tupi-Guarani family. Because of violence and discrimination, for a long time they stopped calling themselves Indigenous. From the 1980s they began to affirm themselves as a people again.",
+  "sources": [
+   "https://pib.socioambiental.org/pt/Povo:Kambeba",
+   "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos"
+  ],
+  "photo": null,
+  "confidence": "checked"
+ },
+ "tuyuka": {
+  "name": "Tuyuka",
+  "aliases": [
+   "Tuyúca",
+   "Tuyuca"
+  ],
+  "pt": "Os Tuyuka vivem na fronteira entre o Brasil e a Colômbia, no noroeste do Amazonas. No Brasil são 1.050 pessoas (Siasi/Sesai, 2014) e falam uma língua da família Tukano Oriental. Contam que são os Filhos da Cobra de Pedra, nascidos de uma viagem ancestral pelos rios Negro e Uaupés.",
+  "en": "The Tuyuka live on the border between Brazil and Colombia, in north-western Amazonas. In Brazil they number 1,050 (Siasi/Sesai, 2014) and speak a language of the Eastern Tukanoan family. They tell that they are the Children of the Stone Snake, born of an ancestral journey along the Negro and Uaupés rivers.",
+  "sources": [
+   "https://pib.socioambiental.org/pt/Povo:Tuyuka",
+   "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos"
+  ],
+  "photo": null,
+  "confidence": "checked"
+ },
+ "kaixana": {
+  "name": "Kaixana",
+  "aliases": [
+   "Caixana"
+  ],
+  "pt": "Os Kaixana vivem no médio rio Japurá, no Amazonas, e são 1.410 pessoas (Siasi/Sesai, 2020). Nos anos 1940 e 1950 a exploração da borracha os expulsou da terra firme, e muitos passaram a viver com os Kokama na várzea. O garimpo ilegal e a pesca predatória continuam a ameaçar seu território.",
+  "en": "The Kaixana live on the middle Japurá river in Amazonas and number 1,410 (Siasi/Sesai, 2020). In the 1940s and 1950s the rubber trade drove them from the upland, and many went to live with the Kokama on the floodplain. Illegal mining and predatory fishing continue to threaten their territory.",
+  "sources": [
+   "https://pib.socioambiental.org/pt/Povo:Kaixana",
+   "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos"
+  ],
+  "photo": null,
+  "confidence": "checked"
+ },
+ "guato": {
+  "name": "Guató",
+  "aliases": [],
+  "pt": "Os Guató são o povo do Pantanal, e vivem em Mato Grosso do Sul e Mato Grosso. São 419 pessoas (Siasi/Sesai, 2014), e sua língua forma uma família própria. Viviam nas ilhas e margens do rio Paraguai, e a partir dos anos 1940 foram expulsos pelo gado dos fazendeiros e por comerciantes de peles. Poucas famílias conseguiram ficar na ilha Ínsua.",
+  "en": "The Guató are the people of the Pantanal, and live in Mato Grosso do Sul and Mato Grosso. They number 419 (Siasi/Sesai, 2014), and their language forms a family of its own. They lived on the islands and banks of the Paraguay river, and from the 1940s they were driven out by ranchers' cattle and by hide traders. Few families managed to stay on Ínsua island.",
+  "sources": [
+   "https://pib.socioambiental.org/pt/Povo:Guató",
+   "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos"
+  ],
+  "photo": {
+   "file": "img/peoples/guato.jpg",
+   "author": "José Medeiros / Amazônia Real",
+   "license": "CC BY 2.0",
+   "source_url": "https://commons.wikimedia.org/wiki/File:Xam%C3%A3_Sandra_da_Silva_Guat%C3%B3_Foto_Jos%C3%A9_Medeiros-9941_(50682409176).jpg",
+   "caption_pt": "A xamã Sandra da Silva Guató na Terra Indígena Baía dos Guató, Mato Grosso, 2020.",
+   "caption_en": "The shaman Sandra da Silva Guató in the Baía dos Guató Indigenous Land, Mato Grosso, 2020."
+  },
+  "confidence": "checked"
+ },
+ "asurini-do-tocantins": {
+  "name": "Asurini do Tocantins",
+  "aliases": [
+   "Asurini do Trocará",
+   "Akuáwa-Asurini"
+  ],
+  "pt": "Os Asurini do Tocantins, também conhecidos como Asurini do Trocará, o nome de sua terra, são 671 pessoas (Siasi/Sesai, 2020) e falam uma língua Tupi-Guarani. Contam que depois de um dilúvio a terra ficou mole, e que o herói Mahira chamou a anta para endurecê-la de novo.",
+  "en": "The Asurini of the Tocantins, also known as Asurini of Trocará, the name of their land, number 671 (Siasi/Sesai, 2020) and speak a Tupi-Guarani language. They tell that after a flood the earth went soft, and that the hero Mahira called the tapir to harden it again.",
+  "sources": [
+   "https://pib.socioambiental.org/pt/Povo:Asurini_do_Tocantins",
+   "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos"
+  ],
+  "photo": null,
+  "confidence": "checked"
+ },
+ "kwaza": {
+  "name": "Kwazá",
+  "aliases": [
+   "Koaiá",
+   "Kwaza"
+  ],
+  "pt": "Os Kwazá vivem no sul de Rondônia, junto com os Aikanã e os Latundê, e são 54 pessoas (Siasi/Sesai, 2014). Sua língua forma uma família própria e tem cerca de 25 falantes. Foram expulsos de suas terras por fazendeiros depois da abertura da rodovia BR-364, nos anos 1960.",
+  "en": "The Kwazá live in southern Rondônia, together with the Aikanã and the Latundê, and number 54 (Siasi/Sesai, 2014). Their language forms a family of its own and has about 25 speakers. They were driven from their lands by ranchers after the BR-364 highway was opened in the 1960s.",
+  "sources": [
+   "https://pib.socioambiental.org/pt/Povo:Kwazá",
+   "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos"
+  ],
+  "photo": null,
+  "confidence": "checked"
+ },
+ "paumari": {
+  "name": "Paumari",
+  "aliases": [
+   "Paumarí",
+   "Pamoari"
+  ],
+  "pt": "Os Paumari vivem no médio rio Purus, no Amazonas, são 1.804 pessoas (Siasi/Sesai, 2014) e falam uma língua da família Arawá. São pescadores das várzeas. Ficaram conhecidos como os nômades do Purus, por sua mobilidade e por suas casas tradicionais construídas sobre balsas, os flutuantes.",
+  "en": "The Paumari live on the middle Purus river in Amazonas, number 1,804 (Siasi/Sesai, 2014) and speak a language of the Arawá family. They are fishers of the floodplains. They became known as the nomads of the Purus, for their mobility and for their traditional houses built on rafts.",
+  "sources": [
+   "https://pib.socioambiental.org/pt/Povo:Paumari",
+   "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos"
+  ],
+  "photo": null,
+  "confidence": "checked"
+ },
+ "banawa": {
+  "name": "Banawá",
+  "aliases": [
+   "Banawa"
+  ],
+  "pt": "Os Banawá vivem entre os rios Juruá e Purus, no Amazonas, são 207 pessoas (Siasi/Sesai, 2014) e falam uma língua da família Arawá, próxima da dos vizinhos Jamamadi. Seu território foi invadido desde o ciclo da borracha, e só nos anos 1990 o Estado reconheceu seus direitos à terra. Ainda enfrentam invasões de madeireiros.",
+  "en": "The Banawá live between the Juruá and Purus rivers in Amazonas, number 207 (Siasi/Sesai, 2014) and speak a language of the Arawá family, close to that of their Jamamadi neighbours. Their territory was invaded from the rubber boom onwards, and only in the 1990s did the state recognise their land rights. They still face invasions by loggers.",
+  "sources": [
+   "https://pib.socioambiental.org/pt/Povo:Banawá",
+   "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos"
+  ],
+  "photo": null,
+  "confidence": "checked"
+ },
+ "kraho-kanela": {
+  "name": "Krahô-Kanela",
+  "aliases": [],
+  "pt": "Os Krahô-Kanela vivem no Tocantins, são 122 pessoas (Siasi/Sesai, 2014), e sua língua é classificada na família Jê.",
+  "en": "The Krahô-Kanela live in Tocantins, number 122 (Siasi/Sesai, 2014), and their language is classified in the Jê family.",
+  "sources": [
+   "https://pib.socioambiental.org/pt/Povo:Krahô-Kanela",
+   "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos"
+  ],
+  "photo": null,
+  "confidence": "thin"
+ },
+ "akuntsu": {
+  "name": "Akuntsu",
+  "aliases": [
+   "Akuntsú"
+  ],
+  "pt": "Os Akuntsu vivem nas matas do igarapé Omerê, afluente do rio Corumbiara, no sudeste de Rondônia, e sua língua é da família Tupari. Eram três sobreviventes em 2017 (CGIIRC/Funai). A área onde vivem é uma pequena reserva de mata, antes parte de uma fazenda, cercada pelo avanço da agropecuária.",
+  "en": "The Akuntsu live in the forest of the Omerê stream, a tributary of the Corumbiara river, in south-eastern Rondônia, and their language belongs to the Tupari family. There were three survivors in 2017 (CGIIRC/Funai). The area where they live is a small forest reserve, once part of a ranch, hemmed in by the advance of farming and cattle.",
+  "sources": [
+   "https://pib.socioambiental.org/pt/Povo:Akuntsu",
+   "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos"
+  ],
+  "photo": null,
+  "confidence": "checked"
+ },
+ "kanoe": {
+  "name": "Kanoê",
+  "aliases": [
+   "Kanoé",
+   "Kapixaná"
+  ],
+  "pt": "Os Kanoê vivem no sul de Rondônia, perto da fronteira com a Bolívia, e são 319 pessoas (Siasi/Sesai, 2014). Sua língua forma uma família própria. A maioria vive nas margens do rio Guaporé, e uma família do rio Omerê só foi contatada em 1995. Vivem numa região tomada por madeireiros e grileiros, que ameaçam suas terras.",
+  "en": "The Kanoê live in southern Rondônia, near the border with Bolivia, and number 319 (Siasi/Sesai, 2014). Their language forms a family of its own. Most live on the banks of the Guaporé river, and one family on the Omerê river was contacted only in 1995. They live in a region taken over by loggers and land grabbers, who threaten their lands.",
+  "sources": [
+   "https://pib.socioambiental.org/pt/Povo:Kanoê",
+   "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos"
+  ],
+  "photo": null,
+  "confidence": "checked"
+ },
+ "bakairi": {
+  "name": "Bakairi (Kurâ)",
+  "aliases": [
+   "Kurâ",
+   "Bacairi",
+   "Bakairí"
+  ],
+  "pt": "Os Bakairi, que chamam a si mesmos Kurâ, vivem em Mato Grosso, são 982 pessoas (Siasi/Sesai, 2014) e falam uma língua Karib. São pescadores e agricultores, sobretudo de mandioca. Antes das estradas e pistas de pouso, eram eles que controlavam o acesso das expedições ao Alto Xingu.",
+  "en": "The Bakairi, who call themselves Kurâ, live in Mato Grosso, number 982 (Siasi/Sesai, 2014) and speak a Carib language. They are fishers and farmers, above all of manioc. Before the roads and airstrips, it was they who controlled the access of expeditions to the Upper Xingu.",
+  "sources": [
+   "https://pib.socioambiental.org/pt/Povo:Bakairi",
+   "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos"
+  ],
+  "photo": null,
+  "confidence": "checked"
+ },
+ "xerente": {
+  "name": "Xerente (Akwê)",
+  "aliases": [
+   "Akwê",
+   "Akwẽ",
+   "Xerente"
+  ],
+  "pt": "Os Xerente, que chamam a si mesmos Akwê, vivem no cerrado do Tocantins, na margem leste do rio Tocantins, 70 km ao norte de Palmas. São 3.964 pessoas (Siasi/Sesai, 2020) e falam uma língua Jê. Em 250 anos de contato com não indígenas, mantiveram sua identidade.",
+  "en": "The Xerente, who call themselves Akwê, live in the savanna of Tocantins, on the east bank of the Tocantins river, 70 km north of Palmas. They number 3,964 (Siasi/Sesai, 2020) and speak a Jê language. Through 250 years of contact with non-Indigenous people they have kept their identity.",
+  "sources": [
+   "https://pib.socioambiental.org/pt/Povo:Xerente",
+   "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos"
+  ],
+  "photo": null,
+  "confidence": "checked"
+ },
+ "galibi-kalina": {
+  "name": "Galibi Kali'na",
+  "aliases": [
+   "Galibi do Oiapoque",
+   "Galibi",
+   "Kali'na"
+  ],
+  "pt": "Os Galibi Kali'na vivem no Oiapoque, no Amapá, onde são 89 pessoas (Siasi/Sesai, 2017), e falam uma língua Karib. A grande maioria do povo vive na Venezuela, no Suriname e na Guiana Francesa. Os do Brasil vieram de Mana, na Guiana Francesa, se consideram brasileiros e nunca aceitaram os convites das autoridades francesas para voltar.",
+  "en": "The Galibi Kali'na live at Oiapoque, in Amapá, where they number 89 (Siasi/Sesai, 2017), and speak a Carib language. The great majority of the people live in Venezuela, Suriname and French Guiana. Those in Brazil came from Mana, in French Guiana, consider themselves Brazilian and never accepted the French authorities' invitations to return.",
+  "sources": [
+   "https://pib.socioambiental.org/pt/Povo:Galibi_Kali'na",
+   "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos"
+  ],
+  "photo": null,
+  "confidence": "checked"
+ },
+ "krenak": {
+  "name": "Krenak",
+  "aliases": [
+   "Borum",
+   "Krenák"
+  ],
+  "pt": "Os Krenak, que chamam a si mesmos Borum, vivem em Minas Gerais, Mato Grosso e São Paulo e são 494 pessoas (Siasi/Sesai, 2020). São os últimos Botocudos do Leste, alvo de massacres que o governo colonial decretou como guerras justas. Vivem hoje em uma área reduzida, reconquistada com muita dificuldade.",
+  "en": "The Krenak, who call themselves Borum, live in Minas Gerais, Mato Grosso and São Paulo and number 494 (Siasi/Sesai, 2020). They are the last of the Eastern Botocudo, the target of massacres that the colonial government decreed as just wars. Today they live in a reduced area, won back with great difficulty.",
+  "sources": [
+   "https://pib.socioambiental.org/pt/Povo:Krenak",
+   "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos"
+  ],
+  "photo": null,
+  "confidence": "checked"
+ },
+ "kraho": {
+  "name": "Krahô",
+  "aliases": [
+   "Mehin",
+   "Craô"
+  ],
+  "pt": "Os Krahô vivem no Tocantins, são 3.571 pessoas (Siasi/Sesai, 2020) e falam uma língua Jê. São um povo Timbira. Em 1940 foram massacrados por fazendeiros. Em 1986 foram ao Museu Paulista, em São Paulo, para recuperar o machado em meia-lua, importante em suas tradições.",
+  "en": "The Krahô live in Tocantins, number 3,571 (Siasi/Sesai, 2020) and speak a Jê language. They are a Timbira people. In 1940 they were massacred by ranchers. In 1986 they went to the Museu Paulista in São Paulo to recover the crescent-shaped axe that matters deeply in their traditions.",
+  "sources": [
+   "https://pib.socioambiental.org/pt/Povo:Krahô",
+   "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos"
+  ],
+  "photo": null,
+  "confidence": "checked"
+ },
+ "krenye": {
+  "name": "Krenyê",
+  "aliases": [
+   "Kreje",
+   "Timbira"
+  ],
+  "pt": "Os Krenyê são um povo Timbira, de língua Jê, do Maranhão, com 104 pessoas (Nascimento, 2016), e parte deles vive entre os Tembé e os Guajajara.",
+  "en": "The Krenyê are a Timbira people, Jê-speaking, of Maranhão, numbering 104 (Nascimento, 2016), and some of them live among the Tembé and the Guajajara.",
+  "sources": [
+   "https://pib.socioambiental.org/pt/Povo:Krenyê",
+   "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos",
+   "https://pib.socioambiental.org/pt/Povo:Timbira"
+  ],
+  "photo": null,
+  "confidence": "thin"
+ }
+}
