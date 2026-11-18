@@ -7,11 +7,13 @@
    Layout: the map is the page, edge to edge, and the Amazon is the object on it. Nothing has a frame. What
    the map shows and how to read it is set on the page at the top left; the bulletin with its timeline is
    docked at the bottom left; the ranked list stands on the right. Each is type on a soft surface of the
-   page's own colour, which only shows once the map is moved under it. The timeline can come forward to fill
-   the page, and then the map is a small picture of itself in the lower right corner. */
+   page's own colour, which only shows once the map is moved under it, and then fades at its edges. The
+   timeline can come forward to fill the page, and then the map is a small picture of itself in the upper
+   right corner. */
 :root {
   --ground: #f4f5f0;
   --soft: rgba(244, 245, 240, 0.94);   /* a surface: the page's colour, a little clear */
+  --fade: 0 0 26px 12px var(--soft);   /* and its edge: no corner, the surface thins out into the page */
   --ink: #10201a;
   --grey: #55605a;
   --line: #c7cdc5;
@@ -48,7 +50,7 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 ::selection { background: var(--ink); color: var(--ground); }
 
 /* ---------- the header: the mark, then the story, About, the API and the language ---------- */
-#top { position: fixed; z-index: 40; top: 0; left: 0; right: 0; display: flex; align-items: center; height: var(--top); padding: 0 var(--pad); background: var(--soft); }
+#top { position: fixed; z-index: 40; top: 0; left: 0; right: 0; display: flex; align-items: center; height: var(--top); padding: 0 var(--pad); background: var(--soft); box-shadow: var(--fade); }
 .brand { display: flex; align-items: center; gap: 10px; margin-right: auto; font: 800 30px/1 var(--cond); letter-spacing: 0.02em; text-transform: uppercase; }
 .brand svg { width: 21px; height: 21px; }
 .brand .f { fill: var(--green); }
@@ -79,8 +81,8 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 .box { position: absolute; overflow: hidden; background: var(--ground); transform-origin: 0 0; transition: opacity 0.5s, visibility 0s; }
 .box > .in { position: relative; width: 100%; height: 100%; transform-origin: 0 0; }
 #mapbox[data-as="stage"] { inset: 0; z-index: 0; }
-#mapbox[data-as="dock"] { right: var(--pad); bottom: var(--pad); width: var(--mdock-w); height: var(--mdock-h); z-index: 30; }
-#chartbox[data-as="dock"] { left: calc(var(--pad) - var(--in)); bottom: calc(var(--pad) - var(--in)); width: calc(var(--rail) + 2 * var(--in)); height: calc(var(--dock-h) + var(--in)); z-index: 10; background: var(--soft); }
+#mapbox[data-as="dock"] { right: var(--pad); top: calc(var(--top) + 10px); width: var(--mdock-w); height: var(--mdock-h); z-index: 30; }
+#chartbox[data-as="dock"] { left: calc(var(--pad) - var(--in)); bottom: calc(var(--pad) - var(--in)); width: calc(var(--rail) + 2 * var(--in)); height: calc(var(--dock-h) + var(--in)); z-index: 10; background: var(--soft); box-shadow: var(--fade); }
 #chartbox[data-as="stage"] { left: 0; right: 0; top: var(--top); bottom: 0; z-index: 20; }
 .box.sinking { z-index: 35; }
 :root[data-swap] #app { pointer-events: none; }
@@ -111,16 +113,15 @@ canvas.cells { position: absolute; left: 0; top: 0; transition: opacity 0.25s; }
 :root[data-list="true"] .leaflet-control-zoom { margin-right: calc(var(--list-w) + 14px) !important; }
 :root[data-list="true"] #credit { right: calc(var(--list-w) + 60px); }
 /* docked, the map is a picture of itself: no controls, and the whole of it is the way back to the stage */
-#map-front { display: none; position: absolute; inset: 0; z-index: 1100; width: auto; height: auto; place-items: start; }
-#map-front svg { width: 30px; height: 30px; padding: 8px; background: var(--soft); }
-#map-front:hover { background: none; color: var(--ink); }
-#map-front:hover svg { background: var(--ink); color: var(--ground); }
+#map-front { display: none; position: absolute; inset: 0; z-index: 1100; width: auto; height: auto; }
+#map-front svg { display: none; }  /* the timeline's own way out is right beside it */
+#map-front:hover { background: none; }
 #mapbox[data-as="dock"] #map-front { display: grid; }
 #mapbox[data-as="dock"] :is(.leaflet-control-zoom, .state-name), :root[data-front="chart"] :is(#mappanel, #list, #credit), :root[data-swap] :is(#mappanel, #list, .leaflet-control-zoom) { display: none; }
 
 /* what the map shows and how to read it, set on the page at the top of the left column: the mode, the kinds
    of sector, the key to the colours (its steps are the filter) and the count of cells */
-#mappanel { position: absolute; z-index: 10; left: calc(var(--pad) - var(--in)); top: var(--top); display: flex; flex-direction: column; gap: 10px; width: calc(var(--rail) + 2 * var(--in)); padding: 6px var(--in) 12px; background: var(--soft); transition: opacity 0.5s, visibility 0s; }
+#mappanel { position: absolute; z-index: 10; left: calc(var(--pad) - var(--in)); top: var(--top); display: flex; flex-direction: column; gap: 10px; width: calc(var(--rail) + 2 * var(--in)); padding: 6px var(--in) 12px; background: var(--soft); box-shadow: var(--fade); transition: opacity 0.5s, visibility 0s; }
 #mapctl { display: grid; grid-template-columns: max-content 1fr; justify-items: start; align-items: center; row-gap: 2px; }
 #kinds { grid-column: 1 / -1; gap: 0 14px; margin-top: 4px; }
 #kinds button { font-size: 14.5px; letter-spacing: 0.05em; padding: 4px 0; border-bottom-width: 2px; }
@@ -146,41 +147,39 @@ canvas.cells { position: absolute; left: 0; top: 0; transition: opacity 0.25s; }
 #share { margin: 0; font-size: 14.5px; line-height: 1.25; font-weight: 500; max-width: 26em; }
 #share b { font: 800 20px/1 var(--cond); margin-right: 3px; }
 
-/* the ranked list, on the right of the page: one line a row, no rules. A priority block that is chosen opens
-   into the sentences that say why it ranks high. It has a way out, which leaves the map on its cells. */
-#list { position: absolute; z-index: 10; right: 0; top: var(--top); bottom: 0; display: flex; flex-direction: column; width: var(--list-w); background: var(--soft); animation: arrive 0.5s both; }
+/* the ranked list, on the right of the page: one line a row, no rules, no headings. A priority place is its
+   rank, its name, a tag if it lies in protected land, and a thin red bar as long as the cells expected to lose
+   a hectare there; chosen, it opens into a sentence or two that say why. The list has a way out, which leaves
+   the map on its cells, and beside it the same list as a file. */
+#list { position: absolute; z-index: 10; right: 0; top: var(--top); bottom: 0; display: flex; flex-direction: column; width: var(--list-w); background: var(--soft); box-shadow: var(--fade); animation: arrive 0.5s both; }
 @keyframes arrive { from { opacity: 0; } }
-#list-bar { position: absolute; z-index: 1; top: 4px; right: calc(var(--pad) - 10px); }
+#list-bar { position: absolute; z-index: 1; top: 4px; right: calc(var(--pad) - 10px); display: flex; align-items: center; gap: 4px; }
 #list-grab { display: none; }
+#list-csv { padding: 8px; font: 600 13.5px/1 var(--cond); letter-spacing: 0.08em; color: var(--grey); text-underline-offset: 3px; }
+#list-csv:hover { color: var(--ink); }
 #list-in { flex: 1 1 0; min-height: 0; overflow-y: auto; overscroll-behavior: contain; padding: 10px var(--pad) 0 18px; }
-#list-say { margin: 0 34px 10px 0; font-size: 15px; line-height: 1.35; font-weight: 500; text-wrap: pretty; }
-#list-say a { margin-left: 4px; font: 600 14px var(--cond); letter-spacing: 0.07em; text-transform: uppercase; color: var(--green); text-underline-offset: 3px; white-space: nowrap; }
-#list-key, #list-rows button { display: grid; grid-template-columns: 34px minmax(0, 1fr) 84px; column-gap: 8px; align-items: baseline; }
-#list-rows.two button, #list-key { grid-template-columns: 34px minmax(0, 1fr) 44px 74px; }
-#list-key { margin: 0 0 4px; font-size: 12.5px; color: var(--grey); }
-#list-key:empty { display: none; }
-#list-key .lk { grid-column: 1 / -1; }  /* the two marks on a line of their own, then what the two columns of figures are */
-#list-key .v:nth-last-child(2) { grid-column: 3; }
-#list-key .v:last-child { grid-column: 4; }
-#list-key .lk .land:not(:first-child) { margin-left: 12px; }
+#list-say { margin: 0 84px 10px 0; font-size: 15px; line-height: 1.35; font-weight: 500; text-wrap: pretty; }
+#list-say:empty { display: none; }
+#list-say:empty + #list-rows { padding-top: 34px; }  /* the rows start under the way out */
+#list-rows button { display: grid; grid-template-columns: 34px minmax(0, 1fr) 84px; column-gap: 8px; align-items: baseline; }
+#list-rows.prio button { grid-template-columns: 34px minmax(0, 1fr) 88px; column-gap: 12px; }
 #list-rows { margin: 0 calc(-1 * var(--pad)) 0 -18px; padding: 0 0 14px; list-style: none; }
 #list-rows button { width: 100%; padding: 4px var(--pad) 4px 18px; text-align: left; }
 #list-rows button:hover .nm { text-decoration: underline; text-underline-offset: 3px; }
 #list-rows b { font: 800 17px/1.1 var(--cond); color: var(--grey); }
 #list-rows .nm { display: flex; align-items: baseline; min-width: 0; font-size: 15px; font-weight: 600; line-height: 1.25; white-space: nowrap; }
 #list-rows .nm > span { min-width: 0; overflow: hidden; text-overflow: ellipsis; }
-#list-rows .nm .land { flex: none; margin-left: 8px; }
+#list-rows .tag { flex: none; margin-left: 8px; font: 600 12px/1 var(--cond); letter-spacing: 0.1em; color: var(--grey); text-decoration: none; }
+#list-rows .len { align-self: center; height: 4px; }
+#list-rows .len i { display: block; height: 100%; background: var(--red); }
 #list .v { text-align: right; white-space: nowrap; }
-#list-rows .v { font-size: 15px; font-weight: 500; }
-#list-rows .v:last-child { font-weight: 700; }
+#list-rows .v { font-size: 15px; font-weight: 700; }
 #list-rows button[aria-current] { background: var(--green); color: #fff; }
-#list-rows button[aria-current] b { color: #fff; }
-/* why the chosen block ranks high: sentences under its row, set under the name, and one small line on what they are */
+#list-rows button[aria-current] :is(b, .tag) { color: #fff; }
+#list-rows button[aria-current] .len i { background: #fff; }
+/* why the chosen place ranks high: a sentence or two under its row, set under the name */
 #list-rows .why { padding: 9px var(--pad) 14px 60px; }
 #list-rows .why p { margin: 0 0 4px; font-size: 15px; line-height: 1.35; font-weight: 500; text-wrap: pretty; }
-#list-rows .why .seen { margin: 9px 0 0; font-size: 12.5px; line-height: 1.3; font-weight: 400; color: var(--grey); }
-.land { display: inline-block; width: 8px; height: 8px; margin: 0 5px 0 3px; vertical-align: 1px; border: 2px solid currentColor; }
-.land.ti { transform: rotate(45deg); background: currentColor; }
 /* the place that is chosen, marked from far, where its block is smaller than a dot */
 .here { border: 2.5px solid var(--ink); border-radius: 50%; box-shadow: 0 0 0 2.5px var(--ground), inset 0 0 0 2.5px var(--ground); }
 
@@ -264,7 +263,8 @@ canvas.cells { position: absolute; left: 0; top: 0; transition: opacity 0.25s; }
 #chart .tip text { fill: var(--ink); font-size: 15px; font-weight: 600; paint-order: stroke; stroke: var(--ground); stroke-width: 5px; stroke-linejoin: round; }
 #chart .tip path { stroke: var(--ink); stroke-width: 1; }
 #chart .tip text + text { fill: var(--grey); font-size: 13px; font-weight: 500; }
-#hint { margin: 4px 0 0; font-size: 13.5px; color: var(--grey); min-height: 17px; flex: none; }
+#hint { margin: 4px 0 0; font-size: 13.5px; color: var(--grey); flex: none; }
+#hint:empty { display: none; }
 /* actions: clearing measured against clearing with enforcement held at the reference year's level. The gap is
    forest left standing, so it is forest green, and hatched because it is modelled. Never red: it is good news. */
 #chart .s0 { fill: var(--green); opacity: 0.2; }
@@ -298,9 +298,15 @@ canvas.cells { position: absolute; left: 0; top: 0; transition: opacity 0.25s; }
 #signs.acts > div { white-space: normal; }
 #signs.acts b { margin-top: 2px; }
 
-/* on the stage the timeline is the large one: the map's dock stands on its lower right corner, so what is
-   under the chart stops short of it */
-#chartbox[data-as="stage"] #under { min-height: calc(var(--mdock-h) + var(--pad) - 8px); margin-right: calc(var(--mdock-w) + 24px); justify-content: space-between; }
+/* on the stage the timeline is the large one. Its content keeps a measure of 1100 px in the middle of the page
+   and its plot a height that leaves the bars a sane proportion. The map's dock stands on the upper right
+   corner, so the hazards, the level and the headline stop short of it and the plot begins under it. */
+@media (min-width: 861px) {
+  #chartbox[data-as="stage"] { --cpad: max(var(--pad), calc((100vw - 1100px) / 2)); }
+  #chartbox[data-as="stage"] :is(#hazrow, #lead) { margin-right: max(0px, calc(var(--mdock-w) + var(--pad) + 28px - var(--cpad))); }
+  #chartbox[data-as="stage"] #lead { min-height: calc(var(--mdock-h) - 22px); }
+  #chartbox[data-as="stage"] #chart { max-height: min(460px, 48vh); }
+}
 #chartbox[data-as="stage"] #signs svg { height: 52px; margin-bottom: 6px; }
 /* docked it is compact: the hazards, the level, the headline and the histogram. The whole of it brings it forward. */
 #chartbox[data-as="dock"] { --cpad: var(--in); cursor: pointer; }
@@ -329,12 +335,12 @@ canvas.cells { position: absolute; left: 0; top: 0; transition: opacity 0.25s; }
    timeline's dock, while the interface is put together around the map: each step brings in one piece of it,
    in the place it keeps. The map does not move. What has not been brought in yet is not on the page (data-has
    lists what has), and what has is not yet for the hand: until the story is over a click anywhere goes on. ---------- */
-#story { position: fixed; z-index: 50; left: var(--pad); top: calc(var(--top) + var(--panel-h) + 12px); width: var(--rail); pointer-events: none; }
+#story { position: fixed; z-index: 50; left: var(--pad); top: calc(var(--top) + 182px); width: var(--rail); pointer-events: none; }  /* under the key, which in the story is never taller than this */
 #story-line { margin: 0; font: 800 clamp(32px, 3vw, 44px)/1.02 var(--cond); text-wrap: balance; }
 #story-line.in { animation: line-in 0.5s cubic-bezier(0.2, 0.7, 0.2, 1) both; }
 @keyframes line-in { from { opacity: 0; transform: translateY(10px); } }
-#story-note { margin: 12px 0 0; max-width: 30em; font-size: 16px; line-height: 1.36; font-weight: 500; color: var(--grey); text-wrap: pretty; }
-#story-note:empty, #story-extra:empty { display: none; }
+#story-extra:empty { display: none; }
+:root[data-step="lossA"] #story-line { color: var(--red); }  /* what falls is said in the red it is drawn in */
 #story-extra { margin-top: 18px; }
 #story-extra .years svg { display: block; overflow: visible; }
 #story-extra .years rect { fill: var(--ink); opacity: 0.22; }
@@ -342,16 +348,20 @@ canvas.cells { position: absolute; left: 0; top: 0; transition: opacity 0.25s; }
 #story-extra .years rect.now { opacity: 1; }
 #story-extra .years p { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; width: 300px; margin: 6px 0 0; font-size: 15px; font-weight: 500; color: var(--grey); }
 #story-extra .years p b { margin-right: auto; font: 800 22px/1 var(--cond); color: var(--ink); }
-#story-nav { display: flex; align-items: center; gap: 14px; margin-top: 22px; pointer-events: auto; }
-#story-next { flex: none; min-width: 118px; height: 44px; padding: 0 22px; background: var(--green); color: #fff; font: 700 17px/1 var(--cond); letter-spacing: 0.08em; text-transform: uppercase; }
-#story-next:hover { background: var(--ink); }
-#story-back { flex: none; height: 44px; padding: 0 6px; color: var(--grey); font: 600 16px/1 var(--cond); letter-spacing: 0.07em; text-transform: uppercase; }
-#story-back:hover { color: var(--ink); }
-#story-back:disabled { visibility: hidden; }
-#story-marks { display: flex; gap: 5px; margin: 0; padding: 0; list-style: none; min-width: 0; }
-#story-marks li { flex: 0 1 auto; width: 16px; min-width: 5px; height: 4px; background: var(--line); }
+#story-nav { display: flex; align-items: center; gap: 8px; margin-top: 22px; pointer-events: auto; }
+#story-marks { display: flex; gap: 4px; margin: 0 auto 0 0; padding: 0; list-style: none; min-width: 0; }
+#story-marks li { flex: 0 1 auto; width: 14px; min-width: 4px; height: 4px; background: var(--line); }
 #story-marks li.done { background: var(--grey); }
 #story-marks li.now { background: var(--ink); }
+/* the way on and the way back: two arrows, the way on the larger and green */
+#story-next, #story-back { display: grid; place-items: center; flex: none; height: 48px; }
+#story-next { width: 84px; background: var(--green); color: #fff; }
+#story-next:hover { background: var(--ink); }
+#story-back { width: 48px; color: var(--grey); }
+#story-back:hover { color: var(--ink); }
+#story-back:disabled { visibility: hidden; }
+#story-nav svg { width: 26px; height: 16px; }
+#story-nav svg path { fill: none; stroke: currentColor; stroke-width: 2.4; stroke-linecap: square; stroke-linejoin: miter; }
 /* the header keeps the mark, the language and a quiet way out; About and the API come in with the model */
 :root[data-story] #story-btn, :root[data-story]:not([data-has~="about"]) :is(#about-btn, #api-btn) { display: none; }
 :root[data-story] #skip-btn { display: block; }
@@ -359,35 +369,29 @@ canvas.cells { position: absolute; left: 0; top: 0; transition: opacity 0.25s; }
 :root[data-story]:not([data-has~="legend"]) :is(#mappanel, .leaflet-control-zoom), :root[data-story]:not([data-has~="chart"]) #chartbox { opacity: 0; visibility: hidden; }
 :root[data-story]:not([data-has~="list"]) .state-name { display: none; }
 
-/* ---------- About: a panel beside the map, with the model, how it is checked and the open board ---------- */
+/* ---------- About: a panel beside the map. What this is, the model's figure, the benchmark as a bare table
+   with the way in as a button. Its way out stays at the top while the text passes under it. ---------- */
 #about { position: fixed; z-index: 38; inset: var(--top) 0 0 auto; width: min(600px, 100vw); height: calc(100dvh - var(--top)); max-height: none; margin: 0; padding: 0 var(--pad) 40px 34px; overflow-y: auto; overscroll-behavior: contain; border: 0; background: var(--ground); color: var(--ink); box-shadow: -24px 0 60px rgba(16, 32, 26, 0.1); }
 #about[open] { animation: slide-in 0.35s cubic-bezier(0.2, 0.7, 0.2, 1) both; }
 @keyframes slide-in { from { transform: translateX(40px); opacity: 0; } }
-#about-bar { position: sticky; top: 0; z-index: 1; display: flex; justify-content: flex-end; margin: 0 calc(-1 * var(--pad)) 0 -34px; padding: 8px calc(var(--pad) - 10px) 4px 0; background: var(--ground); }  /* the way out stays in reach, and the text passes under a clean edge */
-#about h2 { margin: 0 0 12px; font: 800 40px/1 var(--cond); }
-#about h3 { margin: 22px 0 6px; padding-top: 12px; border-top: 1px solid var(--ink); font: 700 17px var(--cond); letter-spacing: 0.07em; text-transform: uppercase; }
-#about p, #about li { margin: 0 0 7px; font-size: 16px; line-height: 1.42; max-width: 62ch; }
-#about ul { margin: 0; padding: 0; list-style: none; }
-#about li b { font-weight: 600; }
+#about-bar { position: sticky; top: 0; z-index: 1; display: flex; justify-content: flex-end; margin: 0 calc(-1 * var(--pad)) 0 -34px; padding: 8px calc(var(--pad) - 10px) 4px 0; background: var(--ground); }
+#about h3 { margin: 26px 0 6px; padding-top: 12px; border-top: 1px solid var(--ink); font: 700 17px var(--cond); letter-spacing: 0.07em; text-transform: uppercase; }
+#about p { margin: 0 0 10px; font-size: 16px; line-height: 1.42; max-width: 62ch; text-wrap: pretty; }
+#about p b { font-weight: 600; }
 #about a { color: inherit; text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 3px; }
-/* the thesis, in the voice of the headline: three short lines */
-#about .thesis p { margin: 0 0 8px; max-width: 34em; font: 700 23px/1.16 var(--cond); letter-spacing: 0.005em; text-wrap: pretty; }
-#about .src { columns: 2; column-gap: 28px; margin: 4px 0 10px; }
-#about .src li { margin: 0 0 3px; font-size: 14.5px; line-height: 1.3; color: var(--grey); break-inside: avoid; }
-/* the board: a bare table, a model a row, the one on this site first. Then the way in, as a button. */
-#about .board { width: 100%; margin: 8px 0 4px; border-collapse: collapse; font-size: 15px; }
-#about .board th { padding: 0 10px 6px 0; text-align: left; font: 600 13.5px var(--cond); letter-spacing: 0.07em; text-transform: uppercase; color: var(--grey); white-space: nowrap; }
-#about .board td { padding: 6px 10px 6px 0; vertical-align: baseline; white-space: nowrap; }
-#about .board :is(th, td).n { text-align: right; }
-#about .board td.n { font: 800 20px/1 var(--cond); }
-#about .board tr.ref td { color: var(--grey); }
-#about .board td small { display: block; font-size: 12.5px; line-height: 1.3; color: var(--grey); white-space: normal; }
-#about .metric { font-size: 13.5px; color: var(--grey); }
-#about .go { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 20px; margin: 14px 0 6px; }
+/* what this is and who it is for, in the voice of the headline */
+#about .lede p { margin: 0 0 8px; max-width: 30em; font: 700 25px/1.14 var(--cond); letter-spacing: 0.005em; }
+/* the benchmark: a bare table, a model a row, the one on this site first. Then the way in, as a button. */
+#about .bench { width: 100%; margin: 8px 0 4px; border-collapse: collapse; font-size: 15px; }
+#about .bench th { padding: 0 10px 6px 0; text-align: left; font: 600 13.5px var(--cond); letter-spacing: 0.07em; text-transform: uppercase; color: var(--grey); white-space: nowrap; }
+#about .bench td { padding: 6px 10px 6px 0; vertical-align: baseline; white-space: nowrap; }
+#about .bench :is(th, td).n { text-align: right; }
+#about .bench td.n { font: 800 20px/1 var(--cond); }
+#about .bench tr.ref td { color: var(--grey); }
+#about .metric { margin-bottom: 18px; font-size: 13.5px; color: var(--grey); }
+#about .go { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 20px; margin: 14px 0 22px; }
 #about .go .btn { display: inline-flex; align-items: center; height: 46px; padding: 0 22px; background: var(--green); color: #fff; font: 700 17px/1 var(--cond); letter-spacing: 0.08em; text-transform: uppercase; text-decoration: none; }
 #about .go .btn:hover { background: var(--ink); }
-#model-fig { margin: 10px 0 4px; }
-#model-fig svg { display: block; overflow: visible; }
 
 /* the API panel: the instructions for agents as the file has them, and nothing else. One line above the
    block, the base address and a way to copy the text. The block scrolls inside the panel. */
@@ -407,8 +411,7 @@ canvas.cells { position: absolute; left: 0; top: 0; transition: opacity 0.25s; }
   #sub { font-size: 15.5px; }
   #hazrow { height: 44px; }
   #chartbox[data-as="stage"] #signs svg { height: 34px; }
-  #story-line { font-size: clamp(28px, 2.7vw, 36px); }
-  #story-note { margin-top: 8px; font-size: 15px; }
+  #story-line { font-size: clamp(26px, 2.5vw, 32px); }
   #story-nav { margin-top: 14px; }
 }
 @media (min-width: 861px) and (max-width: 1180px) { :root { --list-w: 340px; --rail: 380px; } }
@@ -417,22 +420,27 @@ canvas.cells { position: absolute; left: 0; top: 0; transition: opacity 0.25s; }
   #story-line.in, #list, #about[open] { animation: none; }
 }
 /* the model's figure, in About: a stack of planes drawn on a canvas, and their names as text beside them */
-#model-fig { position: relative; margin: 6px 0 16px; }
+#model-fig { position: relative; margin: 14px 0 20px; }
 #model-fig canvas { display: block; }
 #model-fig ol { margin: 0; padding: 0; list-style: none; }
-#about #model-fig li { position: absolute; margin: 0; max-width: none; font-size: 13.5px; line-height: 1.1; font-weight: 500; white-space: nowrap; transform: translateY(-50%); }
+#about #model-fig li { position: absolute; margin: 0; font-size: 13.5px; line-height: 1.1; font-weight: 500; white-space: nowrap; transform: translateY(-50%); }
 #about #model-fig li small { display: block; margin-top: 2px; font-size: 11.5px; color: var(--grey); }
 #about #model-fig li.m { font: 800 19px/1 var(--cond); letter-spacing: 0.02em; }
 #about #model-fig li.o { font: 700 16px/1.1 var(--cond); letter-spacing: 0.02em; color: var(--red-text); }
 .seg:has(button:first-child[aria-pressed="true"]) { margin-left: 0; }  /* the first word keeps the column's edge, as type or as a chip */
 
-/* ---------- a phone. The map is the screen. Under the header a band says what it shows; at the bottom the
-   bulletin is a sheet that shows its top and can be pulled up to the header and pushed back; the ranked list
-   is a sheet too, with its way out; the header is the mark and one menu. The story's caption sits at the
-   bottom, at the thumb, and the sheets stand on it until it goes. Everything that is tapped is 44 px or more. ---------- */
+/* ---------- a phone. The map is the screen. Under the header a band says what it shows. At the bottom there is
+   one sheet at a time: the bulletin, which rests showing its level, its headline and its plot and is pulled up
+   to the header; or the ranked list, and then the bulletin waits behind a small handle under it. The header is
+   the mark and one menu. The story's caption sits at the bottom, at the thumb, and the sheets stand on it until
+   it goes. Type has its own scale here: the story's line 27, a headline 21, text 15.5, labels 12.5. Everything
+   that is tapped is 44 px or more. ---------- */
 @media (max-width: 860px) {
-  :root { --top: 48px; --pad: 16px; --in: 0px; --panel-h: 128px; --peek: 198px; --bar: 50px; --cap: 0px; --list-top: 56dvh; }
-  :root[data-story] { --cap: 130px; }  /* (until the page says how tall the caption is) */
+  :root { --top: 48px; --pad: 16px; --in: 0px; --panel-h: 128px; --peek: 302px; --handle: 30px; --cap: 0px; --list-top: 56dvh; }
+  :root[data-list="true"] { --peek: var(--handle); }                    /* the list is open: the bulletin waits behind its handle */
+  :root[data-story] { --cap: 130px; }                                   /* (until the page says how tall the caption is) */
+  :root[data-story] { --peek: 213px; }                                  /* (in the story the bulletin rests without its hazards and its headline: nothing is for the hand yet, and the caption is the headline) */
+  :root[data-story]:not([data-has~="chart"]) { --peek: 0px; }           /* (the bulletin has not come in yet) */
   .brand { font-size: 24px; gap: 8px; }
   .brand svg { width: 17px; height: 15px; }
   #top { padding: 0 4px 0 16px; }
@@ -441,7 +449,7 @@ canvas.cells { position: absolute; left: 0; top: 0; transition: opacity 0.25s; }
   #menu-btn svg path { fill: none; stroke: currentColor; stroke-width: 2; }
   #nav { display: none; position: fixed; z-index: 60; top: var(--top); right: 0; flex-direction: column; gap: 0; min-width: 210px; padding: 4px 0 8px; background: var(--ground); box-shadow: 0 18px 40px rgba(16, 32, 26, 0.18); }
   :root[data-menu] #nav { display: flex; }
-  #nav button { min-height: 50px; padding: 0 22px; border: 0; text-align: left; font-size: 18px; }
+  #nav button { min-height: 50px; padding: 0 22px; border: 0; text-align: left; font-size: 17px; }
   /* in the story the header keeps the language and the way out, side by side */
   :root[data-story] #menu-btn, :root[data-story] :is(#about-btn, #api-btn) { display: none; }
   :root[data-story] #nav { display: flex; position: static; flex-direction: row; min-width: 0; padding: 0; background: none; box-shadow: none; }
@@ -452,13 +460,13 @@ canvas.cells { position: absolute; left: 0; top: 0; transition: opacity 0.25s; }
   .pick button { min-height: 44px; padding: 0; font-size: 15px; }
   .x { width: 44px; height: 44px; }
   /* what the map shows: a band under the header, the mode and a short key */
-  #mappanel { left: 0; top: var(--top); width: 100%; padding: 0 16px 9px; gap: 3px; }
+  #mappanel { left: 0; top: var(--top); width: 100%; padding: 0 16px 10px; gap: 4px; }
   .seg { margin-left: -10px; }
   .seg button { min-height: 44px; padding: 0 10px; font-size: 16px; }
   #rank-btn { min-height: 44px; justify-self: end; }
   #kinds { margin: 0; }
   #kinds button { min-height: 40px; font-size: 14.5px; }
-  #legend { gap: 4px; font-size: 11.5px; }
+  #legend { gap: 5px; font-size: 12.5px; }
   #legend .what { font-size: 13.5px; }
   #legend .steps { width: min(300px, 100%); }
   #legend .steps button { height: 12px; }
@@ -467,46 +475,63 @@ canvas.cells { position: absolute; left: 0; top: 0; transition: opacity 0.25s; }
   #share { display: none; }
   #credit { right: 10px; bottom: calc(var(--peek) + var(--cap) + 104px); max-width: 46%; text-align: right; }
   .leaflet-control-zoom { margin: 0 10px calc(var(--peek) + var(--cap) + 10px) 0 !important; }
-  :root[data-list="true"] .leaflet-control-zoom { display: none; }  /* the list has the lower half; two fingers zoom */
+  :root[data-list="true"] .leaflet-control-zoom, :root[data-story] .leaflet-control-zoom { display: none; }  /* the list has the lower half; two fingers zoom */
+  :root[data-story] #chartbox[data-as="dock"] :is(#hazrow, #say) { display: none; }
   .leaflet-control-zoom a { width: 44px !important; height: 44px !important; line-height: 43px !important; font-size: 24px !important; }
   /* the map stays the screen when the bulletin's sheet is up */
   #mapbox[data-as="dock"] { inset: 0; width: auto; height: auto; z-index: 0; }
   #mapbox[data-as="dock"] #map-front { display: none; }
   :root[data-front="chart"] #mappanel { display: flex; }
-  /* the bulletin: a sheet. Docked, its top shows: the hazards, the level, the headline, a strip of the timeline. */
+  /* the bulletin: a sheet. At rest its top shows: the hazards, the level, the headline and the plot. */
   #chartbox[data-as] { left: 0; right: 0; bottom: var(--cap); width: auto; height: auto; z-index: 20; background: var(--ground); box-shadow: 0 -10px 30px rgba(16, 32, 26, 0.12); transition: top 0.34s cubic-bezier(0.2, 0.7, 0.2, 1), bottom 0.34s cubic-bezier(0.2, 0.7, 0.2, 1), opacity 0.5s, visibility 0s; }
   #chartbox[data-as="dock"] { top: calc(100dvh - var(--peek) - var(--cap)); --cpad: 16px; }
   #chartbox[data-as="stage"] { top: var(--top); --cpad: 16px; }
   #chartbox.dragging, #list.dragging { transition: none; }
   #sheet-grab, #list-grab { touch-action: none; }
-  #sheet-grab { display: block; flex: none; width: 100%; height: 20px; margin-bottom: -6px; }
+  #sheet-grab { position: relative; display: block; flex: none; width: 100%; height: 20px; margin-bottom: -6px; }
   #sheet-grab::before, #list-grab::before { content: ""; display: block; width: 40px; height: 4px; margin: 0 auto; background: var(--line); }
+  #sheet-grab::after { content: ""; position: absolute; inset: -12px 0; }  /* a 44 px target */
+  /* behind its handle: only the grip shows, and a tap or a pull on it brings the bulletin up */
+  :root[data-list="true"] #chartbox[data-as="dock"] { box-shadow: none; }
+  :root[data-list="true"] #chartbox[data-as="dock"] #chartin > :not(#sheet-grab) { visibility: hidden; }
+  :root[data-list="true"] #chartbox[data-as="dock"] #sheet-grab { height: var(--handle); margin: 0; }
   #hazrow { height: 44px; }
-  #hazard { gap: 0 13px; }
-  #hazard button { font-size: 14.5px; letter-spacing: 0.04em; gap: 5px; }
+  #hazard { gap: 0 14px; }
+  #hazard button { font-size: 15px; letter-spacing: 0.04em; gap: 5px; }
   #chartbox[data-as="dock"] #chart-front { display: none; }
-  #chart-front { width: 44px; height: 44px; margin-right: -12px; }
-  #level { min-height: 32px; margin-bottom: 8px; font-size: 14px; gap: 2px 8px; }
-  #chartbox[data-as="dock"] #level { flex-wrap: nowrap; min-height: 30px; margin-bottom: 7px; font-size: 12.5px; }
-  #chartbox[data-as="dock"] #level span:last-child { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-  #level b { font-size: 18px; }
-  #level .meter i { height: 16px; width: 8px; }
-  #scope { font-size: 14px; }
+  /* pulled up, the way out shares the grip's row, which stays at the top while the sheet scrolls; the hazards keep the whole width */
+  #chartbox[data-as="stage"] #sheet-grab { position: sticky; top: 0; z-index: 2; height: 44px; margin-bottom: -6px; background: var(--ground); }
+  #chartbox[data-as="stage"] #chart-front { position: fixed; z-index: 22; top: var(--top); right: 2px; width: 44px; height: 44px; }
+  #level { flex-wrap: nowrap; min-height: 32px; margin-bottom: 8px; font-size: 13px; gap: 2px 8px; }
+  #level span:last-child { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  #chartbox[data-as="stage"] #level { flex-wrap: wrap; }  /* pulled up there is room for the whole of it */
+  #chartbox[data-as="stage"] #level span:last-child { white-space: normal; }
+  #level b { font-size: 17px; }
+  #level .meter i { height: 15px; width: 8px; }
+  #scope { font-size: 13.5px; }
   #scope button { position: relative; }
   #scope button::after { content: ""; position: absolute; inset: -14px -12px; }  /* a 44 px target without moving the text */
-  #say { font-size: clamp(22px, 5.8vw, 27px); }
+  #say, #chartbox[data-as="dock"] #say { font-size: 21px; line-height: 1.07; }
   #sub { font-size: 15px; margin-top: 4px; }
-  #chartbox[data-as="dock"] #say { font-size: 20px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
-  #chartbox[data-as="dock"] #hazrow { height: 42px; }
-  #chartbox[data-as="dock"] #hazard button { font-size: 14.5px; letter-spacing: 0.04em; }
-  #chartbox[data-as="dock"] #body { flex: 1 1 0; padding-bottom: 8px; }
-  #chartbox[data-as="dock"] #chart { flex: 1 1 0; min-height: 24px; }
+  #chartbox[data-as="dock"] #say { min-height: 45px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+  #chartbox[data-as="dock"] #hazrow { height: 44px; gap: 12px; }
+  #chartbox[data-as="dock"] #hazard { gap: 0 14px; }
+  #chartbox[data-as="dock"] #hazard button { font-size: 15px; letter-spacing: 0.04em; }
+  #chartbox[data-as="dock"] #level { min-height: 32px; margin-bottom: 8px; font-size: 13px; }
+  #chartbox[data-as="dock"] #level b { font-size: 17px; }
+  #chartbox[data-as="dock"] #lead { padding-bottom: 6px; }
+  #chartbox[data-as="dock"] #body { flex: 1 1 0; padding-bottom: 10px; }
+  #chartbox[data-as="dock"] #chart { flex: 1 1 0; min-height: 24px; margin-top: 0; }
   #chartbox[data-as="dock"] #step button { width: 44px; height: 30px; }
+  #chart text, #chartbox[data-as="dock"] #chart text { font-size: 12px; }
+  #chart text.unit { font-size: 12.5px; }
+  #chart text.caps, #chart .h { font-size: 13px; }
+  #chart .tip text { font-size: 14px; }
+  #chart .tip text + text { font-size: 12.5px; }
   /* pulled up, the sheet scrolls: the tabs, the timeline at a fixed height, the signals */
   #chartbox[data-as="stage"] #chartin { overflow-y: auto; overscroll-behavior: contain; }
-  #chartbox[data-as="stage"] #under { min-height: 0; margin-right: 0; }
   #chartbox[data-as="stage"] #body { flex: none; padding-bottom: 24px; }
-  #chartbox[data-as="stage"] #chart { flex: none; height: 250px; margin-top: 0; }
+  #chartbox[data-as="stage"] #chart { flex: none; height: 324px; margin-top: 0; }
   #chartbox[data-as="stage"] #signs svg { height: 26px; margin-bottom: 4px; }
   #bar { margin-top: 0; flex-wrap: wrap; row-gap: 0; }  /* three scales, the two glyphs and the year stepper do not fit one row on a narrow phone */
   #ahead { display: flex; margin-left: auto; }
@@ -516,44 +541,61 @@ canvas.cells { position: absolute; left: 0; top: 0; transition: opacity 0.25s; }
   #shape button { width: 36px; height: 44px; }
   #chart .h { text-decoration: none; cursor: default; }
   #chart .h:not(.on) { display: none; }  /* the choice is the row of buttons above the chart */
-  #signs > div, #signs > button { flex: 1 1 28%; min-height: 44px; }
+  #hint { font-size: 12.5px; }
+  #signs > p { font-size: 12.5px; }
+  #signs > div, #signs > button { flex: 1 1 28%; min-height: 44px; font-size: 14px; }
+  #signs b { font-size: 18px; }
   #signs.acts > div { flex-basis: 40%; }
-  /* the ranked list: a sheet over the lower half, with its bar: the name of the list, which pulls it, and the way out */
-  #list { left: 0; right: 0; top: var(--list-top); bottom: var(--cap); width: auto; z-index: 25; background: var(--ground); box-shadow: 0 -10px 30px rgba(16, 32, 26, 0.12); transition: top 0.34s cubic-bezier(0.2, 0.7, 0.2, 1), bottom 0.34s cubic-bezier(0.2, 0.7, 0.2, 1); }
+  /* the ranked list: a sheet over the lower half, standing on the bulletin's handle. Its bar has the name of
+     the list, which pulls it up to the header and back, the file and the way out. */
+  #list { left: 0; right: 0; top: var(--list-top); bottom: calc(var(--cap) + var(--peek)); width: auto; z-index: 25; background: var(--ground); box-shadow: 0 -10px 30px rgba(16, 32, 26, 0.12); transition: top 0.34s cubic-bezier(0.2, 0.7, 0.2, 1), bottom 0.34s cubic-bezier(0.2, 0.7, 0.2, 1); }
   #list[data-at="full"] { top: var(--top); }
-  #list[data-at="bar"] { top: calc(100dvh - var(--cap) - var(--peek) - var(--bar)); bottom: calc(var(--cap) + var(--peek)); }
-  #list-bar { position: static; display: flex; align-items: center; flex: none; height: var(--bar); padding: 0 4px 0 16px; }
-  #list-grab { display: block; flex: 1; align-self: stretch; padding-top: 7px; text-align: left; font: 700 17px/1 var(--cond); letter-spacing: 0.07em; text-transform: uppercase; }
-  #list-grab::before { margin: 0 auto 9px; transform: translateX(22px); }
+  #list-bar { position: static; display: flex; align-items: center; gap: 0; flex: none; height: 50px; padding: 0 4px 0 16px; }
+  #list-grab { display: block; flex: 1; align-self: stretch; padding-top: 7px; text-align: left; font: 700 16px/1 var(--cond); letter-spacing: 0.07em; text-transform: uppercase; }
+  #list-grab::before { margin: 0 auto 9px; transform: translateX(46px); }
+  #list-csv { display: grid; place-items: center; min-width: 48px; height: 44px; padding: 0 8px; font-size: 13px; }
   #list-in { padding: 0 16px; }
-  #list-say { margin-right: 0; }
+  #list-say { margin-right: 0; font-size: 15px; }
+  #list-say:empty + #list-rows { padding-top: 0; }
   #list-rows { margin: 0 -16px; }
   #list-rows button { min-height: 44px; align-items: center; padding: 4px 16px; }
-  #list-rows .why { padding: 8px 16px 12px 58px; }
-  /* the story's caption: at the bottom, the way on large under the thumb, the way back beside it */
+  #list-rows.prio button { grid-template-columns: 30px minmax(0, 1fr) 64px; }
+  #list-rows .nm { font-size: 15.5px; }
+  #list-rows .tag { font-size: 12.5px; }
+  #list-rows .why { padding: 6px 16px 12px 58px; }
+  #list-rows .why p { font-size: 15.5px; }
+  /* the story's caption: at the bottom, as tall as its line, the way on large under the thumb */
   #story { left: 0; right: 0; top: auto; bottom: 0; width: auto; display: flex; flex-direction: column; padding: 14px 16px calc(12px + env(safe-area-inset-bottom)); background: var(--ground); box-shadow: 0 -10px 30px rgba(16, 32, 26, 0.12); pointer-events: auto; }
-  #story-line { font-size: clamp(23px, 6.6vw, 28px); line-height: 1.04; }
-  #story-note { margin-top: 6px; font-size: 13.5px; line-height: 1.3; }
+  #story-line { font-size: clamp(25px, 7vw, 28px); line-height: 1.05; }
   #story-extra { display: none; }
-  #story-nav { margin-top: 12px; justify-content: space-between; }
-  #story-next { order: 3; min-width: 150px; height: 50px; }
-  #story-back { order: 1; height: 50px; min-width: 48px; padding: 0 4px; }
-  #story-marks { order: 2; flex: 0 1 auto; }
-  /* About fills the screen */
+  #story-nav { margin-top: 12px; }
+  #story-next { width: 112px; height: 52px; }
+  #story-back { width: 52px; height: 52px; }
+  /* About fills the screen; in the story it stands between the header and the caption, so the line, the way on and Skip stay in reach */
   #about { inset: 0; z-index: 70; width: 100vw; height: 100dvh; padding: 0 var(--pad) 40px; box-shadow: none; }
   #about-bar { margin: 0 calc(-1 * var(--pad)); padding: 2px 1px 2px 0; }
-  :root[data-story] #about { inset: var(--top) 0 var(--cap) 0; height: auto; z-index: 45; }  /* in the story the panel stands between the header and the caption: the line, the way on and Skip stay in reach */
-  #about h2 { font-size: 32px; }
-  #about .thesis p { font-size: 21px; }
+  :root[data-story] #about { inset: var(--top) 0 var(--cap) 0; height: auto; z-index: 45; }
+  #about p { font-size: 15.5px; }
+  #about .lede p { font-size: 21px; }
+  #about h3 { font-size: 16px; }
   #about a { padding: 4px 0; }
-  #about .board { font-size: 14px; }
-  #about #model-fig li { font-size: 11.5px; white-space: normal; }
+  #about .bench { font-size: 14.5px; }
+  #about .bench th { font-size: 12.5px; }
+  #about .bench td.n { font-size: 19px; }
+  #about .metric { font-size: 12.5px; }
+  #about #model-fig li { font-size: 12.5px; white-space: normal; }
   #about #model-fig li.m { font-size: 17px; }
-  #about #model-fig li.o { font-size: 14px; }
-  #about .board :is(th, td):nth-child(n+5) { display: none; }  /* who and when give way on a narrow screen: the model's link has both */
+  #about #model-fig li.o { font-size: 14.5px; }
+  #about .bench :is(th, td):nth-child(n+5) { display: none; }  /* who and when give way on a narrow screen: the model's link has both */
   #about .go .btn { height: 50px; }
   #api { width: 100vw; max-width: none; height: 100dvh; max-height: none; margin: 0; padding: 22px 18px 0; }
   #api-close { margin: -6px 0 0; min-height: 44px; }
   #api-top a, #api-copy { min-height: 44px; display: inline-flex; align-items: center; }
   #api-text { font-size: 12px; padding-bottom: 24px; }
+}
+/* a short phone: the bulletin rests lower, without its hazards, so the Amazon keeps its place above it */
+@media (max-width: 860px) and (max-height: 700px) {
+  :root { --peek: 216px; }
+  #chartbox[data-as="dock"] #hazrow { display: none; }
+  #chartbox[data-as="dock"] #sheet-grab { margin-bottom: 0; }
 }

@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en" data-story-version="2">
+<html lang="en" data-story-version="3">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -51,7 +51,7 @@
 </header>
 
 <main id="app">
-  <!-- the map is the page. With the timeline on the stage it is a small picture of itself in the lower right corner. -->
+  <!-- the map is the page. With the timeline on the stage it is a small picture of itself in the upper right corner. -->
   <section id="mapbox" class="box" data-as="stage">
     <div id="mapin" class="in"><div id="map"></div></div>
     <button id="map-front" class="front"><svg viewBox="0 0 14 14" aria-hidden="true"><path d="M12 12L3 3M3 9V3h6"/></svg></button>
@@ -73,10 +73,9 @@
 
   <!-- the ranked list: where to look first, and why -->
   <aside id="list" hidden>
-    <div id="list-bar"><button id="list-grab"><span id="list-title"></span></button><button id="list-close" class="x"></button></div>
+    <div id="list-bar"><button id="list-grab"><span id="list-title"></span></button><a id="list-csv" href="data/priority.csv" download>CSV</a><button id="list-close" class="x"></button></div>
     <div id="list-in">
       <p id="list-say"></p>
-      <p id="list-key"></p>
       <ol id="list-rows"></ol>
     </div>
   </aside>
@@ -112,21 +111,21 @@
   </section>
 </main>
 
-<!-- the opening story: a caption, one line at a time, while the interface is put together around the map -->
+<!-- the opening story: a caption, one line at a time, while the interface is put together around the map.
+     The way on and the way back are arrows. -->
 <section id="story" hidden>
   <div id="story-text">
     <p id="story-line" aria-live="polite"></p>
-    <p id="story-note"></p>
     <div id="story-extra"></div>
   </div>
   <div id="story-nav">
-    <button id="story-next"></button>
     <ol id="story-marks" aria-hidden="true"></ol>
-    <button id="story-back"></button>
+    <button id="story-back"><svg viewBox="0 0 26 16" aria-hidden="true"><path d="M25 8H2M9 1L2 8l7 7"/></svg></button>
+    <button id="story-next"><svg viewBox="0 0 26 16" aria-hidden="true"><path d="M1 8h23M17 1l7 7-7 7"/></svg></button>
   </div>
 </section>
 
-<!-- About: the model, how it is checked, the open board. A panel beside the map. -->
+<!-- About: what this is, the model, the benchmark. A panel beside the map. -->
 <dialog id="about">
   <div id="about-bar"><button id="about-close" class="x"></button></div>
   <div id="about-body"></div>

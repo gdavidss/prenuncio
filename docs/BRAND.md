@@ -8,12 +8,14 @@ Prenúncio is the sign before the event: an early warning for the Brazilian Amaz
 
 Number first, then the fact, then stop. Quantities are named for what happened to the forest (km² cleared, burned, degraded, mined), never for the instrument that saw it. One short sentence per idea, present tense, no adjectives, no reassurance, no exclamation marks. Measured and forecast are never dressed as each other, and a quantity that was not tested is not shown: fire has a map of where it tends to occur and a record of what burned, and no forecast amount. English and Portuguese carry equal weight. No em dashes. In Portuguese, no label followed by a colon.
 
+Where someone did something, the sentence says who, and it is we: we trained a model, we tested it, we built it. No slogans in pairs of fragments. No small print: a line that explains what the reader can already see, or how something was computed, is cut. What stays small is a unit, a forecast's range, what a step of the key means, and the one sentence that says the enforcement figure is a floor and not proof of cause. The benchmark is called the benchmark, in both languages.
+
 ## Colour
 
 | Name | Value | Meaning |
 |---|---|---|
 | Forest green | `#0b6b3a` | Standing forest on the map, and the brand: the mark and whatever is chosen. |
-| Clearing red | `#e4002b` | Clearing. On the map, the chance of clearing, in four reds built around this one. In the bulletin, the alert level and the clearing forecast. |
+| Clearing red | `#e4002b` | Clearing. On the map, the chance of clearing, in four reds built around this one. In the bulletin, the alert level and the clearing forecast. In the story, the one line that says a piece of the forest falls every year. |
 | Mapped dark | `#141414` | Clearing that was mapped in a replayed year. What happened is dark, what is likely is red, and the two are never the same tone. |
 | Ink | `#10201a` | Type, rules, measured history. |
 | Ground | `#f4f5f0` | The page. |
@@ -43,29 +45,31 @@ The other hazards never share a map with clearing. Each climbs from near the for
 
 ## Layout
 
-The map is the page, edge to edge, and the Amazon is the object on it. Nothing has a frame: no border, no outline, no box of rules around the map, a panel or a control. What stands on the page is type, set with space around it, on a surface of the page's own colour that only shows once the map is moved under it.
+The map is the page, edge to edge, and the Amazon is the object on it. Nothing has a frame: no border, no outline, no box of rules around the map, a panel or a control. What stands on the page is type, set with space around it, on a surface of the page's own colour that only shows once the map is moved under it. A surface has no hard corner: at its edges it thins out into the page.
 
-The left of the page is a column of type. At its top, what the map shows and how to read it: the mode, the kinds of sector, the key (whose steps are the filter) and the count of cells. At its bottom, docked, the bulletin with its timeline: the hazards, the level, the headline and the histogram. The ranked list stands on the right, with its way out. The Amazon is fitted to its own outline between them and never under them. When the list opens or closes, the Amazon glides once to its new place; nothing else moves it. The header has the mark, the story, About, the API and the language, and nothing else.
+The left of the page is a column of type. At its top, what the map shows and how to read it: the mode, the kinds of sector and the key, whose steps are the filter. At its bottom, docked, the bulletin with its timeline: the hazards, the level, the headline and the histogram. The ranked list stands on the right, with its way out. The Amazon is fitted to its own outline beside them, never under them, with clear ground between its outline and the column. When the list opens or closes, the Amazon glides once to its new place; nothing else moves it. The header has the mark, the story, About, the API and the language, and nothing else.
 
-The bulletin can come forward to fill the page, and then the map is a small picture of itself in the lower right corner; a click on it swaps them back. The swap is drawn, never cut. Every panel that opens has a clear way out. Every control sits on what it changes.
+The bulletin can come forward to fill the page. Its content keeps a measure of 1100 px in the middle and its plot a height that leaves the bars their proportion. The map is then a small picture of itself in the upper right corner: nothing in it answers the pointer, and a click on it swaps the two back. The swap is drawn, never cut. Every panel that opens has a clear way out. Every control sits on what it changes.
 
-On a phone the map is the screen. A band under the header says what it shows. The bulletin is a sheet at the bottom that shows its top and is pulled up to the header and pushed back. The list is a sheet too. The header is the mark and one menu.
+The priority list is bare rows: the rank, the place, a small tag where it lies in protected land (TI, UC), and a thin red bar as long as the cells expected to lose a hectare there. No paragraph above it, no headings, no figures. A place that is opened says why in one plain sentence, two at most. Beside the way out, the same list as a file.
 
-### About, the model and the open board
+On a phone the map is the screen. A band under the header says what it shows. One sheet stands at the bottom at a time. The bulletin rests there showing its level, its headline and its plot, and is pulled up to the header and pushed back. When the list is open it has the lower half, and the bulletin waits behind a small handle under it; closing the list brings it back. The two never overlap. The header is the mark and one menu. Type has a phone's own scale: the story's line 27 px, a headline 21, text 15.5, labels 12.5.
 
-About is a panel on the right of the page, and the whole screen on a phone. Its way out stays at the top while the text passes under it.
+### About, the model and the benchmark
+
+About is a panel on the right of the page, and the whole screen on a phone. Its way out stays at the top while the text passes under it. It says what the site shows and who it is for, shows the model, says in two sentences what the model learned from and how it did on a year it had never seen, gives the benchmark and the way in, says that it gets things wrong, and names whose data it is. Nothing else.
 
 The model is drawn as it works. Nine sources are nine sheets of the same territory, stacked, each with the Amazon's outline, a hint of what it holds, its name and who makes it. Traces fall from them into one point, the model, by its name, and leave it in red for the last sheet, which is the map of chance. Ink is what goes in; red is only what comes out. Small particles travel the traces, slowly. The figure is still when less motion is asked for, and it stops when it is off the screen.
 
-The open board is the one table on the site: rank, model, score, the year kept apart, who sent it and when, to one decimal in the reader's number format. No stripes, no rules between rows, no box. The row with no model is said plainly and set in grey. Under the board, one green button to submit a model, and a quieter link to the code.
+The benchmark is the one table on the site: rank, model, score, the year kept apart, who sent it and when, to one decimal in the reader's number format. No stripes, no rules between rows, no box. The row with no model is said plainly and set in grey. Under it at most one short line, then one green button to submit a model and a quieter link to the code.
 
 ## The story
 
-A first visit to the bare address is told what this is while the interface is put together around the map. The map is there from the first line and never leaves. While the Amazon is alone it is as large as it is in the tool with the list closed; when the priority list opens it glides once to its place beside it, and then stays. Each step brings in at most one piece of the tool, in the place it keeps: the key, the priority list, About, the timeline in its dock. When the last line is read the caption goes away, and what is on the page is the tool. Skipping lands on that same page.
+A first visit to the bare address is told what this is while the interface is put together around the map. The map is there from the first line and never leaves. While the Amazon is alone it is as large as it is in the tool with the list closed; when the priority list opens it glides once to its place beside it, and then stays. Each step brings in at most one piece of the tool, in the place it keeps. When the last line is read the caption goes away, and what is on the page is the tool. Skipping lands on that same page.
 
-The caption is one line at a time, in the headline's face, in the left column. Forest. Loss, year by year, in the mapped dark, and what it adds up to. The chance of loss arriving in red, and the places that come first. One year that already happened, as proof. The model and the open board. What lies ahead.
+The caption is one line at a time, in the headline's face, in the left column, and nothing is written under it. This is the Amazon. So many squares of forest. Every year a piece of it falls, and that one line is set in the clearing red while the years of clearing are drawn, dark, one after another. What it adds up to. We trained a model to predict the next one: the red arrives and the key takes its place. We tested it on the past: a year that already happened is replayed. What it learns from: the panel opens on the model's figure. The code and the benchmark are open: the panel shows the table and the button, and closes when the reader goes on. For those who enforce, the places that come first: the list opens and the Amazon glides. The last three months and the next three: the timeline takes its dock.
 
-Each line is a sentence that could stand alone, and its numbers are read from the data files. It is one model, by its name, never two. The red spreads from where the chance is highest, outward, and that is the one orchestrated moment on the site. On a phone the caption is at the bottom, as tall as its line needs, with the way on at the thumb, and About stands between the header and the caption. The story is remembered once finished or skipped, a link with a fragment never shows it, and the header plays it again.
+The model's panel and the priority list are never open at the same time. The way on and the way back are arrows, large enough to hit, named for a screen reader. Each line's numbers are read from the data files. It is one model, by its name, never two. The red spreads from where the chance is highest, outward, and that is the one orchestrated moment on the site. The story is remembered once finished or skipped, a link with a fragment never shows it, and the header plays it again. On a phone the caption is at the bottom, as tall as its line needs, with the way on at the thumb; About stands between the header and the caption; and the timeline, when it comes, takes the list's place.
 
 ## The mark
 
@@ -102,7 +106,9 @@ The actions view shows what measured enforcement accounts for. It has no level a
 - A level the data does not earn, in either direction.
 - Fire in red, or a forecast amount of fire.
 - The same tone for clearing that happened and clearing that is likely.
-- Boxes that hold one number, accent bars beside text, card grids, footers, tables in the interface. The open board is the one table.
+- Boxes that hold one number, accent bars beside text, card grids, footers, tables in the interface. The benchmark is the one table.
+- The words placar, board or leaderboard on the screen. It is the benchmark.
+- Small print that explains. A second line under the story's caption.
 - A frame, a border or a box of rules around anything.
 - A control that sits away from what it changes.
 - A second thing moving by itself on a screen. The story's red, the swap, the one glide when the list opens and the particles of the model figure are the motion there is.

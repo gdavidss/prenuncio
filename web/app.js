@@ -1,4 +1,4 @@
-// Prenúncio. A drawn map of the Amazon on a stage, and a bulletin with its timeline docked in the corner: an
+// Prenúncio. The map of the Amazon is the page, and a bulletin with its timeline is docked in the corner: an
 // alert level, a headline, a histogram and a few signals. The two swap places. A first visit opens with a story.
 // It follows docs/BRAND.md: green is forest, red is clearing. No build step, no keys.
 // Data formats: pipeline/export.py (cells) and pipeline/regions.py (sectors, months).
@@ -11,22 +11,21 @@ const T = {
     amazon: "Amazon", about: "About", close: "Close", copy: "Copy", copied: "Copied", story: "Story", skip: "Skip",
     front: { chart: "Bring the timeline forward", map: "Bring the map forward", back: "Back to the map" }, menu: "Menu", closeList: "Close the list",
     chanceOut: "the chance, for every cell",
-    board: { head: ["", "model", "score", "", "by", "date"], submit: "Submit a model", repo: "The code, on GitHub", ref: "no model" },
+    bench: { head: ["", "model", "score", "", "by", "date"], submit: "Submit a model", repo: "GitHub", ref: "no model" },
     // the opening story: one line at a time. Numbers come from data/story.json and the other data files.
     num: n => ["zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten", "eleven", "twelve"][n] ?? String(n),
     st: {
       next: "Next", back: "Back", done: "Done",
       forestA: "This is the Amazon.",
       forestB: v => `${v.cells} million squares of forest, ${v.m} metres each.`,
-      lossA: "Every year a part falls.",
+      lossA: "Every year a piece of it falls.",
       lossB: v => `Since ${v.y}, ${v.k} thousand km².${v.more ? " More than England." : ""}`,
-      omenA: "Where does it fall next year?",
-      omenB: v => `Every square has a chance. These ${v.n} places come first.`,
-      proof: v => `In ${v.y}, of every ${v.of} places it pointed to, ${v.hit} were cleared.`,
-      proofNote: v => `A place is a block of ${v.km} km. Cleared means 10 hectares or more. Across the forest at large, ${v.base} in 100.`,
-      modelA: v => `An open model. ${v.inputs} public sources.`,
-      modelB: "The board is open. Anyone can try to beat it.",
-      ahead: "What lies ahead.",
+      model: "We trained a model to predict the next one.",
+      proof: v => `We tested it on the past. In ${v.y}, ${v.hit} of every ${v.of} places it pointed to were cleared.`,
+      sources: v => `It learns from ${v.n} public sources, from satellite images to clearing permits.`,
+      open: "The code and the benchmark are open. Build a better model and it goes ahead of ours.",
+      first: v => `For those who enforce, these ${v.n} places come first.`,
+      ahead: v => (v.pct ? `In the last three months clearing rose ${v.pct}%, and the model expects another ${v.km} km² by ${v.month}.` : `The model expects another ${v.km} km² of clearing by ${v.month}.`),
     },
     axisY: "km² cleared per year, August to July",
     // cells: every forest cell has its own chance
@@ -37,28 +36,19 @@ const T = {
     cellPast: v => `In ${v.y} this cell was given ${v.p}. ${v.clr ? "Clearing was mapped in it." : "No clearing was mapped in it."}`,
     areaFc: v => (v.low ? `Every cell here has ${v.p} chance of losing a hectare by July ${v.y}` : `Up to ${v.p} chance a cell here loses a hectare by July ${v.y}`),
     areaPast: v => `In ${v.y} cells here were given ${v.low ? "" : "up to "}${v.p}. ${v.clr ? `Clearing was mapped in ${v.clr} of ${v.n}.` : "No clearing was mapped."}`,
-    pShare: v => `<b>${v.exp}</b> of ${v.cells} million forest cells expected to lose a hectare`,
     pShareMin: v => `<b>${v.n}</b> cells at ${v.cut} or more, with ${v.share}% of the expected loss`,
-    pSharePastNo: v => `<b>${v.act}</b> cells had clearing mapped`,
     pSharePastMin: v => `<b>${v.n}</b> cells at ${v.cut} or more, with ${v.share}% of the cells where clearing was mapped`,
     pastP: v => `In ${v.y}, ${v.exp} cells were expected to lose a hectare and ${v.act} did`, prevYear: "Previous year", nextYear: "Next year",
     modes: { sectors: "Sectors", cells: "Cells", prio: "Priorities" }, ranking: "Ranking", bars: "Bars", line: "Line",
-    // the priority list: where to look first
-    prioSay: v => `Of the ${v.top} blocks of ${v.km} km ranked highest, ${v.hit}% lost at least 10 hectares in ${v.y}, against ${v.base}% of all forest blocks.`,
-    prioCols: ["cells", "km² around"], prioColsTitle: v => `Cells of the block expected to lose a hectare by July ${v.y}, and the km² cleared in the block and around it in three years`,
-    csv: "Download CSV", land: { ti: "Indigenous land", uc: "conservation unit" },
-    // why a priority block ranks high: what the model was reading there, a sentence a fact
+    // the priority list: where to look first. A place that is opened says why in one plain sentence, two at most.
+    land: { ti: "Indigenous land", uc: "conservation unit" },
     why: {
-      around: v => `${v.km} km² cleared around it in three years, ${v.x} times the forest's average.`,
-      alerts: v => `${v.km} km² of clearing alerts in the last 12 months.`,
-      degr: v => `${v.km} km² degraded or logged in the last 12 months.`,
-      fire: v => `${v.km} km² burned in the last 12 months.`,
-      mine: v => `${v.km} km² of mining in the last 12 months.`,
-      permit: v => `A valid clearing permit for ${v.ha} ha.`,
-      notices: v => `${v.n} IBAMA ${v.one ? "notice" : "notices"} in the last year.`,
-      land: { ti: "Inside Indigenous land.", uc: "Inside a conservation unit." },
-      forest: "The whole block is still forest.",
-      seen: v => `What the model saw here on ${v.d} ${v.m} ${v.y}, not the cause.`,
+      around: v => `${v.km} km² cleared around it in the last three years.`,
+      fire: v => `${v.km} km² of forest burned in the last year.`,
+      degr: v => `${v.km} km² of forest degraded in the last year.`,
+      near: "Close to recent clearing.",
+      permit: v => `Has a permit to clear ${v.ha} hectares.`,
+      land: { ti: "Inside an Indigenous land.", uc: "Inside a conservation unit." },
     },
     rankSay: v => `${v.kind} by ${v.what}`, rankWhat: { fc: y => `clearing expected by July ${y}`, past: y => `clearing expected for ${y}`, risk: "share of the risk map", fire: "share of where fire tends to occur" },
     kinds: { uf: "States", mun: "Municipalities", ti: "Indigenous lands", uc: "Conservation units" },
@@ -89,12 +79,11 @@ const T = {
       degr: v => `${v.km} km² degraded${v.here} in the last three months`,
       mine: v => `${v.km} km² mined${v.here} in the last three months`,
     },
-    scaledSub: v => `Its share of the Amazon forecast, with no range of its own. ${v.rank} of ${v.n} ${v.many}.`,
+    scaledSub: v => `${v.rank} of ${v.n} ${v.many}.`,
     // fire: what burned, never how much will burn
     burned: { months: v => `${v.km} km² burned${v.here} in the last three months, ${v.prev} a year before`, years: v => `${v.km} km² burned${v.here} in the last twelve months, ${v.prev} in the twelve before` },
     fireRank: v => `${v.rank} of ${v.n} ${v.many} on the map of where fire tends to occur.`,
     rankOnly: v => `${v.rank} of ${v.n} ${v.many} on the risk map.`,
-    deter: "Monthly figures are what INPE's DETER detects. The yearly PRODES count is larger.",
     axisM: { clear: "km² cleared per month", fire: "km² burned per month", degr: "km² degraded per month", mine: "km² mined per month" },
     axisW: { fire: "km² burned per 12 months", degr: "km² degraded per 12 months", mine: "km² mined per 12 months" },
     whole: "Whole Amazon", to: (a, b) => `${a} to ${b}`,
@@ -111,7 +100,6 @@ const T = {
     here: " here",
     short: { clear: "clearing", scar: "burning", degr: "degradation", mine: "mining" },
     sign: { clear: "Clearing", scar: "Burning", degr: "Degradation", mine: "Mining", autos: "IBAMA fines" },
-    hintY: v => `Pick a year from ${v.first} on to replay it.`,
     now: "now", ahead: n => `${n} months`, byJuly: y => `to July ${y}`, window: "forecast",
     signs: "Signals, three months against last year",
     enso: ["El Niño", "La Niña", "Pacific"], ensoLevel: [["very strong", "strong", "moderate", "weak"], ["very strong", "strong", "moderate", "weak"], "neutral"],
@@ -125,10 +113,9 @@ const T = {
       say: v => `Enforcement accounts for ${v.km} km² of clearing avoided${v.here} since ${v.since}`,
       none: v => `Enforcement accounts for no clearing avoided here since ${v.since}`,
       sub: v => `About ${v.part} of the fall since then. The rest fell everywhere at once.`,
-      subHere: v => `${v.pct}% on top of what was cleared here. No range for a single state.`, noRange: "No range for a single state.",
+      subHere: v => `${v.pct}% on top of what was cleared here.`,
       parts: ["a quarter", "a third", "half", "two thirds", "three quarters"],
-      honest: v => `A floor and an association, not proof of cause, since inspectors go where clearing is. ${v.own ? `In the Amazon as a whole, ${v.rest} of the fall is not attributed to anything.` : `The rest, ${v.rest} of the fall, is not attributed to anything.`}`,
-      statesOnly: " Only states have a figure of their own.",
+      honest: "A floor and an association, not proof of cause.",
       axis: "km² cleared per six months", measured: "measured", held: v => `more, with enforcement as in ${v.ref}`, ref: v => `average of ${v.from} to ${v.to}`,
       tipObs: v => `${v.span}, ${v.obs} km² cleared`, tipHeld: v => `${v.held} with enforcement held${v.lo ? `, likely ${v.lo} to ${v.hi}` : ""}`,
       signs: v => `IBAMA actions, year to ${v.now} against year to ${v.ref}`, against: x => `against ${x}`,
@@ -137,65 +124,27 @@ const T = {
     },
     credit: "Imagery: Esri, Maxar, Earthstar Geographics",
     aboutHtml: v => `
-      <h2>The sign before the event</h2>
-      <div class="thesis">
-        <p>Every forest cell of the Amazon has a chance of being cleared next year.</p>
-        <p>That chance can be estimated from what satellites and public records already show, checked against what happened, and improved in the open.</p>
-        <p>The point is to tell IBAMA, and anyone making policy, where to act first.</p>
-      </div>${v.st ? `
-      <h3 id="about-model">The model</h3>
+      <div class="lede">
+        <p>Prenúncio shows where the Amazon is likely to be cleared by July ${v.year}.</p>
+        <p>We built it so the people who enforce the law can get there first.</p>
+      </div>
       <div id="model-fig"></div>
-      <ul>
-        <li><b>${v.st.name}</b> is ${v.st.what}.</li>
-        <li>${v.st.nInputs} public sources go in, the same territory seen ${v.st.nInputs.toLowerCase()} ways.</li>
-        <li>Trained on what happened from ${v.st.from} to ${v.st.to}. ${v.st.rule}.</li>
-        <li>It trains in ${v.st.hours} hours on one rented machine with one GPU, for about ${v.st.usd} dollars.</li>
-        <li>Each cell gets the chance of losing at least a hectare by July ${v.st.year}. Added up, the chances of ${v.st.year} come to ${v.st.cells} cells and about ${v.st.km} km².</li>
-      </ul>
-      <h3 id="about-board">The open board</h3>
-      <p>One question for every model. Rank the forest, take the 5% of forest ranked highest, and count the share of the year's clearing that falls inside. Each year from ${v.st.b0} to ${v.st.b1} is forecast by a model that never saw it.</p>
-      ${v.board}
-      <p class="metric">The score is the mean of ${v.st.b0} to ${v.st.b1}. ${v.st.heldout} was kept apart and scored once, at the end.</p>
+      <p>The model, <b>${v.name}</b>, learned from ${v.span} years of public data. For every ${v.m} metre square of forest it gives the chance of clearing in the year ahead.</p>
+      <p>We tested it on years it had never seen. In ${v.y}, ${v.hit} of every ${v.of} places it pointed to were cleared.</p>
+      <h3 id="about-benchmark">Benchmark</h3>
+      ${v.bench}
+      <p class="metric">The score is the mean of ${v.b0} to ${v.b1}.</p>
+      <p>The code, the data and the benchmark are open. Build a better model and it goes ahead of ours.</p>
       <p class="go"><a class="btn" href="${v.links.benchmark}">${v.submit}</a><a href="${v.links.repository}">${v.repo}</a></p>
-      <h3 id="about-check">How it is checked</h3>
-      <ul>
-        <li>Every year is forecast by a model that never saw it, then set against what INPE mapped.</li>${v.rel ? `
-        <li><b>The chances.</b> For ${v.rel.y} it expected ${v.rel.exp} cells to lose a hectare. ${v.rel.act} did.</li>` : ""}${v.st.replay ? `
-        <li><b>The priority list.</b> In ${v.st.replay.y0}, ${v.st.replay.hit0} of the ${v.st.blocks} blocks ranked highest lost 10 hectares or more. Of all forest blocks, ${v.st.replay.base0}.</li>` : ""}
-        <li><b>How much is the weak part.</b> Where is the model's strength. The yearly total missed by ${v.mape}% on average.</li>
-        <li><b>Other windows.</b> The next 3 and 6 months, fire, degradation and mining have maps of their own, which show the 5% of forest with the highest risk.</li>${v.act ? `
-        <li><b>Enforcement.</b> The Actions view sets clearing against IBAMA's notices and embargoes in ${v.act.n} municipalities. Its figure, ${v.act.km} km² since ${v.act.since}, is a floor and an association, not proof of cause. The method is in <a href="${v.links.policy}">docs/POLICY.md</a>.</li>` : ""}
-      </ul>
-      <h3 id="about-open">How to take part</h3>
-      <ul>
-        <li><b>Submit a model.</b> By pull request, with its scores, its code and a report of how it was made. The <a href="${v.links.benchmark}">benchmark</a> has the rules, and <a href="${v.links.leaderboard}">the board</a> takes every model that is scored.</li>
-        <li><b>Propose an input.</b> ${v.st.tested} were tested. The <a href="${v.links.inputs}">ledger</a> says what each one added, and the <a href="${v.links.results}">lab notes</a> what the ${v.st.tried} versions tried did.</li>
-        <li><b>Agents are welcome</b>, as long as the report says which agent was used and how. The numbers are also a <a href="${v.links.api}">static API with instructions for agents</a>.</li>
-        <li>Forecasts for ${v.st.year} can be registered until 31 December ${v.st.year - 1}, and are scored when INPE publishes the map.</li>
-      </ul>` : ""}
-      <h3 id="about-limits">What it cannot do</h3>
-      <ul>
-        <li>Say why a place is at risk. What the list says about a place is what the model read there, not a cause.</li>
-        <li>Give a range for a single sector, or see a change of policy coming.</li>
-        <li>Forecast one municipality, Indigenous land or conservation unit month by month. Theirs is their share of the Amazon forecast.</li>
-        <li>Say how much will burn. That depends on a drought that has not happened yet, so the site shows where fire tends to occur and what has burned.</li>
-        <li>Replace INPE's official figures. The ${v.partial} outcome covers priority scenes only so far.</li>
-      </ul>
-      <h3>Reading the screen</h3>
-      <ul>
-        <li><b>The level.</b> Quiet, Watch, Warning or Alarm. It is counted from the hazard's last three months against a year before, a strong El Niño for the whole Amazon, and a sector's rank in the forecast. The red band follows the level.</li>
-        <li><b>The map.</b> Green is forest, red is the chance of clearing, and the steps of the key filter by minimum chance. Seen from far, a block takes the step a fifth of its cells reach.</li>
-        <li><b>The timeline.</b> By month, what was cleared and what the model expects for each month ahead, with its range. By year, any year since ${v.first} can be replayed. Monthly figures are what INPE's DETER detects, and the yearly PRODES count is larger.</li>
-      </ul>
-      <h3>Data</h3>
-      <p>INPE PRODES and DETER, through TerraBrasilis, and INPE Queimadas fire detections. Global Forest Change by Hansen, UMD, Google, USGS and NASA. GLAD Sentinel-2 alerts, University of Maryland. Tropical Moist Forest, by the European Commission's JRC. AlphaEarth satellite embeddings. IBAMA open enforcement records and SINAFLOR clearing permits. NOAA's Oceanic Niño Index. Boundaries of states, municipalities, Indigenous lands and conservation units as INPE distributes them. Close-up imagery by Esri, Maxar and Earthstar Geographics. Map drawn with Leaflet.</p>`,
+      <p>It gets things wrong. A 10% chance means 9 of 10 squares like that one are not cleared.</p>
+      <p>Data from INPE, IBAMA, the University of Maryland, the JRC and Google.</p>`,
   },
   pt: {
     hazard: { clear: "Desmatamento", fire: "Fogo", degr: "Degradação", mine: "Garimpo" }, scale: { years: "Anos", months: "Meses", actions: "Ações" },
     amazon: "Amazônia", about: "Sobre", close: "Fechar", copy: "Copiar", copied: "Copiado", story: "História", skip: "Pular",
     front: { chart: "Trazer a linha do tempo à frente", map: "Trazer o mapa à frente", back: "Voltar ao mapa" }, menu: "Menu", closeList: "Fechar a lista",
     chanceOut: "a chance, para cada célula",
-    board: { head: ["", "modelo", "nota", "", "de", "data"], submit: "Enviar um modelo", repo: "O código, no GitHub", ref: "sem modelo", refName: "o ano anterior, por perto" },
+    bench: { head: ["", "modelo", "nota", "", "de", "data"], submit: "Enviar um modelo", repo: "GitHub", ref: "sem modelo", refName: "o ano anterior, por perto" },
     num: (n, fem) => (fem && n < 3 ? ["zero", "uma", "duas"] : ["zero", "um", "dois", "três", "quatro", "cinco", "seis", "sete", "oito", "nove", "dez", "onze", "doze"])[n] ?? String(n),
     st: {
       next: "Seguir", back: "Voltar", done: "Pronto",
@@ -203,13 +152,12 @@ const T = {
       forestB: v => `${v.cells} milhões de quadrados de floresta, ${v.m} metros cada.`,
       lossA: "Todo ano uma parte cai.",
       lossB: v => `Desde ${v.y}, ${v.k} mil km².${v.more ? " Mais que a Inglaterra." : ""}`,
-      omenA: "Onde cai no ano que vem?",
-      omenB: v => `Cada quadrado tem uma chance. Estes ${v.n} lugares vêm primeiro.`,
-      proof: v => `Em ${v.y}, de cada ${v.of} lugares apontados, ${v.hit} foram desmatados.`,
-      proofNote: v => `Um lugar é um bloco de ${v.km} km. Desmatado quer dizer 10 hectares ou mais. Na floresta em geral, ${v.base} em cada 100.`,
-      modelA: v => `Um modelo aberto. ${v.inputs} fontes públicas.`,
-      modelB: "O placar é aberto. Qualquer pessoa pode tentar bater.",
-      ahead: "O que vem pela frente.",
+      model: "Treinamos um modelo para prever a próxima.",
+      proof: v => `Testamos no passado. Em ${v.y}, de cada ${v.of} lugares que ele apontou, ${v.hit} foram desmatados.`,
+      sources: v => `Ele aprende com ${v.n} fontes públicas, de imagem de satélite a licença de desmate.`,
+      open: "O código e o benchmark são abertos. Quem fizer um modelo melhor passa na frente do nosso.",
+      first: v => `Para quem fiscaliza, estes ${v.n} lugares vêm primeiro.`,
+      ahead: v => (v.pct ? `Nos últimos três meses o desmate subiu ${v.pct}%, e o modelo espera mais ${v.km} km² até ${v.month}.` : `O modelo espera mais ${v.km} km² de desmate até ${v.month}.`),
     },
     axisY: "km² desmatados por ano, de agosto a julho",
     chanceBy: y => `Chance de cada célula perder um hectare até julho de ${y}`, chanceFor: y => `Chance dada a cada célula para ${y}`, mapped: "desmatamento mapeado",
@@ -219,26 +167,18 @@ const T = {
     cellPast: v => `Em ${v.y} esta célula recebeu ${v.p}. ${v.clr ? "Houve desmatamento mapeado nela." : "Não houve desmatamento mapeado nela."}`,
     areaFc: v => (v.low ? `Cada célula aqui tem ${v.p} de chance de perder um hectare até julho de ${v.y}` : `Até ${v.p} de chance de uma célula aqui perder um hectare até julho de ${v.y}`),
     areaPast: v => `Em ${v.y} as células aqui receberam ${v.low ? "" : "até "}${v.p}. ${v.clr ? `Houve desmatamento mapeado em ${v.clr} de ${v.n}.` : "Não houve desmatamento mapeado."}`,
-    pShare: v => `<b>${v.exp}</b> de ${v.cells} milhões de células de floresta devem perder um hectare`,
     pShareMin: v => `<b>${v.n}</b> células com ${v.cut} ou mais, com ${v.share}% da perda esperada`,
-    pSharePastNo: v => `<b>${v.act}</b> células tiveram desmatamento mapeado`,
     pSharePastMin: v => `<b>${v.n}</b> células com ${v.cut} ou mais, com ${v.share}% das células com desmatamento mapeado`,
     pastP: v => `Em ${v.y}, esperava-se que ${v.exp} células perdessem um hectare e ${v.act} perderam`, prevYear: "Ano anterior", nextYear: "Ano seguinte",
     modes: { sectors: "Setores", cells: "Células", prio: "Prioridades" }, ranking: "Ranking", bars: "Barras", line: "Linha",
-    prioSay: v => `Dos ${v.top} blocos de ${v.km} km no topo do ranking, ${v.hit}% perderam pelo menos 10 hectares em ${v.y}, contra ${v.base}% de todos os blocos de floresta.`,
-    prioCols: ["células", "km² ao redor"], prioColsTitle: v => `Células do bloco que devem perder um hectare até julho de ${v.y}, e os km² desmatados no bloco e ao redor dele em três anos`,
-    csv: "Baixar CSV", land: { ti: "terra indígena", uc: "unidade de conservação" },
+    land: { ti: "terra indígena", uc: "unidade de conservação" },
     why: {
-      around: v => `${v.km} km² derrubados ao redor em três anos, ${v.x} vezes a média da floresta.`,
-      alerts: v => `${v.km} km² de alertas de desmate nos últimos 12 meses.`,
-      degr: v => `${v.km} km² degradados nos últimos 12 meses.`,
-      fire: v => `${v.km} km² queimados nos últimos 12 meses.`,
-      mine: v => `${v.km} km² de garimpo nos últimos 12 meses.`,
-      permit: v => `Licença de desmate válida para ${v.ha} ha.`,
-      notices: v => `${v.n} ${v.one ? "auto" : "autos"} do IBAMA no último ano.`,
-      land: { ti: "Dentro de terra indígena.", uc: "Dentro de unidade de conservação." },
-      forest: "Toda a área ainda é floresta.",
-      seen: v => `É o que o modelo viu aqui em ${v.d} de ${v.m} de ${v.y}, não a causa.`,
+      around: v => `${v.km} km² desmatados em volta nos últimos três anos.`,
+      fire: v => `${v.km} km² de floresta queimada no último ano.`,
+      degr: v => `${v.km} km² de floresta degradada no último ano.`,
+      near: "Fica perto de desmate recente.",
+      permit: v => `Tem licença para desmatar ${v.ha} hectares.`,
+      land: { ti: "Fica em terra indígena.", uc: "Fica em unidade de conservação." },
     },
     rankSay: v => `${v.kind} por ${v.what}`, rankWhat: { fc: y => `desmatamento esperado até julho de ${y}`, past: y => `desmatamento esperado para ${y}`, risk: "fatia do mapa de risco", fire: "fatia de onde o fogo costuma ocorrer" },
     kinds: { uf: "Estados", mun: "Municípios", ti: "Terras indígenas", uc: "Unidades de conservação" },
@@ -267,11 +207,10 @@ const T = {
       degr: v => `${v.km} km² degradados${v.here} nos últimos três meses`,
       mine: v => `${v.km} km² de garimpo${v.here} nos últimos três meses`,
     },
-    scaledSub: v => `É a fatia deste setor na previsão da Amazônia, sem faixa própria. ${v.rank} entre ${v.n} ${v.many}.`,
+    scaledSub: v => `${v.rank} entre ${v.n} ${v.many}.`,
     burned: { months: v => `${v.km} km² queimados${v.here} nos últimos três meses, ${v.prev} um ano antes`, years: v => `${v.km} km² queimados${v.here} nos últimos doze meses, ${v.prev} nos doze anteriores` },
     fireRank: v => `${v.rank} entre ${v.n} ${v.many} no mapa de onde o fogo costuma ocorrer.`,
     rankOnly: v => `${v.rank} entre ${v.n} ${v.many} no mapa de risco.`,
-    deter: "Os valores mensais são o que o DETER, do INPE, detecta. A contagem anual do PRODES é maior.",
     axisM: { clear: "km² desmatados por mês", fire: "km² queimados por mês", degr: "km² degradados por mês", mine: "km² de garimpo por mês" },
     axisW: { fire: "km² queimados em 12 meses", degr: "km² degradados em 12 meses", mine: "km² de garimpo em 12 meses" },
     whole: "Amazônia inteira", to: (a, b) => `${a} a ${b}`,
@@ -288,7 +227,6 @@ const T = {
     here: " aqui",
     short: { clear: "desmatamento", scar: "queimadas", degr: "degradação", mine: "garimpo" },
     sign: { clear: "Desmate", scar: "Queimadas", degr: "Degradação", mine: "Garimpo", autos: "Autos IBAMA" },
-    hintY: v => `Escolha um ano a partir de ${v.first} para revê-lo.`,
     now: "agora", ahead: n => `${n} meses`, byJuly: y => `até julho de ${y}`, window: "previsão",
     signs: "Sinais, três meses contra o ano passado",
     enso: ["El Niño", "La Niña", "Pacífico"], ensoLevel: [["muito forte", "forte", "moderado", "fraco"], ["muito forte", "forte", "moderada", "fraca"], "neutro"],
@@ -301,10 +239,9 @@ const T = {
       say: v => `A fiscalização responde por ${v.km} km² de desmate evitado${v.here} desde ${v.since}`,
       none: v => `A fiscalização não responde por desmate evitado aqui desde ${v.since}`,
       sub: v => `Cerca de ${v.part} da queda desde então. O resto caiu em toda parte ao mesmo tempo.`,
-      subHere: v => `${v.pct}% a mais do que foi desmatado aqui. Sem faixa para um estado sozinho.`, noRange: "Sem faixa para um estado sozinho.",
+      subHere: v => `${v.pct}% a mais do que foi desmatado aqui.`,
       parts: ["um quarto", "um terço", "metade", "dois terços", "três quartos"],
-      honest: v => `É um piso e uma associação, não prova de causa, porque o fiscal vai aonde o desmate está. ${v.own ? `Na Amazônia inteira, a parte da queda que não é atribuída a nada chega a ${v.rest}.` : `O restante, ${v.rest} da queda, não é atribuído a nada.`}`,
-      statesOnly: " Só os estados têm número próprio.",
+      honest: "É um piso e uma associação, não prova de causa.",
       axis: "km² desmatados por semestre", measured: "medido", held: v => `a mais, com a fiscalização de ${v.ref}`, ref: v => `média de ${v.from} a ${v.to}`,
       tipObs: v => `${v.span}, ${v.obs} km² desmatados`, tipHeld: v => `${v.held} com a fiscalização mantida${v.lo ? `, provável de ${v.lo} a ${v.hi}` : ""}`,
       signs: v => `Ações do IBAMA, ano até ${v.now} contra o ano até ${v.ref}`, against: x => `contra ${x}`,
@@ -313,58 +250,20 @@ const T = {
     },
     credit: "Imagens: Esri, Maxar, Earthstar Geographics",
     aboutHtml: v => `
-      <h2>O sinal antes do acontecimento</h2>
-      <div class="thesis">
-        <p>Cada célula de floresta da Amazônia tem uma chance de ser desmatada no ano que vem.</p>
-        <p>Essa chance pode ser estimada com o que os satélites e os registros públicos já mostram, conferida com o que aconteceu e melhorada em aberto.</p>
-        <p>O objetivo é dizer ao IBAMA, e a quem faz política pública, por onde agir primeiro.</p>
-      </div>${v.st ? `
-      <h3 id="about-model">O modelo</h3>
+      <div class="lede">
+        <p>Prenúncio mostra onde a Amazônia deve ser desmatada até julho de ${v.year}.</p>
+        <p>Fizemos para quem fiscaliza conseguir chegar antes.</p>
+      </div>
       <div id="model-fig"></div>
-      <ul>
-        <li><b>${v.st.name}</b> é um modelo só, um conjunto de árvores de decisão e uma rede convolucional.</li>
-        <li>Entram ${v.st.nInputs.toLowerCase()} fontes públicas, o mesmo território visto de ${v.st.nInputs.toLowerCase()} maneiras.</li>
-        <li>Treinado com o que aconteceu de ${v.st.from} a ${v.st.to}. ${v.st.rule}.</li>
-        <li>Treina em ${v.st.hours} horas numa máquina alugada com uma GPU, por cerca de ${v.st.usd} dólares.</li>
-        <li>Cada célula recebe a chance de perder pelo menos um hectare até julho de ${v.st.year}. Somadas, as chances de ${v.st.year} dão ${v.st.cells} células e cerca de ${v.st.km} km².</li>
-      </ul>
-      <h3 id="about-board">O placar aberto</h3>
-      <p>Uma pergunta para todo modelo. Ordene a floresta, pegue os 5% de floresta no topo do ranking e conte que parte do desmatamento do ano cai ali dentro. Cada ano de ${v.st.b0} a ${v.st.b1} é previsto por um modelo que nunca o viu.</p>
-      ${v.board}
-      <p class="metric">A nota é a média de ${v.st.b0} a ${v.st.b1}. ${v.st.heldout} ficou guardado e recebeu nota uma vez só, no fim.</p>
+      <p>O modelo, <b>${v.name}</b>, aprendeu com ${v.span} anos de dados públicos. Para cada quadrado de ${v.m} metros de floresta ele dá a chance de desmate no ano seguinte.</p>
+      <p>Testamos em anos que ele nunca viu. Em ${v.y}, de cada ${v.of} lugares que apontou, ${v.hit} foram desmatados.</p>
+      <h3 id="about-benchmark">Benchmark</h3>
+      ${v.bench}
+      <p class="metric">A nota é a média de ${v.b0} a ${v.b1}.</p>
+      <p>O código, os dados e o benchmark são abertos. Quem fizer um modelo melhor passa na frente do nosso.</p>
       <p class="go"><a class="btn" href="${v.links.benchmark}">${v.submit}</a><a href="${v.links.repository}">${v.repo}</a></p>
-      <h3 id="about-check">Como é conferido</h3>
-      <ul>
-        <li>Cada ano é previsto por um modelo que nunca o viu, e depois comparado com o que o INPE mapeou.</li>${v.rel ? `
-        <li><b>As chances.</b> Para ${v.rel.y}, esperava ${v.rel.exp} células perdendo um hectare. Foram ${v.rel.act}.</li>` : ""}${v.st.replay ? `
-        <li><b>A lista de prioridades.</b> Em ${v.st.replay.y0}, ${v.st.replay.hit0} dos ${v.st.blocks} blocos no topo perderam 10 hectares ou mais. De todos os blocos de floresta, ${v.st.replay.base0}.</li>` : ""}
-        <li><b>Quanto é a parte fraca.</b> Onde é o forte do modelo. O total anual errou ${v.mape}% em média.</li>
-        <li><b>Outras janelas.</b> Os próximos 3 e 6 meses, o fogo, a degradação e o garimpo têm mapas próprios, que mostram os 5% de floresta de maior risco.</li>${v.act ? `
-        <li><b>Fiscalização.</b> A aba Ações compara o desmatamento com os autos e embargos do IBAMA em ${v.act.n} municípios. O número dela, ${v.act.km} km² desde ${v.act.since}, é um piso e uma associação, não prova de causa. O método está em <a href="${v.links.policy}">docs/POLICY.md</a>.</li>` : ""}
-      </ul>
-      <h3 id="about-open">Como participar</h3>
-      <ul>
-        <li><b>Envie um modelo.</b> Por pull request, com as notas, o código e um relatório de como foi feito. As regras estão no <a href="${v.links.benchmark}">benchmark</a>, e <a href="${v.links.leaderboard}">o placar</a> recebe todo modelo que ganha nota.</li>
-        <li><b>Proponha uma fonte.</b> ${v.st.tested} foram testadas. O <a href="${v.links.inputs}">registro</a> diz o que cada uma acrescentou, e as <a href="${v.links.results}">notas de laboratório</a> o que fizeram as ${v.st.tried} versões tentadas.</li>
-        <li><b>Agentes são bem-vindos</b>, desde que o relatório diga qual agente foi usado e como. Os números também saem como uma <a href="${v.links.api}">API estática com instruções para agentes</a>.</li>
-        <li>Previsões para ${v.st.year} podem ser registradas até 31 de dezembro de ${v.st.year - 1} e recebem nota quando o INPE publicar o mapa.</li>
-      </ul>` : ""}
-      <h3 id="about-limits">O que ele não faz</h3>
-      <ul>
-        <li>Dizer por que um lugar está em risco. O que a lista diz de um lugar é o que o modelo leu ali, não uma causa.</li>
-        <li>Dar uma faixa para um setor sozinho, nem ver chegar uma mudança de política.</li>
-        <li>Prever mês a mês um município, uma terra indígena ou uma unidade de conservação. A previsão deles é a fatia que têm na previsão da Amazônia.</li>
-        <li>Dizer quanto vai queimar. Isso depende de uma seca que ainda não aconteceu, então o site mostra onde o fogo costuma ocorrer e o que já queimou.</li>
-        <li>Substituir os números oficiais do INPE. O resultado de ${v.partial} cobre só cenas prioritárias até agora.</li>
-      </ul>
-      <h3>Como ler a tela</h3>
-      <ul>
-        <li><b>O nível.</b> Calmo, Atenção, Alerta ou Alarme. Ele é contado a partir dos últimos três meses daquele risco contra um ano antes, de um El Niño forte para a Amazônia inteira e da posição do setor na previsão. A faixa vermelha segue o nível.</li>
-        <li><b>O mapa.</b> Verde é floresta, vermelho é a chance de desmatamento, e os degraus da legenda filtram pela chance mínima. De longe, um bloco assume o degrau que um quinto das suas células alcança.</li>
-        <li><b>A linha do tempo.</b> Por mês, o que foi desmatado e o que o modelo espera para cada mês à frente, com a faixa. Por ano, qualquer ano desde ${v.first} pode ser revisto. Os valores mensais são o que o DETER, do INPE, detecta, e a contagem anual do PRODES é maior.</li>
-      </ul>
-      <h3>Dados</h3>
-      <p>PRODES e DETER do INPE, pelo TerraBrasilis, e focos de fogo do INPE Queimadas. Global Forest Change, de Hansen, UMD, Google, USGS e NASA. Alertas GLAD do Sentinel-2, da Universidade de Maryland. Tropical Moist Forest, do JRC da Comissão Europeia. Resumos de imagens de satélite AlphaEarth. Registros abertos de fiscalização do IBAMA e licenças de desmate do SINAFLOR. Índice Oceânico Niño da NOAA. Limites de estados, municípios, terras indígenas e unidades de conservação como o INPE distribui. Imagens de satélite da Esri, Maxar e Earthstar Geographics. Mapa desenhado com o Leaflet.</p>`,
+      <p>Ele erra. Uma chance de 10% quer dizer que 9 em cada 10 quadrados assim não caem.</p>
+      <p>Dados do INPE, IBAMA, Universidade de Maryland, JRC e Google.</p>`,
   },
 };
 const H = new URLSearchParams(location.hash.slice(1));
@@ -384,7 +283,7 @@ const css = name => getComputedStyle(document.documentElement).getPropertyValue(
 // The story was decided in the page's head, before the first paint (index.html). Its first line needs no data,
 // so it is on the screen before anything is fetched.
 let storyOn = "story" in root.dataset;
-if (storyOn) { $("story").hidden = false; $("story-line").textContent = t().st.forestA; $("story-next").textContent = t().st.next; $("skip-btn").textContent = t().skip; $("lang-btn").textContent = lang === "pt" ? "EN" : "PT"; }
+if (storyOn) { $("story").hidden = false; $("story-line").textContent = t().st.forestA; $("story-next").setAttribute("aria-label", t().st.next); $("skip-btn").textContent = t().skip; $("lang-btn").textContent = lang === "pt" ? "EN" : "PT"; }
 const [M, R, MO, P, ACT, ST] = await Promise.all(["meta", "regions", "monthly", "prob", "actions", "story"].map(f => fetch(`data/${f}.json`).then(r => (r.ok ? r.json() : null)).catch(() => null)));  // monthly.json, prob.json, actions.json and story.json may not be there yet
 if (!ST) storyOn = false;
 M.layers ||= {};
@@ -537,18 +436,18 @@ const PHONE = matchMedia("(max-width: 860px)"), narrow = () => PHONE.matches;
 const calm = () => matchMedia("(prefers-reduced-motion: reduce)").matches;
 const rectOf = el => el.getBoundingClientRect();
 // ---------- the stage and the dock. Of the two boxes, the map and the timeline, one is large, on the stage,
-// and the other is docked in a lower corner. `front` is the one on the stage; in a link, f=chart.
+// and the other is docked: the timeline in the lower left corner, the map in the upper right. `front` is the one on the stage; in a link, f=chart.
 const BOX = { map: $("mapbox"), chart: $("chartbox") };
 let front = H.get("f") === "chart" ? "chart" : "map", swapping = false;
 const docked = k => BOX[k].dataset.as === "dock";
 const mapSmall = () => docked("map") && !narrow();  // (on a phone the map stays the page, under the timeline's sheet)
 const place = () => { for (const k in BOX) BOX[k].dataset.as = k === front ? "stage" : "dock"; root.dataset.front = front; };
 place();
-let keepList = false;  // the story keeps the priority list on the page while the map replays a year
-// ---------- a phone's sheets and menu. The bulletin is a sheet that shows its top and can be pulled up to the
-// header (the same thing as coming to the stage) and pushed back. The ranked list is a sheet over the lower half:
-// pulled up it is whole, pushed down it is a bar that stands on the bulletin's top. Each has a grip that follows
-// the finger and then takes the nearest place; a tap on a grip moves it one place.
+// ---------- a phone's sheets and menu. One sheet shows at a time. The bulletin is a sheet that shows its top
+// and can be pulled up to the header (the same thing as coming to the stage) and pushed back. When the ranked
+// list is open it has the lower half, or the whole screen when pulled up, and the bulletin waits behind a small
+// handle under it (style.css). Each has a grip that follows the finger and then takes the nearest place; a tap
+// on a grip moves it one place.
 const SHEET = { list: "half" };
 function sheetAt(at) {
   if (at) SHEET.list = at;
@@ -566,12 +465,12 @@ function grip(handle, sheet, done) {  // done(dy): where the sheet goes when it 
   handle.addEventListener("click", e => e.stopPropagation());  // the grip has spoken for itself
 }
 grip($("sheet-grab"), BOX.chart, dy => { if (dy ? (dy < -40) === (front === "map") : true) swap(); });
-grip($("list-grab"), $("list"), dy => { const at = ["bar", "half", "full"], i = at.indexOf(SHEET.list); sheetAt(at[Math.max(0, Math.min(2, dy ? i + (dy < -40 ? 1 : dy > 40 ? -1 : 0) : i === 1 ? 2 : 1))]); });
+grip($("list-grab"), $("list"), dy => sheetAt(dy ? (dy < -40 ? "full" : dy > 40 ? "half" : SHEET.list) : SHEET.list === "half" ? "full" : "half"));
 // a phone's header: the mark and one menu
 const menu = on => { if (on) root.dataset.menu = ""; else delete root.dataset.menu; $("menu-btn").setAttribute("aria-expanded", !!on); };
 $("menu-btn").onclick = e => { e.stopPropagation(); menu(root.dataset.menu == null); };
 document.addEventListener("click", () => menu(false));
-const listOn = () => S.mode === "prio" || (S.mode === "sectors" && S.rank) || keepList;  // the ranked list stands on the right of the page
+const listOn = () => S.mode === "prio" || (S.mode === "sectors" && S.rank);  // the ranked list stands on the right of the page
 // The room the page's own pieces take from the map, in pixels of its pane. The map is the whole page, and the
 // Amazon is fitted beside what stands on it: under the header; right of the left column, which holds the map's
 // panel at the top and the timeline's dock at the bottom; left of the ranked list when that is open. When the
@@ -584,7 +483,7 @@ function room() {
   const m = map.getSize(), top = lengthOf("--top");
   if (mapSmall()) return { top: 6, right: 6, bottom: 6, left: 6 };
   if (narrow()) { const y = top + lengthOf("--panel-h") + 8; return { top: y, right: 10, left: 10, bottom: Math.max(10, m.y - y - (m.x - 20) / 1.27) }; }
-  const left = pagePad() + lengthOf("--rail") + 8;  // the right edge of the left column
+  const left = pagePad() + lengthOf("--rail") + lengthOf("--in");  // the right edge of the left column's surfaces
   return { top, right: listOn() ? lengthOf("--list-w") : 0, bottom: 0, left, panel: top + lengthOf("--panel-h"), dock: m.y - pagePad() - lengthOf("--dock-h"), column: listOn() || storyOn };
 }
 // the same room as the padding of a view that is sent somewhere: a sector or a block is brought to the middle of what is free
@@ -621,7 +520,7 @@ function view(v, animate) {
 // place nearest the middle of what is free.
 const SHAPE = rings(R.border).flatMap(p => p[0]).map(q => map.project(q, 0));
 function fitShape(size, r) {
-  const b = L.latLngBounds(AMAZON), nw = map.project(b.getNorthWest(), 0), se = map.project(b.getSouthEast(), 0), pad = 14, gap = 12, whole_ = r.column;
+  const b = L.latLngBounds(AMAZON), nw = map.project(b.getNorthWest(), 0), se = map.project(b.getSouthEast(), 0), pad = 14, gap = 30, whole_ = r.column;  // gap: the clear ground kept between the Amazon and the column's pieces
   const x0 = pad, x1 = size.x - r.right - pad, y0 = r.top + pad, y1 = size.y - r.bottom - pad;
   for (let z = fitView(size, { paddingTopLeft: [x0, y0], paddingBottomRight: [size.x - x1, size.y - y1] }).z; z >= map.getMinZoom(); z -= 1 / 16) {
     const s = 2 ** z, w = (se.x - nw.x) * s, h = (se.y - nw.y) * s, xMax = x1 - w, yMax = y1 - h, mid = (x0 + x1 - w) / 2;
@@ -942,21 +841,18 @@ async function paint() {
 }
 // the line that stands outside the legend box: how many cells, for the chances on screen
 function shareLine() {
-  const L_ = t(), n3 = x => fmt(round(Math.max(1, x), 3)), st = grid?.stats, Y = P?.years?.[grid?.key], past = !!st?.clr;
-  // (a replayed year whose chances were checked already has its count in the headline, or is about a sector)
-  const on = cellsOn() && grid?.prob && grid.key === key() && (S.min || !(past && Y));
+  const L_ = t(), n3 = x => fmt(round(Math.max(1, x), 3)), st = grid?.stats, past = !!st?.clr;
+  const on = cellsOn() && grid?.prob && grid.key === key() && S.min > 0;
   $("share").hidden = !on;
   if (!on) return;
   const from = a => a.slice(S.min).reduce((x, v) => x + v, 0), all = a => a.reduce((x, v) => x + v, 0);
-  $("share").innerHTML = S.min
-    ? (past ? L_.pSharePastMin : L_.pShareMin)({ n: n3(from(st.n)), cut: pct(PCUT[S.min - 1]), share: fmt(100 * (past ? from(st.clr) / all(st.clr) : from(st.sum) / all(st.sum))) })
-    : past ? L_.pSharePastNo({ act: n3(all(st.clr)) })
-    : L_.pShare({ exp: n3(all(st.sum)), cells: fmt(all(st.n) / 1e6, 1) });
+  $("share").innerHTML = (past ? L_.pSharePastMin : L_.pShareMin)({ n: n3(from(st.n)), cut: pct(PCUT[S.min - 1]), share: fmt(100 * (past ? from(st.clr) / all(st.clr) : from(st.sum) / all(st.sum))) });
 }
 // what a cell says when the pointer or a finger is on it. Close up it is the cell; from far it is the block on
 // screen: the highest chance among its cells and, in a replay, how many of them had clearing.
 const cellTip = L.tooltip({ className: "tip cell", direction: "top", offset: [0, -8], opacity: 1 });
 function cellSay(e) {
+  if (mapSmall()) return;
   const on = cellsOn() && grid?.prob && grid.key === key() && gridLayer._container.dataset.key, l0 = on && grid.levels[0], f = +gridLayer._container.dataset.f || 1;
   const r = on ? Math.floor((M.north - e.latlng.lat) / grid.cell) : -1, c = on ? Math.floor((e.latlng.lng - M.west) / grid.cell) : -1;
   if (r < 0 || c < 0 || r >= l0.rows || c >= l0.cols) return map.closeTooltip(cellTip);
@@ -1041,14 +937,14 @@ async function say() {
   const it = S.sel != null ? K.byId.get(S.sel) : null, here = it ? L_.here : "";
   const v = { y, here, many: L_.many[S.kind], n: K?.items.length };
   if (it) v.rank = L_.rank(rankOf(it, K));
-  let head, sub = "", hint = S.scale === "months" && hz === "clear" ? L_.deter : yearly ? L_.hintY({ first: R.hyears[0] }) : "";
+  let head, sub = "", hint = "";
   const D = acting() ? actsOf(it) : null;
   if (D) {
     // what enforcement accounts for, and in the same breath what it does not
     const o = { km: approx(D.avoided), here: D.own ? L_.here : "", since: D.since };
     head = D.avoided < 0.5 ? L_.act.none(o) : L_.act.say(o);
-    sub = !D.own ? L_.act.sub({ part: partOf(ACT.summary.fall_accounted_share) }) : D.avoided < 0.5 ? L_.act.noRange : L_.act.subHere({ pct: fmt(100 * D.over) });
-    hint = L_.act.honest({ own: D.own, rest: partOf(1 - ACT.summary.fall_accounted_share) }) + (it && !D.own ? L_.act.statesOnly : "");
+    sub = !D.own ? L_.act.sub({ part: partOf(ACT.summary.fall_accounted_share) }) : D.avoided < 0.5 ? "" : L_.act.subHere({ pct: fmt(100 * D.over) });
+    hint = L_.act.honest;
   } else if (hz === "fire") {
     // fire: what burned against a year before. Three months by month; by year, the last twelve months against
     // the twelve before, the same windows the timeline draws.
@@ -1304,7 +1200,7 @@ function chart(it = scope) {
     if (monthsView && small) {
       if (b.d.getMonth() === 0) s += `<text x="${cx}" y="${H - 3}">${b.d.getFullYear()}</text>`;
     } else if (monthsView) {
-      s += `<text x="${cx}" y="${y0 + 15}"${pitch < 14 ? ' style="font-size:10px"' : ""}>${b.d.toLocaleDateString(loc(), { month: "narrow" })}</text>`;
+      if (pitch >= 13 || b.d.getMonth() % 3 === 0) s += `<text x="${cx}" y="${y0 + 15}">${b.d.toLocaleDateString(loc(), { month: "narrow" })}</text>`;  // every month where there is room, otherwise every third
       if (b.d.getMonth() === 0) s += `<text x="${cx}" y="${y0 + 30}">${b.d.getFullYear()}</text>`;
     } else if (skip === 1 || b.on || ((bars.length - 1 - i) % 2 === 0 && Math.abs(i - onAt) !== 1)) s += `<text x="${cx}" y="${H - (small ? 3 : 5)}">${pitch < 40 ? String(b.label).slice(-2) : b.label}</text>`;  // four digits only where they fit
     s += `<rect class="hot" x="${X(i)}" y="${top - 12}" width="${pitch}" height="${H - top + 12}"/></g>`;
@@ -1392,6 +1288,7 @@ async function swap(to = front === "map" ? "chart" : "map") {
   if (swapping || to === front) return;
   if (narrow()) { front = to; place(); sheetAt(); refresh(); return; }  // a phone: the timeline's sheet goes up or down over the map, which stays where it is
   swapping = true;
+  map.closeTooltip(cellTip); map.eachLayer(l => l.closeTooltip?.());  // no label rides the map into its dock
   const up = BOX[to], down = BOX[front], ms = calm() ? 0 : narrow() ? 440 : 600, G = L.latLngBounds(AMAZON).getCenter();
   const at = () => { const r = rectOf($("map")), p = map.latLngToContainerPoint(G); return [r.x + p.x, r.y + p.y]; };  // where the middle of the Amazon is on the page
   const was = { box: rectOf(up), g: at(), z: map.getZoom() };
@@ -1486,6 +1383,7 @@ function chrome() {
 // only the yearly clearing timeline replays a past year: its bars and its stepper are the year control
 const replays = () => S.hazard === "clear" && S.scale === "years";
 async function refresh() {
+  $("mapin").inert = mapSmall();  // docked, the map is a picture of itself: one click on it brings it back
   if (!hazards().includes(S.hazard)) S.hazard = "clear";
   if (S.mode === "prio") { S.hazard = "clear"; S.year = FY; S.h = 0; }  // the priority list is the yearly clearing forecast
   if (S.h && !M.layers["clear" + S.h]) S.h = 0;
@@ -1507,60 +1405,52 @@ let PRIO = null, blocks = null, blockSel = null, here = null, listed = "", flown
 const priority = () => (PRIO ||= fetch("data/priority.json").then(r => r.json()));
 const blockBox = (PR, b) => { const h = PR.block_km * M.years[PR.year].flags500.cell; return [[b.lat - h, b.lon - h], [b.lat + h, b.lon + h]]; };  // 5 km is ten 500 m cells
 // (the name gives way when the row is narrow; the mark of protected land after it does not)
-const row = (attr, rank, name, vals, on, mark = "") => `<li><button ${attr}${on ? ' aria-current="true"' : ""}><b>${rank}</b><span class="nm"><span>${name}</span>${mark}</span>${vals.map(x => `<span class="v">${x}</span>`).join("")}</button></li>`;
+const row = (attr, rank, name, right, on, mark = "") => `<li><button ${attr}${on ? ' aria-current="true"' : ""}><b>${rank}</b><span class="nm"><span>${name}</span>${mark}</span>${right}</button></li>`;
 async function list() {
   const el = $("list"), L_ = t(), k = key();
   el.hidden = !listOn();
+  $("list-csv").hidden = S.mode !== "prio";
   if (blocks && S.mode !== "prio") blocks.remove();
   if (blockSel && (S.mode !== "prio" || !S.block)) { blockSel.remove(); blockSel = null; if (here) { here.remove(); here = null; } }
   if (!listOn()) return;
-  if (S.mode === "prio" || keepList) {
+  if (S.mode === "prio") {
     const PR = await priority();
-    if (S.mode !== "prio" && !keepList) return;
+    if (S.mode !== "prio") return;
     // the blocks on the map: a white outline inside a dark one, which reads on forest green and on red alike
     blocks ||= L.layerGroup(PR.blocks.flatMap(b => [
       L.rectangle(blockBox(PR, b), { renderer: cvSectors, color: INK, weight: 3.4, opacity: 1, fill: false, interactive: false }),
       L.rectangle(blockBox(PR, b), { renderer: cvSectors, color: "#fff", weight: 1.4, opacity: 1, fillOpacity: 0 }).on("click", e => { L.DomEvent.stopPropagation(e); block(b.rank, false); })]));
     if (S.mode === "prio") blocks.addTo(map);
     if (listed !== "prio" + lang) {
-      const y0 = Object.keys(PR.replay)[0], r0 = PR.replay[y0];
-      $("list-say").innerHTML = `${L_.prioSay({ top: PR.top, km: PR.block_km, y: y0, hit: fmt(100 * r0.lost_10ha), base: fmt(100 * r0.base_10ha, 1) })} <a href="data/priority.csv" download>${L_.csv}</a>`;
-      $("list-key").innerHTML = `<span class="lk"><i class="land ti"></i>${L_.land.ti}<i class="land uc"></i>${L_.land.uc}</span>${L_.prioCols.map(c => `<span class="v" title="${L_.prioColsTitle({ y: PR.year })}">${c}</span>`).join("")}`;
-      $("list-rows").innerHTML = PR.blocks.map(b => row(`data-b="${b.rank}"`, b.rank, `${esc(b.municipality)}, ${b.state}`, [fmt(b.expected_cells), b.why ? km(b.why.cleared_3y_around_km2) : pct(b.max_chance)], false, b.land ? `<i class="land ${b.land}" title="${L_.land[b.land]}"></i>` : "")).join("");
+      // a place a row: its rank, its name, a tag if it lies in protected land, and a thin bar as long as the cells expected to lose a hectare there
+      const max = Math.max(...PR.blocks.map(b => b.expected_cells));
+      $("list-say").textContent = "";
+      $("list-rows").innerHTML = PR.blocks.map(b => row(`data-b="${b.rank}"`, b.rank, `${esc(b.municipality)}, ${b.state}`, `<span class="len" aria-hidden="true"><i style="width:${(100 * b.expected_cells / max).toFixed(1)}%"></i></span>`, false, b.land ? `<abbr class="tag" title="${L_.land[b.land]}">${b.land.toUpperCase()}</abbr>` : "")).join("");
       listed = "prio" + lang;
     }
-    $("list-rows").className = "two";
+    $("list-rows").className = "prio";
     if (S.block && S.mode === "prio") { block(S.block, !storyOn && !flown && !H.get("v"), false); flown = true; }  // a block in the link is brought into view once; the story marks it and leaves the map where it is
   } else {
     const K = await sectors(S.kind), I = info(), yearly = typeof k === "number", past = isPast();
     if (!(S.mode === "sectors" && S.rank) || k !== key()) return;
     const top = [...K.items].sort((a, b) => expOf(b) - expOf(a)).slice(0, 100).filter(it => expOf(it) > 0);
     $("list-say").textContent = L_.rankSay({ kind: L_.kinds[S.kind], what: yearly ? (past ? L_.rankWhat.past(k) : L_.rankWhat.fc(k)) : S.hazard === "fire" ? L_.rankWhat.fire : L_.rankWhat.risk });
-    $("list-key").innerHTML = "";
     $("list-rows").className = "";
-    $("list-rows").innerHTML = top.map((it, n) => row(`data-id="${esc(it.id)}"`, n + 1, esc(it.n) + (it.s ? ", " + it.s : ""), [yearly ? `${approx(expOf(it))} km²` : `${share(100 * expOf(it) / I.risk_km2)}%`], String(it.id) === S.sel)).join("");
+    $("list-rows").innerHTML = top.map((it, n) => row(`data-id="${esc(it.id)}"`, n + 1, esc(it.n) + (it.s ? ", " + it.s : ""), `<span class="v">${yearly ? `${approx(expOf(it))} km²` : `${share(100 * expOf(it) / I.risk_km2)}%`}</span>`, String(it.id) === S.sel)).join("");
     listed = "";
   }
 }
-// Why a block ranks high: what the model was reading there on the forecast date, two or three sentences,
-// strongest first. data/priority.json gives each block's facts and what an average forest block has; a fact is
-// said when it is there at all in a way that matters, and ranked by how many times the average it is. Where the
-// block lies in protected land that takes the last place, and a block with little to say is told to be all forest.
+// Why a place ranks high, in one plain sentence, two at most. The first is what was cleared around it in three
+// years; where that is little, what burned or was degraded there in the last year, whichever is more; failing
+// both, that it lies close to recent clearing. The second, only where it applies: a permit to clear, or the
+// protected land the place lies in.
 function reasons(PR, b) {
-  const L_ = t().why, w = b.why, typ = PR.why.typical_forest_block, out = [];
-  const add = (k, min, say) => { if (w[k] >= min) out.push([w[k] / Math.max(typ[k], 1e-9), say(km(w[k]))]); };
-  if (w.times_typical_clearing >= 2) add("cleared_3y_around_km2", 1, x => L_.around({ km: x, x: fmt(w.times_typical_clearing, w.times_typical_clearing < 10 ? 1 : 0) }));
-  add("clearing_alerts_12m_km2", 0.5, x => L_.alerts({ km: x }));
-  add("degradation_12m_km2", 0.5, x => L_.degr({ km: x }));
-  add("fire_scar_12m_km2", 0.25, x => L_.fire({ km: x }));
-  add("mining_12m_km2", 0.05, x => L_.mine({ km: x }));
-  add("permit_ha", Math.max(1, typ.permit_ha), () => L_.permit({ ha: fmt(w.permit_ha) }));
-  add("ibama_notices_12m", 1, () => L_.notices({ n: fmt(w.ibama_notices_12m), one: w.ibama_notices_12m === 1 }));
-  const say = out.sort((x, y) => y[0] - x[0]).slice(0, b.land ? 2 : 3).map(x => x[1]);
-  if (b.land) say.push(L_.land[b.land]);
-  if (say.length < 3 && w.forest_share >= 0.995) say.push(L_.forest);
-  const [y, m_, d] = M.years[PR.year].origin.split("-").map(Number);
-  return `<div class="why">${say.map(x => `<p>${x}</p>`).join("")}<p class="seen">${L_.seen({ d, m: month(y, m_ - 1, { month: "long" }), y })}</p></div>`;
+  const L_ = t().why, w = { cleared_3y_around_km2: 0, fire_scar_12m_km2: 0, degradation_12m_km2: 0, permit_ha: 0, ...b.why }, burned = w.fire_scar_12m_km2 >= w.degradation_12m_km2;
+  const main = w.cleared_3y_around_km2 >= 1 ? L_.around({ km: km(w.cleared_3y_around_km2) })
+    : Math.max(w.fire_scar_12m_km2, w.degradation_12m_km2) >= 0.5 ? L_[burned ? "fire" : "degr"]({ km: km(burned ? w.fire_scar_12m_km2 : w.degradation_12m_km2) })
+    : L_.near;
+  const second = w.permit_ha >= 50 ? L_.permit({ ha: fmt(w.permit_ha) }) : b.land ? L_.land[b.land] : "";
+  return `<div class="why"><p>${main}</p>${second ? `<p>${second}</p>` : ""}</div>`;
 }
 // choose a priority block: outline it, bring it into view, mark its row and open it into its reasons
 async function block(rank, fly = true, write = true) {
@@ -1582,7 +1472,7 @@ async function block(rank, fly = true, write = true) {
   if (write) link();
 }
 // the list's way out: the map goes back to its cells, or the ranking closes
-$("list-close").onclick = () => { if (storyOn) storyShut = true; keepList = false; if (S.mode === "prio") { S.mode = "cells"; S.block = null; } S.rank = false; refresh(); };
+$("list-close").onclick = () => { if (storyOn) storyShut = true; if (S.mode === "prio") { S.mode = "cells"; S.block = null; } S.rank = false; refresh(); };
 $("list-rows").onclick = e => {
   const b = e.target.closest("button");
   if (!b) return;
@@ -1617,36 +1507,31 @@ document.addEventListener("keydown", e => {
 });
 $("lang-btn").onclick = () => { lang = localStorage.lang = lang === "pt" ? "en" : "pt"; langInLink = true; refresh(); if (storyOn) storyText(); };
 
-// About: a panel beside the map. The thesis, the model with its figure, the open board as a bare table with the
-// way in as a button, how it is checked, how to take part, what it cannot do. Every number is read from the data
-// files (data/story.json for the model and the board). `at` opens it on one of its sections.
-const MODEL = ST?.model?.name || ST?.leaderboard?.rows?.find(r => r.kind === "model")?.model || "prenuncio";  // the model on this site, by the name it has on the board
-function board() {
-  const L_ = t().board, B = ST.benchmark, pc = x => (x == null ? "" : fmt(100 * x, 1) + "%"), day = d => { const [y, m_, dd] = d.split("-").map(Number); return new Date(y, m_ - 1, dd).toLocaleDateString(loc(), { day: "numeric", month: "short", year: "numeric" }); };
-  // until the file carries the board, the same rows from the benchmark's own figures
-  const rows = ST.leaderboard?.rows || [{ rank: 1, model: MODEL, url: ST.links.leaderboard, cap5: B.today, unseen_2026: B.unseen_2026, by: "Prenúncio", kind: "model" }, { rank: 2, model: "first version", url: ST.links.results, cap5: B.first_version, by: "Prenúncio", kind: "model" }, { rank: 3, model: "last year", url: ST.links.benchmark, cap5: B.naive, by: "reference", kind: "reference" }];
+// About: a panel beside the map. What this is and who it is for, the model's figure, what the model is and how
+// it did, the benchmark as a bare table with the way in as a button, and that it gets things wrong. Every number
+// is read from data/story.json. `at` opens it on the figure or on the benchmark.
+const MODEL = ST?.model?.name || ST?.leaderboard?.rows?.find(r => r.kind === "model")?.model || "prenuncio";  // the model on this site, by the name it has in the benchmark
+const of5 = x => (Math.abs(x * 5 - Math.round(x * 5)) < 0.02 ? [Math.round(x * 5), 5] : [Math.round(x * 10), 10]);  // a share as so many in five, or in ten
+function bench() {
+  const L_ = t().bench, B = ST.benchmark, pc = x => (x == null ? "" : fmt(100 * x, 1) + "%"), day = d => { const [y, m_, dd] = d.split("-").map(Number); return new Date(y, m_ - 1, dd).toLocaleDateString(loc(), { day: "numeric", month: "short", year: "numeric" }); };
+  // until the file carries the table, the same rows from the benchmark's own figures
+  const rows = ST.leaderboard?.rows || [{ rank: 1, model: MODEL, url: ST.links.leaderboard, cap5: B.today, unseen_2026: B.unseen_2026, by: "Prenúncio", kind: "model" }, { rank: 2, model: "last year", url: ST.links.benchmark, cap5: B.naive, by: "reference", kind: "reference" }];
   const head = L_.head.map((h, i) => `<th${i === 2 || i === 3 ? ' class="n"' : ""}>${i === 3 ? ST.model.trained_on.last_outcome_year : h}</th>`).join("");
-  return `<table class="board"><thead><tr>${head}</tr></thead><tbody>${rows.map(r => `<tr${r.kind === "reference" ? ' class="ref"' : ""}><td>${r.rank}</td><td><a href="${esc(r.url)}">${esc(r.kind === "reference" && L_.refName ? L_.refName : r.model)}</a>${r.note && lang === "en" ? `<small>${esc(r.note)}</small>` : ""}</td><td class="n">${pc(r.cap5)}</td><td class="n">${pc(r.unseen_2026)}</td><td>${r.kind === "reference" ? L_.ref : esc(r.by)}</td><td>${r.date ? day(r.date) : ""}</td></tr>`).join("")}</tbody></table>`;
+  return `<table class="bench"><thead><tr>${head}</tr></thead><tbody>${rows.map(r => `<tr${r.kind === "reference" ? ' class="ref"' : ""}><td>${r.rank}</td><td><a href="${esc(r.url)}">${esc(r.kind === "reference" && L_.refName ? L_.refName : r.model)}</a></td><td class="n">${pc(r.cap5)}</td><td class="n">${pc(r.unseen_2026)}</td><td>${r.kind === "reference" ? L_.ref : esc(r.by)}</td><td>${r.date ? day(r.date) : ""}</td></tr>`).join("")}</tbody></table>`;
 }
-async function about(at) {
-  const pc = x => fmt(100 * x), cap = x => x[0].toUpperCase() + x.slice(1), pt = lang === "pt";
-  const B = ST?.benchmark, Mo = ST?.model, rp = ST?.priority?.replay, y0 = Object.keys(rp || {})[0], C = ST?.check || (y => P?.years?.[y] && { year: y, ...P.years[y] })(Object.keys(P?.years || {})[0]);
-  const st = ST && {
-    name: MODEL, what: /^one model/.test(Mo.what || "") ? Mo.what : "one model, an ensemble of boosted trees and a convolutional network", nInputs: cap(t().num(Mo.inputs.length, true)),
-    from: Mo.trained_on.first_outcome_year, to: Mo.trained_on.last_outcome_year, rule: pt ? "O modelo que prevê um ano nunca viu esse ano nem nenhum depois dele" : cap(Mo.trained_on.rule),
-    hours: fmt(Mo.compute.hours), usd: fmt(Mo.compute.cost_usd), year: ST.forecast.year, cells: fmt(ST.forecast.expected_cells), km: approx(ST.forecast.km2),
-    b0: B.years[0], b1: B.years.at(-1), heldout: Mo.trained_on.last_outcome_year, tried: fmt(B.models_tried), tested: fmt(B.inputs_tested), blocks: fmt(ST.priority.blocks),
-    replay: y0 && { y0, hit0: pc(rp[y0].lost_10ha) + "%", base0: fmt(100 * rp[y0].base_10ha, 1) + "%" },
-  };
+function about(at) {
+  if (!ST) return;
+  const [hit, of] = of5(ST.check.priority_blocks_that_lost_10ha);
   $("about-body").innerHTML = t().aboutHtml({
-    st, links: ST?.links || {}, first: R.hyears[0], partial: PARTIAL, board: ST ? board() : "", submit: t().board.submit, repo: t().board.repo, mape: fmt(100 * M.forecast.mape),
-    act: ACT && (D => ({ n: fmt(ACT.municipalities), since: D.since, km: fmt(ACT.summary.avoided) }))(actsOf(null)),
-    rel: C && { y: C.year, exp: fmt(C.expected_cells), act: fmt(C.actual_cells) },
+    year: ST.forecast.year, name: MODEL, span: +ST.forecast.made_on.slice(0, 4) - ST.history.years[0], m: ST.forest.cell_m, y: ST.check.year, hit, of,
+    bench: bench(), b0: ST.benchmark.years[0], b1: ST.benchmark.years.at(-1), links: ST.links, submit: t().bench.submit, repo: t().bench.repo,
   });
   if (!$("about").open) $("about").show();  // beside the map, not over it: the page stays in use
+  if (storyOn) $("story-next").focus({ preventScroll: true });  // (opening takes the focus to the panel's X; in the story it belongs to the way on, so Enter and Space go on)
   figure();
-  $("about").scrollTop = at && $(at) ? $(at).offsetTop - $("about-bar").offsetHeight : 0;  // the section's rule, right under the bar
+  $("about").scrollTop = at && $(at) ? $(at).offsetTop - $("about-bar").offsetHeight : 0;  // that part, right under the bar
 }
+$("about-btn").hidden = !ST;
 $("about-btn").onclick = () => about();
 $("about-close").onclick = () => $("about").close();
 // the API panel: the instructions for agents, shown as the file has them (api/v1/llms.txt), fetched when opened
@@ -1695,42 +1580,48 @@ map.on("moveend", link);
 
 // ---------- the opening story. A first visit to the bare address is told what this is, one line at a time,
 // while the interface is put together around the map. The map is there from the first line and never gives its
-// place; the Amazon glides once, to make room when the priority list comes in. Each step brings in at most one piece of the tool, in the place it keeps: the key to the
-// colours, the priority list, About (in the header), the timeline in its dock. When the last line is read the
-// caption goes away and what is on the page is the tool. Skipping lands on that same page.
+// place; the Amazon glides once, to make room when the priority list comes in. Each step brings in at most one
+// piece of the tool, in the place it keeps: the key to the colours, About (which opens on the model's figure and
+// then on the benchmark, and closes when the reader goes on), the priority list, the timeline in its dock. The
+// model's panel and the list are never open together. When the last line is read the caption goes away and what
+// is on the page is the tool. Skipping lands on that same page.
 // Each step is a scene, a plain description of what is on the page, and scene() makes the page match it, so a
 // step can be reached forward, backward or by a change of language. Heavy layers load while the first lines are read.
 const CY = ST?.check?.year;  // the year the story replays
 const ENGLAND = 130279;      // km², for the measure of what has been cleared since the record began
 const SCENES = [
-  { id: "forestA", beat: 0 },
-  { id: "forestB", beat: 0, fx: "mosaic" },
-  { id: "lossA", beat: 1, loss: true, fx: "loss", extra: "years" },
-  { id: "lossB", beat: 1, loss: true, extra: "years" },
-  { id: "omenA", beat: 2, has: "legend", cells: FY, fx: "sweep" },
-  { id: "omenB", beat: 2, has: "legend list", cells: FY, prio: true },
-  { id: "proof", beat: 3, has: "legend list", cells: CY, fx: "proof" },
-  { id: "modelA", beat: 4, has: "legend list about", cells: FY, prio: true, about: "about-model" },
-  { id: "modelB", beat: 4, has: "legend list about", cells: FY, prio: true, about: "about-board" },
-  { id: "ahead", beat: 5, has: "legend list about chart", cells: FY, prio: true },
+  { id: "forestA" },
+  { id: "forestB", fx: "mosaic" },
+  { id: "lossA", loss: true, fx: "loss", extra: "years" },
+  { id: "lossB", loss: true, extra: "years" },
+  { id: "model", has: "legend", cells: FY, fx: "sweep" },
+  { id: "proof", has: "legend", cells: CY, fx: "proof" },
+  { id: "sources", has: "legend about", cells: FY, about: "model-fig" },
+  { id: "open", has: "legend about", cells: FY, about: "about-benchmark" },
+  { id: "first", has: "legend about list", cells: FY, prio: true },
+  { id: "ahead", has: "legend about list chart", cells: FY, prio: true },
 ].filter(s => s.cells !== CY || (CY && CY !== FY && M.years[CY]?.flags500 && P?.years?.[CY]));
 let sAt = 0, sRun = 0, storyShut = false;  // the step on screen; a count that tells a running effect it has been overtaken; whether the reader closed the list
 const wait = ms => new Promise(r => setTimeout(r, ms));
 // what each line says, from the data
 function storyWords(id) {
-  const L_ = t().st, n0 = x => fmt(Math.round(x)), hist = ST.history, chk = ST.check, cap = x => x[0].toUpperCase() + x.slice(1), sum = hist.km2.reduce((a, b) => a + b, 0);
-  const of = x => (Math.abs(x * 5 - Math.round(x * 5)) < 0.02 ? [Math.round(x * 5), 5] : [Math.round(x * 10), 10]);  // a share as so many in five, or in ten
+  const L_ = t().st, n0 = x => fmt(Math.round(x)), hist = ST.history, chk = ST.check, sum = hist.km2.reduce((a, b) => a + b, 0), [hit, of] = of5(chk.priority_blocks_that_lost_10ha);
   switch (id) {
-    case "forestA": return [L_.forestA];
-    case "forestB": return [L_.forestB({ cells: n0(ST.forest.cells / 1e6), m: ST.forest.cell_m })];
-    case "lossA": return [L_.lossA];
-    case "lossB": return [L_.lossB({ y: hist.years[0], k: n0(sum / 1000), more: sum > ENGLAND })];
-    case "omenA": return [L_.omenA];
-    case "omenB": return [L_.omenB({ n: n0(ST.priority.blocks) })];
-    case "proof": return [L_.proof({ y: chk.year, hit: of(chk.priority_blocks_that_lost_10ha)[0], of: of(chk.priority_blocks_that_lost_10ha)[1] }), L_.proofNote({ km: ST.priority.block_km, base: fmt(100 * chk.all_blocks_that_lost_10ha) })];
-    case "modelA": return [L_.modelA({ inputs: cap(t().num(ST.model.inputs.length, true)) })];
-    case "modelB": return [L_.modelB];
-    case "ahead": return [L_.ahead];
+    case "forestA": return L_.forestA;
+    case "forestB": return L_.forestB({ cells: n0(ST.forest.cells / 1e6), m: ST.forest.cell_m });
+    case "lossA": return L_.lossA;
+    case "lossB": return L_.lossB({ y: hist.years[0], k: n0(sum / 1000), more: sum > ENGLAND });
+    case "model": return L_.model;
+    case "proof": return L_.proof({ y: chk.year, hit, of });
+    case "sources": return L_.sources({ n: t().num(ST.model.inputs.length, true) });
+    case "open": return L_.open;
+    case "first": return L_.first({ n: n0(ST.priority.blocks) });
+    case "ahead": {  // the three months behind against a year before, as the level counts them, and the three ahead
+      const [now, prev] = three(monthly(null, "clear")), hz = MO?.hazards?.clear, f = hz?.forecast?.[2], rise = prev >= 1 ? Math.round(100 * (now / prev - 1)) : 0;
+      if (!hz?.sums?.[3] || !f) return t().fc({ km: approx(M.forecast.total_km2), here: "", y: FY }) + ".";
+      const [y, m_] = f.month.split("-").map(Number);
+      return L_.ahead({ pct: rise > 0 ? fmt(rise) : 0, km: approx(hz.sums[3].p50), month: month(y, m_ - 1, { month: "long" }) });
+    }
   }
 }
 // the years of clearing as small bars under the line: all of them up to `upTo`, the one being counted in ink
@@ -1828,7 +1719,7 @@ function figure() {
   // each beside the easternmost point of its plane, so there is no doubt which plane it names
   let tip = [0, 0]; for (const ring of border) for (const [la, lo] of ring) { const p = at(0, (lo - M.west) / (M.cols * M.cell), (M.north - la) / (M.rows * M.cell)); if (p[0] > tip[0]) tip = p; }
   const lx = tip[0] + (slim ? 8 : 14), name = (i, cls, text_) => `<li class="${cls}" style="left:${(i === "m" ? core[0] + m + 10 : lx).toFixed(1)}px;top:${(i === "m" ? core[1] : tip[1] - y0 + (i < n ? y0 + i * gap : yO)).toFixed(1)}px;max-width:${Math.floor(i === "m" ? W : W - lx)}px">${text_}</li>`;
-  el.innerHTML = `<canvas width="${still.width}" height="${still.height}" style="width:${W}px;height:${H}px" role="img" aria-label="${esc(storyWords("modelA")[0])}"></canvas><ol>${src.map(([x, by], i) => name(i, "", `<span>${esc(x)}</span>${by && !slim ? `<small>${esc(by)}</small>` : ""}`)).join("")}${name("m", "m", esc(MODEL))}${name(n, "o", t().chanceOut)}</ol>`;
+  el.innerHTML = `<canvas width="${still.width}" height="${still.height}" style="width:${W}px;height:${H}px" role="img" aria-label="${esc(storyWords("sources"))}"></canvas><ol>${src.map(([x, by], i) => name(i, "", `<span>${esc(x)}</span>${by && !slim ? `<small>${esc(by)}</small>` : ""}`)).join("")}${name("m", "m", esc(MODEL))}${name(n, "o", t().chanceOut)}</ol>`;
   const cv = el.firstChild, cx = cv.getContext("2d"), RED = css("--red");
   const frame = now => {
     cx.setTransform(1, 0, 0, 1, 0, 0);
@@ -1857,17 +1748,15 @@ function figure() {
 }
 addEventListener("resize", () => { if ($("about").open) { clearTimeout(FIG.t); FIG.t = setTimeout(figure, 150); } });
 $("about").addEventListener("close", () => cancelAnimationFrame(FIG.raf));
-// the line, its small second line, and what stands under them
+// the line, and under it, while the years run, their small bars. The way on and the way back are arrows.
 function storyText() {
-  const sc = SCENES[sAt], L_ = t().st, [line, note = ""] = storyWords(sc.id), last = sAt === SCENES.length - 1;
-  $("story-line").textContent = line.replaceAll(" km²", " km²");
-  $("story-note").textContent = note;
+  const sc = SCENES[sAt], L_ = t().st, last = sAt === SCENES.length - 1;
+  $("story-line").textContent = storyWords(sc.id).replaceAll(" km²", "\u00a0km²");
   $("story-extra").innerHTML = sc.extra === "years" ? yearBars(ST.history.years.at(-1), sc.id === "lossB") : "";
   $("story-line").classList.remove("in"); void $("story-line").offsetWidth; $("story-line").classList.add("in");  // the line arrives again
-  $("story-next").textContent = last ? L_.done : L_.next;
-  $("story-back").textContent = L_.back;
+  for (const [id, label] of [["story-next", last ? L_.done : L_.next], ["story-back", L_.back]]) { $(id).setAttribute("aria-label", label); $(id).title = label; }
   $("story-back").disabled = sAt === 0;
-  $("story-marks").innerHTML = Array.from({ length: SCENES.at(-1).beat + 1 }, (_, b) => `<li class="${b < sc.beat ? "done" : b === sc.beat ? "now" : ""}"></li>`).join("");
+  $("story-marks").innerHTML = SCENES.map((_, i) => `<li class="${i < sAt ? "done" : i === sAt ? "now" : ""}"></li>`).join("");
   root.dataset.step = sc.id;
   capAt();
 }
@@ -1968,12 +1857,12 @@ async function proof(my) {  // the year that is replayed: first the chances as t
   gridLayer._update();
 }
 async function scene(i, dir = 0) {
-  const sc = SCENES[sAt = Math.max(0, Math.min(SCENES.length - 1, i))], my = ++sRun, fwd = dir > 0 && !calm(), has = sc.has || "", listed = !storyShut && /list/.test(has);
+  const sc = SCENES[sAt = Math.max(0, Math.min(SCENES.length - 1, i))], my = ++sRun, fwd = dir > 0 && !calm(), has = sc.has || "", listed = !storyShut && /list/.test(has) && !(narrow() && /chart/.test(has));  // (a phone shows one sheet at a time: there the timeline takes the list's place)
   root.dataset.has = has;  // the pieces of the tool that are on the page by now
   storyText();
-  // what the map and the timeline are set to. The list stays open once it is in, also while the map replays a year.
+  // what the map and the timeline are set to
   S.hazard = "clear"; S.sel = null; S.min = 0; S.h = 0; S.rank = false; S.line = false;
-  S.mode = sc.prio && listed ? "prio" : "cells"; S.block = sc.prio && listed ? 1 : null; keepList = listed && !sc.prio;
+  S.mode = sc.prio && listed ? "prio" : "cells"; S.block = sc.prio && listed ? 1 : null;
   S.scale = sc.cells && sc.cells !== FY ? "years" : "months";
   S.year = sc.cells || FY;
   veil.off = !sc.cells; veil.mapped = !(fwd && sc.fx === "proof"); veil.th = 0;
@@ -1985,7 +1874,7 @@ async function scene(i, dir = 0) {
   } else if (grid?.key !== FY && keep) grid = keep;
   front = "map"; place();
   lossShow(sc.loss && !(fwd && sc.fx === "loss") ? LOSS.years.length : 0);
-  sheetAt(/chart/.test(has) ? "bar" : "half");  // a phone: the list's sheet stands as a bar on the bulletin's once that is in
+  sheetAt("half");
   refresh();
   if (sc.about) about(sc.about); else if ($("about").open) $("about").close();
   if (fwd && sc.fx === "mosaic") mosaic(my);
@@ -2020,10 +1909,10 @@ function storyEnd() {
   LOSS.got = {};
   if (grid?.key !== FY && keep) grid = keep;
   keep = lite = null;
-  keepList = false;
   if ($("about").open) $("about").close();
   S.hazard = "clear"; S.sel = null; S.min = 0; S.h = 0; S.rank = false; S.scale = "months"; S.year = FY;
-  S.mode = storyShut ? "cells" : "prio"; S.block = storyShut ? null : 1;
+  const shut = storyShut || narrow();  // (a phone shows one sheet at a time, and the last step's is the timeline)
+  S.mode = shut ? "cells" : "prio"; S.block = shut ? null : 1;
   flown = true;  // the first place is marked from far, as on the story's last step: the map is not sent to it
   front = "map"; place();
   if (new URLSearchParams(location.search).has("story")) history.replaceState(null, "", location.pathname + location.hash);

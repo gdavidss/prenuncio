@@ -78,6 +78,7 @@ try {
   const send = (method, params = {}) => new Promise(r => { waiting.set(++id, r); ws.send(JSON.stringify({ id, method, params })); });
   // (while the page is reloading there is no context to evaluate in: that reads as undefined, and until() asks again)
   const js = async expr => (await send("Runtime.evaluate", { expression: expr, returnByValue: true }))?.result?.value;
+  const jsA = async expr => (await send("Runtime.evaluate", { expression: expr, returnByValue: true, awaitPromise: true }))?.result?.value;  // (one that waits for a promise)
   const until = async (expr, what) => { for (let i = 0; i < 450; i++) { if (await js(expr)) return; await sleep(200); } throw new Error("timed out waiting for " + what + "; headline is: " + await js(`document.getElementById("say")?.textContent`) + "; link is: " + await js(`location.hash`)); };
   const click = async (x, y) => {
     await send("Input.dispatchMouseEvent", { type: "mouseMoved", x, y });
@@ -114,13 +115,14 @@ try {
   await send("Emulation.setDeviceMetricsOverride", DESK);
 
   // ---------- the story. A first visit to the bare address is told what this is, one line at a time, while the
-  // interface is put together around the map. The map never moves; each piece comes in where it stays; when the
-  // caption goes, what is on the page is the tool. Every number in a line is recomputed here from the data files.
-  // Then: it is remembered, a link with a fragment never shows it, ?story=0 and ?story=1 decide by themselves,
-  // Skip lands on the same page as the end, the list can be closed on the way, and Story plays it again.
+  // interface is put together around the map. One new piece a step, each where it stays; the model's panel and the
+  // priority list are never open together; the Amazon glides once, when the list comes in; when the caption goes,
+  // what is on the page is the tool. Every number in a line is recomputed here from the data files. The way on is
+  // an arrow. Then: it is remembered, a link with a fragment never shows it, ?story=0 and ?story=1 decide by
+  // themselves, Skip lands on the same page as the end, the list can be closed on the way, and Story plays it again.
   const story = await fetch(`${SITE}data/story.json`).then(r => r.json());
   const n0 = x => Math.round(x).toLocaleString("en-US");
-  const line = () => text("#story-line"), note = () => text("#story-note");
+  const line = async () => (await text("#story-line")).replaceAll(" ", " ");
   const onStory = `"story" in document.documentElement.dataset`, key = async k => { for (const type of ["keyDown", "keyUp"]) await send("Input.dispatchKeyEvent", { type, key: k, code: k === " " ? "Space" : k, windowsVirtualKeyCode: { Enter: 13, " ": 32, ArrowRight: 39, ArrowLeft: 37, Escape: 27 }[k], ...(type === "keyDown" && (k === "Enter" || k === " ") ? { text: k === "Enter" ? "\r" : " " } : {}) }); };  // (a key that types sends its character, as a keyboard does: that is what presses a focused button)
   const darkPx = () => js(`(() => { const c = document.querySelector("canvas.cells"), d = c.getContext("2d").getImageData(0, 0, c.width, c.height).data; let n = 0; for (let i = 0; i < d.length; i += 4) n += d[i + 3] > 200 && d[i] < 60 && d[i + 1] < 60 && d[i + 2] < 60; return n; })()`);
   const redPx = () => js(`(() => { const c = document.querySelector("canvas.cells"), d = c.getContext("2d").getImageData(0, 0, c.width, c.height).data; let n = 0; for (let i = 0; i < d.length; i += 4) n += d[i + 3] > 0 && d[i] > 2 * d[i + 1]; return n; })()`);
@@ -129,12 +131,45 @@ try {
   const place = id => js(`(() => { const r = document.getElementById("${id}").getBoundingClientRect(); return [r.left, r.top, r.width, r.height].map(Math.round); })()`);
   const amazon = () => js(`(() => { const r = document.querySelector("canvas.base")?.getBoundingClientRect(); return r ? [r.left, r.top, r.width, r.height].map(Math.round) : null; })()`);
   const PIECES = ["mappanel", "list", "chartbox"], onPage = async () => { const out = []; for (const id of PIECES) if (await seen(id)) out.push(id); return out.join(); };
+  const label = id => js(`document.getElementById("${id}").getAttribute("aria-label")`);
+  // the words, in both languages, as the brief has them, with their numbers from the data
+  const hist = story.history, sum = hist.km2.reduce((a, b) => a + b, 0), fy0 = meta.forecast.year, share5 = x => (Math.abs(x * 5 - Math.round(x * 5)) < 0.02 ? [Math.round(x * 5), 5] : [Math.round(x * 10), 10]);
+  const [hit5, of5] = share5(story.check.priority_blocks_that_lost_10ha), twoFig = x => { const p = 10 ** (Math.floor(Math.log10(x)) - 1); return Math.round(x / p) * p; };
+  const [now3, prev3] = three(regions.months.clear), rise = prev3 >= 1 ? Math.round(100 * (now3 / prev3 - 1)) : 0, mc = monthly.hazards.clear, by3 = (([y, m]) => new Date(y, m - 1, 1))(mc.forecast[2].month.split("-").map(Number));
+  const nIn = story.model.inputs.length, NUM = { en: ["zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten"], pt: ["zero", "uma", "duas", "três", "quatro", "cinco", "seis", "sete", "oito", "nove", "dez"] };
+  const WORDS = {
+    en: {
+      forestA: "This is the Amazon.",
+      forestB: `${n0(story.forest.cells / 1e6)} million squares of forest, ${story.forest.cell_m} metres each.`,
+      lossA: "Every year a piece of it falls.",
+      lossB: `Since ${hist.years[0]}, ${n0(sum / 1000)} thousand km².${sum > 130279 ? " More than England." : ""}`,
+      model: "We trained a model to predict the next one.",
+      proof: `We tested it on the past. In ${story.check.year}, ${hit5} of every ${of5} places it pointed to were cleared.`,
+      sources: `It learns from ${NUM.en[nIn]} public sources, from satellite images to clearing permits.`,
+      open: "The code and the benchmark are open. Build a better model and it goes ahead of ours.",
+      first: `For those who enforce, these ${story.priority.blocks} places come first.`,
+      ahead: rise > 0 ? `In the last three months clearing rose ${rise}%, and the model expects another ${twoFig(mc.sums[3].p50).toLocaleString("en-US")} km² by ${by3.toLocaleDateString("en-US", { month: "long" })}.` : `The model expects another ${twoFig(mc.sums[3].p50).toLocaleString("en-US")} km² of clearing by ${by3.toLocaleDateString("en-US", { month: "long" })}.`,
+    },
+    pt: {
+      forestA: "Isto é a Amazônia.",
+      forestB: `${Math.round(story.forest.cells / 1e6)} milhões de quadrados de floresta, ${story.forest.cell_m} metros cada.`,
+      lossA: "Todo ano uma parte cai.",
+      lossB: `Desde ${hist.years[0]}, ${Math.round(sum / 1000).toLocaleString("pt-BR")} mil km².${sum > 130279 ? " Mais que a Inglaterra." : ""}`,
+      model: "Treinamos um modelo para prever a próxima.",
+      proof: `Testamos no passado. Em ${story.check.year}, de cada ${of5} lugares que ele apontou, ${hit5} foram desmatados.`,
+      sources: `Ele aprende com ${NUM.pt[nIn]} fontes públicas, de imagem de satélite a licença de desmate.`,
+      open: "O código e o benchmark são abertos. Quem fizer um modelo melhor passa na frente do nosso.",
+      first: `Para quem fiscaliza, estes ${story.priority.blocks} lugares vêm primeiro.`,
+      ahead: rise > 0 ? `Nos últimos três meses o desmate subiu ${rise}%, e o modelo espera mais ${twoFig(mc.sums[3].p50).toLocaleString("pt-BR")} km² até ${by3.toLocaleDateString("pt-BR", { month: "long" })}.` : `O modelo espera mais ${twoFig(mc.sums[3].p50).toLocaleString("pt-BR")} km² de desmate até ${by3.toLocaleDateString("pt-BR", { month: "long" })}.`,
+    },
+  };
+  const WANT = WORDS.en, IDS = Object.keys(WANT), said = [];
   let t1 = Date.now();
   await send("Page.navigate", { url: SITE });
   await until(`!document.getElementById("story")?.hidden && document.getElementById("story-line")?.textContent === "This is the Amazon."`, "the first line of the story");
   const firstLine = Date.now() - t1;
   assert.ok(firstLine < 2500, `the first line is there at once, before any layer: ${firstLine} ms`);
-  await until(`document.documentElement.dataset.step === "forestA" && document.querySelectorAll("#story-marks li").length === 6 && !!document.querySelector("canvas.base")`, "the story's first step, with the forest drawn");
+  await until(`document.documentElement.dataset.step === "forestA" && document.querySelectorAll("#story-marks li").length === ${IDS.length} && !!document.querySelector("canvas.base")`, "the story's first step, with the forest drawn and a mark a step");
   const storyWords = await js(`document.body.innerText.split(/\\s+/).filter(w => /[A-Za-zÀ-ú0-9]/.test(w)).length`);
   assert.ok(storyWords <= 10, `the first screen is almost empty: ${storyWords} words (${JSON.stringify(await js(`document.body.innerText`))})`);
   assert.equal(await onPage(), "", "no piece of the tool is on the first screen");
@@ -143,7 +178,11 @@ try {
   assert.equal(await js(`location.hash + location.search`), "", "the story plays at the bare address");
   assert.equal(await js(`document.getElementById("story-back").disabled`), true);
   assert.equal(await redPx(), 0, "the forest is green: no chance is painted yet");
-  // the map is the page, and the Amazon is where it will be when the story is over
+  // the way on and the way back are arrows, not words: large enough to hit, and named for a screen reader
+  assert.deepEqual(await js(`["story-next", "story-back"].map(id => { const b = document.getElementById(id), r = b.getBoundingClientRect(); return [b.textContent.trim(), !!b.querySelector("svg"), r.width >= 44 && r.height >= 44]; })`), [["", true, true], ["", true, true]], "two arrows of 44 px or more, with no word on them");
+  assert.deepEqual([await label("story-next"), await label("story-back")], ["Next", "Back"]);
+  assert.equal(await js(`!!document.getElementById("story-note")`), false, "there is no place for a small line under the caption");
+  // the map is the page, and the Amazon is as large as it is in the tool with the list closed
   const vw0 = await js(`innerWidth`), vh0 = await js(`innerHeight`);
   assert.deepEqual(await place("mapbox"), [0, 0, vw0, vh0], "the map is the whole page");
   let where = await amazon();
@@ -151,30 +190,21 @@ try {
   assert.ok(where && where[2] > 0.55 * vw0 && where[0] > 0.25 * vw0 && where[0] + where[2] <= vw0 && where[3] > 0.7 * vh0, "the Amazon is large on the first screen, beside the caption: " + where);
   assert.ok((await place("story"))[0] + (await place("story"))[2] <= where[0] + 2, "and the caption stands clear of it");
   // Next goes through every step: by the button, by Space, by Enter, by the right arrow, by a click on the map
-  const hist = story.history, sum = hist.km2.reduce((a, b) => a + b, 0), fy0 = meta.forecast.year, share5 = x => (Math.abs(x * 5 - Math.round(x * 5)) < 0.02 ? [Math.round(x * 5), 5] : [Math.round(x * 10), 10]);
-  const WANT = {
-    forestA: "This is the Amazon.",
-    forestB: `${n0(story.forest.cells / 1e6)} million squares of forest, ${story.forest.cell_m} metres each.`,
-    lossA: "Every year a part falls.",
-    lossB: `Since ${hist.years[0]}, ${n0(sum / 1000)} thousand km².${sum > 130279 ? " More than England." : ""}`,
-    omenA: "Where does it fall next year?",
-    omenB: `Every square has a chance. These ${story.priority.blocks} places come first.`,
-    proof: `In ${story.check.year}, of every ${share5(story.check.priority_blocks_that_lost_10ha)[1]} places it pointed to, ${share5(story.check.priority_blocks_that_lost_10ha)[0]} were cleared.`,
-    modelA: `An open model. ${["Zero", "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten"][story.model.inputs.length]} public sources.`,
-    modelB: "The board is open. Anyone can try to beat it.",
-    ahead: "What lies ahead.",
-  };
-  const IDS = Object.keys(WANT), BEAT = { forestA: 0, forestB: 0, lossA: 1, lossB: 1, omenA: 2, omenB: 2, proof: 3, modelA: 4, modelB: 4, ahead: 5 }, said = [];
-  const HAS = { omenA: "mappanel", omenB: "mappanel,list", proof: "mappanel,list", modelA: "mappanel,list", modelB: "mappanel,list", ahead: "mappanel,list,chartbox" }, stays = {};
-  const forward = [() => clickOn("#story-next"), () => key(" "), () => key("Enter"), () => key("ArrowRight"), () => click(vw0 * 0.5, vh0 * 0.55)];
+  const HAS = { model: "mappanel", proof: "mappanel", sources: "mappanel", open: "mappanel", first: "mappanel,list", ahead: "mappanel,list,chartbox" }, stays = {};
+  const forward = [() => clickOn("#story-next"), () => key(" "), () => key("Enter"), () => key("ArrowRight"), () => click(vw0 * 0.45, vh0 * 0.55)];
   for (let i = 0; i < IDS.length; i++) {
     const id = IDS[i];
     if (i) { await forward[i % forward.length](); await until(`document.documentElement.dataset.step === "${id}"`, `step ${i + 1}, ${id}, reached by way ${i % forward.length}`); }
-    assert.equal((await line()).replaceAll(" ", " "), WANT[id], `the line of ${id}`);
-    said.push(await line(), await note());
-    assert.equal(await js(`[...document.querySelectorAll("#story-marks li")].findIndex(e => e.classList.contains("now"))`), BEAT[id], `the mark of the beat at ${id}`);
+    assert.equal(await line(), WANT[id], `the line of ${id}`);
+    said.push(await line());
+    assert.equal(await js(`[...document.querySelectorAll("#story-marks li")].findIndex(e => e.classList.contains("now"))`), i, `the mark of step ${id}`);
+    // nothing is said under the line, except the small bars of the years while they run
+    assert.equal((await js(`document.getElementById("story-text").innerText.replaceAll("\\u00a0", " ").replace(/\\s+/g, " ").trim()`)).startsWith(WANT[id]), true);
+    assert.equal(await js(`document.getElementById("story-text").children.length === 2 && (!!document.getElementById("story-extra").textContent) === ${id === "lossA" || id === "lossB"}`), true, `no small line under the caption at ${id}`);
+    // the line about what falls is set in the red it is drawn in, and no other line is
+    assert.equal(await style("#story-line", "color") === RED, id === "lossA", `only the line about the loss is red: ${id}`);
     // the map does not move, except once: the Amazon glides to make room when the priority list comes in
-    if (id === "omenB") {
+    if (id === "first") {
       await until(`(() => { const r = document.querySelector("canvas.base").getBoundingClientRect(), l = document.getElementById("list"); return !l.hidden && r.right <= l.getBoundingClientRect().left && !document.querySelector(".leaflet-zoom-anim"); })()`, "the Amazon gliding aside for the list");
       await sleep(900);
       where = await amazon();
@@ -185,70 +215,74 @@ try {
     assert.deepEqual(await place("mapbox"), [0, 0, vw0, vh0]);
     await until(`(${JSON.stringify(PIECES)}).filter(id => { const e = document.getElementById(id), s = getComputedStyle(e); return !e.hidden && e.offsetParent && s.visibility === "visible" && +s.opacity > 0.9; }).join() === "${HAS[id] || ""}"`, `the pieces on the page at ${id}: ${HAS[id] || "none"}`);
     for (const p of (HAS[id] || "").split(",").filter(Boolean)) { const r = (await place(p)).slice(0, 3); stays[p] ||= r; assert.deepEqual(r, stays[p], `${p} keeps its place at ${id}`); }
+    // the model's panel and the priority list are never open at the same time
+    assert.equal(await js(`document.getElementById("about").open && !document.getElementById("list").hidden`), false, `the panel and the list are not open together at ${id}`);
     if (id === "lossA") assert.equal(await count("#story-extra .years rect"), hist.years.length, "the years of clearing as small bars");
     if (id === "lossB") {
       assert.equal(await redPx(), 0, "still no chance on the map");
-      assert.doesNotMatch(await line(), new RegExp(`In ${hist.years.at(-1)}|In 20\\d\\d it was`), "the cumulative figure, not a year's");
       // the language turns in the middle of the story
       await clickOn("#lang-btn");
       await until(`document.documentElement.lang === "pt" && /^Desde ${hist.years[0]}, /.test(document.getElementById("story-line").textContent)`, "the story in Portuguese");
-      assert.equal((await line()).replaceAll(" ", " "), `Desde ${hist.years[0]}, ${Math.round(sum / 1000).toLocaleString("pt-BR")} mil km².${sum > 130279 ? " Mais que a Inglaterra." : ""}`);
+      assert.equal(await line(), WORDS.pt.lossB);
       assert.equal(await js(`[...document.querySelectorAll("#top button")].filter(b => b.offsetParent).map(b => b.textContent).join()`), "EN,Pular");
-      assert.equal(await text("#story-next"), "Seguir");
+      assert.deepEqual([await label("story-next"), await label("story-back")], ["Seguir", "Voltar"]);
       await clickOn("#lang-btn");
       await until(`document.documentElement.lang === "en" && /^Since ${hist.years[0]}, /.test(document.getElementById("story-line").textContent)`, "English again");
     }
-    if (id === "omenA") {  // the omen: the chances of the forecast year arrive in red, and their key takes its place
+    if (id === "model") {  // the chances of the forecast year arrive in red, and their key takes its place
       await until(`document.querySelector("canvas.cells")?.dataset.key === "${fy0}"`, "the chances arriving");
       for (let k = 0; k < 60 && await redPx() < 8000; k++) await sleep(200);
       assert.ok(await redPx() >= 8000, "the red has spread over the forest");
       assert.equal(await text("#legend .what"), `Chance each cell loses a hectare by July ${fy0}`, "with its key");
+      assert.equal(await js(`document.documentElement.dataset.has`), "legend");
     }
-    if (id === "omenB") {  // the priorities come with it: the blocks on the map, the list in its place, the first place open
-      await until(`document.querySelector("#list-rows .why")?.previousElementSibling.dataset.b === "1" && !!document.querySelector(".here")`, "the list, with its first place open and marked on the map");
-      assert.ok(await count("#list-rows .why p") >= 2, "the list says why");
-      const l = await place("list");
-      assert.ok(l[0] + l[2] >= vw0 - 1 && l[0] > 0.6 * vw0, "the list is on the right of the page: " + l);
-      assert.equal(await js(`document.documentElement.dataset.has`), "legend list");
-    }
-    if (id === "proof") {
+    if (id === "proof") {  // the year that already happened, on the map; and nothing in small under the line
       await until(`document.querySelector("canvas.cells")?.dataset.key === "${story.check.year}"`, "the chances given for " + story.check.year);
-      assert.equal(await note(), `A place is a block of ${story.priority.block_km} km. Cleared means 10 hectares or more. Across the forest at large, ${Math.round(100 * story.check.all_blocks_that_lost_10ha)} in 100.`);
       for (let k = 0; k < 40 && await darkPx() < 300; k++) await sleep(200);
       assert.ok(await darkPx() >= 300, "the clearing that was mapped, dark, on the chances as they were given");
     }
-    if (id === "modelA") {  // About comes in: in the header, and open beside the map on the model
-      await until(`document.getElementById("about").open && !!document.querySelector("#about-model") && !!document.querySelector("#model-fig svg, #model-fig canvas")`, "the model, beside the map");
+    if (id === "sources") {  // About comes in: in the header, and open beside the map on the model's figure
+      await until(`document.getElementById("about").open && !!document.querySelector("#model-fig canvas")`, "the model's figure, beside the map");
       assert.equal(await js(`[...document.querySelectorAll("#top button")].filter(b => b.offsetParent).map(b => b.textContent).join()`), "About,API,PT,Skip", "About and the API are in the header from here on");
       assert.ok((await place("about"))[0] > 0.5 * vw0, "the panel is beside the map, on the right");
-      assert.match(await js(`document.getElementById("about-body").textContent`), new RegExp(`${story.model.name}\\s+is one model`), "one model, by its name");
+      const fg = await js(`(() => { const f = document.getElementById("model-fig").getBoundingClientRect(), a = document.getElementById("about").getBoundingClientRect(), b = document.getElementById("about-bar").getBoundingClientRect(); return [Math.round(f.top - b.bottom), f.bottom <= a.bottom + 2]; })()`);
+      assert.ok(Math.abs(fg[0]) <= 24 && fg[1], "the panel opens on the figure, whole: " + fg);
     }
-    if (id === "modelB") {  // the open board: a bare table, a model a row, and the way in as a button
-      await until(`document.getElementById("about").open && Math.abs(document.getElementById("about-board").getBoundingClientRect().top - document.getElementById("about").getBoundingClientRect().top) < 90`, "the board, in the panel");
+    if (id === "open") {  // the benchmark: a bare table, a model a row, and the way in as a button
+      await until(`document.getElementById("about").open && (() => { const h = document.getElementById("about-benchmark").getBoundingClientRect(), t = document.querySelector("#about .bench").getBoundingClientRect(), a = document.getElementById("about").getBoundingClientRect(), b = document.getElementById("about-bar").getBoundingClientRect(); return h.top >= b.bottom - 1 && t.bottom <= a.bottom; })()`, "the benchmark, heading and table, in the panel");
       const rows = story.leaderboard.rows;
       const p1 = x => (100 * x).toLocaleString("en-US", { minimumFractionDigits: 1, maximumFractionDigits: 1 }) + "%";
-      assert.deepEqual(await js(`[...document.querySelectorAll("#about .board tbody tr")].map(tr => [tr.cells[0].textContent, tr.querySelector("a").textContent, tr.querySelector("a").getAttribute("href"), tr.cells[2].textContent, tr.cells[3].textContent])`), rows.map(r => [String(r.rank), r.model, r.url, p1(r.cap5), p1(r.unseen_2026)]), "a model a row: its rank, its name as a link, its score and the year kept apart, to one decimal");
-      assert.equal(new Set(rows.map(r => p1(r.cap5))).size, rows.length, "so that no two rows read the same");
-      assert.deepEqual(await js(`[document.querySelector("#about .go .btn").textContent, document.querySelector("#about .go .btn").getAttribute("href"), document.querySelector("#about .go a:not(.btn)").getAttribute("href"), getComputedStyle(document.querySelector("#about .go .btn")).backgroundColor]`), ["Submit a model", story.links.benchmark, story.links.repository, GREEN], "the way in is a button, and the repository a link beside it");
+      assert.deepEqual(await js(`[...document.querySelectorAll("#about .bench tbody tr")].map(tr => [tr.cells[0].textContent, tr.querySelector("a").textContent, tr.querySelector("a").getAttribute("href"), tr.cells[2].textContent, tr.cells[3].textContent])`), rows.map(r => [String(r.rank), r.model, r.url, p1(r.cap5), p1(r.unseen_2026)]), "a model a row: its rank, its name as a link, its score and the year kept apart, to one decimal");
+      assert.deepEqual(await js(`(() => { const b = document.querySelector("#about .go .btn"), a = document.getElementById("about").getBoundingClientRect(), r = b.getBoundingClientRect(); return [b.textContent, b.getAttribute("href"), document.querySelector("#about .go a:not(.btn)").getAttribute("href"), getComputedStyle(b).backgroundColor, r.top > a.top && r.bottom < a.bottom]; })()`), ["Submit a model", story.links.benchmark, story.links.repository, GREEN, true], "the way in is a button, on the screen, and the repository a link beside it");
+    }
+    if (id === "first") {  // the priorities: the panel has closed, the blocks are on the map, the list in its place, the first place open
+      await until(`!document.getElementById("about").open && document.querySelector("#list-rows .why")?.previousElementSibling.dataset.b === "1" && !!document.querySelector(".here")`, "the list, with its first place open and marked on the map, and the panel closed");
+      const nWhy = await count("#list-rows .why p");
+      assert.ok(nWhy >= 1 && nWhy <= 2, "the list says why, in a sentence or two");
+      const l = await place("list");
+      assert.ok(l[0] + l[2] >= vw0 - 1 && l[0] > 0.6 * vw0, "the list is on the right of the page: " + l);
+      assert.equal(await js(`document.documentElement.dataset.has`), "legend about list");
     }
     if (id === "ahead") {
       await until(`!document.getElementById("about").open && document.querySelectorAll("#chart .bar").length === 36`, "the months ahead, in the dock");
       const d = await place("chartbox");
       assert.ok(d[0] < 0.05 * vw0 && d[1] + d[3] > 0.95 * vh0 && d[0] + d[2] < 0.4 * vw0 && d[1] > 0.5 * vh0, "the timeline is in its dock, in the lower left corner: " + d);
-      assert.deepEqual([await js(`document.documentElement.dataset.scale`), await count("#chart .bar .fc"), await count("#chart .line"), await text("#story-next")], ["months", 12, 0, "Done"], "month by month, as a histogram, with the forecast; and one way on, which ends it");
+      assert.deepEqual([await js(`document.documentElement.dataset.scale`), await count("#chart .bar .fc"), await count("#chart .line"), await label("story-next")], ["months", 12, 0, "Done"], "month by month, as a histogram, with the forecast; and one way on, which ends it");
+      // its numbers are the ones on the bulletin beside it
+      if (rise > 0) assert.ok((await text("#level")).includes(`+${rise}%`), "the rise the caption quotes is the one the level counts");
     }
   }
-  assert.doesNotMatch(said.join(" "), /flagged|\bflag\b|—|Legal Amazon|black box|[Tt]wo models|put to the test|Where to start|Enforcement|month by month/i, "the story's own words");
-  assert.ok(said.every((x, i) => i % 2 || (x.length > 8 && x.length <= 70)), "every line is short: " + Math.max(...said.filter((x, i) => !(i % 2)).map(x => x.length)));
-  // Back goes back, by the key and by the button, and forward again
+  assert.doesNotMatch(said.join(" "), /flagged|\bflag\b|—|Legal Amazon|black box|[Tt]wo models|put to the test|Where to start|\bboard\b|leaderboard|month by month/i, "the story's own words");
+  assert.ok(said.every(x => x.length > 8 && x.length <= 100), "every line is one sentence or two: " + Math.max(...said.map(x => x.length)));
+  // Back goes back, by the key and by the button, and forward again: the list gives its place back to the panel
   await key("ArrowLeft");
-  await until(`document.documentElement.dataset.step === "modelB" && document.getElementById("about").open`, "back one step");
+  await until(`document.documentElement.dataset.step === "first" && !document.getElementById("about").open && !document.getElementById("list").hidden`, "back one step");
   await clickOn("#story-back");
-  await until(`document.documentElement.dataset.step === "modelA"`, "back another");
-  assert.deepEqual(await amazon(), where);
-  await key("ArrowRight"); await until(`document.documentElement.dataset.step === "modelB"`, "forward");
+  await until(`document.documentElement.dataset.step === "open" && document.getElementById("about").open && document.getElementById("list").hidden`, "back another: the panel again, and no list");
+  await key("ArrowRight"); await until(`document.documentElement.dataset.step === "first" && !document.getElementById("about").open`, "forward");
   await key("ArrowRight"); await until(`document.documentElement.dataset.step === "ahead" && !document.getElementById("about").open && document.querySelectorAll("#chart .bar").length === 36`, "to the last step");
-  await sleep(700);
+  await sleep(1500);
+  assert.deepEqual(await amazon(), where, "the Amazon is where the list left it");
   // the end: the caption goes, and what is on the page is the tool. Nothing moves and nothing new comes in.
   const before = { has: await onPage(), amazon: await amazon(), zoom: await js(`!!document.querySelector(".leaflet-control-zoom").offsetParent`), names: await count(".state-name") };
   for (const p of PIECES) before[p] = await place(p);
@@ -258,7 +292,8 @@ try {
   const after = { has: await onPage(), amazon: await amazon(), zoom: await js(`!!document.querySelector(".leaflet-control-zoom").offsetParent`), names: await count(".state-name") };
   for (const p of PIECES) after[p] = await place(p);
   assert.deepEqual(after, before, "the page after the story is the page of its last step");
-  assert.equal(await js(`localStorage.story + "/" + document.documentElement.dataset.storyVersion`), "2/2", "finishing is remembered, with the story's version");
+  const VER = await js(`document.documentElement.dataset.storyVersion`);
+  assert.equal(await js(`localStorage.story`), VER, "finishing is remembered, with the story's version");
   assert.equal(await js(`[...document.querySelectorAll("#top button")].filter(b => b.offsetParent).map(b => b.textContent).join()`), "Story,About,API,PT");
   assert.equal(await js(`document.querySelector("#list-rows [aria-current]").dataset.b + "/" + !!document.querySelector("#list-rows .why") + "/" + document.getElementById("mapbox").dataset.as`), "1/true/stage");
   const endHash = (await hash()).replace(/&l=\w+/, "");
@@ -276,7 +311,7 @@ try {
   }
   assert.equal(await js(`localStorage.getItem("story")`), null, "and none of that counts as having seen it");
   // ?story=1 plays it whatever is remembered. Skip lands on the very page the story ends on.
-  await js(`localStorage.setItem("story", "2")`);
+  await js(`localStorage.setItem("story", "${VER}")`);
   await send("Page.navigate", { url: SITE + "?story=1" });
   await until(`${onStory} && document.documentElement.dataset.step === "forestA" && !!document.querySelector("canvas.base")`, "the story, forced");
   await key("ArrowRight");
@@ -288,26 +323,27 @@ try {
   for (const p of PIECES) skipped[p] = await place(p);
   assert.deepEqual(skipped, before, "skipping lands on the page the story ends on");
   assert.equal((await hash()).replace(/&l=\w+/, ""), endHash, "the same state, to the link");
-  assert.equal(await js(`location.search + "/" + localStorage.story + "/" + document.getElementById("story").hidden`), "/2/true", "the address is clean and skipping is remembered");
+  assert.equal(await js(`location.search + "/" + localStorage.story + "/" + document.getElementById("story").hidden`), `/${VER}/true`, "the address is clean and skipping is remembered");
   assert.ok(await redPx() > 5000, "with the chances on the map");
   // the reader may close the list on the way: it stays closed, and the story ends on the cells
   await send("Page.navigate", { url: SITE + "?story=1" });
   await until(`${onStory} && document.documentElement.dataset.step === "forestA"`, "the story again");
-  for (const id of IDS.slice(1, IDS.indexOf("omenB") + 1)) { await js(`document.getElementById("story-next").click()`); await until(`document.documentElement.dataset.step === "${id}"`, id); }
+  for (const id of IDS.slice(1, IDS.indexOf("first") + 1)) { await js(`document.getElementById("story-next").click()`); await until(`document.documentElement.dataset.step === "${id}"`, id); }
   await until(`!!document.getElementById("list").offsetParent && !!document.getElementById("list-close").offsetParent`, "the list, with its way out");
+  await sleep(900);
   await clickOn("#list-close");
-  await until(`document.getElementById("list").hidden && ${onStory} && document.documentElement.dataset.step === "omenB"`, "the list closed by the reader, the story still on");
-  await until(`document.querySelector("canvas.base").getBoundingClientRect().width > ${0.9 * 1} * ${0} + ${Math.round(0.55 * 1440)}`, "and the Amazon large again");
-  for (const id of IDS.slice(IDS.indexOf("omenB") + 1)) { await js(`document.getElementById("story-next").click()`); await until(`document.documentElement.dataset.step === "${id}" && document.getElementById("list").hidden`, id + ", the list still closed"); }
+  await until(`document.getElementById("list").hidden && ${onStory} && document.documentElement.dataset.step === "first"`, "the list closed by the reader, the story still on");
+  await until(`document.querySelector("canvas.base").getBoundingClientRect().width > ${Math.round(0.55 * 1440)}`, "and the Amazon large again");
+  for (const id of IDS.slice(IDS.indexOf("first") + 1)) { await js(`document.getElementById("story-next").click()`); await until(`document.documentElement.dataset.step === "${id}" && document.getElementById("list").hidden`, id + ", the list still closed"); }
   await js(`document.getElementById("story-next").click()`);
   await until(`!(${onStory}) && /m=cells/.test(location.hash) && document.getElementById("list").hidden`, "the story over, on the cells");
   // an older version of the story does not count: a rewritten one is shown once more
-  await js(`localStorage.setItem("story", "1")`);
+  await js(`localStorage.setItem("story", "${+VER - 1}")`);
   await send("Page.navigate", { url: SITE });
   await until(`${onStory} && document.documentElement.dataset.step === "forestA"`, "a new version of the story is shown again");
   await key("Escape");
   await until(`!(${onStory})`, "Escape skips");
-  assert.equal(await js(`localStorage.story`), "2");
+  assert.equal(await js(`localStorage.story`), VER);
   // the header's Story plays it again
   await clickOn("#story-btn");
   await until(`${onStory} && document.documentElement.dataset.step === "forestA" && location.search === "?story=1"`, "the story, played again from the header");
@@ -354,10 +390,11 @@ try {
   assert.deepEqual(keyRgb, [[11, 107, 58], ...RAMP], "the steps of the key are the forest and the ramp");
   assert.deepEqual([await text("#legend .what"), await text("#legend .ticks")], [`Chance each cell loses a hectare by July ${meta.forecast.year}`, "0.1%1%5%20%"], "the key states the event, and the chance where two steps meet");
   assert.equal(await js(`[...document.querySelectorAll("#legend .steps button")].map(b => b.getAttribute("aria-label")).join()`), "under 0.1%,0.1 to 1%,1 to 5%,5 to 20%,over 20%", "each step says its own range");
-  assert.match(await text("#share"), /^[\d,]+ of [\d.]+ million forest cells expected to lose a hectare$/);
+  assert.equal(await js(`document.getElementById("share").hidden`), true, "no count of cells under the key until a step is chosen");
+  assert.equal(await js(`["hint", "list-say"].some(id => !!document.getElementById(id).offsetParent)`), false, "no small print on the default screen");
   await sleep(400);
 
-  // the swap: the timeline comes to the stage, larger and richer, and the map shrinks into the lower right corner, still painted
+  // the swap: the timeline comes to the stage, larger and richer, and the map shrinks into the upper right corner, still painted
   const paintedPx = () => js(`(() => { const c = document.querySelector("canvas.cells"), d = c.getContext("2d").getImageData(0, 0, c.width, c.height).data; let n = 0; for (let i = 3; i < d.length; i += 4) n += d[i] > 0; return n; })()`);
   assert.ok(await area("mapbox") > 4 * await area("chartbox"), "the map is the large one");
   assert.ok(await paintedPx() > 1000, "and it is painted");
@@ -368,10 +405,18 @@ try {
   await sleep(300);
   assert.ok(await area("chartbox") > 4 * await area("mapbox"), "now the timeline is the large one");
   const dock1 = await rect("mapbox");
-  assert.ok(dock1[2] > 0.95 * vw && dock1[3] > 0.95 * vh && dock1[0] > 0.6 * vw && dock1[1] > 0.5 * vh, "the map is docked in the lower right corner: " + dock1);
+  assert.ok(dock1[2] > 0.95 * vw && dock1[1] < 0.12 * vh && dock1[0] > 0.6 * vw && dock1[3] < 0.5 * vh, "the map is docked in the upper right corner: " + dock1);
+  // the docked map is a picture: nothing in it answers the pointer, and no label opens on it
+  assert.equal(await js(`document.getElementById("mapin").inert`), true, "the docked map is inert");
+  for (const k of [0.3, 0.5, 0.7]) await send("Input.dispatchMouseEvent", { type: "mouseMoved", x: dock1[0] + (dock1[2] - dock1[0]) * k, y: dock1[1] + (dock1[3] - dock1[1]) * 0.55 });
+  await sleep(250);
+  assert.equal(await count(".leaflet-tooltip"), 0, "hovering the docked map shows no label");
+  // on the stage the timeline's content keeps a measure in the middle of the page, its plot a proportion, and its top stops short of the map
+  const stageFit = await js(`(() => { const c = document.getElementById("chart").getBoundingClientRect(), m = document.getElementById("mapbox").getBoundingClientRect(), tops = ["hazrow", "lead"].map(id => document.getElementById(id).getBoundingClientRect()); return { w: Math.round(c.width), off: Math.round(c.left - (innerWidth - c.right)), h: Math.round(c.height), clear: tops.every(r => r.right <= m.left - 8), under: c.top >= m.bottom }; })()`);
+  assert.ok(stageFit.w <= 1100 && Math.abs(stageFit.off) <= 2 && stageFit.h <= 0.5 * vh && stageFit.w / stageFit.h < 3.6 && stageFit.clear && stageFit.under, "the timeline on the stage: 1100 px at most, centred, a plot that is not stretched, clear of the docked map: " + JSON.stringify(stageFit));
   assert.ok(await paintedPx() > 200, "the docked map is still painted");
   assert.equal(await js(`document.querySelector("canvas.cells").dataset.key`), String(meta.forecast.year));
-  assert.equal(await js(`["scale", "shape", "sub", "hint", "signs"].every(id => document.getElementById(id).offsetParent) && !!document.querySelector("#chart .unit") && document.querySelectorAll("#chart .grid text").length > 0 && document.querySelectorAll("#chart .bar .rng").length > 0`), true, "on the stage the timeline has its tabs, its axis, its ranges and the signals");
+  assert.equal(await js(`["scale", "shape", "sub", "signs"].every(id => document.getElementById(id).offsetParent) && !!document.querySelector("#chart .unit") && document.querySelectorAll("#chart .grid text").length > 0 && document.querySelectorAll("#chart .bar .rng").length > 0`), true, "on the stage the timeline has its tabs, its axis, its ranges and the signals");
   assert.equal(await js(`["mappanel", "list"].some(id => document.getElementById(id).offsetParent) || !!document.querySelector(".leaflet-control-zoom")?.offsetParent`), false, "the docked map has no controls");
   assert.match(await hash(), /f=chart/, "the link says the timeline is on the stage");
   assert.equal(await text("#chart .unit"), "km² cleared per month");
@@ -382,6 +427,7 @@ try {
   assert.ok(Date.now() - t0 < 2500);
   await sleep(300);
   assert.ok(await area("mapbox") > 4 * await area("chartbox"), "the map is large again");
+  assert.equal(await js(`document.getElementById("mapin").inert`), false, "and answers the pointer again");
   assert.ok(await paintedPx() > 1000, "and painted, not blank");
   assert.deepEqual((await rect("mapbox")).map(Math.round), stage0.map(Math.round), "in the place it had");
   assert.doesNotMatch(await hash(), /f=chart/);
@@ -408,7 +454,7 @@ try {
   await clickOn('#scale button[data-k="years"]');
   await until(`document.querySelectorAll("#chart .bar").length === 20 && /t=years/.test(location.hash)`, "nineteen years and the forecast");
   assert.equal(await text("#chart .unit"), "km² cleared per year, August to July", "the y axis says what it counts");
-  assert.match(await text("#hint"), /^Pick a year from \d+ on to replay it\.$/);
+  assert.equal(await js(`!!document.getElementById("hint").offsetParent`), false, "no small print under the yearly timeline: the bars and the stepper are the control");
   await clickOn('#chart .bar[data-i="15"] .hot');
   await until(head("/^In 2023, [\\d,.]+\\skm² were cleared here$/"), "the 2023 replay");
   const past = await text("#say") + " " + await text("#sub");
@@ -427,7 +473,8 @@ try {
   assert.doesNotMatch(await js(`document.getElementById("chartbox").innerText`), /alerts?\b/i, "the quantity is km² cleared, never alerts");
   assert.equal(await count("#chart .ghost, #chart .tick"), 0, "nothing from a year before on the timeline");
   assert.equal(await count("#chart .bar .fc"), monthly ? 12 : 0, "the months ahead are the model's forecast");
-  assert.match(await text("#hint"), /DETER/, "says once where monthly figures come from");
+  assert.doesNotMatch(await js(`document.getElementById("chartbox").innerText`), /DETER|PRODES/, "no note on where monthly figures come from");
+  assert.equal(await js(`!!document.getElementById("hint").offsetParent`), false);
   await clickOn('#chart tspan[data-h="3"]');
   await until(head("/km² (cleared here in the last three months|expected to be cleared here in the next 3 months)$/") + ` && /k=clear3/.test(location.hash)`, "the three month window");
   const months = await text("#level") + " | " + await text("#say") + " " + await text("#sub");
@@ -462,11 +509,11 @@ try {
   assert.equal(await js(`document.documentElement.dataset.front`), "map", "stepping the year on the dock leaves the map on the stage");
   assert.ok((await text("#scope")).includes("Altamira"));
   // every forest cell is painted by its chance, for the window on screen and never as one huge canvas
-  await until(`document.querySelector("canvas.cells").dataset.key === "2023" && !document.getElementById("share").hidden`, "the cells of 2023");
+  await until(`document.querySelector("canvas.cells").dataset.key === "2023"`, "the cells of 2023");
   const painted = () => js(`(() => { const c = document.querySelector("canvas.cells"), d = c.getContext("2d").getImageData(0, 0, c.width, c.height).data; let n = 0; for (let i = 3; i < d.length; i += 4) n += d[i] > 0; return [c.width, c.height, n, Math.max(...[...document.querySelectorAll(".leaflet-paint-pane canvas")].map(c => c.width * c.height))]; })()`);
   const [w, h, all, biggest] = await painted();
   assert.ok(w * h < 4e6 && biggest < 4e6 && all > 0, `the cells canvas is the size of the view (${w} x ${h}) and has cells on it (${all} px)`);
-  assert.match(await text("#share"), /^[\d,]+ cells had clearing mapped$/, "the line under the key counts cells");
+  assert.equal(await js(`document.getElementById("share").hidden`), true, "nothing is counted under the key until a step is chosen");
   assert.doesNotMatch(await js(`document.getElementById("mapbox").innerText + document.getElementById("say").textContent`), /flagged|top 5%|5% of forest/i, "no flag and no 5% cut in the cells view");
   // the steps of the key are the filter: choosing one leaves the cells at that chance or more
   await clickOn('#legend button[data-min="3"]');
@@ -518,6 +565,19 @@ try {
   await toFront("map");
   await noFireForecast("docked");
 
+  // how near the Amazon's outline comes to the map's panel and to the timeline's dock, in pixels of the screen,
+  // worked out from the border in the data and the place of the drawn map
+  const GAPS = `(async () => {
+    const R = await (await fetch("data/regions.json")).json(), M = await (await fetch("data/meta.json")).json(), r = document.querySelector("canvas.base").getBoundingClientRect(), m = document.getElementById("map").getBoundingClientRect();
+    const mer = la => Math.log(Math.tan(Math.PI / 4 + la * Math.PI / 360)), y0 = mer(M.north), y1 = mer(M.north - M.rows * M.cell), boxes = ["mappanel", "chartbox"].map(id => document.getElementById(id).getBoundingClientRect());
+    const out = { panel: 1e9, dock: 1e9, tall: r.height / m.height, whole: r.left >= 0 && r.right <= innerWidth && r.top >= 0 && r.bottom <= innerHeight };
+    for (const poly of R.border) for (const ring of poly) for (let i = 0, x = 0, y = 0; i < ring.length; i += 2) {
+      x += ring[i]; y += ring[i + 1];
+      const px = r.left + (x / R.q - M.west) / (M.cols * M.cell) * r.width, py = r.top + (y0 - mer(y / R.q)) / (y0 - y1) * r.height;
+      boxes.forEach((b, k) => { const d = Math.hypot(Math.max(b.left - px, 0, px - b.right), Math.max(b.top - py, 0, py - b.bottom)); if (d < out[k ? "dock" : "panel"]) out[k ? "dock" : "panel"] = d; });
+    }
+    return out;
+  })()`;
   // a cell says its own chance. The file is decoded here, a cell is picked from it, and the map must say the same.
   const fyear = meta.forecast.year, F = meta.years[fyear].flags500, pmap = F && await grey(`p${fyear}.png`);
   let cell = "";
@@ -528,7 +588,6 @@ try {
     await send("Page.navigate", { url: SITE + `#l=en&m=cells&v=${lat.toFixed(6)},${lng.toFixed(6)},11` });
     await until(`document.querySelector("canvas.cells")?.dataset.key === "${fyear}" && document.querySelector("canvas.cells").dataset.f === "1"`, "the chances of " + fyear + " at 500 m");
     assert.equal(await text("#legend"), `Chance each cell loses a hectare by July ${fyear}0.1%1%5%20%`, "the key states the event and the steps");
-    assert.match(await text("#share"), /^[\d,]+ of [\d.]+ million forest cells expected to lose a hectare$/);
     const [mx, my] = await js(`(() => { const r = document.getElementById("map").getBoundingClientRect(); return [r.x + r.width / 2, r.y + r.height / 2]; })()`);
     await send("Input.dispatchMouseEvent", { type: "mouseMoved", x: mx + 1, y: my + 1 });
     await send("Input.dispatchMouseEvent", { type: "mouseMoved", x: mx, y: my });
@@ -558,8 +617,8 @@ try {
     const mixOf = await js(`(() => { const R = ${JSON.stringify(RAMP)}, c = document.querySelector("canvas.cells"), d = c.getContext("2d").getImageData(0, 0, c.width, c.height).data, n = { all: 0, steps: [0, 0, 0, 0], other: 0 }; for (let i = 0; i < d.length; i += 4) if (d[i + 3]) { n.all++; const k = R.findIndex(s => s[0] === d[i] && s[1] === d[i + 1] && s[2] === d[i + 2]); k < 0 ? n.other++ : n.steps[k]++; } return n; })()`);
     assert.ok(mixOf.other === 0 && mixOf.steps.every(x => x > 0), `the chances are painted in the four reds and nothing else: ${JSON.stringify(mixOf)}`);
     assert.ok(mixOf.steps[0] > mixOf.steps[1] && mixOf.steps[1] > mixOf.steps[2] && mixOf.steps[2] > mixOf.steps[3] && (mixOf.steps[2] + mixOf.steps[3]) / mixOf.all < 0.1, `the dark red is common and the bright reds are rare: ${JSON.stringify(mixOf)}`);
-    // The Amazon is fitted to its own outline: clear of the map's panel and of the timeline's dock, and reaching
-    // into the room between the two, so the left of the stage is not an empty strip.
+    // The Amazon is fitted to its own outline: no part of it under the map's panel or the timeline's dock, and
+    // clear ground between its outline and both.
     const fit = await js(`(() => {
       const cv = document.querySelector("canvas.base"), r = cv.getBoundingClientRect(), k = cv.width / r.width, cx = cv.getContext("2d"), m = document.getElementById("map").getBoundingClientRect();
       const [panel, dock] = ["mappanel", "chartbox"].map(id => document.getElementById(id).getBoundingClientRect());
@@ -568,8 +627,9 @@ try {
       return { under: drawn(panel.left, panel.top, panel.right, panel.bottom) + drawn(dock.left, dock.top, dock.right, dock.bottom), between: drawn(m.left, panel.bottom, dock.right, dock.top), left: r.left, rail: dock.right, tall: r.height / m.height };
     })()`);
     assert.equal(Math.round(fit.under), 0, "no part of the Amazon lies under the panel or the dock: " + JSON.stringify(fit));
-    assert.ok(fit.between > 400 && fit.left < fit.rail - 30, "the Amazon's west reaches into the room between the panel and the dock: " + JSON.stringify(fit));
-    assert.ok(fit.tall > 0.85, "and the Amazon takes most of the stage's height: " + JSON.stringify(fit));
+    const g0 = await jsA(GAPS);
+    assert.ok(g0.panel >= 24 && g0.dock >= 24 && g0.whole, `there is clear ground between the Amazon and the panel (${Math.round(g0.panel)} px) and the dock (${Math.round(g0.dock)} px): ` + JSON.stringify(fit));
+    assert.ok(fit.tall > 0.8, "and the Amazon takes most of the stage's height: " + JSON.stringify(fit));
     assert.equal(await js(`(() => { const c = document.querySelector("canvas.cells"), r = c.getBoundingClientRect(), d = c.getContext("2d").getImageData(0, 0, c.width, c.height).data, boxes = ["mappanel", "chartbox"].map(id => document.getElementById(id).getBoundingClientRect()); let n = 0; for (let y = 0; y < c.height; y += 2) for (let x = 0; x < c.width; x += 2) if (d[4 * (y * c.width + x) + 3] > 0 && boxes.some(b => x + r.x > b.left && x + r.x < b.right && y + r.y > b.top && y + r.y < b.bottom)) n++; return n; })()`), 0, "and no painted cell either");
     const [fx, fy_] = await at(lat, lng);
     await send("Input.dispatchMouseEvent", { type: "mouseMoved", x: fx + 1, y: fy_ + 1 });
@@ -604,68 +664,67 @@ try {
   await send("Input.dispatchKeyEvent", { type: "keyUp", key: "Escape", code: "Escape", windowsVirtualKeyCode: 27 });
   await until(settled("map"), "the map back on the stage, by Escape");
   await sleep(250);
-  // priorities: the ranked blocks, the line that says how the ranking did, the download, and a row that leads to the map
+  // priorities: the ranked places as bare rows (rank, name, a tag for protected land, a thin red bar), the file,
+  // and a row that leads to the map and says why in a sentence or two
   const prio = await fetch(`${SITE}data/priority.json`).then(r => (r.ok ? r.json() : null)).catch(() => null);
   if (prio) {
     await clickOn('#modes button[data-k="prio"]');
     await until(`document.querySelectorAll("#list-rows li").length === ${prio.blocks.length} && document.getElementById("kinds").hidden`, "the priority list");
-    const y0 = Object.keys(prio.replay)[0], r0 = prio.replay[y0];
-    assert.ok((await text("#list-say")).startsWith(`Of the ${prio.top} blocks of ${prio.block_km} km ranked highest, ${Math.round(100 * r0.lost_10ha)}% lost at least 10 hectares in ${y0}, against ${(100 * r0.base_10ha).toFixed(1)}% of all forest blocks.`), "the line above the list says how the ranking did");
-    assert.equal((await fetch(await js(`document.querySelector("#list-say a").href`), { method: "HEAD" })).ok, true, "the CSV is there to download");
-    assert.equal(await text("#list-rows li .nm"), `${prio.blocks[0].municipality}, ${prio.blocks[0].state}`);
-    const around = b => b.why.cleared_3y_around_km2.toLocaleString("en-US", { maximumFractionDigits: b.why.cleared_3y_around_km2 < 9.95 ? 1 : 0, minimumFractionDigits: b.why.cleared_3y_around_km2 < 9.95 ? 1 : 0 });
-    assert.equal(await js(`[...document.querySelectorAll("#list-rows li:first-child button > *")].map(e => e.textContent.trim()).join("|")`), `1|${prio.blocks[0].municipality}, ${prio.blocks[0].state}|${Math.round(prio.blocks[0].expected_cells)}|${around(prio.blocks[0])}`, "a row is its rank, the place, the cells expected and the km² cleared around it");
-    // the second figure tells rows apart, which the highest chance did not (it is the same for almost every block)
-    const col = await js(`[...document.querySelectorAll("#list-rows li button .v:last-child")].slice(0, 40).map(e => e.textContent)`);
-    assert.deepEqual(col, prio.blocks.slice(0, 40).map(around));
-    assert.ok(new Set(col).size > 25, "the column carries information: " + new Set(col).size + " different values in 40 rows");
-    assert.equal(await js(`[...document.querySelectorAll("#list-key .v, #list-rows li:nth-child(-n+30) .v, #list-rows li:nth-child(-n+30) .land")].every(e => { const r = e.getBoundingClientRect(), l = document.getElementById("list").getBoundingClientRect(); return r.right <= l.right - 4 && r.left >= l.left; })`), true, "nothing in the list is cut at its edge");
-    assert.equal(await count("#list-rows .land"), prio.blocks.filter(b => b.land).length, "a glyph marks the blocks in Indigenous lands and conservation units");
-    assert.equal(await text("#list-key"), "Indigenous landconservation unitcellskm² around");
+    assert.equal(await js(`!!document.getElementById("list-say").offsetParent || !!document.getElementById("list-key") || !!document.querySelector("#list .lk, #list .land")`), false, "no paragraph above the list, no legend, no glyphs");
+    assert.deepEqual(await js(`(() => { const a = document.getElementById("list-csv"), x = document.getElementById("list-close").getBoundingClientRect(), r = a.getBoundingClientRect(); return [a.textContent, !!a.offsetParent, a.hasAttribute("download"), Math.abs(r.right - x.left) < 16 && Math.abs((r.top + r.bottom) / 2 - (x.top + x.bottom) / 2) < 6]; })()`), ["CSV", true, true, true], "a small CSV link beside the X");
+    assert.equal((await fetch(await js(`document.getElementById("list-csv").href`), { method: "HEAD" })).ok, true, "the CSV is there to download");
+    assert.equal(await text("#list-rows li .nm > span"), `${prio.blocks[0].municipality}, ${prio.blocks[0].state}`);
+    assert.equal(await js(`[...document.querySelectorAll("#list-rows li:first-child button > *")].map(e => e.textContent.trim()).join("|")`), `1|${prio.blocks[0].municipality}, ${prio.blocks[0].state}|`, "a row is its rank, the place and a bar: no figures");
+    assert.equal(await count("#list-rows .v, #list th, #list-rows .h"), 0, "no number columns and no headers");
+    // the bar: thin, red, as long as the cells expected to lose a hectare there
+    const bars = await js(`[...document.querySelectorAll("#list-rows .len i")].slice(0, 60).map(e => { const r = e.getBoundingClientRect(); return [r.width, r.height, getComputedStyle(e).backgroundColor]; })`);
+    assert.ok(bars.length === 60 && bars.every(([w, h, c], k) => Math.abs(w / bars[0][0] - prio.blocks[k].expected_cells / prio.blocks[0].expected_cells) < 0.02 && h <= 6 && c === RED), "a thin red bar a row, its length the expected cells: " + JSON.stringify(bars.slice(0, 3)));
+    assert.equal(await js(`[...document.querySelectorAll("#list-rows li:nth-child(-n+30) .len, #list-rows li:nth-child(-n+30) .tag")].every(e => { const r = e.getBoundingClientRect(), l = document.getElementById("list").getBoundingClientRect(); return r.right <= l.right - 4 && r.left >= l.left; })`), true, "nothing in the list is cut at its edge");
+    assert.deepEqual(await js(`[...document.querySelectorAll("#list-rows .tag")].map(e => e.textContent)`), prio.blocks.filter(b => b.land).map(b => b.land.toUpperCase()), "a small text tag, TI or UC, on the places in protected land");
     assert.equal(await js(`document.querySelectorAll("#list table, #list-rows [style*=border]").length + (getComputedStyle(document.querySelector("#list-rows button")).borderTopWidth === "0px" ? 0 : 1)`), 0, "a typographic list: no table, no rules between rows");
     assert.match(await text("#legend"), /^Chance each cell loses a hectare by July \d+0\.1%/, "the blocks sit on the chances of the cells");
     assert.equal(await count("#chart .bar"), 20, "the timeline keeps its scale: the priority list is about the map");
     await clickOn('#list-rows li:nth-child(3) button');
     await until(`/b=3/.test(location.hash) && document.querySelectorAll(".leaflet-sel-pane path").length === 2 && +new URLSearchParams(location.hash.slice(1)).get("v").split(",")[2] >= 9`, "the third block outlined and in view");
-    assert.equal(await js(`document.querySelector("#list-rows [aria-current]").dataset.b`), "3");
+    assert.equal(await js(`document.querySelector("#list-rows [aria-current]").dataset.b + "/" + getComputedStyle(document.querySelector("#list-rows [aria-current] .len i")).backgroundColor`), "3/rgb(255, 255, 255)", "the row is chosen, and its bar turns white on the green");
     await sleep(900);
     // the block is in the part of the map that nothing covers: right of the rail, left of the list
     const [bx, by] = await at(prio.blocks[2].lat, prio.blocks[2].lon), free = await js(`[Math.max(document.getElementById("mappanel").getBoundingClientRect().right, document.getElementById("chartbox").getBoundingClientRect().right), document.getElementById("top").getBoundingClientRect().bottom, document.getElementById("list").getBoundingClientRect().left, innerHeight]`);
     assert.ok(bx > free[0] + 20 && bx < free[2] - 20 && by > free[1] + 20 && by < free[3] - 20, `the map is on the block, clear of the panel, the dock and the list: ${[bx, by]} in ${free}`);
     assert.doesNotMatch(await js(`document.body.innerText`), /flagged/i, "the word is gone from the interface");
-    // the chosen block says why it ranks high: sentences built from its `why`, strongest first, then one fixed small line
-    const typ = prio.why.typical_forest_block, n1 = x => x.toLocaleString("en-US", { maximumFractionDigits: x < 9.95 ? 1 : 0, minimumFractionDigits: x < 9.95 ? 1 : 0 });
-    const why = b => {
-      const w = b.why, out = [], add = (k, min, say) => { if (w[k] >= min) out.push([w[k] / Math.max(typ[k], 1e-9), say]); };
-      if (w.times_typical_clearing >= 2) add("cleared_3y_around_km2", 1, `${n1(w.cleared_3y_around_km2)} km² cleared around it in three years, ${w.times_typical_clearing.toLocaleString("en-US", { maximumFractionDigits: w.times_typical_clearing < 10 ? 1 : 0, minimumFractionDigits: w.times_typical_clearing < 10 ? 1 : 0 })} times the forest's average.`);
-      add("clearing_alerts_12m_km2", 0.5, `${n1(w.clearing_alerts_12m_km2)} km² of clearing alerts in the last 12 months.`);
-      add("degradation_12m_km2", 0.5, `${n1(w.degradation_12m_km2)} km² degraded or logged in the last 12 months.`);
-      add("fire_scar_12m_km2", 0.25, `${n1(w.fire_scar_12m_km2)} km² burned in the last 12 months.`);
-      add("mining_12m_km2", 0.05, `${n1(w.mining_12m_km2)} km² of mining in the last 12 months.`);
-      add("permit_ha", Math.max(1, typ.permit_ha), `A valid clearing permit for ${Math.round(w.permit_ha).toLocaleString("en-US")} ha.`);
-      add("ibama_notices_12m", 1, `${w.ibama_notices_12m} IBAMA ${w.ibama_notices_12m === 1 ? "notice" : "notices"} in the last year.`);
-      const say = out.sort((x, y) => y[0] - x[0]).slice(0, b.land ? 2 : 3).map(x => x[1]);
-      if (b.land) say.push(b.land === "ti" ? "Inside Indigenous land." : "Inside a conservation unit.");
-      if (say.length < 3 && w.forest_share >= 0.995) say.push("The whole block is still forest.");
-      return say;
+    // the chosen place says why in one plain sentence, two at most, by the brief's rule
+    const WHY = {
+      en: { around: x => `${x} km² cleared around it in the last three years.`, fire: x => `${x} km² of forest burned in the last year.`, degr: x => `${x} km² of forest degraded in the last year.`, near: "Close to recent clearing.", permit: x => `Has a permit to clear ${x} hectares.`, ti: "Inside an Indigenous land.", uc: "Inside a conservation unit." },
+      pt: { around: x => `${x} km² desmatados em volta nos últimos três anos.`, fire: x => `${x} km² de floresta queimada no último ano.`, degr: x => `${x} km² de floresta degradada no último ano.`, near: "Fica perto de desmate recente.", permit: x => `Tem licença para desmatar ${x} hectares.`, ti: "Fica em terra indígena.", uc: "Fica em unidade de conservação." },
     };
-    const closing = (([y, m, d]) => `What the model saw here on ${d} ${new Date(y, m - 1, 1).toLocaleDateString("en-US", { month: "long" })} ${y}, not the cause.`)(meta.years[prio.year].origin.split("-").map(Number));
-    const said = () => js(`[...document.querySelectorAll("#list-rows .why p")].map(e => e.textContent)`);
-    assert.deepEqual(await said(), [...why(prio.blocks[2]), closing], "the third block's reasons, and the line that says what they are");
-    assert.equal(await js(`document.querySelector("#list-rows .why").previousElementSibling.dataset.b`), "3", "the reasons open under the row that was chosen");
-    for (const b of [prio.blocks[0], prio.blocks.find(x => x.land === "ti"), prio.blocks.find(x => x.why.permit_ha >= 30), prio.blocks.find(x => x.why.mining_12m_km2 >= 0.05)].filter(Boolean)) {
+    const why = (b, l) => {
+      const w = b.why, L = WHY[l], loc = l === "en" ? "en-US" : "pt-BR", n1 = x => x.toLocaleString(loc, { maximumFractionDigits: x < 9.95 ? 1 : 0, minimumFractionDigits: x < 9.95 ? 1 : 0 });
+      const main = w.cleared_3y_around_km2 >= 1 ? L.around(n1(w.cleared_3y_around_km2)) : Math.max(w.fire_scar_12m_km2, w.degradation_12m_km2) >= 0.5 ? (w.fire_scar_12m_km2 >= w.degradation_12m_km2 ? L.fire(n1(w.fire_scar_12m_km2)) : L.degr(n1(w.degradation_12m_km2))) : L.near;
+      const second = w.permit_ha >= 50 ? L.permit(w.permit_ha.toLocaleString(loc, { maximumFractionDigits: 0 })) : b.land ? L[b.land] : null;
+      return second ? [main, second] : [main];
+    };
+    const said = async () => (await js(`[...document.querySelectorAll("#list-rows .why p")].map(e => e.textContent)`)).map(x => x.replaceAll(" ", " "));
+    assert.deepEqual(await said(), why(prio.blocks[2], "en"), "the third place's reason");
+    assert.equal(await js(`document.querySelector("#list-rows .why").previousElementSibling.dataset.b`), "3", "the reason opens under the row that was chosen");
+    const lowAround = prio.blocks.filter(x => x.why.cleared_3y_around_km2 < 1), cases = [prio.blocks[0], prio.blocks.find(x => x.land === "ti" && x.why.permit_ha < 50), prio.blocks.find(x => x.land === "uc" && x.why.permit_ha < 50), prio.blocks.find(x => x.why.permit_ha >= 50), prio.blocks.find(x => x.why.permit_ha >= 50 && x.land), lowAround.find(x => Math.max(x.why.fire_scar_12m_km2, x.why.degradation_12m_km2) >= 0.5), lowAround.find(x => Math.max(x.why.fire_scar_12m_km2, x.why.degradation_12m_km2) < 0.5)].filter(Boolean);
+    for (const b of cases) {
       await js(`document.querySelector('#list-rows [data-b="${b.rank}"]').click()`);
-      await until(`document.querySelector("#list-rows .why")?.previousElementSibling.dataset.b === "${b.rank}"`, "the reasons of block " + b.rank);
-      const got = await said(), want = why(b);
-      assert.deepEqual(got, [...want, closing], `block ${b.rank}: ${JSON.stringify(b.why)}`);
-      assert.ok(want.length >= 1 && want.length <= 3 && await count("#list-rows .why") === 1, "two or three sentences, for one block at a time");
+      await until(`document.querySelector("#list-rows .why")?.previousElementSibling.dataset.b === "${b.rank}"`, "the reason of place " + b.rank);
+      const got = await said(), want = why(b, "en");
+      assert.deepEqual(got, want, `place ${b.rank}: ${JSON.stringify(b.why)} ${b.land}`);
+      assert.ok(got.length >= 1 && got.length <= 2 && await count("#list-rows .why") === 1, "one sentence, two at most, for one place at a time");
+      assert.doesNotMatch(got.join(" "), /alert|IBAMA|notice|times|average|still forest|What the model saw|not the cause/i, "nothing about alerts, notices, multiples of the average or what the model saw");
     }
-    assert.match((await said())[0], /^[\d.,]+ km² /, "a sentence starts with its number");
-    // and in Portuguese
+    assert.ok(cases.length >= 5, "the rule's branches are in the data: " + cases.map(b => b.rank));
+    // and in Portuguese, for the place that is open
+    const open_ = cases.at(-1);
     await clickOn("#lang-btn");
-    await until(`document.documentElement.lang === "pt" && /não a causa\.$/.test(document.querySelector("#list-rows .why .seen")?.textContent || "")`, "the reasons in Portuguese");
-    assert.match((await said()).join(" "), /nos últimos 12 meses|ao redor em três anos|do IBAMA no último ano|Dentro de|ainda é floresta|Licença de desmate/);
-    assert.equal((await said()).at(-1), (([y, m, d]) => `É o que o modelo viu aqui em ${d} de ${new Date(y, m - 1, 1).toLocaleDateString("pt-BR", { month: "long" })} de ${y}, não a causa.`)(meta.years[prio.year].origin.split("-").map(Number)));
+    await until(`document.documentElement.lang === "pt" && document.querySelector("#list-rows .why")?.previousElementSibling.dataset.b === "${open_.rank}"`, "the reason in Portuguese");
+    assert.deepEqual(await said(), why(open_, "pt"));
+    await js(`document.querySelector('#list-rows [data-b="${cases[0].rank}"]').click()`);
+    await until(`document.querySelector("#list-rows .why")?.previousElementSibling.dataset.b === "${cases[0].rank}"`, "another place, in Portuguese");
+    assert.deepEqual(await said(), why(cases[0], "pt"));
+    assert.doesNotMatch(await js(`document.getElementById("list").innerText`), /não a causa|Dos \d+ blocos|alertas|autos/, "no paragraph, and no line on what the model saw");
     // the list has a way out, and it leaves the map on its cells
     await clickOn("#list-close");
     await until(`document.getElementById("list").hidden && /m=cells/.test(location.hash) && !/b=/.test(location.hash) && !document.querySelector(".here")`, "the priority list closed by its X, the map back on its cells");
@@ -686,7 +745,7 @@ try {
   await until(`document.getElementById("about").open`, "the About text");
   assert.doesNotMatch(await js(`document.body.innerText + document.getElementById("about").innerText`), /—/, "no em dashes");
   // the old wording is gone from everything a reader can see, in both languages: every mode, a replay, fire, the
-  // hover text and About. About keeps one sentence on the benchmark's 5% yardstick.
+  // hover text and About.
   const pastY = Math.max(...Object.keys(meta.years).map(Number).filter(y => meta.years[y].actual_km2 != null));
   for (const l of ["en", "pt"]) {
     for (const [q, ready] of [["", `!!document.querySelector("#legend .steps") && document.querySelector("canvas.cells")?.dataset.key === "${meta.forecast.year}"`], ["&m=sectors", `!!document.querySelector("#legend .ramp")`], ["&m=cells&y=" + pastY, `document.querySelector("canvas.cells")?.dataset.key === "${pastY}"`], ["&m=cells&y=2020", `document.querySelector("canvas.cells")?.dataset.key === "2020"`],
@@ -702,9 +761,9 @@ try {
       assert.doesNotMatch(seen, /flagged|\bflag\b|marcad/i, `no "flagged" or "marcado" in ${l} at ${q || "the default screen"}`);
       assert.doesNotMatch(seen, /—/, "no em dashes");
       assert.doesNotMatch(seen, /Amazônia Legal|Legal Amazon/, "the Amazon by its name");
-      assert.equal((await js(`document.getElementById("about").textContent`)).match(/\b5% (of forest|de floresta)/g).length, 2, "About: the yardstick once, and the 5% of the other hazards' maps once");
+      assert.doesNotMatch(seen, /placar|leaderboard|\bboards?\b/i, `the word is benchmark, in ${l} at ${q || "the default screen"}`);
+      assert.doesNotMatch(seen, /yearly PRODES count|contagem anual do PRODES|é o que o modelo viu|What the model saw|sem faixa própria|no range of its own/i, "and the small print is gone");
       assert.doesNotMatch(await js(`document.getElementById("app").innerText`), /5% (of forest|de floresta)|top 5%/i, "and no 5% cut on the screen itself");
-      assert.match(await js(`document.getElementById("about").textContent`), l === "en" ? /depends on a drought that has not happened yet/ : /depende de uma seca que ainda não aconteceu/, "About says why fire has no amount");
     }
   }
   // ---------- actions: the third scale of the clearing timeline. What measured enforcement accounts for, every
@@ -747,8 +806,7 @@ try {
       assert.ok(Math.abs(Math.max(...hs) / Math.min(...hs) - Math.max(...obs) / Math.min(...obs)) < 0.01, "bar heights are in proportion to the file");
       // the limits of the claim, without a click
       const hint = await text("#hint");
-      assert.match(hint, en ? /^A floor and an association, not proof of cause/ : /^É um piso e uma associação, não prova de causa/, `${l}: the honesty line`);
-      assert.ok(hint.includes(en ? `The rest, ${part(1 - share, l)} of the fall, is not attributed to anything.` : `O restante, ${part(1 - share, l)} da queda, não é atribuído a nada.`), `${l}: the part of the fall that is not attributed`);
+      assert.equal(hint, en ? "A floor and an association, not proof of cause." : "É um piso e uma associação, não prova de causa.", `${l}: the honesty line, one sentence`);
       assert.equal(await js(`getComputedStyle(document.getElementById("hint")).display !== "none" && document.getElementById("hint").getBoundingClientRect().height > 10`), true, "and it is on the screen");
       // the actions themselves, in the signals' place: the last year against the reference year
       assert.equal(await js(`[...document.querySelectorAll("#signs.acts > div")].map(d => d.dataset.k + "=" + d.querySelector("b").textContent + "|" + d.querySelector("b + span").textContent).join(";")`),
@@ -770,25 +828,16 @@ try {
       await send("Page.navigate", { url: SITE + `#l=${l}&t=actions&s=uf&r=${state}&f=chart` });
       await until(`document.documentElement.lang === "${l}" && !document.getElementById("scope").hidden && /${en ? "here" : "aqui"}/.test(document.getElementById("say").textContent) && !!document.querySelector("#chart svg.acts")`, `${l}: the actions of ${state}`);
       assert.equal(await text("#say"), en ? `Enforcement accounts for ${two(gap, l)} km² of clearing avoided here since ${since}` : `A fiscalização responde por ${two(gap, l)} km² de desmate evitado aqui desde ${since}`, `${l}: the state's own gap`);
-      assert.match(await text("#sub"), en ? /^\d+% on top of what was cleared here\. No range for a single state\.$/ : /^\d+% a mais do que foi desmatado aqui\. Sem faixa para um estado sozinho\.$/);
+      assert.match(await text("#sub"), en ? /^\d+% on top of what was cleared here\.$/ : /^\d+% a mais do que foi desmatado aqui\.$/);
       assert.deepEqual([await count("#chart .observed"), await count("#chart .held"), await count("#chart .bar .rng"), await count("#chart .refrule")], [rows.length, rows.length, 0, 0], "the state's marks, with no interval and no reference rule");
-      assert.match(await text("#hint"), en ? /A floor and an association.*is not attributed to anything\.$/ : /É um piso e uma associação.*a parte da queda que não é atribuída a nada chega a .+\.$/);
-      // About says how it is computed and where the method is
-      await clickOn("#about-btn");
-      await until(`document.getElementById("about").open`, "About");
-      const about = await js(`document.getElementById("about").textContent`);
-      assert.match(about, en ? /is a floor and an association/ : /é um piso e uma associação/);
-      assert.ok(about.includes(n(acts.summary.avoided, l) + " km²") && about.includes(n(acts.municipalities, l)), "About quotes the file");
-      assert.deepEqual(await js(`[...document.querySelectorAll("#about a")].map(a => a.getAttribute("href")).filter(h => h.includes("/docs/"))`), [story.links.policy, story.links.inputs, story.links.results], "and points to the method, the inputs and the notes in the repository");
-      assert.doesNotMatch(about, /—|Amazônia Legal/);
-      await js(`document.getElementById("about").close()`);
+      assert.equal(await text("#hint"), en ? "A floor and an association, not proof of cause." : "É um piso e uma associação, não prova de causa.");
     }
     // a municipality has no figure of its own: the Amazon's is shown, and named
     await send("Page.navigate", { url: SITE + "#l=en&t=actions&r=1500602&f=chart" });
     await until(`document.querySelector("#scope span")?.textContent === "Amazon" && !!document.querySelector("#chart svg.acts")`, "the actions view with a municipality selected");
     assert.equal(await text("#scope span"), "Amazon");
     assert.equal(await text("#say"), `Enforcement accounts for ${two(acts.summary.avoided, "en")} km² of clearing avoided since ${monthOf(sem[0].start, "en")}`);
-    assert.match(await text("#hint"), /Only states have a figure of their own\.$/);
+    assert.match(await text("#hint"), /^A floor and an association, not proof of cause/);
     assert.equal(await count("#chart .bar .rng"), sem.length);
     // the view belongs to clearing: another hazard has no such tab, and a link that asks for it gets the years
     await send("Page.navigate", { url: SITE + "#l=en&k=scar12&t=actions&f=chart" });
@@ -824,30 +873,41 @@ try {
   assert.equal(await js(`document.querySelector('link[rel="alternate"][type="text/plain"]').getAttribute("href")`), "/llms.txt", "the page points agents to the instructions");
   assert.equal(await fetch(`${SITE}llms.txt`).then(r => r.text()), llms, "and /llms.txt is the same text");
 
-  // ---------- About: a panel beside the map. The thesis first, then the model (one model, by its name), the open
-  // board as a bare table with the way in as a button, how it is checked, how to take part, and its limits.
-  // Every number is the data's.
+  // ---------- About: a panel beside the map, and exactly this: what the site shows and who it is for, the model's
+  // figure, the model and how it did in two sentences, the benchmark as a bare table with at most one short line
+  // under it, that it is open with the way in as a button, that it gets things wrong, and whose data it is.
+  const span = +story.forecast.made_on.slice(0, 4) - story.history.years[0];
+  const ABOUT = {
+    en: [`Prenúncio shows where the Amazon is likely to be cleared by July ${story.forecast.year}.`, "We built it so the people who enforce the law can get there first.",
+      `The model, ${story.model.name}, learned from ${span} years of public data. For every ${story.forest.cell_m} metre square of forest it gives the chance of clearing in the year ahead.`,
+      `We tested it on years it had never seen. In ${story.check.year}, ${hit5} of every ${of5} places it pointed to were cleared.`,
+      "Benchmark", `The score is the mean of ${story.benchmark.years[0]} to ${story.benchmark.years.at(-1)}.`,
+      "The code, the data and the benchmark are open. Build a better model and it goes ahead of ours.", "Submit a modelGitHub",
+      "It gets things wrong. A 10% chance means 9 of 10 squares like that one are not cleared.", "Data from INPE, IBAMA, the University of Maryland, the JRC and Google."],
+    pt: [`Prenúncio mostra onde a Amazônia deve ser desmatada até julho de ${story.forecast.year}.`, "Fizemos para quem fiscaliza conseguir chegar antes.",
+      `O modelo, ${story.model.name}, aprendeu com ${span} anos de dados públicos. Para cada quadrado de ${story.forest.cell_m} metros de floresta ele dá a chance de desmate no ano seguinte.`,
+      `Testamos em anos que ele nunca viu. Em ${story.check.year}, de cada ${of5} lugares que apontou, ${hit5} foram desmatados.`,
+      "Benchmark", `A nota é a média de ${story.benchmark.years[0]} a ${story.benchmark.years.at(-1)}.`,
+      "O código, os dados e o benchmark são abertos. Quem fizer um modelo melhor passa na frente do nosso.", "Enviar um modeloGitHub",
+      "Ele erra. Uma chance de 10% quer dizer que 9 em cada 10 quadrados assim não caem.", "Dados do INPE, IBAMA, Universidade de Maryland, JRC e Google."],
+  };
+  assert.equal(span, 18, "the years of public data, from the first year of the record to the day the forecast was made");
   for (const l of ["en", "pt"]) {
-    const en = l === "en", LOC = { en: "en-US", pt: "pt-BR" }[l], n = (x, d = 0) => x.toLocaleString(LOC, { maximumFractionDigits: d, minimumFractionDigits: d }), pc = x => n(100 * x), b = story.benchmark, rows = story.leaderboard.rows, name = rows.find(r => r.kind === "model").model;
-    const A = sel => js(`[...document.querySelectorAll(${JSON.stringify("#about-body " + sel)})].map(e => e.textContent.trim())`);
+    const en = l === "en", LOC = { en: "en-US", pt: "pt-BR" }[l], n = (x, d = 0) => x.toLocaleString(LOC, { maximumFractionDigits: d, minimumFractionDigits: d }), rows = story.leaderboard.rows, name = story.model.name;
     await send("Page.navigate", { url: SITE + `#l=${l}&about` });
-    await until(`document.documentElement.lang === "${l}" && document.getElementById("about").open && !!document.querySelector("#about .thesis") && !!document.querySelector("#about .board")`, `${l}: About`);
-    assert.equal(await js(`document.querySelector("#about-body h2").nextElementSibling.className`), "thesis", `${l}: About opens with the thesis`);
-    assert.deepEqual(await A(".thesis p"), en
-      ? ["Every forest cell of the Amazon has a chance of being cleared next year.", "That chance can be estimated from what satellites and public records already show, checked against what happened, and improved in the open.", "The point is to tell IBAMA, and anyone making policy, where to act first."]
-      : ["Cada célula de floresta da Amazônia tem uma chance de ser desmatada no ano que vem.", "Essa chance pode ser estimada com o que os satélites e os registros públicos já mostram, conferida com o que aconteceu e melhorada em aberto.", "O objetivo é dizer ao IBAMA, e a quem faz política pública, por onde agir primeiro."]);
-    assert.deepEqual(await A("h3"), en ? ["The model", "The open board", "How it is checked", "How to take part", "What it cannot do", "Reading the screen", "Data"] : ["O modelo", "O placar aberto", "Como é conferido", "Como participar", "O que ele não faz", "Como ler a tela", "Dados"], `${l}: the model, the board, the check, how to take part, then the limits`);
-    const body = await js(`document.getElementById("about-body").textContent.replace(/\\s+/g, " ")`), has = (x, what) => assert.ok(body.includes(x), `${l}: About says ${what}: ${x}`);
+    await until(`document.documentElement.lang === "${l}" && document.getElementById("about").open && !!document.querySelector("#about .lede") && !!document.querySelector("#about .bench")`, `${l}: About`);
+    // exactly these parts, in this order, and nothing else but the X
+    assert.deepEqual(await js(`[...document.getElementById("about-body").children].map(e => e.tagName + (e.id ? "#" + e.id : "") + (e.className ? "." + e.className : ""))`), ["DIV.lede", "DIV#model-fig", "P", "P", "H3#about-benchmark", "TABLE.bench", "P.metric", "P", "P.go", "P", "P"], `${l}: the parts of About, in order`);
+    assert.deepEqual(await js(`[...document.querySelectorAll("#about-body .lede p, #about-body > p, #about-body > h3")].map(e => e.textContent.trim().replace(/\\s+/g, " "))`), ABOUT[l], `${l}: the words of About, as the brief has them`);
+    assert.deepEqual(await js(`[...document.getElementById("about").children].map(e => e.id)`), ["about-bar", "about-body"]);
+    const body = await js(`document.getElementById("about-body").textContent.replace(/\\s+/g, " ")`);
+    assert.doesNotMatch(body, /The sign before the event|O sinal antes do acontecimento|rented machine|máquina alugada|How it is checked|Como é conferido|What it cannot do|O que ele não faz|two models|dois modelos/i, `${l}: the old text is gone`);
+    assert.doesNotMatch(body, /placar|leaderboard|\bboards?\b/i, `${l}: the word is benchmark`);
+    assert.equal(await js(`(() => { const m = document.querySelector("#about .metric"), s = getComputedStyle(m); return m.getBoundingClientRect().height < 1.6 * parseFloat(s.lineHeight); })()`), true, `${l}: the line under the table is one line`);
     // it is a panel beside the map, not a window over the page: the map is still there, and the panel has its way out
     const pr = await js(`(() => { const r = document.getElementById("about").getBoundingClientRect(); return [r.left / innerWidth, r.right / innerWidth, getComputedStyle(document.getElementById("about")).borderTopWidth, document.getElementById("about").matches(":modal")]; })()`);
     assert.ok(pr[0] > 0.5 && pr[1] > 0.99 && pr[2] === "0px" && pr[3] === false, `${l}: About is a panel on the right of the map, with no frame: ${pr}`);
     assert.equal(await js(`!!document.getElementById("about-close").offsetParent && document.getElementById("about-close").getAttribute("aria-label")`), en ? "Close" : "Fechar");
-    // one model, by its name; an ensemble inside, said once; never two
-    has(en ? `${name} is ${story.model.what}.` : `${name} é um modelo só, um conjunto de árvores de decisão e uma rede convolucional.`, "it is one model, an ensemble inside");
-    assert.match(story.model.what, /^one model/, "the data says one model");
-    assert.doesNotMatch(body, /two models|dois modelos|Two models|Dois modelos/, `${l}: never two models`);
-    has(en ? "Nine public sources go in" : "Entram nove fontes públicas", "how many sources");
-    has(en ? `Trained on what happened from ${story.model.trained_on.first_outcome_year} to ${story.model.trained_on.last_outcome_year}. The model that forecasts a year has never seen that year or any later one.` : `Treinado com o que aconteceu de ${story.model.trained_on.first_outcome_year} a ${story.model.trained_on.last_outcome_year}. O modelo que prevê um ano nunca viu esse ano nem nenhum depois dele.`, "the rule");
     // its figure: the sources as a stack of planes, each named, the model under them, the chance at the foot
     await until(`!!document.querySelector("#model-fig canvas") && document.querySelectorAll("#model-fig li").length === ${story.model.inputs.length + 2} && document.querySelector("canvas.cells")?.dataset.key === "${meta.forecast.year}"`, `${l}: the figure of the model, and the chances it ends on`);
     await sleep(600);
@@ -855,27 +915,20 @@ try {
     assert.deepEqual(await js(`[document.querySelector("#model-fig li.m").textContent, document.querySelector("#model-fig li.o").textContent]`), [name, en ? "the chance, for every cell" : "a chance, para cada célula"]);
     const figBox = await js(`(() => { const f = document.getElementById("model-fig").getBoundingClientRect(), a = document.getElementById("about").getBoundingClientRect(), c = document.querySelector("#model-fig canvas"), d = c.getContext("2d").getImageData(0, 0, c.width, c.height).data, tops = [...document.querySelectorAll("#model-fig li:not(.m):not(.o)")].map(e => e.getBoundingClientRect().top); let ink = 0, red = 0; for (let i = 0; i < d.length; i += 16) if (d[i + 3] > 40) { ink++; if (d[i] > 150 && d[i + 1] < 90) red++; } return { fits: [...document.querySelectorAll("#model-fig li")].every(e => { const r = e.getBoundingClientRect(); return r.left >= a.left && r.right <= a.right; }), down: tops.every((y, i) => !i || y > tops[i - 1] + 20), ink, red, h: f.height }; })()`);
     assert.ok(figBox.fits && figBox.down && figBox.ink > 5000 && figBox.red > 200 && figBox.h > 400, `${l}: the names fit the panel and go down the stack, the planes are drawn and the last one is red: ${JSON.stringify(figBox)}`);
-    // the open board: a bare table, a model a row with its link, then the way in as a button
-    assert.deepEqual(await js(`[...document.querySelectorAll("#about .board tbody tr")].map(tr => [tr.cells[0].textContent, tr.querySelector("a").getAttribute("href"), tr.cells[2].textContent, tr.cells[3].textContent])`), rows.map(r => [String(r.rank), r.url, n(100 * r.cap5, 1) + "%", n(100 * r.unseen_2026, 1) + "%"]), `${l}: the board is the file's, a model a row, to one decimal in the language's own figures`);
-    assert.equal(await js(`document.querySelector("#about .board tbody tr a").textContent`), name);
-    assert.deepEqual(await js(`[...document.querySelectorAll("#about .board tbody tr.ref")].map(tr => tr.cells[4].textContent)`), rows.filter(r => r.kind === "reference").map(() => (en ? "no model" : "sem modelo")), `${l}: the row that is not a model says so`);
-    assert.deepEqual(await js(`[...document.querySelectorAll("#about .board th")].map(e => e.textContent)`), en ? ["", "model", "score", String(story.model.trained_on.last_outcome_year), "by", "date"] : ["", "modelo", "nota", String(story.model.trained_on.last_outcome_year), "de", "data"]);
-    assert.deepEqual(await js(`(() => { const t = document.querySelector("#about .board"), s = [t, ...t.querySelectorAll("tr, td, th")].map(e => getComputedStyle(e)); return [s.every(x => parseFloat(x.borderTopWidth) === 0 && parseFloat(x.borderBottomWidth) === 0 && parseFloat(x.borderLeftWidth) === 0), new Set(s.slice(1).map(x => x.backgroundColor)).size]; })()`), [true, 1], `${l}: a bare table: no rules, no stripes`);
-    assert.deepEqual(await js(`[document.querySelector("#about .go .btn").textContent, document.querySelector("#about .go .btn").getAttribute("href"), document.querySelector("#about .go a:not(.btn)").getAttribute("href")]`), [en ? "Submit a model" : "Enviar um modelo", story.links.benchmark, story.links.repository], `${l}: the way in is a button, the repository a link`);
-    // how it is checked
-    has(en ? `For ${story.check.year} it expected ${n(story.check.expected_cells)} cells to lose a hectare. ${n(story.check.actual_cells)} did.` : `Para ${story.check.year}, esperava ${n(story.check.expected_cells)} células perdendo um hectare. Foram ${n(story.check.actual_cells)}.`, "the chances, checked");
-    const y0 = Object.keys(story.priority.replay)[0];
-    has(en ? `In ${y0}, ${pc(story.priority.replay[y0].lost_10ha)}% of the ${story.priority.blocks} blocks ranked highest lost 10 hectares or more. Of all forest blocks, ${n(100 * story.priority.replay[y0].base_10ha, 1)}%.` : `Em ${y0}, ${pc(story.priority.replay[y0].lost_10ha)}% dos ${story.priority.blocks} blocos no topo perderam 10 hectares ou mais. De todos os blocos de floresta, ${n(100 * story.priority.replay[y0].base_10ha, 1)}%.`, "how the priority list did");
-    // short lines: the detail is in the repository
-    const check = await js(`(() => { const out = []; for (let e = document.getElementById("about-check").nextElementSibling; e && e.tagName !== "H3"; e = e.nextElementSibling) out.push(...[...e.querySelectorAll("li")].map(li => li.textContent.trim().length)); return out; })()`);
-    assert.ok(check.length <= 6 && Math.max(...check) < 260 && check.reduce((a, c) => a + c, 0) < 900, `${l}: how it is checked is a few short lines: ${check}`);
-    // how to take part
-    has(en ? `what the ${n(b.models_tried)} versions tried did` : `o que fizeram as ${n(b.models_tried)} versões tentadas`, "the versions tried");
-    has(en ? `${n(b.inputs_tested)} were tested.` : `${n(b.inputs_tested)} foram testadas.`, "the inputs tested");
-    has(en ? "Agents are welcome" : "Agentes são bem-vindos", "agents are welcome");
-    assert.deepEqual([...new Set(await js(`[...document.querySelectorAll("#about a")].map(a => a.getAttribute("href"))`))].sort(), [...new Set([...["policy", "repository", "leaderboard", "results", "inputs", "benchmark", "api"].map(k => story.links[k]), ...rows.map(r => r.url)])].sort(), `${l}: the links are the repository's documents and the models, from the data`);
-    assert.equal(await count("#about [class*=card], #about [class*=grid]"), 0, "no cards");
+    // the benchmark: a bare table, a model a row with its link, then the way in as a button
+    assert.deepEqual(await js(`[...document.querySelectorAll("#about .bench tbody tr")].map(tr => [tr.cells[0].textContent, tr.querySelector("a").getAttribute("href"), tr.cells[2].textContent, tr.cells[3].textContent])`), rows.map(r => [String(r.rank), r.url, n(100 * r.cap5, 1) + "%", n(100 * r.unseen_2026, 1) + "%"]), `${l}: the table is the file's, a model a row, to one decimal in the language's own figures`);
+    assert.equal(await js(`document.querySelector("#about .bench tbody tr a").textContent`), name);
+    assert.deepEqual(await js(`[...document.querySelectorAll("#about .bench tbody tr.ref")].map(tr => tr.cells[4].textContent)`), rows.filter(r => r.kind === "reference").map(() => (en ? "no model" : "sem modelo")), `${l}: the row that is not a model says so`);
+    assert.deepEqual(await js(`[...document.querySelectorAll("#about .bench th")].map(e => e.textContent)`), en ? ["", "model", "score", String(story.model.trained_on.last_outcome_year), "by", "date"] : ["", "modelo", "nota", String(story.model.trained_on.last_outcome_year), "de", "data"], `${l}: the table keeps its columns`);
+    assert.deepEqual(await js(`(() => { const t = document.querySelector("#about .bench"), s = [t, ...t.querySelectorAll("tr, td, th")].map(e => getComputedStyle(e)); return [s.every(x => parseFloat(x.borderTopWidth) === 0 && parseFloat(x.borderBottomWidth) === 0 && parseFloat(x.borderLeftWidth) === 0), new Set(s.slice(1).map(x => x.backgroundColor)).size]; })()`), [true, 1], `${l}: a bare table: no rules, no stripes`);
+    assert.deepEqual(await js(`[document.querySelector("#about .go .btn").textContent, document.querySelector("#about .go .btn").getAttribute("href"), document.querySelector("#about .go a:not(.btn)").textContent, document.querySelector("#about .go a:not(.btn)").getAttribute("href")]`), [en ? "Submit a model" : "Enviar um modelo", story.links.benchmark, "GitHub", story.links.repository], `${l}: the way in is a button, the repository a link`);
+    assert.deepEqual([...new Set(await js(`[...document.querySelectorAll("#about a")].map(a => a.getAttribute("href"))`))].sort(), [...new Set([story.links.benchmark, story.links.repository, ...rows.map(r => r.url)])].sort(), `${l}: the links are the benchmark, the repository and the models, from the data`);
+    assert.equal(await count("#about [class*=card], #about [class*=grid], #about ul, #about h2"), 0, "no cards, no lists, no title");
     assert.doesNotMatch(body, /—|flagged|marcad|Amazônia Legal|Legal Amazon/);
+    // the text passes under a bar that keeps the way out in reach
+    await js(`document.getElementById("about").scrollTop = 400`);
+    await sleep(100);
+    assert.equal(await js(`(() => { const x = document.getElementById("about-close").getBoundingClientRect(), a = document.getElementById("about").getBoundingClientRect(); return x.top >= a.top && x.bottom <= a.top + 60 && !!document.elementFromPoint(x.x + x.width / 2, x.y + x.height / 2)?.closest("#about-close"); })()`), true, `${l}: scrolled, the way out is still at the top`);
     // its way out closes it, and so does Escape
     await clickOn("#about-close");
     await until(`!document.getElementById("about").open`, "About closed by its X");
@@ -886,50 +939,73 @@ try {
     await until(`!document.getElementById("about").open`, "About closed by Escape");
   }
 
+  // ---------- the default view at three desktop sizes: the Amazon whole, clear ground between it and the left
+  // column's two pieces, and the dock's corner nowhere near it
+  for (const [w, h] of [[1280, 720], [1920, 1080], [1440, 900]]) {
+    await send("Emulation.setDeviceMetricsOverride", { width: w, height: h, deviceScaleFactor: 1, mobile: false });
+    await send("Page.navigate", { url: SITE + `?story=0&w=${w}#l=en` });
+    await until(`innerWidth === ${w} && document.querySelector("canvas.cells")?.dataset.key === "${meta.forecast.year}" && !!document.querySelector("canvas.base") && /v=/.test(location.hash)`, `the default view at ${w} by ${h}`);
+    await sleep(500);
+    const g = await jsA(GAPS);
+    assert.ok(g.panel >= 24 && g.dock >= 24, `at ${w} by ${h} there is clear ground between the Amazon and the panel (${Math.round(g.panel)} px) and the dock (${Math.round(g.dock)} px)`);
+    assert.ok(g.whole && g.tall > 0.8, `at ${w} by ${h} the Amazon is whole and takes most of the stage's height: ${JSON.stringify(g)}`);
+    // the surfaces have no hard corner: where the map is moved under them, they thin out into the page
+    assert.equal(await js(`["top", "mappanel", "chartbox"].every(id => /rgba?\\(244, 245, 240/.test(getComputedStyle(document.getElementById(id)).boxShadow))`), true, "the surfaces fade at their edges, in the page's colour");
+  }
+
   // ---------- a phone, 390 by 844, in Portuguese. The map is the screen; the story's caption is at the bottom, at
-  // the thumb; the bulletin is a sheet that is pulled up and pushed back; the list is a sheet with its way out;
-  // the header is the mark and one menu.
+  // the thumb, with the way on as a large arrow; one sheet shows at a time, the bulletin or the list, and their
+  // rectangles never meet; the bulletin rests showing its level, its headline and a plot of 120 px or more, and
+  // pulled up its plot is 240 px or more; type has a phone's scale; the header is the mark and one menu.
   await send("Emulation.setDeviceMetricsOverride", { width: 390, height: 844, deviceScaleFactor: 2, mobile: true });
   await send("Page.navigate", { url: SITE + "?story=1#l=pt" });
   await until(`${onStory} && document.documentElement.dataset.step === "forestA" && document.documentElement.lang === "pt" && innerWidth === 390 && !!document.querySelector("canvas.base")`, "the story on a phone");
-  const tall = `(e => e.getBoundingClientRect().height)`, fits = async what => assert.equal(await js(`document.documentElement.scrollWidth <= innerWidth && [...document.querySelectorAll("#story, #story-line, #mappanel, #list, #chartbox, #top")].filter(e => e.offsetParent).every(e => { const r = e.getBoundingClientRect(); return r.left >= -0.5 && r.right <= innerWidth + 0.5; })`), true, "nothing is wider than the screen at " + what);
+  const fits = async what => assert.equal(await js(`document.documentElement.scrollWidth <= innerWidth && [...document.querySelectorAll("#story, #story-line, #mappanel, #list, #chartbox, #top")].filter(e => e.offsetParent).every(e => { const r = e.getBoundingClientRect(); return r.left >= -0.5 && r.right <= innerWidth + 0.5; })`), true, "nothing is wider than the screen at " + what);
+  // the two sheets, where each is on the screen (null when it is not shown), and whether their rectangles meet
+  const sheets = () => js(`["list", "chartbox"].map(id => { const e = document.getElementById(id), s = getComputedStyle(e), r = e.getBoundingClientRect(); return e.hidden || !e.offsetParent || s.visibility !== "visible" || +s.opacity < 0.5 ? null : [Math.round(r.top), Math.round(r.bottom)]; })`);
+  const apart = async what => { const [l, c] = await sheets(); assert.ok(!l || !c || l[1] <= c[0] || c[1] <= l[0], `the list and the bulletin never overlap, ${what}: ${JSON.stringify([l, c])}`); return [l, c]; };
+  const px = (sel, prop = "fontSize") => js(`parseFloat(getComputedStyle(document.querySelector(${JSON.stringify(sel)}))[${JSON.stringify(prop)}])`);
   assert.deepEqual(await place("mapbox"), [0, 0, 390, 844], "the map is the screen");
-  const cap = await js(`(() => { const s = document.getElementById("story").getBoundingClientRect(), b = document.getElementById("story-next").getBoundingClientRect(), k = document.getElementById("skip-btn").getBoundingClientRect(); return [s.top / innerHeight, s.bottom / innerHeight, b.width, b.height, b.bottom / innerHeight, k.height, k.top]; })()`);
-  assert.ok(cap[0] > 0.82 && cap[1] > 0.99 && cap[2] >= 120 && cap[3] >= 44 && cap[4] > 0.9 && cap[5] >= 44 && cap[6] < 10, "the caption is at the bottom and no taller than its one line needs, the way on is large at the thumb, and Skip is in the header: " + cap);
+  const cap = await js(`(() => { const s = document.getElementById("story").getBoundingClientRect(), b = document.getElementById("story-next").getBoundingClientRect(), k = document.getElementById("skip-btn").getBoundingClientRect(); return [s.top / innerHeight, s.bottom / innerHeight, b.width, b.height, b.bottom / innerHeight, k.height, k.top, b.right > innerWidth * 0.8]; })()`);
+  assert.ok(cap[0] > 0.82 && cap[1] > 0.99 && cap[2] >= 96 && cap[3] >= 48 && cap[4] > 0.9 && cap[5] >= 44 && cap[6] < 10 && cap[7], "the caption is at the bottom and no taller than its one line needs, the way on is a large arrow at the thumb, and Skip is in the header: " + cap);
   assert.equal(await js(`[...document.querySelectorAll("#top button")].filter(b => b.offsetParent).map(b => b.textContent).join()`), "EN,Pular");
+  const lineSize = await px("#story-line");
+  assert.ok(lineSize >= 26 && lineSize <= 28, "the story's line is set at 26 to 28 px on a phone: " + lineSize);
   const whereP = await amazon(), ptSaid = [];
   assert.ok(whereP[0] >= 0 && whereP[0] + whereP[2] <= 390 && whereP[1] + whereP[3] < cap[0] * 844, "the Amazon is whole on the screen, above the caption: " + whereP);
   for (let i = 0; i < IDS.length; i++) {
     if (i) { await clickOn("#story-next"); await until(`document.documentElement.dataset.step === "${IDS[i]}"`, "phone, step " + IDS[i]); }
-    ptSaid.push(await line(), await note());
+    ptSaid.push(await line());
     await fits(IDS[i]);
     assert.deepEqual(await amazon(), whereP, "the Amazon has not moved at " + IDS[i]);
     assert.equal(await js(`(() => { const s = document.getElementById("story").getBoundingClientRect(), n = document.getElementById("story-next").getBoundingClientRect(), t = document.getElementById("story-text").getBoundingClientRect(); return t.bottom <= n.top + 1 && Math.round(s.bottom) === innerHeight && Math.round(n.bottom) >= innerHeight - 16 && t.top >= s.top; })()`), true, "the caption holds its line above the way on, which stays at the foot of the screen, at " + IDS[i]);
-    if (IDS[i] === "omenB") {  // the list: a sheet over the lower part, above the caption, with its way out
-      await until(`!!document.querySelector("#list-rows .why") && !!document.getElementById("list").offsetParent`, "the list's sheet");
+    assert.equal(await js(`document.getElementById("about").open && !document.getElementById("list").hidden`), false, "the panel and the list are not open together at " + IDS[i]);
+    if (IDS[i] === "sources" || IDS[i] === "open") {  // the panel stands between the header and the caption: the line, the way on and Skip stay in reach
+      await until(`document.getElementById("about").open`, "About, on a phone"); await sleep(500);
+      const ab = await js(`(() => { const a = document.getElementById("about").getBoundingClientRect(), s = document.getElementById("story").getBoundingClientRect(), n = document.getElementById("story-next").getBoundingClientRect(), k = document.getElementById("skip-btn").getBoundingClientRect(), x = document.getElementById("about-close").getBoundingClientRect(), on = (r, id) => !!document.elementFromPoint(r.x + r.width / 2, r.y + r.height / 2)?.closest("#" + id); return [Math.round(a.bottom - s.top), a.top >= k.bottom - 1, on(n, "story-next"), on(k, "skip-btn"), on(x, "about-close"), x.width >= 44 && x.height >= 44]; })()`);
+      assert.deepEqual(ab, [0, true, true, true, true, true], "About on a phone, in the story: on the caption, under the header, with the way on, Skip and its X in reach: " + ab);
+    }
+    if (IDS[i] === "open") assert.equal(await js(`(() => { const r = document.getElementById("about").getBoundingClientRect(), t = document.querySelector("#about .bench").getBoundingClientRect(), b = document.querySelector("#about .go .btn").getBoundingClientRect(); return r.width === innerWidth && t.right <= innerWidth && document.getElementById("about").scrollWidth <= innerWidth && b.height >= 44; })()`), true, "the benchmark fits the screen, and its button is tall enough");
+    if (IDS[i] === "first") {  // the list: a sheet over the lower part, standing on the caption, with its way out
+      await until(`!document.getElementById("about").open && !!document.querySelector("#list-rows .why") && !!document.getElementById("list").offsetParent`, "the list's sheet");
       await sleep(450);
       const ls = await js(`(() => { const l = document.getElementById("list").getBoundingClientRect(), s = document.getElementById("story").getBoundingClientRect(), x = document.getElementById("list-close").getBoundingClientRect(), w = document.querySelector("#list-rows .why").getBoundingClientRect(); return [l.top / innerHeight, Math.round(l.bottom - s.top), l.width, x.width, x.height, w.top < s.top]; })()`);
       assert.ok(ls[0] > 0.4 && Math.abs(ls[1]) <= 1 && ls[2] === 390 && ls[3] >= 44 && ls[4] >= 44 && ls[5], "the list is a sheet standing on the caption, with an X of 44 px and its first place's reason showing: " + ls);
+      await apart("at the list's step");
     }
-    if (IDS[i] === "modelA" || IDS[i] === "modelB") { await until(`document.getElementById("about").open`, "About, on a phone"); await sleep(500); }
-    if (IDS[i] === "modelB") assert.equal(await js(`(() => { const r = document.getElementById("about").getBoundingClientRect(), t = document.querySelector("#about .board").getBoundingClientRect(); return r.width === innerWidth && t.right <= innerWidth && document.getElementById("about").scrollWidth <= innerWidth; })()`), true, "the board fits the screen");
-    if (IDS[i] === "modelA" || IDS[i] === "modelB") {  // the panel stands between the header and the caption: the line, the way on and Skip stay in reach
-      const ab = await js(`(() => { const a = document.getElementById("about").getBoundingClientRect(), s = document.getElementById("story").getBoundingClientRect(), n = document.getElementById("story-next").getBoundingClientRect(), k = document.getElementById("skip-btn").getBoundingClientRect(), x = document.getElementById("about-close").getBoundingClientRect(), on = (r, id) => !!document.elementFromPoint(r.x + r.width / 2, r.y + r.height / 2)?.closest("#" + id); return [Math.round(a.bottom - s.top), a.top >= k.bottom - 1, on(n, "story-next"), on(k, "skip-btn"), on(x, "about-close"), x.width >= 44 && x.height >= 44]; })()`);
-      assert.deepEqual(ab, [0, true, true, true, true, true], "About on a phone, in the story: on the caption, under the header, with Next, Skip and its X in reach: " + ab);
-    }
-    if (IDS[i] === "ahead") {  // the bulletin: a sheet showing its top, with the list a bar on it
-      await until(`document.querySelectorAll("#chart .bar").length === 36 && document.getElementById("list").dataset.at === "bar"`, "the bulletin's sheet, under the list's bar");
+    if (IDS[i] === "ahead") {  // the bulletin takes the list's place: a sheet showing its top, standing on the caption
+      await until(`document.querySelectorAll("#chart .bar").length === 36 && document.getElementById("list").hidden`, "the bulletin's sheet, and no list");
       await sleep(450);
-      const st = await js(`(() => { const c = document.getElementById("chartbox").getBoundingClientRect(), l = document.getElementById("list").getBoundingClientRect(), s = document.getElementById("story").getBoundingClientRect(); return [Math.round(c.bottom - s.top), Math.round(l.bottom - c.top), c.height, l.height, c.width]; })()`);
-      assert.ok(Math.abs(st[0]) <= 1 && Math.abs(st[1]) <= 1 && st[2] > 150 && st[2] < 260 && st[3] >= 44 && st[3] < 70 && st[4] === 390, "the caption, on it the bulletin's top, on that the list's bar: " + st);
+      const [, c] = await apart("at the last step");
+      const sTop = (await place("story"))[1];
+      assert.ok(c && Math.abs(c[1] - sTop) <= 1 && c[1] - c[0] > 180 && await js(`+document.querySelector("#chart rect.win").getAttribute("height")`) >= 120, "the bulletin's sheet stands on the caption, with its level and a plot of 120 px: " + JSON.stringify([c, sTop]));
     }
   }
-  assert.equal(ptSaid[0], "Isto é a Amazônia.");
-  assert.doesNotMatch(ptSaid.join(" "), /marcad|—|Amazônia Legal|caixa-preta|[Dd]ois modelos|posto à prova|Por onde começar|Fiscalização|[Mm]ês a mês/, "the story's words in Portuguese");
-  assert.ok(ptSaid.every((x, i) => i % 2 || (x.length > 8 && x.length <= 70)), "every line is short in Portuguese too: " + Math.max(...ptSaid.filter((x, i) => !(i % 2)).map(x => x.length)));
-  assert.equal(await text("#story-next"), "Pronto");
+  assert.deepEqual(ptSaid, IDS.map(id => WORDS.pt[id]), "the story in Portuguese, word for word");
+  assert.doesNotMatch(ptSaid.join(" "), /marcad|—|Amazônia Legal|caixa-preta|[Dd]ois modelos|posto à prova|Por onde começar|placar|[Mm]ês a mês/, "the story's words in Portuguese");
+  assert.equal(await label("story-next"), "Pronto");
   await clickOn("#story-next");
-  await until(`!(${onStory}) && /m=prio&b=1/.test(location.hash)`, "the tool on a phone, after the story");
+  await until(`!(${onStory}) && /m=cells/.test(location.hash) && document.getElementById("list").hidden`, "the tool on a phone, after the story: the map on its cells, the bulletin at rest");
   await sleep(600);
   assert.deepEqual(await amazon(), whereP, "and the Amazon is where it was");
   // the tool. The header is the mark and one menu.
@@ -939,38 +1015,32 @@ try {
   assert.deepEqual(await js(`[...document.querySelectorAll("#nav button")].map(b => [b.textContent, b.getBoundingClientRect().height >= 44, b.getBoundingClientRect().right <= innerWidth])`), [["História", true, true], ["Sobre", true, true], ["API", true, true], ["EN", true, true]], "the menu holds the story, About, the API and the language");
   await clickOn("#lang-btn");
   await until(`document.documentElement.lang === "en" && !("menu" in document.documentElement.dataset)`, "English, and the menu closed");
-  // the two sheets: the list a bar standing on the bulletin's top; nothing wider than the screen; what is tapped is 44 px
+  // the bulletin at rest: the level, the headline in two lines at most, and a plot of 120 px or more, under the Amazon
   await fits("the tool");
-  const sheets = () => js(`["list", "chartbox"].map(id => { const r = document.getElementById(id).getBoundingClientRect(); return [Math.round(r.top), Math.round(r.bottom)]; })`);
-  let [ls, cs] = await sheets();
-  assert.ok(cs[1] === 844 && cs[1] - cs[0] > 150 && cs[1] - cs[0] < 260 && ls[1] === cs[0] && ls[1] - ls[0] < 70, "the bulletin shows its top at the bottom of the screen, and the list is a bar on it: " + JSON.stringify([ls, cs]));
-  assert.equal(await js(`[...document.querySelectorAll("#modes button, #hazard button, #menu-btn, #list-close, #list-grab, #sheet-grab")].filter(e => e.offsetParent).every(e => e.getBoundingClientRect().height >= 40 || e.id === "sheet-grab")`), true, "what is tapped is tall enough");
-  // the list's bar: a tap opens it over the lower half, a pull up makes it whole, a pull down a bar again, the X closes it onto the cells
-  const pull = async (sel, dy) => { const [x, y] = await js(`(() => { const r = document.querySelector("${sel}").getBoundingClientRect(); return [r.x + r.width / 2, r.y + r.height / 2]; })()`); await send("Input.dispatchMouseEvent", { type: "mousePressed", x, y, button: "left", clickCount: 1 }); for (let k = 1; k <= 6; k++) await send("Input.dispatchMouseEvent", { type: "mouseMoved", x, y: y + dy * k / 6, button: "left" }); await send("Input.dispatchMouseEvent", { type: "mouseReleased", x, y: y + dy, button: "left", clickCount: 1 }); await sleep(500); };
-  await clickOn("#list-grab");
-  await until(`document.getElementById("list").dataset.at === "half"`, "the list opened by a tap on its bar");
-  await sleep(450);
-  [ls] = await sheets();
-  assert.ok(ls[0] > 0.4 * 844 && ls[0] < 0.7 * 844 && ls[1] === 844, "over the lower half: " + ls);
-  await pull("#list-grab", -300);
-  await until(`document.getElementById("list").dataset.at === "full"`, "the list pulled up");
-  await sleep(450);
-  [ls] = await sheets();
-  assert.ok(ls[0] < 60 && ls[1] === 844, "whole, under the header: " + ls);
-  await pull("#list-grab", 300);
-  await until(`document.getElementById("list").dataset.at === "half"`, "pushed back to the half");
-  await pull("#list-grab", 300);
-  await until(`document.getElementById("list").dataset.at === "bar"`, "and to a bar");
-  await clickOn("#list-close");
-  await until(`document.getElementById("list").hidden && /m=cells/.test(location.hash)`, "the list closed by its X, the map on its cells");
+  let [ls, cs] = await apart("at rest");
+  const plot = () => js(`+document.querySelector("#chart rect.win").getAttribute("height")`);
+  const rest = await js(`(() => { const s = document.getElementById("say"), st = getComputedStyle(s); return { shown: ["level", "say", "chart"].every(id => !!document.getElementById(id).offsetParent), lines: Math.round(s.getBoundingClientRect().height / parseFloat(st.lineHeight)), base: Math.round(document.querySelector("canvas.base").getBoundingClientRect().bottom) }; })()`);
+  assert.ok(ls === null && cs[1] === 844 && rest.shown && rest.lines <= 2 && await plot() >= 120 && cs[0] >= rest.base, `the bulletin rests at the bottom showing its level, its headline and a plot of 120 px or more, clear of the Amazon: ${JSON.stringify([cs, rest, await plot()])}`);
+  // a phone's type: a headline about 20 px, text 15 to 16, labels 12 to 13
+  const type = { say: await px("#say"), level: await px("#level span:last-child"), ticks: await px("#legend .ticks"), what: await px("#legend .what"), axis: await px("#chart .bar text") };
+  assert.ok(type.say >= 20 && type.say <= 22 && [type.level, type.ticks, type.axis].every(x => x >= 12 && x <= 13.5) && type.what >= 13 && type.what <= 14, "the phone's type scale on the resting screen: " + JSON.stringify(type));
+  assert.equal(await js(`[...document.querySelectorAll("#modes button, #hazard button, #menu-btn, #sheet-grab")].filter(e => e.offsetParent).every(e => { const r = e.getBoundingClientRect(), a = getComputedStyle(e, "::after"); return r.height >= 44 || (a.content !== "none" && r.height - parseFloat(a.top) - parseFloat(a.bottom) >= 44); })`), true, "what is tapped is 44 px tall, or has a target that is");
+  assert.equal(await js(`document.getElementById("hazard").scrollWidth <= document.getElementById("hazard").clientWidth`), true, "the four hazards fit the sheet's width");
   // the bulletin: its top is tapped or pulled up to the header, where it is whole, and pushed back
+  const pull = async (sel, dy) => { const [x, y] = await js(`(() => { const r = document.querySelector("${sel}").getBoundingClientRect(); return [r.x + r.width / 2, r.y + r.height / 2]; })()`); await send("Input.dispatchMouseEvent", { type: "mousePressed", x, y, button: "left", clickCount: 1 }); for (let k = 1; k <= 6; k++) await send("Input.dispatchMouseEvent", { type: "mouseMoved", x, y: y + dy * k / 6, button: "left" }); await send("Input.dispatchMouseEvent", { type: "mouseReleased", x, y: y + dy, button: "left", clickCount: 1 }); await sleep(500); };
   assert.ok(await paintedPx() > 1000, "the map is painted under it all");
   await pull("#sheet-grab", -400);
   await until(settled("chart"), "the bulletin pulled up");
   await sleep(450);
-  [, cs] = await sheets();
+  [, cs] = await apart("with the bulletin up");
   assert.ok(cs[0] <= 50 && cs[1] === 844, "whole, under the header: " + cs);
-  assert.equal(await js(`["scale", "ahead", "signs", "chart-front"].every(id => document.getElementById(id).offsetParent) && document.getElementById("chart-front").getBoundingClientRect().height >= 44 && document.documentElement.scrollWidth <= innerWidth`), true, "with its tabs, its window buttons, the signals and its way out");
+  assert.equal(await js(`["scale", "ahead", "signs", "sub"].every(id => document.getElementById(id).offsetParent) && (() => { const x = document.getElementById("chart-front").getBoundingClientRect(); return x.height >= 44 && x.width >= 44 && x.right <= innerWidth && !!document.elementFromPoint(x.x + x.width / 2, x.y + x.height / 2)?.closest("#chart-front"); })() && document.documentElement.scrollWidth <= innerWidth`), true, "with its tabs, its window buttons, the signals and its way out");
+  // pulled up, the plot is 240 px or more and its axes can be read
+  const axes = await js(`(() => { const t = [...document.querySelectorAll("#chart .bar text")].map(e => e.getBoundingClientRect()).sort((a, b) => a.left - b.left), rows = {}; for (const r of t) (rows[Math.round(r.top)] ||= []).push(r); const row = Object.values(rows).sort((a, b) => b.length - a.length)[0]; return { months: row.length, clash: row.some((r, i) => i && r.left < row[i - 1].right + 1), grid: document.querySelectorAll("#chart .grid text:not(.unit)").length, unit: document.querySelector("#chart .unit").textContent }; })()`);
+  assert.ok(await plot() >= 240 && await px("#chart .grid text") >= 12 && await px("#chart .bar text") >= 12 && axes.months >= 8 && !axes.clash && axes.grid >= 1 && axes.unit === "km² cleared per month", `pulled up, the plot is ${await plot()} px tall and its axes read: ${JSON.stringify(axes)}`);
+  assert.equal(await js(`document.getElementById("hazard").scrollWidth <= document.getElementById("hazard").clientWidth && (() => { const x = document.getElementById("chart-front").getBoundingClientRect(); return [...document.querySelectorAll("#hazard button")].every(b => { const r = b.getBoundingClientRect(); return r.right <= x.left || r.top >= x.bottom; }); })()`), true, "the hazards keep the whole width, clear of the way out");
+  const type2 = { say: await px("#say"), sub: await px("#sub"), signs: await px("#signs > button") };
+  assert.ok(type2.say >= 20 && type2.say <= 22 && type2.sub >= 15 && type2.sub <= 16 && type2.signs >= 13 && type2.signs <= 15, "and its type: " + JSON.stringify(type2));
   assert.deepEqual(await place("mapbox"), [0, 0, 390, 844], "the map is still the screen, under the sheet");
   await pull("#sheet-grab", 400);
   await until(settled("map"), "pushed back");
@@ -980,13 +1050,64 @@ try {
   await until(settled("map"), "and down by its X");
   await sleep(450);
   [, cs] = await sheets();
-  assert.ok(cs[1] === 844 && cs[1] - cs[0] < 260, "showing its top again: " + cs);
-  // priorities on a phone: the mode opens the list's sheet, and a row brings its place into view above it
+  assert.ok(cs[1] === 844 && cs[1] - cs[0] < 320, "showing its top again: " + cs);
+  // priorities on a phone: the mode opens the list's sheet and the bulletin waits behind a small handle under it
   await clickOn('#modes button[data-k="prio"]');
   await until(`!!document.getElementById("list").offsetParent && document.getElementById("list").dataset.at === "half" && document.querySelectorAll("#list-rows li").length > 100`, "the list's sheet, from the mode");
   await sleep(500);
+  [ls, cs] = await apart("with the list open");
+  assert.ok(ls[0] > 0.4 * 844 && ls[0] < 0.7 * 844 && ls[1] === cs[0] && cs[1] === 844 && cs[1] - cs[0] <= 40, "the list has the lower half, and the bulletin is a small handle under it: " + JSON.stringify([ls, cs]));
+  assert.equal(await js(`["hazard", "level", "say", "chart"].some(id => getComputedStyle(document.getElementById(id)).visibility === "visible" && !!document.getElementById(id).offsetParent)`), false, "nothing of the bulletin shows behind the handle");
+  assert.equal(await js(`[...document.querySelectorAll("#list-close, #list-csv, #list-grab, #list-rows li:nth-child(-n+4) button")].every(e => e.getBoundingClientRect().height >= 44)`), true, "the list's controls and rows are 44 px tall");
+  assert.deepEqual([await px("#list-rows .nm"), await px("#list-rows .tag")].map(x => Math.round(x * 2) / 2), [15.5, 12.5], "the list's type");
+  // a row brings its place into view above the sheet and says why
   await clickOn('#list-rows li:nth-child(2) button');
   await until(`/b=2/.test(location.hash) && !!document.querySelector("#list-rows .why")`, "a place chosen on a phone");
+  await apart("with a row open");
+  const whyP = await js(`(() => { const p = document.querySelector("#list-rows .why p"), r = p.getBoundingClientRect(); return [parseFloat(getComputedStyle(p).fontSize), r.left >= 0 && r.right <= innerWidth]; })()`);
+  assert.ok(whyP[0] >= 15 && whyP[0] <= 16 && whyP[1], "the reason is set at the text size, inside the screen: " + whyP);
+  // the list is pulled up to the header and pushed back; the bulletin stays behind its handle
+  await pull("#list-grab", -300);
+  await until(`document.getElementById("list").dataset.at === "full"`, "the list pulled up");
+  await sleep(450);
+  [ls, cs] = await apart("with the list whole");
+  assert.ok(ls[0] < 60 && ls[1] === cs[0], "whole, under the header, on the handle: " + JSON.stringify([ls, cs]));
+  await pull("#list-grab", 300);
+  await until(`document.getElementById("list").dataset.at === "half"`, "pushed back to the half");
+  await clickOn("#list-grab");
+  await until(`document.getElementById("list").dataset.at === "full"`, "and up again by a tap on its bar");
+  await clickOn("#list-grab");
+  await until(`document.getElementById("list").dataset.at === "half"`, "and back");
+  // the handle brings the bulletin up over everything, and its X sends it back behind the list
+  await sleep(400);
+  await clickOn("#sheet-grab");
+  await until(settled("chart"), "the bulletin, from its handle");
+  await sleep(450);
+  [ls, cs] = await apart("with the bulletin up from its handle");
+  assert.ok(ls === null && cs[0] <= 50, "the bulletin is up and the list is not shown: " + JSON.stringify([ls, cs]));
+  await clickOn("#chart-front");
+  await until(settled("map"), "the bulletin sent back");
+  await sleep(450);
+  [ls, cs] = await apart("with the bulletin back behind its handle");
+  assert.ok(ls && cs[1] - cs[0] <= 40, "the list again, on the handle: " + JSON.stringify([ls, cs]));
+  // closing the list brings the bulletin back
+  await clickOn("#list-close");
+  await until(`document.getElementById("list").hidden && /m=cells/.test(location.hash)`, "the list closed by its X, the map on its cells");
+  await sleep(500);
+  [ls, cs] = await apart("with the list closed");
+  assert.ok(ls === null && cs[1] === 844 && cs[1] - cs[0] > 200 && await plot() >= 120, "and the bulletin is back at rest, with its plot: " + JSON.stringify(cs));
+  // About on a phone: the whole screen, its text at the text size, its way out at the top
+  await clickOn("#menu-btn");
+  await until(`"menu" in document.documentElement.dataset`, "the menu again");
+  await clickOn("#about-btn");
+  await until(`document.getElementById("about").open && !!document.querySelector("#model-fig canvas")`, "About on a phone");
+  await sleep(500);
+  const ab2 = await js(`(() => { const a = document.getElementById("about").getBoundingClientRect(), x = document.getElementById("about-close").getBoundingClientRect(); return [Math.round(a.top), Math.round(a.width), Math.round(a.height), x.width >= 44 && x.height >= 44, document.getElementById("about").scrollWidth <= innerWidth, [...document.querySelectorAll("#model-fig li")].every(e => { const r = e.getBoundingClientRect(); return r.left >= 0 && r.right <= innerWidth; })]; })()`);
+  assert.deepEqual(ab2, [0, 390, 844, true, true, true], "About fills the screen, nothing in it is wider, and its X is 44 px: " + ab2);
+  const type3 = { p: await px("#about-body > p"), lede: await px("#about .lede p"), label: await px("#model-fig li"), th: await px("#about .bench th") };
+  assert.ok(type3.p >= 15 && type3.p <= 16 && type3.lede >= 20 && type3.lede <= 22 && type3.label >= 12 && type3.label <= 13 && type3.th >= 12 && type3.th <= 13, "About's type on a phone: " + JSON.stringify(type3));
+  await clickOn("#about-close");
+  await until(`!document.getElementById("about").open`, "About closed");
   await send("Emulation.setDeviceMetricsOverride", DESK);
 
   assert.deepEqual(errors, [], "no script errors");
