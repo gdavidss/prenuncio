@@ -125,14 +125,15 @@
   </div>
 </section>
 
-<!-- About: what this is, the model, the benchmark. A panel beside the map. -->
+<!-- About: what this is, the model, the benchmark. It takes the stage, and the map waits in its corner. -->
 <dialog id="about">
-  <div id="about-bar"><button id="about-close" class="x"></button></div>
+  <div id="about-bar" class="pbar"><button id="about-close" class="x"></button></div>
   <div id="about-body"></div>
 </dialog>
 
+<!-- the API's instructions for agents: on the stage too -->
 <dialog id="api">
-  <button id="api-close"></button>
+  <div class="pbar"><button id="api-close" class="x"></button></div>
   <p id="api-top"><a id="api-base" href="api/v1/index.json">https://prenuncio.com/api/v1</a><button id="api-copy"></button></p>
   <pre id="api-text"></pre>
 </dialog>

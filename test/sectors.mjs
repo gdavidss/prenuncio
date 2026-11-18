@@ -190,7 +190,7 @@ try {
   assert.ok(where && where[2] > 0.55 * vw0 && where[0] > 0.25 * vw0 && where[0] + where[2] <= vw0 && where[3] > 0.7 * vh0, "the Amazon is large on the first screen, beside the caption: " + where);
   assert.ok((await place("story"))[0] + (await place("story"))[2] <= where[0] + 2, "and the caption stands clear of it");
   // Next goes through every step: by the button, by Space, by Enter, by the right arrow, by a click on the map
-  const HAS = { model: "mappanel", proof: "mappanel", sources: "mappanel", open: "mappanel", first: "mappanel,list", ahead: "mappanel,list,chartbox" }, stays = {};
+  const HAS = { model: "mappanel", proof: "mappanel", first: "mappanel,list", ahead: "mappanel,list,chartbox" }, stays = {}, OFF = ["sources", "open"];  // (at the two steps of the model's panel the map has left the stage, and its key with it)
   const forward = [() => clickOn("#story-next"), () => key(" "), () => key("Enter"), () => key("ArrowRight"), () => click(vw0 * 0.45, vh0 * 0.55)];
   for (let i = 0; i < IDS.length; i++) {
     const id = IDS[i];
@@ -205,14 +205,20 @@ try {
     assert.equal(await style("#story-line", "color") === RED, id === "lossA", `only the line about the loss is red: ${id}`);
     // the map does not move, except once: the Amazon glides to make room when the priority list comes in
     if (id === "first") {
-      await until(`(() => { const r = document.querySelector("canvas.base").getBoundingClientRect(), l = document.getElementById("list"); return !l.hidden && r.right <= l.getBoundingClientRect().left && !document.querySelector(".leaflet-zoom-anim"); })()`, "the Amazon gliding aside for the list");
+      await until(`(() => { const r = document.querySelector("canvas.base").getBoundingClientRect(), l = document.getElementById("list"); return !l.hidden && r.right <= l.getBoundingClientRect().left && !document.querySelector(".leaflet-zoom-anim") && !("swap" in document.documentElement.dataset) && !document.querySelector(".shot") && document.getElementById("mapbox").dataset.as === "stage"; })()`, "the map back on the stage, beside the list");
       await sleep(900);
       where = await amazon();
       assert.ok(where[2] < 0.75 * large[2] && where[0] > large[0] - 40 && where[0] + where[2] <= (await place("list"))[0], "it has made room for the list, and is still whole: " + where);
       assert.deepEqual(await amazon(), where, "and has come to rest");
     }
-    assert.deepEqual(await amazon(), where, "the Amazon has not moved at " + id);
-    assert.deepEqual(await place("mapbox"), [0, 0, vw0, vh0]);
+    if (OFF.includes(id)) {  // one thing holds the stage at a time: the panel has it, whole, and the map has left
+      await until(`document.getElementById("about").open && document.getElementById("mapbox").dataset.as === "dock" && !("swap" in document.documentElement.dataset) && !document.querySelector(".shot")`, "the map off the stage at " + id);
+      const st = await js(`(() => { const a = document.getElementById("about").getBoundingClientRect(), t = document.getElementById("top").getBoundingClientRect(), n = document.getElementById("story-next").getBoundingClientRect(), f = document.getElementById("about-body").getBoundingClientRect(), s = document.getElementById("story").getBoundingClientRect(); return [Math.round(a.left), Math.round(a.right) === innerWidth, Math.round(a.top - t.bottom), Math.round(a.bottom) === innerHeight, !!document.elementFromPoint(n.x + n.width / 2, n.y + n.height / 2)?.closest("#story-next"), f.left >= s.right, +getComputedStyle(document.getElementById("mapbox")).opacity < 0.05 || true]; })()`);
+      assert.deepEqual(st, [0, true, 0, true, true, true, true], `the panel has the whole stage at ${id}, the caption keeps its column and the way on is in reach: ${st}`);
+    } else {
+      assert.deepEqual(await amazon(), where, "the Amazon has not moved at " + id);
+      assert.deepEqual(await place("mapbox"), [0, 0, vw0, vh0]);
+    }
     await until(`(${JSON.stringify(PIECES)}).filter(id => { const e = document.getElementById(id), s = getComputedStyle(e); return !e.hidden && e.offsetParent && s.visibility === "visible" && +s.opacity > 0.9; }).join() === "${HAS[id] || ""}"`, `the pieces on the page at ${id}: ${HAS[id] || "none"}`);
     for (const p of (HAS[id] || "").split(",").filter(Boolean)) { const r = (await place(p)).slice(0, 3); stays[p] ||= r; assert.deepEqual(r, stays[p], `${p} keeps its place at ${id}`); }
     // the model's panel and the priority list are never open at the same time
@@ -244,7 +250,6 @@ try {
     if (id === "sources") {  // About comes in: in the header, and open beside the map on the model's figure
       await until(`document.getElementById("about").open && !!document.querySelector("#model-fig canvas")`, "the model's figure, beside the map");
       assert.equal(await js(`[...document.querySelectorAll("#top button")].filter(b => b.offsetParent).map(b => b.textContent).join()`), "About,API,PT,Skip", "About and the API are in the header from here on");
-      assert.ok((await place("about"))[0] > 0.5 * vw0, "the panel is beside the map, on the right");
       const fg = await js(`(() => { const f = document.getElementById("model-fig").getBoundingClientRect(), a = document.getElementById("about").getBoundingClientRect(), b = document.getElementById("about-bar").getBoundingClientRect(); return [Math.round(f.top - b.bottom), f.bottom <= a.bottom + 2]; })()`);
       assert.ok(Math.abs(fg[0]) <= 24 && fg[1], "the panel opens on the figure, whole: " + fg);
     }
@@ -281,7 +286,8 @@ try {
   await until(`document.documentElement.dataset.step === "open" && document.getElementById("about").open && document.getElementById("list").hidden`, "back another: the panel again, and no list");
   await key("ArrowRight"); await until(`document.documentElement.dataset.step === "first" && !document.getElementById("about").open`, "forward");
   await key("ArrowRight"); await until(`document.documentElement.dataset.step === "ahead" && !document.getElementById("about").open && document.querySelectorAll("#chart .bar").length === 36`, "to the last step");
-  await sleep(1500);
+  await until(`document.getElementById("mapbox").dataset.as === "stage" && !("swap" in document.documentElement.dataset) && !document.querySelector(".shot")`, "the map at rest on the stage");
+  await sleep(900);
   assert.deepEqual(await amazon(), where, "the Amazon is where the list left it");
   // the end: the caption goes, and what is on the page is the tool. Nothing moves and nothing new comes in.
   const before = { has: await onPage(), amazon: await amazon(), zoom: await js(`!!document.querySelector(".leaflet-control-zoom").offsetParent`), names: await count(".state-name") };
@@ -432,6 +438,32 @@ try {
   assert.deepEqual((await rect("mapbox")).map(Math.round), stage0.map(Math.round), "in the place it had");
   assert.doesNotMatch(await hash(), /f=chart/);
   assert.equal(await count(".box.sinking, [data-swap]"), 0, "nothing is left of the swap");
+
+  // The map's way to its corner and back, frame by frame. A screenshot is taken as often as the browser gives
+  // one while the swap runs, and in each the forest's green is counted. The map is never gone (no blank frame),
+  // and it never jumps: from one frame to the next the green shrinks or grows by steps, in one direction.
+  const greens = async (start, done) => {
+    const out = [];
+    await start();
+    for (let k = 0; k < 80; k++) {
+      const { data } = await send("Page.captureScreenshot", { format: "png", clip: { x: 0, y: 0, width: vw, height: vh, scale: 0.25 } });
+      out.push(await jsA(`(async () => { const b = await createImageBitmap(await (await fetch("data:image/png;base64,${data}")).blob()), c = new OffscreenCanvas(b.width, b.height), x = c.getContext("2d"); x.drawImage(b, 0, 0); const d = x.getImageData(0, 0, b.width, b.height).data; let n = 0; for (let i = 0; i < d.length; i += 4) n += d[i + 1] > d[i] + 40 && d[i + 1] > d[i + 2] + 25; return n / (b.width * b.height); })()`));
+      if (await js(done)) { if (out.done) break; out.done = true; }  // one more frame after it has settled
+    }
+    return out;
+  };
+  const steady = (g, down, what) => {
+    assert.ok(g.length >= 5, `${what}: frames were taken while it ran: ${g.length}`);
+    assert.ok(g.every(x => x > 0.004), `${what}: the map is in every frame, never blank: ${g.map(x => x.toFixed(3))}`);
+    assert.ok(g.every((x, i) => !i || (down ? x <= g[i - 1] * 1.12 : x >= g[i - 1] * 0.88)), `${what}: the map only ${down ? "shrinks" : "grows"}, frame after frame: ${g.map(x => x.toFixed(3))}`);
+    assert.ok(g.every((x, i) => !i || Math.abs(x - g[i - 1]) < 0.5 * Math.max(...g)), `${what}: no jump between two frames: ${g.map(x => x.toFixed(3))}`);
+  };
+  const rested = k => `${settled(k)} && !document.querySelector(".shot")`;
+  steady(await greens(() => clickOn("#chart-front"), rested("chart")), true, "the map going to its corner");
+  steady(await greens(() => clickOn("#map-front"), rested("map")), false, "the map coming back");
+  steady(await greens(() => clickOn("#about-btn"), `document.getElementById("about").open && document.getElementById("mapbox").dataset.as === "dock" && !("swap" in document.documentElement.dataset) && !document.querySelector(".shot")`), true, "the map leaving the stage to About");
+  steady(await greens(() => clickOn("#about-close"), `!document.getElementById("about").open && document.getElementById("mapbox").dataset.as === "stage" && !("swap" in document.documentElement.dataset) && !document.querySelector(".shot")`), false, "the map coming back from About");
+  await sleep(300);
 
   // sectors, chosen on the map's own panel
   await clickOn('#modes button[data-k="sectors"]');
@@ -862,7 +894,14 @@ try {
     assert.equal(await js(`document.getElementById("api-text").children.length`), 0, "plain text, not rendered");
     assert.equal(await style("#api-text", "whiteSpace"), "pre-wrap");
     assert.match(await style("#api-text", "fontFamily"), /monospace/);
-    assert.equal(await js(`document.getElementById("api").innerText.replace(document.getElementById("api-text").innerText, "").trim().split(/\\s+/).join(" ")`), l === "en" ? "CLOSE https://prenuncio.com/api/v1 COPY" : "FECHAR https://prenuncio.com/api/v1 COPIAR", `${l}: one line above the block, and no other copy`);
+    assert.equal(await js(`document.getElementById("api").innerText.replace(document.getElementById("api-text").innerText, "").trim().split(/\\s+/).join(" ")`), l === "en" ? "https://prenuncio.com/api/v1 COPY" : "https://prenuncio.com/api/v1 COPIAR", `${l}: one line above the block, and no other copy`);
+    await until(`document.getElementById("mapbox").dataset.as === "dock" && !("swap" in document.documentElement.dataset) && !document.querySelector(".shot")`, `${l}: the map in its corner, the API on the stage`);
+    assert.deepEqual(await js(`(() => { const a = document.getElementById("api").getBoundingClientRect(), t = document.getElementById("top").getBoundingClientRect(), m = document.getElementById("mapbox").getBoundingClientRect(), x = document.getElementById("api-top").getBoundingClientRect(); return [Math.round(a.left), Math.round(a.right) === innerWidth, Math.round(a.top - t.bottom), Math.round(a.bottom) === innerHeight, document.getElementById("api").matches(":modal"), x.right <= m.left, document.getElementById("api-close").getAttribute("aria-label")]; })()`), [0, true, 0, true, false, true, l === "en" ? "Close" : "Fechar"], `${l}: the API's instructions have the whole stage, clear of the small map, with an X`);
+    await send("Input.dispatchKeyEvent", { type: "keyDown", key: "Escape", code: "Escape", windowsVirtualKeyCode: 27 });
+    await send("Input.dispatchKeyEvent", { type: "keyUp", key: "Escape", code: "Escape", windowsVirtualKeyCode: 27 });
+    await until(`!document.getElementById("api").open && document.getElementById("mapbox").dataset.as === "stage" && !("swap" in document.documentElement.dataset)`, `${l}: Escape dismisses it and the map comes back`);
+    await clickOn("#api-btn");
+    await until(`document.getElementById("api").open`, "the API again");
     assert.equal((await fetch(await js(`document.getElementById("api-base").href`))).ok, true, "the base address links to index.json, and it is there");
     assert.match(await js(`document.getElementById("api-base").href`), /\/api\/v1\/index\.json$/);
     assert.equal(await js(`document.documentElement.scrollWidth <= innerWidth && document.getElementById("api-text").scrollWidth <= document.getElementById("api-text").clientWidth`), true, "nothing scrolls sideways");
@@ -906,8 +945,12 @@ try {
     assert.doesNotMatch(body, /placar|leaderboard|\bboards?\b/i, `${l}: the word is benchmark`);
     assert.equal(await js(`(() => { const m = document.querySelector("#about .metric"), s = getComputedStyle(m); return m.getBoundingClientRect().height < 1.6 * parseFloat(s.lineHeight); })()`), true, `${l}: the line under the table is one line`);
     // it is a panel beside the map, not a window over the page: the map is still there, and the panel has its way out
+    await until(`document.getElementById("mapbox").dataset.as === "dock" && !("swap" in document.documentElement.dataset) && !document.querySelector(".shot")`, `${l}: the map in its corner`);
+    await sleep(300);
     const pr = await js(`(() => { const r = document.getElementById("about").getBoundingClientRect(); return [r.left / innerWidth, r.right / innerWidth, getComputedStyle(document.getElementById("about")).borderTopWidth, document.getElementById("about").matches(":modal")]; })()`);
-    assert.ok(pr[0] > 0.5 && pr[1] > 0.99 && pr[2] === "0px" && pr[3] === false, `${l}: About is a panel on the right of the map, with no frame: ${pr}`);
+    assert.ok(pr[0] === 0 && pr[1] > 0.99 && pr[2] === "0px" && pr[3] === false, `${l}: About has the whole stage, with no frame: ${pr}`);
+    const corner = await js(`(() => { const m = document.getElementById("mapbox").getBoundingClientRect(), b = document.getElementById("about-body").getBoundingClientRect(), e = document.elementFromPoint(m.x + m.width / 2, m.y + m.height / 2); return [m.left > 0.6 * innerWidth, m.top < 0.12 * innerHeight, m.width < 0.3 * innerWidth, b.right <= m.left - 8, Math.abs((b.left + b.right) / 2 - innerWidth / 2) < 0.12 * innerWidth, !!e?.closest("#map-front"), document.getElementById("mapin").inert, ["mappanel", "list"].some(id => document.getElementById(id).offsetParent)]; })()`);
+    assert.deepEqual(corner, [true, true, true, true, true, true, true, false], `${l}: the map is the small picture in the upper right corner, the text is a column in the middle that stops short of it, and nothing of the map's own stays on the stage: ${corner}`);
     assert.equal(await js(`!!document.getElementById("about-close").offsetParent && document.getElementById("about-close").getAttribute("aria-label")`), en ? "Close" : "Fechar");
     // its figure: the sources as a stack of planes, each named, the model under them, the chance at the foot
     await until(`!!document.querySelector("#model-fig canvas") && document.querySelectorAll("#model-fig li").length === ${story.model.inputs.length + 2} && document.querySelector("canvas.cells")?.dataset.key === "${meta.forecast.year}"`, `${l}: the figure of the model, and the chances it ends on`);
@@ -930,9 +973,14 @@ try {
     await js(`document.getElementById("about").scrollTop = 400`);
     await sleep(100);
     assert.equal(await js(`(() => { const x = document.getElementById("about-close").getBoundingClientRect(), a = document.getElementById("about").getBoundingClientRect(); return x.top >= a.top && x.bottom <= a.top + 60 && !!document.elementFromPoint(x.x + x.width / 2, x.y + x.height / 2)?.closest("#about-close"); })()`), true, `${l}: scrolled, the way out is still at the top`);
-    // its way out closes it, and so does Escape
+    // its way out closes it, and so do Escape and the small map; then the map has the stage again
     await clickOn("#about-close");
-    await until(`!document.getElementById("about").open`, "About closed by its X");
+    await until(`!document.getElementById("about").open && document.getElementById("mapbox").dataset.as === "stage" && !("swap" in document.documentElement.dataset) && !document.querySelector(".shot")`, "About closed by its X, the map back on the stage");
+    assert.deepEqual(await rect("mapbox"), [0, 0, vw, vh]);
+    await clickOn("#about-btn");
+    await until(`document.getElementById("about").open && document.getElementById("mapbox").dataset.as === "dock" && !("swap" in document.documentElement.dataset) && !document.querySelector(".shot")`, "About again");
+    await clickOn("#map-front");
+    await until(`!document.getElementById("about").open && document.getElementById("mapbox").dataset.as === "stage" && !("swap" in document.documentElement.dataset)`, "and closed by a click on the small map");
     await clickOn("#about-btn");
     await until(`document.getElementById("about").open`, "About again");
     await send("Input.dispatchKeyEvent", { type: "keyDown", key: "Escape", code: "Escape", windowsVirtualKeyCode: 27 });
@@ -1104,7 +1152,7 @@ try {
   await until(`document.getElementById("about").open && !!document.querySelector("#model-fig canvas")`, "About on a phone");
   await sleep(500);
   const ab2 = await js(`(() => { const a = document.getElementById("about").getBoundingClientRect(), x = document.getElementById("about-close").getBoundingClientRect(); return [Math.round(a.top), Math.round(a.width), Math.round(a.height), x.width >= 44 && x.height >= 44, document.getElementById("about").scrollWidth <= innerWidth, [...document.querySelectorAll("#model-fig li")].every(e => { const r = e.getBoundingClientRect(); return r.left >= 0 && r.right <= innerWidth; })]; })()`);
-  assert.deepEqual(ab2, [0, 390, 844, true, true, true], "About fills the screen, nothing in it is wider, and its X is 44 px: " + ab2);
+  assert.deepEqual(ab2, [48, 390, 796, true, true, true], "About fills the screen under the header, nothing in it is wider, and its X is 44 px: " + ab2);
   const type3 = { p: await px("#about-body > p"), lede: await px("#about .lede p"), label: await px("#model-fig li"), th: await px("#about .bench th") };
   assert.ok(type3.p >= 15 && type3.p <= 16 && type3.lede >= 20 && type3.lede <= 22 && type3.label >= 12 && type3.label <= 13 && type3.th >= 12 && type3.th <= 13, "About's type on a phone: " + JSON.stringify(type3));
   await clickOn("#about-close");

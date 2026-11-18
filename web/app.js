@@ -441,7 +441,11 @@ const BOX = { map: $("mapbox"), chart: $("chartbox") };
 let front = H.get("f") === "chart" ? "chart" : "map", swapping = false;
 const docked = k => BOX[k].dataset.as === "dock";
 const mapSmall = () => docked("map") && !narrow();  // (on a phone the map stays the page, under the timeline's sheet)
-const place = () => { for (const k in BOX) BOX[k].dataset.as = k === front ? "stage" : "dock"; root.dataset.front = front; };
+// The page has one stage, and one thing holds it at a time. The map is its default occupant; the timeline can
+// take it, and so can a panel (About, or the API's instructions). Whenever something else has the stage the map
+// is the small picture in the upper right corner, and it comes back when that thing is dismissed.
+let panel = null;
+const place = () => { BOX.chart.dataset.as = front === "chart" ? "stage" : "dock"; if (!swapping) BOX.map.dataset.as = front === "map" && !panel ? "stage" : "dock"; root.dataset.front = panel || front; };
 place();
 // ---------- a phone's sheets and menu. One sheet shows at a time. The bulletin is a sheet that shows its top
 // and can be pulled up to the header (the same thing as coming to the stage) and pushed back. When the ranked
@@ -1284,51 +1288,122 @@ const dockOf = box => { box.dataset.as = "dock"; const r = [rectOf(box), rectOf(
 const dockView = size => (pristine ? fitView(size, { paddingTopLeft: [6, 6], paddingBottomRight: [6, 6] })
   : { c: map.getCenter(), z: Math.max(map.getMinZoom(), map.getZoom() + Math.log2(Math.min(size.x / map.getSize().x, size.y / map.getSize().y))) });
 const corner = (big, small) => ({ big: [big.x, big.y], small: [small.x, small.y] });  // contents that scale from the box's own corner
+// The map as it is drawn at this moment, in one bitmap: its canvases, in the order of their panes. (Satellite
+// tiles, which only show close up, are another site's pictures and cannot be copied: the ground stands in.)
+function mapShot() {
+  const r = rectOf($("map")), k = Math.min(2, devicePixelRatio || 1), cv = document.createElement("canvas"), cx = cv.getContext("2d");
+  cv.width = Math.max(1, Math.round(r.width * k)); cv.height = Math.max(1, Math.round(r.height * k));
+  cv.style.cssText = `display:block;width:${r.width}px;height:${r.height}px`;
+  cx.fillStyle = GROUND; cx.fillRect(0, 0, cv.width, cv.height);
+  const z = c => +getComputedStyle(c.closest(".leaflet-pane")).zIndex || 0;
+  for (const c of [...$("map").querySelectorAll(".leaflet-pane canvas")].sort((a, b) => z(a) - z(b))) {
+    const q = rectOf(c), o = +getComputedStyle(c).opacity;
+    if (!q.width || !q.height || !c.width || !c.height || !o) continue;
+    cx.globalAlpha = o;
+    cx.drawImage(c, (q.x - r.x) * k, (q.y - r.y) * k, q.width * k, q.height * k);
+  }
+  return cv;
+}
+// The map leaves the stage for its dock, or comes back. What moves is never the map itself but a picture of it:
+// the map is laid out and painted in its new place at once, under the picture, and shown only when the picture
+// has arrived and fades from over it. So nothing is cleared, resized or repainted in sight, in either direction.
+async function mapMove(dock, ms) {
+  const box = BOX.map, G = L.latLngBounds(AMAZON).getCenter(), frame = () => new Promise(r => requestAnimationFrame(r));
+  const at = () => { const r = rectOf($("map")), p = map.latLngToContainerPoint(G); return [r.x + p.x, r.y + p.y]; };  // where the middle of the Amazon is on the page
+  const boxed = (cv, r) => { const w = document.createElement("div"), i = document.createElement("div"); w.className = "box shot"; i.className = "in"; w.style.cssText = `left:${r.x}px;top:${r.y}px;width:${r.width}px;height:${r.height}px`; i.append(cv); w.append(i); $("app").append(w); return w; };
+  let big, small, ref, s, shot, first = null;
+  if (dock) {
+    big = rectOf(box);
+    const g0 = at(), z0 = map.getZoom(), [sm, pane] = dockOf(box), size = L.point(pane.width, pane.height), v = dockView(size);
+    if (!pristine) stageView = { c: map.getCenter(), z: z0 };
+    if (ms) shot = boxed(mapShot(), big);
+    box.dataset.as = "dock";
+    map.invalidateSize({ pan: false }); view(v);
+    const p = map.project(G, v.z).subtract(map.project(v.c, v.z));
+    small = sm; ref = { big: g0, small: [pane.x + size.x / 2 + p.x, pane.y + size.y / 2 + p.y] }; s = 2 ** (v.z - z0);
+  } else {
+    small = rectOf(box);
+    const g1 = at(), z1 = map.getZoom();
+    if (ms && +getComputedStyle(box).opacity > 0) first = boxed(mapShot(), small);  // the small picture stays in sight while the map is laid out large
+    if (ms) box.style.visibility = "hidden";
+    box.dataset.as = "stage";
+    map.invalidateSize({ pan: false });
+    stageView ? view(stageView) : whole();
+    stageView = null;
+    big = rectOf(box); ref = { big: at(), small: g1 }; s = 2 ** (z1 - map.getZoom());
+    if (ms) { await frame(); await frame(); shot = boxed(mapShot(), big); }  // (the lines are drawn on the next frame)
+  }
+  if (!ms) return;
+  const anims = morph(shot, big, small, ref, s, dock, ms);
+  if (first) first.remove();
+  await Promise.all(anims.map(a => a.finished));
+  box.style.visibility = "";
+  await frame();
+  await shot.animate({ opacity: [1, 0] }, { duration: 180, easing: "linear" }).finished.catch(() => {});
+  shot.remove();
+}
+// The swap of the map and the timeline. The timeline that grows takes its place on the stage at once and is
+// drawn out from the dock; the one that shrinks is drawn down to its dock and only then laid out there. The map
+// moves as a picture of itself (mapMove).
 async function swap(to = front === "map" ? "chart" : "map") {
   if (swapping || to === front) return;
   if (narrow()) { front = to; place(); sheetAt(); refresh(); return; }  // a phone: the timeline's sheet goes up or down over the map, which stays where it is
   swapping = true;
   map.closeTooltip(cellTip); map.eachLayer(l => l.closeTooltip?.());  // no label rides the map into its dock
-  const up = BOX[to], down = BOX[front], ms = calm() ? 0 : narrow() ? 440 : 600, G = L.latLngBounds(AMAZON).getCenter();
-  const at = () => { const r = rectOf($("map")), p = map.latLngToContainerPoint(G); return [r.x + p.x, r.y + p.y]; };  // where the middle of the Amazon is on the page
-  const was = { box: rectOf(up), g: at(), z: map.getZoom() };
-  let anims = [], docks = null;
+  const cb = BOX.chart, ms = calm() ? 0 : 600;
+  let anims = [], moved;
   root.dataset.swap = front = to;
-  up.dataset.as = "stage";
-  down.classList.add("sinking");
-  if (to === "map") {
-    // the map is laid out on the stage, given back the view it had there, and drawn out from the dock
-    map.invalidateSize({ pan: false });
-    stageView ? view(stageView) : whole();
-    stageView = null;
-    if (ms) {
-      const [small] = dockOf(down), bigUp = rectOf(up), bigDown = rectOf(down);
-      anims = [...morph(up, bigUp, was.box, { big: at(), small: was.g }, 2 ** (was.z - map.getZoom()), false, ms), ...morph(down, bigDown, small, corner(bigDown, small), small.width / bigDown.width, true, ms)];
-    }
-  } else {
-    // the timeline is laid out on the stage and drawn out from the dock; the map is drawn down to the view it will have there
+  if (to === "chart") {
+    const was = rectOf(cb);
+    cb.dataset.as = "stage";
     chart();
-    const [small, pane] = dockOf(down), size = L.point(pane.width, pane.height), v = dockView(size), p = map.project(G, v.z).subtract(map.project(v.c, v.z));
-    docks = v;
-    if (!pristine) stageView = { c: map.getCenter(), z: map.getZoom() };
-    if (ms) {
-      const bigUp = rectOf(up), bigDown = rectOf(down);
-      anims = [...morph(up, bigUp, was.box, corner(bigUp, was.box), was.box.width / bigUp.width, false, ms), ...morph(down, bigDown, small, { big: at(), small: [pane.x + size.x / 2 + p.x, pane.y + size.y / 2 + p.y] }, 2 ** (v.z - map.getZoom()), true, ms)];
-    }
+    moved = mapMove(true, ms);
+    const big = rectOf(cb);
+    if (ms) anims = morph(cb, big, was, corner(big, was), was.width / big.width, false, ms);
+  } else {
+    const big = rectOf(cb), [small] = dockOf(cb);
+    cb.classList.add("sinking");
+    moved = mapMove(false, ms);
+    if (ms) anims = morph(cb, big, small, corner(big, small), small.width / big.width, true, ms);
   }
-  await Promise.all(anims.map(a => a.finished));
-  // the one that shrank takes its place in the dock, and the map is told its size once
-  down.dataset.as = "dock";
-  down.classList.remove("sinking");
+  await Promise.all([moved, ...anims.map(a => a.finished)]);
+  cb.dataset.as = to === "chart" ? "stage" : "dock";
+  cb.classList.remove("sinking");
   for (const a of anims) a.cancel();
-  root.dataset.front = to;
-  if (docks) { map.invalidateSize({ pan: false }); view(docks); }
+  root.dataset.front = panel || to;
   delete root.dataset.swap;
   swapping = false;
   refresh();
 }
+// the map alone leaves the stage or comes back, for when what takes the stage is a panel
+async function mapTo(dock) {
+  swapping = true;
+  map.closeTooltip(cellTip); map.eachLayer(l => l.closeTooltip?.());
+  root.dataset.swap = "map";
+  await mapMove(dock, calm() ? 0 : 600);
+  delete root.dataset.swap;
+  swapping = false;
+}
+// make the map's place agree with what holds the stage (a step of the story may change its mind while the map is on its way)
+let syncing = false;
+async function stageSync() {
+  root.dataset.front = panel || front;
+  if (syncing) return;
+  syncing = true;
+  while (!narrow() && !swapping && docked("map") !== (front !== "map" || !!panel)) await mapTo(!docked("map"));
+  syncing = false;
+  refresh();
+}
+// a panel takes the stage, and gives it back when it is closed
+function stageOn(id) {
+  for (const o of ["about", "api"]) if (o !== id && $(o).open) $(o).close();
+  if (!$(id).open) $(id).show();
+  panel = id;
+  stageSync();
+}
+for (const id of ["about", "api"]) $(id).addEventListener("close", () => { if (panel === id) { panel = null; stageSync(); } });
 $("chart-front").onclick = e => { e.stopPropagation(); swap(); };
-$("map-front").onclick = () => swap("map");
+$("map-front").onclick = () => (panel ? $(panel).close() : swap("map"));  // the small map is the way back to the map, whatever has the stage
 // docked, the timeline comes forward at a click anywhere on it, except on the controls it keeps there: the
 // hazards, the year stepper and the way out of a sector. (The path is the one the click took: by now a control
 // may have redrawn itself, and its old button is no longer in the page.)
@@ -1369,12 +1444,11 @@ function chrome() {
   prev.setAttribute("aria-label", L_.prevYear); next.setAttribute("aria-label", L_.nextYear);
   // each box says how it comes forward; the timeline on the stage says how to send it back
   for (const [id, label] of [["chart-front", front === "chart" ? L_.close : L_.front.chart], ["map-front", L_.front.map]]) { $(id).setAttribute("aria-label", label); $(id).title = label; }
-  for (const [id, label] of [["list-close", L_.closeList], ["about-close", L_.close], ["menu-btn", L_.menu]]) { $(id).setAttribute("aria-label", label); $(id).title = label; }
+  for (const [id, label] of [["list-close", L_.closeList], ["about-close", L_.close], ["api-close", L_.close], ["menu-btn", L_.menu]]) { $(id).setAttribute("aria-label", label); $(id).title = label; }
   $("list-title").textContent = S.mode === "sectors" ? L_.ranking : L_.modes.prio;
   $("story-btn").textContent = L_.story;
   $("skip-btn").textContent = L_.skip;
   $("about-btn").textContent = L_.about;
-  $("api-close").textContent = L_.close;
   $("api-copy").textContent = L_.copy;
   $("lang-btn").textContent = lang === "pt" ? "EN" : "PT";
   $("lang-btn").setAttribute("aria-label", lang === "pt" ? "English" : "Português");
@@ -1496,8 +1570,9 @@ $("step").onclick = e => {
 };
 function pick(y) { if (y !== FY) leavePrio(); S.year = y; refresh(); }
 document.addEventListener("keydown", e => {
-  if ($("api").open || storyOn) return;
-  if (e.key === "Escape" && $("about").open) return $("about").close();
+  if (storyOn) return;
+  if (e.key === "Escape" && panel) return $(panel).close();
+  if (panel) return;
   if (e.key === "Escape" && root.dataset.menu != null) return menu(false);
   if (e.key === "Escape" && S.sel != null) return select(null);
   if (e.key === "Escape" && front === "chart") return swap("map");
@@ -1527,7 +1602,7 @@ function about(at) {
     year: ST.forecast.year, name: MODEL, span: +ST.forecast.made_on.slice(0, 4) - ST.history.years[0], m: ST.forest.cell_m, y: ST.check.year, hit, of,
     bench: bench(), b0: ST.benchmark.years[0], b1: ST.benchmark.years.at(-1), links: ST.links, submit: t().bench.submit, repo: t().bench.repo,
   });
-  if (!$("about").open) $("about").show();  // beside the map, not over it: the page stays in use
+  stageOn("about");  // it takes the stage, and the map waits in its corner
   if (storyOn) $("story-next").focus({ preventScroll: true });  // (opening takes the focus to the panel's X; in the story it belongs to the way on, so Enter and Space go on)
   figure();
   $("about").scrollTop = at && $(at) ? $(at).offsetTop - $("about-bar").offsetHeight : 0;  // that part, right under the bar
@@ -1538,7 +1613,7 @@ $("about-close").onclick = () => $("about").close();
 // the API panel: the instructions for agents, shown as the file has them (api/v1/llms.txt), fetched when opened
 let apiText = null;
 $("api-btn").onclick = async () => {
-  $("api").showModal();
+  stageOn("api");
   apiText ??= await fetch("api/v1/llms.txt").then(r => (r.ok ? r.text() : null)).catch(() => null);
   $("api-text").textContent = apiText ?? "";
   $("api-text").scrollTop = 0;
@@ -1552,7 +1627,6 @@ $("api-copy").onclick = async () => {
   setTimeout(() => ($("api-copy").textContent = t().copy), 1600);
 };
 $("api-close").onclick = () => $("api").close();
-$("api").onclick = e => { if (e.target === $("api")) $("api").close(); };
 
 // shareable state: #y=2023&k=scar12&t=months&m=cells&f=chart&s=ti&r=<sector id>&v=lat,lng,zoom&l=pt
 // (t is the timeline's scale, m the map's mode, f=chart when the timeline is on the stage. k is the forecast
@@ -1682,8 +1756,8 @@ function figure() {
     fetch("data/tenure.png").then(r => r.blob()).then(b => createImageBitmap(b, { colorSpaceConversion: "none", premultiplyAlpha: "none" })).then(bmp => { const c = new OffscreenCanvas(320, 249), cx = c.getContext("2d", { willReadFrequently: true }); cx.imageSmoothingEnabled = false; cx.drawImage(bmp, 0, 0, 320, 249); const d = cx.getImageData(0, 0, 320, 249).data; FIG.tenure = Uint8Array.from({ length: 320 * 249 }, (_, i) => d[4 * i]); if ($("about").open) figure(); }).catch(() => {});
   }
   const W = el.clientWidth, slim = W < 440, src = ST.model.inputs.map(x => x[lang] || x.en).map(x => { const q = x.match(/^(.*?)\s*\(([^)]*)\)$/); return q ? [q[1], q[2]] : [x, ""]; });  // the layer, and who makes it
-  const n = src.length, S = slim ? W * 0.47 : Math.min(W * 0.42, 236), asp = (M.cols * M.cell) / (M.rows * M.cell) * Math.cos(6.4 * Math.PI / 180);  // the grid's shape on the ground
-  const E = [0.8 * S, 0.24 * S], So = [-0.5 * S / asp, 0.36 * S / asp], gap = slim ? 31 : 37, ph = E[1] + So[1], x0 = (slim ? 2 : 6) - So[0], y0 = 10;
+  const n = src.length, S = slim ? W * 0.47 : Math.min(W * 0.42, Math.max(200, (innerHeight - lengthOf("--top") - 160) / 2.3)), asp = (M.cols * M.cell) / (M.rows * M.cell) * Math.cos(6.4 * Math.PI / 180);  // the grid's shape on the ground
+  const E = [0.8 * S, 0.24 * S], So = [-0.5 * S / asp, 0.36 * S / asp], gap = slim ? 31 : Math.round(S * 0.157), ph = E[1] + So[1], x0 = (slim ? 2 : 6) - So[0], y0 = 10;
   const yM = y0 + (n - 1) * gap + ph + (slim ? 34 : 42), yO = yM + (slim ? 30 : 38), H = Math.ceil(yO + ph + 12), mid = [x0 + (E[0] + So[0]) / 2, 0];
   const at = (i, u, v) => [x0 + u * E[0] + v * So[0], (i < n ? y0 + i * gap : yO) + u * E[1] + v * So[1]];  // a point of plane i: u east, v south
   // the outline, on a plane

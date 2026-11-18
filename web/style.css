@@ -77,14 +77,15 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 .x:hover { background: var(--ink); color: var(--ground); }
 
 /* ---------- the page: the map under everything, and the two boxes that swap ---------- */
-#app { position: fixed; inset: 0; }
+#app { position: absolute; inset: 0; }  /* (not fixed: its boxes take their place among the panels, by their own z-index) */
 .box { position: absolute; overflow: hidden; background: var(--ground); transform-origin: 0 0; transition: opacity 0.5s, visibility 0s; }
 .box > .in { position: relative; width: 100%; height: 100%; transform-origin: 0 0; }
 #mapbox[data-as="stage"] { inset: 0; z-index: 0; }
-#mapbox[data-as="dock"] { right: var(--pad); top: calc(var(--top) + 10px); width: var(--mdock-w); height: var(--mdock-h); z-index: 30; }
+#mapbox[data-as="dock"] { right: var(--pad); top: calc(var(--top) + 10px); width: var(--mdock-w); height: var(--mdock-h); z-index: 39; }
 #chartbox[data-as="dock"] { left: calc(var(--pad) - var(--in)); bottom: calc(var(--pad) - var(--in)); width: calc(var(--rail) + 2 * var(--in)); height: calc(var(--dock-h) + var(--in)); z-index: 10; background: var(--soft); box-shadow: var(--fade); }
 #chartbox[data-as="stage"] { left: 0; right: 0; top: var(--top); bottom: 0; z-index: 20; }
-.box.sinking { z-index: 35; }
+.box.sinking { z-index: 41; }
+.box.shot { z-index: 39; pointer-events: none; }  /* the picture of the map that travels between the stage and the dock */
 :root[data-swap] #app { pointer-events: none; }
 /* the corner of a dock says it can come forward; on the stage the timeline has a way out, like any panel */
 .front { display: grid; place-items: center; width: 30px; height: 30px; flex: none; color: var(--ink); }
@@ -117,7 +118,7 @@ canvas.cells { position: absolute; left: 0; top: 0; transition: opacity 0.25s; }
 #map-front svg { display: none; }  /* the timeline's own way out is right beside it */
 #map-front:hover { background: none; }
 #mapbox[data-as="dock"] #map-front { display: grid; }
-#mapbox[data-as="dock"] :is(.leaflet-control-zoom, .state-name), :root[data-front="chart"] :is(#mappanel, #list, #credit), :root[data-swap] :is(#mappanel, #list, .leaflet-control-zoom) { display: none; }
+#mapbox[data-as="dock"] :is(.leaflet-control-zoom, .state-name), :root:not([data-front="map"]) :is(#mappanel, #list, #credit), :root[data-swap] :is(#mappanel, #list, .leaflet-control-zoom) { display: none; }
 
 /* what the map shows and how to read it, set on the page at the top of the left column: the mode, the kinds
    of sector, the key to the colours (its steps are the filter) and the count of cells */
@@ -369,12 +370,23 @@ canvas.cells { position: absolute; left: 0; top: 0; transition: opacity 0.25s; }
 :root[data-story]:not([data-has~="legend"]) :is(#mappanel, .leaflet-control-zoom), :root[data-story]:not([data-has~="chart"]) #chartbox { opacity: 0; visibility: hidden; }
 :root[data-story]:not([data-has~="list"]) .state-name { display: none; }
 
-/* ---------- About: a panel beside the map. What this is, the model's figure, the benchmark as a bare table
-   with the way in as a button. Its way out stays at the top while the text passes under it. ---------- */
-#about { position: fixed; z-index: 38; inset: var(--top) 0 0 auto; width: min(600px, 100vw); height: calc(100dvh - var(--top)); max-height: none; margin: 0; padding: 0 var(--pad) 40px 34px; overflow-y: auto; overscroll-behavior: contain; border: 0; background: var(--ground); color: var(--ink); box-shadow: -24px 0 60px rgba(16, 32, 26, 0.1); }
-#about[open] { animation: slide-in 0.35s cubic-bezier(0.2, 0.7, 0.2, 1) both; }
-@keyframes slide-in { from { transform: translateX(40px); opacity: 0; } }
-#about-bar { position: sticky; top: 0; z-index: 1; display: flex; justify-content: flex-end; margin: 0 calc(-1 * var(--pad)) 0 -34px; padding: 8px calc(var(--pad) - 10px) 4px 0; background: var(--ground); }
+/* ---------- what takes the stage in the map's place: About (what this is, the model's figure, the benchmark)
+   and the API's instructions. Each fills the page under the header, its content a column in the middle; the map
+   is the small picture in the upper right corner, and the column stops short of it. Each has its way out at the
+   top, which stays there while the text passes under it. ---------- */
+#about, #api { position: fixed; z-index: 38; inset: var(--top) 0 0 0; width: auto; max-width: none; height: auto; max-height: none; margin: 0; padding: 0 var(--apad) 40px; overflow-y: auto; overscroll-behavior: contain; border: 0; background: var(--ground); color: var(--ink); --apad: max(var(--pad), calc((100vw - 780px) / 2)); }
+#api { --apad: max(var(--pad), calc((100vw - 1000px) / 2)); }
+#about[open], #api[open] { animation: enter 0.6s cubic-bezier(0.2, 0.7, 0.2, 1) both; }
+@keyframes enter { from { opacity: 0; transform: scale(0.96); } }
+.pbar { position: sticky; top: 0; z-index: 1; display: flex; justify-content: flex-end; flex: none; padding: 8px 0 4px; background: var(--ground); }
+.pbar .x { margin-right: -10px; }
+@media (min-width: 861px) {
+  #about, #api { padding-right: max(var(--apad), calc(var(--mdock-w) + var(--pad) + 28px)); }
+  /* in the story the caption keeps the left column, the panel has the rest, and the map is gone until it is called back */
+  :root[data-story] #about { padding-left: calc(var(--pad) + var(--rail) + 48px); padding-right: var(--pad); }
+  :root[data-story] #about > * { max-width: 800px; margin-left: auto; margin-right: auto; }
+  :root[data-story] #mapbox[data-as="dock"] { opacity: 0; }
+}
 #about h3 { margin: 26px 0 6px; padding-top: 12px; border-top: 1px solid var(--ink); font: 700 17px var(--cond); letter-spacing: 0.07em; text-transform: uppercase; }
 #about p { margin: 0 0 10px; font-size: 16px; line-height: 1.42; max-width: 62ch; text-wrap: pretty; }
 #about p b { font-weight: 600; }
@@ -393,12 +405,9 @@ canvas.cells { position: absolute; left: 0; top: 0; transition: opacity 0.25s; }
 #about .go .btn { display: inline-flex; align-items: center; height: 46px; padding: 0 22px; background: var(--green); color: #fff; font: 700 17px/1 var(--cond); letter-spacing: 0.08em; text-transform: uppercase; text-decoration: none; }
 #about .go .btn:hover { background: var(--ink); }
 
-/* the API panel: the instructions for agents as the file has them, and nothing else. One line above the
-   block, the base address and a way to copy the text. The block scrolls inside the panel. */
-#api { width: min(1100px, calc(100vw - 32px)); max-height: min(88dvh, 900px); padding: 34px 42px 38px; border: 0; background: var(--ground); color: var(--ink); box-shadow: 0 30px 80px rgba(16, 32, 26, 0.18); }
-#api::backdrop { background: rgba(17, 17, 17, 0.5); }
+/* the API's instructions for agents as the file has them, and nothing else. One line above the block, the base
+   address and a way to copy the text. The block scrolls inside the panel. */
 #api[open] { display: flex; flex-direction: column; }
-#api-close { align-self: flex-end; flex: none; margin: -12px -18px 0 0; font: 600 16px var(--cond); letter-spacing: 0.07em; text-transform: uppercase; text-decoration: underline; text-underline-offset: 3px; }
 #api-top { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 20px; margin: 0 0 12px; font-size: 16px; font-weight: 600; flex: none; }
 #api-top a { color: inherit; text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 3px; overflow-wrap: anywhere; }
 #api-copy { font: 600 15px var(--cond); letter-spacing: 0.07em; text-transform: uppercase; color: var(--green); text-decoration: underline; text-underline-offset: 3px; }
@@ -417,16 +426,16 @@ canvas.cells { position: absolute; left: 0; top: 0; transition: opacity 0.25s; }
 @media (min-width: 861px) and (max-width: 1180px) { :root { --list-w: 340px; --rail: 380px; } }
 @media (prefers-reduced-motion: reduce) {
   .leaflet-image-layer, canvas.cells, .box, #mappanel, .loss, .leaflet-control-zoom, #list, #chartbox, #story { transition: none !important; }
-  #story-line.in, #list, #about[open] { animation: none; }
+  #story-line.in, #list, #about[open], #api[open] { animation: none; }
 }
 /* the model's figure, in About: a stack of planes drawn on a canvas, and their names as text beside them */
 #model-fig { position: relative; margin: 14px 0 20px; }
 #model-fig canvas { display: block; }
 #model-fig ol { margin: 0; padding: 0; list-style: none; }
-#about #model-fig li { position: absolute; margin: 0; font-size: 13.5px; line-height: 1.1; font-weight: 500; white-space: nowrap; transform: translateY(-50%); }
-#about #model-fig li small { display: block; margin-top: 2px; font-size: 11.5px; color: var(--grey); }
-#about #model-fig li.m { font: 800 19px/1 var(--cond); letter-spacing: 0.02em; }
-#about #model-fig li.o { font: 700 16px/1.1 var(--cond); letter-spacing: 0.02em; color: var(--red-text); }
+#about #model-fig li { position: absolute; margin: 0; font-size: 15px; line-height: 1.1; font-weight: 500; white-space: nowrap; transform: translateY(-50%); }
+#about #model-fig li small { display: block; margin-top: 2px; font-size: 12.5px; color: var(--grey); }
+#about #model-fig li.m { font: 800 22px/1 var(--cond); letter-spacing: 0.02em; }
+#about #model-fig li.o { font: 700 18px/1.1 var(--cond); letter-spacing: 0.02em; color: var(--red-text); }
 .seg:has(button:first-child[aria-pressed="true"]) { margin-left: 0; }  /* the first word keeps the column's edge, as type or as a chip */
 
 /* ---------- a phone. The map is the screen. Under the header a band says what it shows. At the bottom there is
@@ -572,8 +581,9 @@ canvas.cells { position: absolute; left: 0; top: 0; transition: opacity 0.25s; }
   #story-next { width: 112px; height: 52px; }
   #story-back { width: 52px; height: 52px; }
   /* About fills the screen; in the story it stands between the header and the caption, so the line, the way on and Skip stay in reach */
-  #about { inset: 0; z-index: 70; width: 100vw; height: 100dvh; padding: 0 var(--pad) 40px; box-shadow: none; }
-  #about-bar { margin: 0 calc(-1 * var(--pad)); padding: 2px 1px 2px 0; }
+  #about, #api { --apad: var(--pad); }
+  .pbar { padding: 2px 0; }
+  .pbar .x { margin-right: -15px; }
   :root[data-story] #about { inset: var(--top) 0 var(--cap) 0; height: auto; z-index: 45; }
   #about p { font-size: 15.5px; }
   #about .lede p { font-size: 21px; }
@@ -588,8 +598,6 @@ canvas.cells { position: absolute; left: 0; top: 0; transition: opacity 0.25s; }
   #about #model-fig li.o { font-size: 14.5px; }
   #about .bench :is(th, td):nth-child(n+5) { display: none; }  /* who and when give way on a narrow screen: the model's link has both */
   #about .go .btn { height: 50px; }
-  #api { width: 100vw; max-width: none; height: 100dvh; max-height: none; margin: 0; padding: 22px 18px 0; }
-  #api-close { margin: -6px 0 0; min-height: 44px; }
   #api-top a, #api-copy { min-height: 44px; display: inline-flex; align-items: center; }
   #api-text { font-size: 12px; padding-bottom: 24px; }
 }
