@@ -80,7 +80,7 @@ const ras = F => (LITE ? { cols: Math.ceil(F.cols / 2), rows: Math.ceil(F.rows /
 const MEM = { decode: 0 };  // the largest picture decoded so far, in pixels (for the test's budget)
 const t = () => T[lang];
 const loc = () => LANGS[lang][1];
-window.prenuncio = { get zoom() { return map.getZoom(); }, lite: LITE, mem: () => ({ decodeMP: MEM.decode / 1e6, canvasMP: [...document.querySelectorAll("canvas")].reduce((x, c) => x + c.width * c.height, 0) / 1e6 }), like: async (a, l) => likeArea(a, (await loadLang(l))?.like), country: c => COUNTRY[c] ?? null, pick: id => select(id), langs: Object.keys(LANGS), step: async id => classOf((await sectors(S.kind)).byId.get(String(id))) };  // (for the test)
+window.prenuncio = { get zoom() { return map.getZoom(); }, get mapped() { return veil.mapped ? veil.amt : 0; }, lite: LITE, mem: () => ({ decodeMP: MEM.decode / 1e6, canvasMP: [...document.querySelectorAll("canvas")].reduce((x, c) => x + c.width * c.height, 0) / 1e6 }), like: async (a, l) => likeArea(a, (await loadLang(l))?.like), country: c => COUNTRY[c] ?? null, pick: id => select(id), langs: Object.keys(LANGS), step: async id => classOf((await sectors(S.kind)).byId.get(String(id))) };  // (for the test)
 const fmt = (x, d = 0) => x.toLocaleString(loc(), { maximumFractionDigits: d, minimumFractionDigits: d });
 const km = x => fmt(x, x < 9.95 ? 1 : 0);
 const round = (x, n) => { const p = 10 ** (Math.floor(Math.log10(x)) - n + 1); return Math.round(x / p) * p; };
@@ -108,7 +108,7 @@ const PARTIAL = 2026;  // the year whose outcome is INPE's priority scenes only,
 // hazard's most vivid tone, so on the green map brighter is more. Clearing is red through its whole range: a dark,
 // bruised red where the chance is low, the brand's red, and a hotter one at the top. One hue, lightness rising
 // with the chance, so the order holds without colour (docs/BRAND.md has the numbers).
-const FOREST = [11, 107, 58], DARK = [20, 20, 20];  // standing forest, and clearing mapped in a replayed year
+const FOREST = [11, 107, 58], DARK = [255, 212, 0];  // standing forest, and clearing mapped in a replayed year (a yellow that reads on the reds, the green and the cream alike)
 const HAZ = {
   clear: { series: "clear", glyph: "M1 1h10v6l-4 4H1z", steps: [[106, 15, 36], [174, 12, 44], [228, 0, 43], [255, 90, 64]] },
   fire: { layer: "scar12", series: "scar", glyph: "M6 .5C8 3 10.6 5 10.6 7.7A4.6 4 0 0 1 1.4 7.7C1.4 6 2.6 5 3.4 3.6C3.9 5 4.5 5.5 5.2 5.5C5 3.7 5.3 2 6 .5z", steps: [[112, 128, 48], [176, 146, 30], [236, 170, 8], [255, 214, 46]] },
@@ -629,7 +629,7 @@ const chanceText = ch => (ch < PCUT[0] ? t().under({ c: pct(PCUT[0]) }) : pct(ch
 let grid = null;  // what the cells layer draws: { key, cell, levels }. One layer at a time (a 500 m one is 45 MB).
 // The story draws the same layer in parts. off: nothing yet. th: only the blocks whose highest chance reaches this
 // byte, which lets the red spread outward from where the chance is highest. mapped: with the clearing on top.
-const veil = { off: false, th: 0, mapped: true };
+const veil = { off: false, th: 0, mapped: true, amt: 1 };  // amt: how far the mapped clearing has come in, 0 to 1
 // A canvas the size of the view, redrawn after every move. Leaflet's renderer base keeps it placed, and scales
 // it during a zoom animation.
 const GridLayer = L.Renderer.extend({
@@ -659,11 +659,11 @@ const GridLayer = L.Renderer.extend({
     cv.dataset.key = grid.key; cv.dataset.f = lv.f; cv.dataset.cell = cell; cv.dataset.min = grid.prob ? S.min : 0;
   },
   // every forest cell by its chance. Cells under the lowest step, or under the chosen minimum, are left to the
-  // green base map; cells where clearing was mapped are dark, on top. A far block shows the step a fifth of its
+  // green base map; cells where clearing was mapped are yellow, on top. A far block shows the step a fifth of its
   // cells reach; when a minimum is chosen it is kept, fainter, if any of its cells reaches it; and it darkens
   // with the share of it that had clearing.
   _chances(lv, row, col, size, out) {
-    const min = S.min, faint = PCOL.map(c => c && ((c & 0xffffff) | (120 << 24)) >>> 0), th = veil.th, soft = 14, shown = veil.mapped;
+    const min = S.min, faint = PCOL.map(c => c && ((c & 0xffffff) | (120 << 24)) >>> 0), th = veil.th, soft = 14, shown = veil.mapped && veil.amt > 0, amt = veil.amt, MAPK = PRGB.map(c => rgba(...c.map((x, n) => x + (DARK[n] - x) * amt | 0), 1));
     const dark = (k, a) => (k ? rgba(...PRGB[k - 1].map((c, n) => c + (DARK[n] - c) * a | 0), 1) : rgba(...DARK, a));  // clearing over a step, or over the base map
     for (let y = 0, i = 0; y < size.y; y++) {
       if (row[y] < 0) { i += size.x; continue; }
@@ -674,12 +674,13 @@ const GridLayer = L.Renderer.extend({
           const v = lv.val[j];
           if (!v) continue;
           if (v < th) continue;
-          if (shown && lv.bits && (lv.bits[j >> 3] >> (j & 7)) & 1) out[i] = MAPPED;
-          else { const k = PCLS[v]; if (k && k >= min) out[i] = PCOL[k]; }
+          const k = PCLS[v], on = k && k >= min;
+          if (shown && lv.bits && (lv.bits[j >> 3] >> (j & 7)) & 1) out[i] = amt >= 1 ? MAPPED : on ? MAPK[k - 1] : rgba(...DARK, amt);
+          else if (on) out[i] = PCOL[k];
         } else if (lv.k[j]) {
           if (lv.mx[j] < th) continue;
           const k = (lv.k[j] & 15) - 1, on = k && k >= min;
-          if (shown && lv.clr && lv.clr[j]) out[i] = dark(on ? k : 0, Math.min(1, 0.1 + 1.8 * Math.sqrt(lv.clr[j] / 255)));
+          if (shown && lv.clr && lv.clr[j]) out[i] = dark(on ? k : 0, amt * Math.min(1, 0.55 + 1.8 * Math.sqrt(lv.clr[j] / 255)));
           else if (on) out[i] = th && lv.mx[j] < th + soft ? ((PCOL[k] & 0xffffff) | ((255 * (lv.mx[j] - th + 1) / soft) << 24)) >>> 0 : PCOL[k];  // the edge of the stain is soft
           else if (min && (lv.k[j] >> 4) >= min) out[i] = faint[min];
         }
@@ -1730,7 +1731,7 @@ function figure() {
   }
   const W = el.clientWidth, slim = W < 440, src = ST.model.inputs.map(x => x[lang] || x.en).map(x => { const q = x.match(/^(.*?)\s*[(（]([^)）]*)[)）]$/); return q ? [q[1], q[2]] : [x, ""]; });  // the layer, and who makes it
   const n = src.length, S = slim ? W * 0.47 : Math.min(W * 0.42, Math.max(200, (innerHeight - lengthOf("--top") - 160) / 2.3)), asp = (M.cols * M.cell) / (M.rows * M.cell) * Math.cos(6.4 * Math.PI / 180);  // the grid's shape on the ground
-  const E = [0.8 * S, 0.24 * S], So = [-0.5 * S / asp, 0.36 * S / asp], gap = slim ? 31 : Math.round(S * 0.157), ph = E[1] + So[1], x0 = (slim ? 2 : 6) - So[0], y0 = 10;
+  const E = [0.8 * S, 0.24 * S], So = [-0.5 * S / asp, 0.36 * S / asp], gap = slim ? 31 : Math.max(36, Math.round(S * 0.157)), ph = E[1] + So[1], x0 = (slim ? 2 : 6) - So[0], y0 = 10;
   const yM = y0 + (n - 1) * gap + ph + (slim ? 34 : 42), yO = yM + (slim ? 30 : 38), H = Math.ceil(yO + ph + 12), mid = [x0 + (E[0] + So[0]) / 2, 0];
   const at = (i, u, v) => [x0 + u * E[0] + v * So[0], (i < n ? y0 + i * gap : yO) + u * E[1] + v * So[1]];  // a point of plane i: u east, v south
   // the outline, on a plane
@@ -1899,15 +1900,23 @@ async function sweep(my) {  // the chances arrive: from where they are highest, 
   };
   requestAnimationFrame(tick);
 }
-async function proof(my) {  // the year that is replayed: first the chances as they were given, then what was cleared, dark, on top
+async function proof(my) {  // the year that is replayed: first the chances as they were given, then what was cleared, in yellow, coming in on top
   veil.mapped = false;
   await gridOf(CY);
   if (my !== sRun) return;
   gridLayer._update();
   await wait(1300);
   if (my !== sRun) return;
-  veil.mapped = true;
-  gridLayer._update();
+  veil.mapped = true; veil.amt = 0;
+  $("legend").dataset.mapped = "in";  // its swatch comes in with it
+  const t0 = performance.now(), ms = 1000;
+  const tick = now => {
+    if (my !== sRun) return;
+    veil.amt = Math.min(1, (now - t0) / ms);
+    gridLayer._update();
+    if (veil.amt < 1) requestAnimationFrame(tick);
+  };
+  requestAnimationFrame(tick);
 }
 async function scene(i, dir = 0) {
   const sc = SCENES[sAt = Math.max(0, Math.min(SCENES.length - 1, i))], my = ++sRun, fwd = dir > 0 && !calm(), has = sc.has || "", listed = !storyShut && /list/.test(has) && !(narrow() && /chart/.test(has));  // (a phone shows one sheet at a time: there the timeline takes the list's place)
@@ -1918,7 +1927,8 @@ async function scene(i, dir = 0) {
   S.mode = sc.prio && listed ? "prio" : "cells"; S.block = sc.prio && listed ? 1 : null;
   S.scale = sc.cells && sc.cells !== FY ? "years" : "months";
   S.year = sc.cells || FY;
-  veil.off = !sc.cells; veil.mapped = !(fwd && sc.fx === "proof"); veil.th = 0;
+  veil.off = !sc.cells; veil.mapped = !(fwd && sc.fx === "proof"); veil.th = 0; veil.amt = 1;
+  if (veil.mapped) delete $("legend").dataset.mapped; else $("legend").dataset.mapped = "wait";
   if (outline) { outline.remove(); outline = null; }
   // the replayed year is the story's own light copy; the forecast year is the tool's, kept aside meanwhile
   if (sc.cells === CY) {
@@ -1956,7 +1966,7 @@ function storyEnd() {
   try { localStorage.setItem("story", root.dataset.storyVersion); } catch (err) { /* private mode: it plays again next time */ }
   for (const k of ["story", "has", "step"]) delete root.dataset[k];
   $("story").hidden = true;
-  veil.off = false; veil.th = 0; veil.mapped = true;
+  veil.off = false; veil.th = 0; veil.mapped = true; veil.amt = 1; delete $("legend").dataset.mapped;
   lossShow(0);
   if (LOSS.worker) LOSS.worker.terminate();
   if (LOSS.sheet) { LOSS.sheet.layer.remove(); LOSS.sheet.cx.canvas.width = 0; LOSS.sheet = null; LOSS.shown = -1; }  // the picture of the loss belongs to the story: let go with it

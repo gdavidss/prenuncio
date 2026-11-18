@@ -18,7 +18,7 @@ The band of the alert level holds the bars and the level's word and nothing else
 |---|---|---|
 | Forest green | `#0b6b3a` | Standing forest on the map, and the brand: the mark and whatever is chosen. |
 | Clearing red | `#e4002b` | Clearing. On the map, the chance of clearing, in four reds built around this one. In the bulletin, the alert level and the clearing forecast. In the story, the one line that says a piece of the forest falls every year. |
-| Mapped dark | `#141414` | Clearing that was mapped in a replayed year. What happened is dark, what is likely is red, and the two are never the same tone. |
+| Mapped yellow | `#FFD400` | Clearing that was mapped in a replayed year, on the map and in its legend swatch. What happened is yellow, what is likely is red: the yellow reads on every red, on the forest green and on the cream of non-forest. From far, a block with any mapped clearing takes at least half the yellow, so single cells do not vanish. In the story it comes in over one second after the chances are up (at once under reduced motion). |
 | Ink | `#10201a` | Type, rules, measured history. |
 | Ground | `#f4f5f0` | The page. |
 | Grey, line | `#55605a` `#c7cdc5` | Secondary type, hairlines. |
@@ -39,7 +39,7 @@ Every forest cell has a chance of losing at least a hectare in the year. The map
 | 5 to 20% | `#e4002b` clearing red | 48 | 1.6% |
 | over 20% | `#ff5a40` hot red | 61 | 0.13% |
 
-The four reds are one hue family (346° to 8°) and their lightness rises with the chance, so the order of the steps does not depend on telling red from green. Through a deuteranopia transform (Viénot, Brettel and Mollon 1999) the steps become four olive yellows of lightness 25, 41, 53 and 65 against a forest of 38, still in order, and their distance from the forest is ΔE 13, 19, 40 and 48. The weak point is known and stated: the lowest step separates from the forest by darkness alone, and for a protanope the clearing red sits close to the forest (ΔE 8), as the brand's red and green always have. Clearing mapped in a replayed year stays `#141414`, darker than every step (L* 6).
+The four reds are one hue family (346° to 8°) and their lightness rises with the chance, so the order of the steps does not depend on telling red from green. Through a deuteranopia transform (Viénot, Brettel and Mollon 1999) the steps become four olive yellows of lightness 25, 41, 53 and 65 against a forest of 38, still in order, and their distance from the forest is ΔE 13, 19, 40 and 48. The weak point is known and stated: the lowest step separates from the forest by darkness alone, and for a protanope the clearing red sits close to the forest (ΔE 8), as the brand's red and green always have. Clearing mapped in a replayed year is `#FFD400`, lighter than every step (L* 86), so it separates from the reds and the forest by lightness alone.
 
 The chances are very skewed, so three quarters of the forest stays green, the dark red spreads around the frontier and the two bright reds are rare. Seen from far, a block of cells takes the highest step that a fifth of its forest cells reach, which keeps a hot spot visible without letting one cell paint a whole block. Sectors use the same four reds for their classes of expected clearing, and the lowest class stays green.
 

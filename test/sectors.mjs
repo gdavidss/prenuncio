@@ -128,7 +128,7 @@ try {
   const n0 = x => Math.round(x).toLocaleString("en-US");
   const line = async () => (await text("#story-line")).replaceAll(" ", " ");
   const onStory = `"story" in document.documentElement.dataset`, key = async k => { for (const type of ["keyDown", "keyUp"]) await send("Input.dispatchKeyEvent", { type, key: k, code: k === " " ? "Space" : k, windowsVirtualKeyCode: { Enter: 13, " ": 32, ArrowRight: 39, ArrowLeft: 37, Escape: 27 }[k], ...(type === "keyDown" && (k === "Enter" || k === " ") ? { text: k === "Enter" ? "\r" : " " } : {}) }); };  // (a key that types sends its character, as a keyboard does: that is what presses a focused button)
-  const darkPx = () => js(`(() => { const c = document.querySelector("canvas.cells"), d = c.getContext("2d").getImageData(0, 0, c.width, c.height).data; let n = 0; for (let i = 0; i < d.length; i += 4) n += d[i + 3] > 200 && d[i] < 60 && d[i + 1] < 60 && d[i + 2] < 60; return n; })()`);
+  const darkPx = () => js(`(() => { const c = document.querySelector("canvas.cells"), d = c.getContext("2d").getImageData(0, 0, c.width, c.height).data; let n = 0; for (let i = 0; i < d.length; i += 4) n += d[i + 3] > 200 && d[i] > 235 && d[i + 1] > 180 && d[i + 1] < 235 && d[i + 2] < 40; return n; })()`);  // the yellow of mapped clearing, full
   const redPx = () => js(`(() => { const c = document.querySelector("canvas.cells"), d = c.getContext("2d").getImageData(0, 0, c.width, c.height).data; let n = 0; for (let i = 0; i < d.length; i += 4) n += d[i + 3] > 0 && d[i] > 2 * d[i + 1]; return n; })()`);
   // a piece of the interface is on the page when it can be seen; where it is; and where the Amazon is drawn
   const seen = id => js(`(() => { const e = document.getElementById("${id}"), s = e && getComputedStyle(e); return !!e && !e.hidden && !!e.offsetParent && s.visibility === "visible" && +s.opacity > 0.9; })()`);
@@ -168,6 +168,13 @@ try {
     },
   };
   const WANT = WORDS.en, IDS = Object.keys(WANT), said = [];
+  // the map waits small and inert at the top right while a panel has the stage, clear of what the panel shows
+  const SMALL = async at => {
+    await until(`document.getElementById("mapbox").dataset.as === "dock" && !document.querySelector(".shot")`, `${at}: the map in its corner`);
+    await sleep(500);
+    const m = await js(`(() => { const b = document.getElementById("mapbox"), r = b.getBoundingClientRect(), s = getComputedStyle(b), k = [...document.getElementById("about-body").children].filter(e => getComputedStyle(e).display !== "none").map(e => e.getBoundingClientRect()), cv = [...b.querySelectorAll("canvas")].some(c => c.width > 0 && c.getBoundingClientRect().width > 0); return { seen: +s.opacity === 1 && s.visibility === "visible" && r.width > 120 && r.height > 80 && cv, corner: r.right > innerWidth - 60 && r.top < 140 && r.left > innerWidth * 0.6, inert: s.pointerEvents === "none" || document.getElementById("mapin").inert, clear: k.every(q => q.right <= r.left + 1 || q.top >= r.bottom - 1 || q.bottom <= r.top + 1) }; })()`);
+    assert.deepEqual(m, { seen: true, corner: true, inert: true, clear: true }, `${at}: the small map is at the top right, inert, clear of the panel`);
+  };
   // what of About is on the stage in the story, whether anything scrolls, and whether it is all inside the panel
   const ONLY = () => js(`(() => { const a = document.getElementById("about"), r = a.getBoundingClientRect(), kids = [...document.getElementById("about-body").children].filter(e => getComputedStyle(e).display !== "none"); return { shown: kids.map(e => e.tagName + (e.id ? "#" + e.id : "")), scroll: a.scrollHeight > a.clientHeight + 1 || a.scrollWidth > a.clientWidth + 1 || getComputedStyle(a).overflowY === "auto" && a.scrollHeight > a.clientHeight, inside: kids.every(e => { const q = e.getBoundingClientRect(); return q.top >= r.top - 1 && q.bottom <= r.bottom + 1 && q.left >= r.left - 1 && q.right <= r.right + 1; }) }; })()`);
   let t1 = Date.now();
@@ -252,17 +259,26 @@ try {
     }
     if (id === "proof") {  // the year that already happened, on the map; and nothing in small under the line
       await until(`document.querySelector("canvas.cells")?.dataset.key === "${story.check.year}"`, "the chances given for " + story.check.year);
-      for (let k = 0; k < 40 && await darkPx() < 300; k++) await sleep(200);
-      assert.ok(await darkPx() >= 300, "the clearing that was mapped, dark, on the chances as they were given");
+      // first the chances alone: the mapped clearing is not there yet, nor its swatch
+      assert.deepEqual([await js(`prenuncio.mapped`), await darkPx(), await style("#legend .sw", "opacity")], [0, 0, "0"], "forecast first: no mapped clearing yet");
+      assert.ok(await redPx() >= 8000, "the chances as they were given are up before it");
+      // then it comes in over about a second, in yellow, and its swatch with it in the same colour
+      await until(`prenuncio.mapped > 0 && prenuncio.mapped < 1`, "the mapped clearing on its way in");
+      await until(`prenuncio.mapped === 1`, "the mapped clearing arrived");
+      await sleep(1100);
+      assert.ok(await darkPx() >= 1500, "the clearing that was mapped, yellow, on the chances as they were given: " + await darkPx());
+      assert.deepEqual([await style("#legend .sw", "opacity"), await js(`getComputedStyle(document.querySelector("#legend .sw"), "::before").backgroundColor`)], ["1", "rgb(255, 212, 0)"], "its swatch in the same yellow");
     }
     if (id === "sources") {  // About comes in: in the header, and open beside the map on the model's figure
       await until(`document.getElementById("about").open && !!document.querySelector("#model-fig canvas")`, "the model's figure, beside the map");
       assert.equal(await js(`[...document.querySelectorAll("#top button")].filter(b => b.offsetParent).map(b => b.textContent).join()`), "About,API,EN,Skip", "About and the API are in the header from here on");
       assert.deepEqual(await ONLY(), { shown: ["DIV#model-fig"], scroll: false, inside: true }, "only the figure is on the stage, whole, and nothing scrolls");
+      await SMALL("sources");
     }
     if (id === "open") {  // the benchmark: a bare table, a model a row, and the way in as a button
       await until(`document.getElementById("about").open && (() => { const h = document.getElementById("about-benchmark").getBoundingClientRect(), t = document.querySelector("#about .bench").getBoundingClientRect(), a = document.getElementById("about").getBoundingClientRect(), b = document.getElementById("about-bar").getBoundingClientRect(); return h.top >= b.bottom - 1 && t.bottom <= a.bottom; })()`, "the benchmark, heading and table, in the panel");
       assert.deepEqual(await ONLY(), { shown: ["H3#about-benchmark", "TABLE", "P"], scroll: false, inside: true }, "the figure has left: only the benchmark and its button are on the stage, and nothing scrolls");
+      await SMALL("open");
       const rows = story.leaderboard.rows;
       const p1 = x => (100 * x).toLocaleString("en-US", { minimumFractionDigits: 1, maximumFractionDigits: 1 }) + "%";
       assert.deepEqual(await js(`[...document.querySelectorAll("#about .bench tbody tr")].map(tr => [tr.cells[0].textContent, tr.querySelector("a").textContent, tr.querySelector("a").getAttribute("href"), tr.cells[2].textContent, tr.cells[3].textContent])`), rows.map(r => [String(r.rank), r.model, r.url, p1(r.cap5), p1(r.unseen_2026)]), "a model a row: its rank, its name as a link, its score and the year kept apart, to one decimal");

@@ -19,7 +19,7 @@
   --green: #0b6b3a;
   --red: #e4002b;
   --red-text: #c70025;   /* the same red, a step darker, for small type on the ground */
-  --dark: #141414;       /* clearing mapped in a replayed year */
+  --dark: #141414;       /* the tip over the map */
   --clear: var(--red);
   --fire: #f2a900;
   --degr: #2f7fe6;
@@ -135,7 +135,8 @@ canvas.cells { position: absolute; left: 0; top: 0; transition: opacity 0.25s; }
 /* what the map shows and how to read it, set on the page at the top of the left column: the mode, the kinds
    of sector, the key to the colours (its steps are the filter) and the count of cells */
 #mappanel { position: absolute; z-index: 10; left: calc(var(--pad) - var(--in)); top: var(--top); display: flex; flex-direction: column; gap: 10px; width: fit-content; max-width: calc(var(--rail) + 2 * var(--in)); padding: 6px var(--in) 12px; background: var(--soft); animation: arrive 0.4s both; transition: opacity 0.5s, visibility 0s; }
-#mapctl { display: grid; grid-template-columns: max-content 1fr; justify-items: start; align-items: center; row-gap: 2px; }
+#mapctl { display: grid; width: min(340px, 100%); grid-template-columns: minmax(0, 1fr) auto; justify-items: start; align-items: center; row-gap: 2px; }
+#modes { width: calc(100% + 9px); justify-content: space-between; }
 #kinds { grid-column: 1 / -1; gap: 0 14px; margin-top: 4px; }
 #kinds button { font-size: 14.5px; letter-spacing: 0.05em; padding: 4px 0; border-bottom-width: 2px; }
 #rank-btn { margin-left: 16px; font: 600 15px/1 var(--cond); letter-spacing: 0.07em; text-transform: uppercase; color: var(--grey); padding: 7px 0; border-bottom: 3px solid transparent; }
@@ -411,6 +412,8 @@ canvas.cells { position: absolute; left: 0; top: 0; transition: opacity 0.25s; }
 :root[data-story] :is(#mapbox, #mappanel, #chartbox, #list-rows) { pointer-events: none; }
 :root[data-story]:not([data-has~="legend"]) :is(#mappanel, .leaflet-control-zoom), :root[data-story]:not([data-has~="chart"]) #chartbox { opacity: 0; visibility: hidden; }
 :root[data-story]:not([data-has~="list"]) .state-name { display: none; }
+#legend[data-mapped] .sw { transition: opacity 1s linear; }
+#legend[data-mapped="wait"] .sw { opacity: 0; transition: none; }
 :root[data-story] #mapctl { visibility: hidden; }  /* modes, kinds and Ranking come in when the story ends */
 
 /* ---------- what takes the stage in the map's place: About (what this is, the model's figure, the benchmark)
@@ -433,10 +436,9 @@ canvas.cells { position: absolute; left: 0; top: 0; transition: opacity 0.25s; }
 #about-body.in { animation: enter 0.6s cubic-bezier(0.2, 0.7, 0.2, 1) both; }
 @media (min-width: 861px) {
   #about, #api { padding-right: max(var(--apad), calc(var(--mdock-w) + var(--pad) + 28px)); }
-  /* in the story the caption keeps the left column, the panel has the rest, and the map is gone until it is called back */
-  :root[data-story] #about { padding-left: calc(var(--pad) + var(--rail) + 48px); padding-right: var(--pad); }
+  /* in the story the caption keeps the left column, the panel has the rest, and the map waits small in its corner */
+  :root[data-story] #about { padding-left: calc(var(--pad) + var(--rail) + 48px); padding-right: calc(var(--mdock-w) + var(--pad) + 28px); }
   :root[data-story] #about > * { width: 100%; max-width: 800px; margin-left: auto; margin-right: auto; }
-  :root[data-story] #mapbox[data-as="dock"] { opacity: 0; }
 }
 #about h3 { margin: 26px 0 6px; padding-top: 12px; border-top: 1px solid var(--ink); font: 700 17px var(--cond); letter-spacing: 0.07em; text-transform: uppercase; }
 #about p { margin: 0 0 10px; font-size: 16px; line-height: 1.42; max-width: 62ch; text-wrap: pretty; }
@@ -522,6 +524,8 @@ canvas.cells { position: absolute; left: 0; top: 0; transition: opacity 0.25s; }
   .x { width: 44px; height: 44px; }
   /* what the map shows: a band under the header, the mode and a short key */
   #mappanel { left: 0; top: var(--top); width: 100%; padding: 0 16px 10px; gap: 4px; }
+  #mapctl { width: min(300px, 100%); }
+  #modes { width: calc(100% + 10px); }
   .seg { margin-left: -10px; }
   .seg button { min-height: 44px; padding: 0 10px; font-size: 16px; }
   #rank-btn { min-height: 44px; justify-self: end; }
@@ -707,7 +711,7 @@ canvas.cells { position: absolute; left: 0; top: 0; transition: opacity 0.25s; }
   [dir="rtl"]:root[data-list="true"] .leaflet-control-zoom { margin-left: calc(var(--list-w) + 14px) !important; margin-right: 0 !important; }
   [dir="rtl"] #credit { right: auto; left: calc(var(--pad) + 46px); }
   [dir="rtl"] #about, [dir="rtl"] #api { padding-right: var(--apad); padding-left: max(var(--apad), calc(var(--mdock-w) + var(--pad) + 28px)); }
-  [dir="rtl"]:root[data-story] #about { padding-right: calc(var(--pad) + var(--rail) + 48px); padding-left: var(--pad); }
+  [dir="rtl"]:root[data-story] #about { padding-right: calc(var(--pad) + var(--rail) + 48px); padding-left: calc(var(--mdock-w) + var(--pad) + 28px); }
   [dir="rtl"] #chartbox[data-as="stage"] :is(#hazrow, #lead) { margin-right: 0; margin-left: max(0px, calc(var(--mdock-w) + var(--pad) + 28px - var(--cpad))); }
 }
 
