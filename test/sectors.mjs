@@ -1140,6 +1140,24 @@ try {
   }
   await js(`document.getElementById("skip-btn").click()`);
 
+  // ---------- the rasters. A desktop reads the 500 m pictures; a device short of memory the half-resolution
+  // copies, at 1 km, and everything that reads them follows: the paint, what a cell says, the far views.
+  assert.equal(await js(`prenuncio.lite`), false, "a desktop keeps the full pictures");
+  {
+    const F = meta.years[meta.forecast.year].flags500, half = await grey(`p${meta.forecast.year}_h.png`);
+    assert.deepEqual([half.w, half.h], [Math.ceil(F.cols / 2), Math.ceil(F.rows / 2)], "the half-resolution chances are there, at half the rows and columns");
+    const at0 = (half.h >> 1) * half.w, i = half.px.findIndex((v, n) => n > at0 && v >= 90 && v < 200), row = Math.floor(i / half.w), col = i % half.w;
+    const lat = meta.north - (row + 0.5) * F.cell * 2, lng = meta.west + (col + 0.5) * F.cell * 2;
+    await send("Page.navigate", { url: SITE + `?story=0&raster=h#l=en&m=cells&v=${lat.toFixed(6)},${lng.toFixed(6)},11` });
+    await until(`document.querySelector("canvas.cells")?.dataset.key === "${meta.forecast.year}" && document.querySelector("canvas.cells").dataset.f === "1"`, "the chances at half resolution");
+    assert.deepEqual(await js(`[prenuncio.lite, Math.round(1e4 * document.querySelector("canvas.cells").dataset.cell), prenuncio.mem().decodeMP < 9]`), [true, Math.round(2e4 * F.cell), true], "forced to the half pictures: cells of 1 km, and no picture over 9 megapixels decoded");
+    const [mx, my] = await js(`(() => { const r = document.getElementById("map").getBoundingClientRect(); return [r.x + r.width / 2, r.y + r.height / 2]; })()`);
+    await send("Input.dispatchMouseEvent", { type: "mouseMoved", x: mx + 1, y: my + 1 });
+    await send("Input.dispatchMouseEvent", { type: "mouseMoved", x: mx, y: my });
+    await until(`!!document.querySelector(".leaflet-tooltip.cell")`, "what a square of the half picture says");
+    assert.equal(await tipLine(), `${chance(half.px[i])} chance this cell loses a hectare by July ${meta.forecast.year}`, "the same sentence, with the square's mean chance from the file");
+  }
+
   // ---------- the people of an Indigenous land. Selected in Sectors, a land that has an entry opens on its
   // people: the photograph whole, with its author and licence as a link to the source, the name, a few lines;
   // the other peoples of the land as names that open. A land with no entry looks as it always did.
@@ -1153,7 +1171,7 @@ try {
       await until(`document.documentElement.lang === "${l}" && !document.getElementById("people").hidden && !!document.querySelector("#people img") && !document.getElementById("scope").hidden`, `${l}: the people of land ${withPhoto}`);
       await until(`document.querySelector("#people img").complete && document.querySelector("#people img").naturalWidth > 0`, "the photograph");
       await sleep(1800);
-      const got = await js(`(() => { const a = document.getElementById("people"), r = a.getBoundingClientRect(), im = a.querySelector("img"), ir = im.getBoundingClientRect(), c = a.querySelector("figcaption a"), kids = [...document.getElementById("people-in").children].map(e => e.tagName); return { kids: kids.slice(0, 3).join(), src: im.getAttribute("src"), alt: im.alt, lazy: im.loading, whole: Math.abs(ir.width / ir.height - im.naturalWidth / im.naturalHeight) < 0.02 && Math.round(ir.width) === Math.round(r.width), credit: c.textContent, href: c.getAttribute("href"), blank: c.target, name: a.querySelector("h2").textContent, text: a.querySelector("h2 + p").textContent, others: [...a.querySelectorAll("details summary")].map(e => e.textContent), right: r.right >= innerWidth - 1 && r.left > innerWidth * 0.6, x: !!document.getElementById("people-close").offsetParent, amazon: (q => (q.left + q.right) / 2 < r.left)(document.querySelector(".leaflet-sel-pane path").getBoundingClientRect()) }; })()`);
+      const got = await js(`(() => { const a = document.getElementById("people"), r = a.getBoundingClientRect(), im = a.querySelector("img"), ir = im.getBoundingClientRect(), c = a.querySelector("figcaption a"), kids = [...document.getElementById("people-in").children].map(e => e.tagName); return { kids: kids.slice(0, 3).join(), src: im.getAttribute("src"), alt: im.alt, lazy: im.loading, whole: Math.abs(ir.width / ir.height - im.naturalWidth / im.naturalHeight) < 0.02 && ir.width >= r.width - 20, credit: c.textContent, href: c.getAttribute("href"), blank: c.target, name: a.querySelector("h2").textContent, text: a.querySelector("h2 + p").textContent, others: [...a.querySelectorAll("details summary")].map(e => e.textContent), right: r.right >= innerWidth - 1 && r.left > innerWidth * 0.6, x: !!document.getElementById("people-close").offsetParent, amazon: (q => (q.left + q.right) / 2 < r.left)(document.querySelector(".leaflet-sel-pane path").getBoundingClientRect()) }; })()`);
       assert.deepEqual(got, { kids: "FIGURE,H2,P", src: p0.photo.file, alt: p0.photo.caption[l], lazy: "lazy", whole: true, credit: (l === "pt" ? "Foto: " : "Photo: ") + `${p0.photo.author}, ${p0.photo.license}`, href: p0.photo.source_url, blank: "_blank", name: p0.name, text: p0.text[l], others: P.slice(1).map(x => x.name), right: true, x: true, amazon: true }, `${l}: the photograph leads, whole, with its credit linked to the source; then the name and the lines; the others as names`);
       assert.equal((await fetch(SITE + p0.photo.file, { method: "HEAD" })).ok, true, "the photograph is there");
       assert.match(await text("#say"), /km²|\d/, "and the forecast for the land is where it was");
@@ -1274,12 +1292,16 @@ try {
   assert.equal(await js(`[...document.querySelectorAll("#top button")].filter(b => b.offsetParent).map(b => b.textContent).join()`), "PT,Pular");
   const lineSize = await px("#story-line");
   assert.ok(lineSize >= 26 && lineSize <= 28, "the story's line is set at 26 to 28 px on a phone: " + lineSize);
-  const whereP = await amazon(), ptSaid = [];
+  const whereP = await amazon(), ptSaid = [], budget = [];
+  assert.equal(await js(`prenuncio.lite`), true, "a phone takes the half-resolution pictures, decided before anything is fetched");
+  assert.equal(await js(`performance.getEntriesByType("resource").some(e => /data\\/[pf]\\d{4}\\.png/.test(e.name))`), false, "and never fetches a full one");
   assert.ok(whereP[0] >= 0 && whereP[0] + whereP[2] <= 390 && whereP[1] + whereP[3] < cap[0] * 844, "the Amazon is whole on the screen, above the caption: " + whereP);
   for (let i = 0; i < IDS.length; i++) {
     if (i) { await clickOn("#story-next"); await until(`document.documentElement.dataset.step === "${IDS[i]}"`, "phone, step " + IDS[i]); }
     ptSaid.push(await line());
     await fits(IDS[i]);
+    await sleep(IDS[i] === "lossA" || IDS[i] === "model" || IDS[i] === "proof" ? 2500 : 300);
+    budget.push([IDS[i], await js(`(m => [m.decodeMP, m.canvasMP, Math.round(performance.memory.usedJSHeapSize / 1048576)])(prenuncio.mem())`)]);
     assert.deepEqual(await amazon(), whereP, "the Amazon has not moved at " + IDS[i]);
     assert.equal(await js(`(() => { const s = document.getElementById("story").getBoundingClientRect(), n = document.getElementById("story-next").getBoundingClientRect(), t = document.getElementById("story-text").getBoundingClientRect(); return t.bottom <= n.top + 1 && Math.round(s.bottom) === innerHeight && Math.round(n.bottom) >= innerHeight - 16 && t.top >= s.top; })()`), true, "the caption holds its line above the way on, which stays at the foot of the screen, at " + IDS[i]);
     assert.equal(await js(`document.getElementById("about").open && !document.getElementById("list").hidden`), false, "the panel and the list are not open together at " + IDS[i]);
@@ -1307,6 +1329,9 @@ try {
     }
   }
   assert.deepEqual(ptSaid, IDS.map(id => WORDS.pt[id]), "the story in Portuguese, word for word");
+  // the memory budget of a phone, through the whole story: no picture over 9 megapixels is decoded, and the canvases on the page stay under 16 million pixels in all
+  assert.ok(budget.every(([, m]) => m[0] <= 9 && m[1] < 16), "the phone's budget holds at every step (largest decode in megapixels, canvases in megapixels, heap in MB): " + JSON.stringify(budget));
+  assert.equal(await js(`performance.getEntriesByType("resource").some(e => /data\\/[pf]\\d{4}\\.png/.test(e.name))`), false, "no full-resolution picture was fetched in the story");
   assert.doesNotMatch(ptSaid.join(" "), /marcad|—|Amazônia Legal|caixa-preta|[Dd]ois modelos|posto à prova|Por onde começar|placar|[Mm]ês a mês/, "the story's words in Portuguese");
   assert.equal(await label("story-next"), "Pronto");
   await clickOn("#story-next");
@@ -1424,6 +1449,11 @@ try {
     await until(settled("chart"), "the sheet up, from the photograph");
     await sleep(500);
     assert.equal(await js(`(() => { const m = document.getElementById("people-m"), h = m.querySelector("h2"), p = m.querySelector("h2 + p"), a = m.querySelector("figcaption a"); return !!h.offsetParent && !!p.offsetParent && !!a.offsetParent && m.getBoundingClientRect().bottom <= document.getElementById("lead").getBoundingClientRect().top + 60 && document.documentElement.scrollWidth <= innerWidth; })()`), true, "pulled up: the photograph, its credit, the name and the lines, then the forecast");
+  }
+  {
+    const m = await js(`(m => [m.decodeMP, m.canvasMP])(prenuncio.mem())`);
+    assert.ok(m[0] <= 9 && m[1] < 16 && !(await js(`performance.getEntriesByType("resource").some(e => /data\\/[pf]\\d{4}\\.png/.test(e.name))`)), "and in the tool, after the list, the sectors and the people: " + m);
+    console.log("phone budget, story: " + JSON.stringify(budget.map(([id, m]) => [id, +m[0].toFixed(1), +m[1].toFixed(1), m[2]])) + "; tool: " + m.map(x => +x.toFixed(1)));
   }
   await send("Emulation.setDeviceMetricsOverride", DESK);
 

@@ -70,9 +70,17 @@ if (!lang) {
   if (COUNTRY[country]) lang = COUNTRY[country];
 }
 await loadLang(lang);
+// ---------- which rasters. The chances and the masks of clearing are pictures of the whole grid: at 500 m they
+// are 5180 by 6664, 34 megapixels, which a phone cannot decode (about 138 MB each, and iOS reloads the page). So a
+// phone, a tablet or a machine short of memory takes the half-resolution copies (`_h`, 1 km, under 9 megapixels),
+// decided here before anything is fetched; a desktop keeps the full ones. Everything that reads them takes its
+// rows, columns and cell size from ras(). ?raster=h or ?raster=full forces one (for the test).
+const LITE = Q.get("raster") ? Q.get("raster") === "h" : /iPhone|iPad|iPod|Android/i.test(navigator.userAgent) || (navigator.maxTouchPoints > 1 && /Mac/.test(navigator.platform || "")) || navigator.deviceMemory <= 4 || (matchMedia("(pointer: coarse)").matches && Math.min(screen.width, screen.height) < 900) || Math.min(screen.width, screen.height) < 600;
+const ras = F => (LITE ? { cols: Math.ceil(F.cols / 2), rows: Math.ceil(F.rows / 2), cell: F.cell * 2, suf: "_h", far: [3, 6, 12], mult: 4 } : { cols: F.cols, rows: F.rows, cell: F.cell, suf: "", far: [2, 6, 12, 24], mult: 1 });
+const MEM = { decode: 0 };  // the largest picture decoded so far, in pixels (for the test's budget)
 const t = () => T[lang];
 const loc = () => LANGS[lang][1];
-window.prenuncio = { get zoom() { return map.getZoom(); }, like: async (a, l) => likeArea(a, (await loadLang(l))?.like), country: c => COUNTRY[c] ?? null, langs: Object.keys(LANGS), step: async id => classOf((await sectors(S.kind)).byId.get(String(id))) };  // (for the test)
+window.prenuncio = { get zoom() { return map.getZoom(); }, lite: LITE, mem: () => ({ decodeMP: MEM.decode / 1e6, canvasMP: [...document.querySelectorAll("canvas")].reduce((x, c) => x + c.width * c.height, 0) / 1e6 }), like: async (a, l) => likeArea(a, (await loadLang(l))?.like), country: c => COUNTRY[c] ?? null, langs: Object.keys(LANGS), step: async id => classOf((await sectors(S.kind)).byId.get(String(id))) };  // (for the test)
 const fmt = (x, d = 0) => x.toLocaleString(loc(), { maximumFractionDigits: d, minimumFractionDigits: d });
 const km = x => fmt(x, x < 9.95 ? 1 : 0);
 const round = (x, n) => { const p = 10 ** (Math.floor(Math.log10(x)) - n + 1); return Math.round(x / p) * p; };
@@ -314,7 +322,7 @@ for (const [name, z] of [["veil", 250], ["base", 300], ["paint", 350], ["lines",
 }
 L.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}", { minZoom: SAT_ZOOM, maxNativeZoom: 17 }).addTo(map);
 L.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}", { pane: "labels", minZoom: SAT_ZOOM, opacity: 0.9 }).addTo(map);
-const cvSectors = L.canvas({ padding: 0.4 }), cvLines = L.canvas({ pane: "lines", padding: 0.4 }), svgSel = L.svg({ pane: "sel", padding: 0.4 });
+const cvSectors = L.canvas({ padding: LITE ? 0.1 : 0.4 }), cvLines = L.canvas({ pane: "lines", padding: LITE ? 0.1 : 0.4 }), svgSel = L.svg({ pane: "sel", padding: 0.4 });
 // The view that fits the whole Amazon in a pane of a given size, as fitBounds would choose it: the largest zoom,
 // in sixteenths, at which it fits inside the padding, centred in what the padding leaves. Worked out here so
 // that the view the map will have in its dock is known before it gets there.
@@ -421,9 +429,13 @@ function toMercatorRows(src, w, h, cellLat) {  // src: a Uint32Array [h, w], row
 }
 async function pixels(name) {
   const bmp = await createImageBitmap(await (await fetch(`data/${name}.png`)).blob(), { colorSpaceConversion: "none", premultiplyAlpha: "none" });
-  const cx = new OffscreenCanvas(M.cols, M.rows).getContext("2d", { willReadFrequently: true });
+  MEM.decode = Math.max(MEM.decode, M.cols * M.rows);
+  const cv = new OffscreenCanvas(M.cols, M.rows), cx = cv.getContext("2d", { willReadFrequently: true });
   cx.drawImage(bmp, 0, 0);
-  return cx.getImageData(0, 0, M.cols, M.rows).data;
+  if (bmp.close) bmp.close();
+  const d = cx.getImageData(0, 0, M.cols, M.rows).data;
+  cv.width = cv.height = 0;  // (the picture and the canvas it was read through are let go at once)
+  return d;
 }
 // the base map and the state lines, fetched when the map is first on screen (on a phone that is after the timeline)
 let base, baseCv, started = false;
@@ -526,7 +538,7 @@ async function kmLevels(y, I) {
 const PCUT = [0.001, 0.01, 0.05, 0.2];  // the steps of the legend: under 0.1%, to 1%, to 5%, to 20%, over
 const PCLS = Uint8Array.from({ length: 256 }, (_, v) => PCUT.filter(c => (v / 255) ** 2 >= c).length);
 const FAR_PART = 0.2;
-async function decodeProb(urlP, urlF, cols, rows, cuts, part) {
+async function decodeProb(urlP, urlF, cols, rows, cuts, part, steps, mult) {
   const raw = async url => {
     const bmp = await createImageBitmap(await (await fetch(url)).blob(), { colorSpaceConversion: "none", premultiplyAlpha: "none" });
     const T = 1024, cv = typeof OffscreenCanvas === "function" ? new OffscreenCanvas(T, T) : Object.assign(document.createElement("canvas"), { width: T, height: T });
@@ -551,7 +563,7 @@ async function decodeProb(urlP, urlF, cols, rows, cuts, part) {
   // per step of the legend: how many forest cells, their chances added up, and how many had clearing
   const stats = { n: [0, 0, 0, 0, 0], sum: [0, 0, 0, 0, 0], clr: bits ? [0, 0, 0, 0, 0] : null };
   // far views: blocks of 1, 3, 6 and 12 km. Each counts its forest cells, how many reach each step, and how many had clearing.
-  const far = [2, 6, 12, 24].map(f => {
+  const far = steps.map(f => {
     const c = Math.ceil(cols / f), r = Math.ceil(rows / f), A = f > 12 ? Uint16Array : Uint8Array;
     return { f, cols: c, rows: r, at: Int32Array.from({ length: cols }, (_, x) => (x / f) | 0), cnt: new A(c * r), ge: [0, 1, 2, 3].map(() => new A(c * r)), nclr: bits && new A(c * r), mx: new Uint8Array(c * r) };
   });
@@ -563,7 +575,7 @@ async function decodeProb(urlP, urlF, cols, rows, cuts, part) {
       const k = cls[v], cl = bits ? (bits[(o + c) >> 3] >> ((o + c) & 7)) & 1 : 0;
       stats.n[k]++; stats.sum[k] += sq[v];
       if (cl) stats.clr[k]++;
-      for (let n = 0; n < 4; n++) {
+      for (let n = 0; n < far.length; n++) {
         const l = far[n], i = off[n] + l.at[c];
         l.cnt[i]++;
         if (v > l.mx[i]) l.mx[i] = v;
@@ -586,10 +598,12 @@ async function decodeProb(urlP, urlF, cols, rows, cuts, part) {
     }
     return { f: l.f, cols: l.cols, rows: l.rows, k, clr, mx: l.mx };  // mx: the highest chance byte among the block's cells
   })];
+  if (mult > 1) for (const a of [stats.n, stats.sum, stats.clr]) if (a) for (let k = 0; k < a.length; k++) a[k] *= mult;  // (a square of the half-resolution picture stands for four cells)
   return { levels, stats };
 }
 function loadProb(y, F, withTruth) {
-  const url = f => new URL(`data/${f}${y}.png`, location.href).href, args = [url("p"), withTruth ? url("f") : null, F.cols, F.rows, PCUT, FAR_PART];
+  const url = f => new URL(`data/${f}${y}${F.suf}.png`, location.href).href, args = [url("p"), withTruth ? url("f") : null, F.cols, F.rows, PCUT, FAR_PART, F.far, F.mult];
+  MEM.decode = Math.max(MEM.decode, F.cols * F.rows);
   return new Promise(done => {
     let w;
     const here = () => { if (w) w.terminate(); done(decodeProb(...args)); };  // no worker, or no canvas inside one: decode here
@@ -603,7 +617,7 @@ function loadProb(y, F, withTruth) {
 }
 // which years have a p file: asked once per year, without downloading it
 const probs = {};
-const hasProb = y => (probs[y] ??= M.years[y]?.flags500 ? fetch(`data/p${y}.png`, { method: "HEAD" }).then(r => r.ok).catch(() => false) : Promise.resolve(false));
+const hasProb = y => (probs[y] ??= M.years[y]?.flags500 ? fetch(`data/p${y}${LITE ? "_h" : ""}.png`, { method: "HEAD" }).then(r => r.ok).catch(() => false) : Promise.resolve(false));
 // the five steps: forest under 0.1% is left as the base map shows it, green; then clearing's four reds
 const PRGB = HAZ.clear.steps, PCOL = [0, ...PRGB.map(c => rgba(...c, 1))], PCSS = [FOREST, ...PRGB].map(c => `rgb(${c})`);
 const pct = c => pcOf(c, c < 0.01 ? 1 : 0);
@@ -672,9 +686,11 @@ const GridLayer = L.Renderer.extend({
 });
 const gridLayer = new GridLayer({ pane: "paint", padding: 0.2 }).addTo(map);
 async function paint() {
-  const y = key(), I = info(), F = I.flags500;
+  const y = key(), I = info(), F = I.flags500 && ras(I.flags500);
   if (!cellsOn() || grid?.key === y) return zoomed();
   if (storyOn && y !== FY) return zoomed();  // the story brings its own, lighter copy of the year it replays
+  if (storyOn && LITE && LOSS.busy) await LOSS.busy;  // (on a phone one picture is decoded at a time: the masks of the loss first, then the chances)
+  if (grid && grid.key !== y && !storyOn) grid = null;  // the year that was on screen is let go before the next is decoded
   const g = S.hazard === "clear" && typeof y === "number" && await hasProb(y)
     ? { key: y, prob: true, cell: F.cell, ...await loadProb(y, F, I.actual_km2 != null) }
     : { key: y, cell: M.cell, levels: await kmLevels(y, I) };
@@ -1797,7 +1813,7 @@ const capAt = () => { if (storyOn && narrow()) root.style.setProperty("--cap", $
 addEventListener("resize", capAt);
 // the clearing mapped year by year (the f<year>.png masks), counted per block of 2 km in a worker and drawn dark
 // on the forest: the first n years of them
-const LOSS = { f: 4, years: R.hyears.filter(y => M.years[y]?.flags500), got: {}, shown: -1 };
+const LOSS = { f: 4, busy: null, years: R.hyears.filter(y => M.years[y]?.flags500), got: {}, shown: -1 };
 async function decodeLoss(url, cols, rows, f) {
   const bmp = await createImageBitmap(await (await fetch(url)).blob(), { colorSpaceConversion: "none", premultiplyAlpha: "none" });
   const T = 1024, cx = new OffscreenCanvas(T, T).getContext("2d", { willReadFrequently: true }), c2 = Math.ceil(cols / f), out = new Uint8Array(c2 * Math.ceil(rows / f));
@@ -1812,16 +1828,21 @@ async function decodeLoss(url, cols, rows, f) {
   return out;
 }
 function lossLoad() {
-  const F = M.years[FY]?.flags500;
+  const F = M.years[FY]?.flags500 && ras(M.years[FY].flags500);
   if (LOSS.worker || !F || !LOSS.years.length) return;
+  MEM.decode = Math.max(MEM.decode, F.cols * F.rows);
+  let free;
+  LOSS.busy = new Promise(r => (free = r));
+  setTimeout(free, 20000);
   try {
     LOSS.worker = new Worker(URL.createObjectURL(new Blob([`onmessage = async e => { for (const [y, url] of e.data.urls) { let a = null; try { a = await (${decodeLoss})(url, ...e.data.dim); } catch (err) {} postMessage({ y, a }, a ? [a.buffer] : []); } };`], { type: "text/javascript" })));
-    LOSS.worker.onmessage = e => { if (e.data.a) { LOSS.got[e.data.y] = e.data.a; if (storyOn && SCENES[sAt].loss && LOSS.shown >= LOSS.years.indexOf(e.data.y) + 1) lossShow(LOSS.shown, true); } if (LOSS.years.every(y => y in LOSS.got || e.data.y === y) && e.data.y === LOSS.years.at(-1)) LOSS.worker.terminate(); };
-    LOSS.worker.postMessage({ urls: LOSS.years.map(y => [y, new URL(`data/f${y}.png`, location.href).href]), dim: [F.cols, F.rows, LOSS.f] });
-  } catch (err) { /* no worker: the bars run without the map */ }
+    LOSS.worker.onmessage = e => { if (e.data.a) { LOSS.got[e.data.y] = e.data.a; if (storyOn && SCENES[sAt].loss && LOSS.shown >= LOSS.years.indexOf(e.data.y) + 1) lossShow(LOSS.shown, true); } if (LOSS.years.every(y => y in LOSS.got || e.data.y === y) && e.data.y === LOSS.years.at(-1)) { LOSS.worker.terminate(); free(); } };
+    LOSS.worker.onerror = free;
+    LOSS.worker.postMessage({ urls: LOSS.years.map(y => [y, new URL(`data/f${y}${F.suf}.png`, location.href).href]), dim: [F.cols, F.rows, LOSS.f] });
+  } catch (err) { free(); /* no worker: the bars run without the map */ }
 }
 function lossShow(n, again) {
-  const F = M.years[FY]?.flags500;
+  const F = M.years[FY]?.flags500 && ras(M.years[FY].flags500);
   if (!F || (n === LOSS.shown && !again)) return;
   LOSS.shown = n;
   const f = LOSS.f, c = Math.ceil(F.cols / f), r = Math.ceil(F.rows / f);
@@ -1836,7 +1857,7 @@ function lossShow(n, again) {
 }
 // the year the story replays, kept light: only the far views of it, which is all a whole Amazon needs
 let lite = null, keep = null;
-const liteYear = () => (lite ||= loadProb(CY, M.years[CY].flags500, true).then(g => ({ key: CY, prob: true, cell: M.years[CY].flags500.cell, levels: g.levels.filter(l => l.f >= 6), stats: g.stats })));
+const liteYear = () => (lite ||= loadProb(CY, ras(M.years[CY].flags500), true).then(g => ({ key: CY, prob: true, cell: ras(M.years[CY].flags500).cell, levels: g.levels.filter(l => l.f * ras(M.years[CY].flags500).cell > 0.02), stats: g.stats })));
 const gridOf = y => new Promise(done => { const look = () => (grid?.key === y && grid.prob ? done() : !storyOn ? 0 : setTimeout(look, 120)); look(); });
 // effects, each run once on the way forward and overtaken by the next step
 async function mosaic(my) {  // the forest as coarse squares that get finer: it is made of them
@@ -1938,6 +1959,7 @@ function storyEnd() {
   veil.off = false; veil.th = 0; veil.mapped = true;
   lossShow(0);
   if (LOSS.worker) LOSS.worker.terminate();
+  if (LOSS.sheet) { LOSS.sheet.layer.remove(); LOSS.sheet.cx.canvas.width = 0; LOSS.sheet = null; LOSS.shown = -1; }  // the picture of the loss belongs to the story: let go with it
   LOSS.got = {};
   if (grid?.key !== FY && keep) grid = keep;
   keep = lite = null;
