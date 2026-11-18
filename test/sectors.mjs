@@ -87,6 +87,8 @@ try {
   };
   const clickOn = async sel => { const [x, y] = await js(`(() => { const r = document.querySelector(${JSON.stringify(sel)}).getBoundingClientRect(); return [r.x + r.width / 2, r.y + r.height / 2]; })()`); await click(x, y); };
   const text = sel => js(`document.querySelector(${JSON.stringify(sel)}).textContent`);
+  const tipLine = () => js(`document.querySelector(".leaflet-tooltip.cell").firstChild.textContent`);  // the first line of what a cell says (the second is where it is)
+  const likeOf = (a, l) => js(`prenuncio.like(${a}, "${l}")`);
   const style = (sel, prop) => js(`getComputedStyle(document.querySelector(${JSON.stringify(sel)}))[${JSON.stringify(prop)}]`);
   const head = re => `${re}.test(document.getElementById("say").textContent)`;
   const level = () => js(`document.getElementById("lead").dataset.l`);
@@ -164,6 +166,8 @@ try {
     },
   };
   const WANT = WORDS.en, IDS = Object.keys(WANT), said = [];
+  // what of About is on the stage in the story, whether anything scrolls, and whether it is all inside the panel
+  const ONLY = () => js(`(() => { const a = document.getElementById("about"), r = a.getBoundingClientRect(), kids = [...document.getElementById("about-body").children].filter(e => getComputedStyle(e).display !== "none"); return { shown: kids.map(e => e.tagName + (e.id ? "#" + e.id : "")), scroll: a.scrollHeight > a.clientHeight + 1 || a.scrollWidth > a.clientWidth + 1 || getComputedStyle(a).overflowY === "auto" && a.scrollHeight > a.clientHeight, inside: kids.every(e => { const q = e.getBoundingClientRect(); return q.top >= r.top - 1 && q.bottom <= r.bottom + 1 && q.left >= r.left - 1 && q.right <= r.right + 1; }) }; })()`);
   let t1 = Date.now();
   await send("Page.navigate", { url: SITE });
   await until(`!document.getElementById("story")?.hidden && document.getElementById("story-line")?.textContent === "This is the Amazon."`, "the first line of the story");
@@ -220,7 +224,7 @@ try {
       assert.deepEqual(await place("mapbox"), [0, 0, vw0, vh0]);
     }
     await until(`(${JSON.stringify(PIECES)}).filter(id => { const e = document.getElementById(id), s = getComputedStyle(e); return !e.hidden && e.offsetParent && s.visibility === "visible" && +s.opacity > 0.9; }).join() === "${HAS[id] || ""}"`, `the pieces on the page at ${id}: ${HAS[id] || "none"}`);
-    for (const p of (HAS[id] || "").split(",").filter(Boolean)) { const r = (await place(p)).slice(0, 3); stays[p] ||= r; assert.deepEqual(r, stays[p], `${p} keeps its place at ${id}`); }
+    for (const p of (HAS[id] || "").split(",").filter(Boolean)) { const r = (await place(p)).slice(0, p === "mappanel" ? 2 : 3); stays[p] ||= r; assert.deepEqual(r, stays[p], `${p} keeps its place at ${id}`); }
     // the model's panel and the priority list are never open at the same time
     assert.equal(await js(`document.getElementById("about").open && !document.getElementById("list").hidden`), false, `the panel and the list are not open together at ${id}`);
     if (id === "lossA") assert.equal(await count("#story-extra .years rect"), hist.years.length, "the years of clearing as small bars");
@@ -250,11 +254,11 @@ try {
     if (id === "sources") {  // About comes in: in the header, and open beside the map on the model's figure
       await until(`document.getElementById("about").open && !!document.querySelector("#model-fig canvas")`, "the model's figure, beside the map");
       assert.equal(await js(`[...document.querySelectorAll("#top button")].filter(b => b.offsetParent).map(b => b.textContent).join()`), "About,API,PT,Skip", "About and the API are in the header from here on");
-      const fg = await js(`(() => { const f = document.getElementById("model-fig").getBoundingClientRect(), a = document.getElementById("about").getBoundingClientRect(), b = document.getElementById("about-bar").getBoundingClientRect(); return [Math.round(f.top - b.bottom), f.bottom <= a.bottom + 2]; })()`);
-      assert.ok(Math.abs(fg[0]) <= 24 && fg[1], "the panel opens on the figure, whole: " + fg);
+      assert.deepEqual(await ONLY(), { shown: ["DIV#model-fig"], scroll: false, inside: true }, "only the figure is on the stage, whole, and nothing scrolls");
     }
     if (id === "open") {  // the benchmark: a bare table, a model a row, and the way in as a button
       await until(`document.getElementById("about").open && (() => { const h = document.getElementById("about-benchmark").getBoundingClientRect(), t = document.querySelector("#about .bench").getBoundingClientRect(), a = document.getElementById("about").getBoundingClientRect(), b = document.getElementById("about-bar").getBoundingClientRect(); return h.top >= b.bottom - 1 && t.bottom <= a.bottom; })()`, "the benchmark, heading and table, in the panel");
+      assert.deepEqual(await ONLY(), { shown: ["H3#about-benchmark", "TABLE", "P"], scroll: false, inside: true }, "the figure has left: only the benchmark and its button are on the stage, and nothing scrolls");
       const rows = story.leaderboard.rows;
       const p1 = x => (100 * x).toLocaleString("en-US", { minimumFractionDigits: 1, maximumFractionDigits: 1 }) + "%";
       assert.deepEqual(await js(`[...document.querySelectorAll("#about .bench tbody tr")].map(tr => [tr.cells[0].textContent, tr.querySelector("a").textContent, tr.querySelector("a").getAttribute("href"), tr.cells[2].textContent, tr.cells[3].textContent])`), rows.map(r => [String(r.rank), r.model, r.url, p1(r.cap5), p1(r.unseen_2026)]), "a model a row: its rank, its name as a link, its score and the year kept apart, to one decimal");
@@ -274,7 +278,6 @@ try {
       assert.ok(d[0] < 0.05 * vw0 && d[1] + d[3] > 0.95 * vh0 && d[0] + d[2] < 0.4 * vw0 && d[1] > 0.5 * vh0, "the timeline is in its dock, in the lower left corner: " + d);
       assert.deepEqual([await js(`document.documentElement.dataset.scale`), await count("#chart .bar .fc"), await count("#chart .line"), await label("story-next")], ["months", 12, 0, "Done"], "month by month, as a histogram, with the forecast; and one way on, which ends it");
       // its numbers are the ones on the bulletin beside it
-      if (rise > 0) assert.ok((await text("#level")).includes(`+${rise}%`), "the rise the caption quotes is the one the level counts");
     }
   }
   assert.doesNotMatch(said.join(" "), /flagged|\bflag\b|—|Legal Amazon|black box|[Tt]wo models|put to the test|Where to start|\bboard\b|leaderboard|month by month/i, "the story's own words");
@@ -356,12 +359,135 @@ try {
   await clickOn("#skip-btn");
   await until(`!(${onStory}) && location.search === ""`, "and left");
 
+  // how near the Amazon's outline comes to the map's panel and to the timeline's dock, in pixels of the screen,
+  // worked out from the border in the data and the place of the drawn map
+  const GAPS = `(async () => {
+    const R = await (await fetch("data/regions.json")).json(), M = await (await fetch("data/meta.json")).json(), r = document.querySelector("canvas.base").getBoundingClientRect(), m = document.getElementById("map").getBoundingClientRect();
+    const mer = la => Math.log(Math.tan(Math.PI / 4 + la * Math.PI / 360)), y0 = mer(M.north), y1 = mer(M.north - M.rows * M.cell), boxes = ["mappanel", "chartbox"].map(id => document.getElementById(id).getBoundingClientRect());
+    const out = { panel: 1e9, dock: 1e9, tall: r.height / m.height, whole: r.left >= 0 && r.right <= innerWidth && r.top >= 0 && r.bottom <= innerHeight };
+    for (const poly of R.border) for (const ring of poly) for (let i = 0, x = 0, y = 0; i < ring.length; i += 2) {
+      x += ring[i]; y += ring[i + 1];
+      const px = r.left + (x / R.q - M.west) / (M.cols * M.cell) * r.width, py = r.top + (y0 - mer(y / R.q)) / (y0 - y1) * r.height;
+      boxes.forEach((b, k) => { const d = Math.hypot(Math.max(b.left - px, 0, px - b.right), Math.max(b.top - py, 0, py - b.bottom)); if (d < out[k ? "dock" : "panel"]) out[k ? "dock" : "panel"] = d; });
+    }
+    return out;
+  })()`;
+  // ---------- this round's own checks, each on a page of its own
+  // an area as a place people know: each language's own places, whole sentences, and nothing for a language with no table
+  const LIKE = { en: { 26: "Half of Manhattan.", 120: "Twice Manhattan.", 360: "Twice Washington, D.C.", 1500: "Twice Singapore.", 3200: "Twice Greater London.", 8500: "Three times Luxembourg.", 12685: "Twice Delaware.", 9: "" },
+    pt: { 26: "Do tamanho de Fernando de Noronha.", 120: "Duas vezes Manhattan.", 360: "Do tamanho de Belo Horizonte.", 1500: "Do tamanho da cidade de São Paulo.", 3200: "Duas vezes a cidade de São Paulo.", 8500: "Três vezes Luxemburgo.", 12685: "Cinco vezes Luxemburgo.", 9: "" } };
+  for (const l in LIKE) for (const a in LIKE[l]) assert.equal(await likeOf(a, l), LIKE[l][a], `${a} km² in ${l}`);
+  assert.equal(await likeOf(1500, "xx"), "", "a language with no table of places says nothing, never another language's places");
+  // a screenshot of a part of the page, read back as pixels
+  const pixels = async (clip, scale = 1) => { const { data } = await send("Page.captureScreenshot", { format: "png", clip: { ...clip, scale } }); return jsA(`(async () => { const b = await createImageBitmap(await (await fetch("data:image/png;base64,${data}")).blob()), c = new OffscreenCanvas(b.width, b.height), x = c.getContext("2d"); x.drawImage(b, 0, 0); return { w: b.width, h: b.height, d: [...x.getImageData(0, 0, b.width, b.height).data] }; })()`); };
+  const boxOf = sel => js(`(() => { const r = document.querySelector(${JSON.stringify(sel)}).getBoundingClientRect(); return { x: r.x, y: r.y, width: r.width, height: r.height }; })()`);
+  const zoomNow = async () => +(await js(`new URLSearchParams(location.hash.slice(1)).get("v")`)).split(",")[2];
+  const wheel = async (x, y, dy, n = 1) => { for (let k = 0; k < n; k++) { await send("Input.dispatchMouseEvent", { type: "mouseWheel", x, y, deltaX: 0, deltaY: dy }); await sleep(120); } await sleep(700); };
+  await send("Page.navigate", { url: SITE + "?story=0&r=a#l=pt" });
+  await until(`document.documentElement.lang === "pt" && document.querySelector("canvas.cells")?.dataset.key === "${fy0}" && /v=/.test(location.hash)`, "the default page, for the map's own checks");
+  await sleep(900);
+  // the chip that is on is flat forest green, top to bottom
+  const chip = await pixels(await boxOf('#modes button[aria-pressed="true"]')), at4 = (px, x, y) => px.d.slice(4 * (y * px.w + x), 4 * (y * px.w + x) + 3).join();
+  assert.deepEqual([at4(chip, 3, 1), at4(chip, 3, chip.h - 2), at4(chip, chip.w - 3, 1)], ["11,107,58", "11,107,58", "11,107,58"], "the active chip is one flat green, with no wash at its top");
+  // the furthest out is the fit: zooming out from it does nothing, and the way back to it is dimmed while it is the view
+  const home0 = await js(`location.hash.match(/v=[^&]+/)[0]`), z0 = await zoomNow(), mid = [vw0 * 0.62, vh0 * 0.5];
+  assert.equal(await js(`document.querySelector(".leaflet-control-zoom a.home").classList.contains("off") && document.querySelector(".leaflet-control-zoom a.home").getAttribute("aria-label")`), "Voltar ao mapa inteiro", "the way back to the whole map, dimmed on the whole map");
+  await clickOn(".leaflet-control-zoom-out"); await clickOn(".leaflet-control-zoom-out"); await sleep(600);
+  assert.equal(await zoomNow(), z0, "zooming out stops at the fit");
+  await wheel(...mid, 300, 4);
+  assert.equal(await zoomNow(), z0, "by the wheel too");
+  // the wheel zooms, about the pointer
+  await wheel(...mid, -300, 3);
+  assert.ok(await zoomNow() > z0 + 0.4, "the wheel zooms in: " + await zoomNow());
+  assert.equal(await js(`document.querySelector(".leaflet-control-zoom a.home").classList.contains("off")`), false);
+  // however wildly it is dragged, a good part of the Amazon stays in the part of the stage that nothing covers
+  for (const [dx, dy] of [[900, 700], [900, 700], [-1300, -800], [-1300, -800], [-1300, -800]]) {
+    await send("Input.dispatchMouseEvent", { type: "mousePressed", x: mid[0], y: mid[1], button: "left", clickCount: 1 });
+    for (let k = 1; k <= 8; k++) await send("Input.dispatchMouseEvent", { type: "mouseMoved", x: mid[0] + dx * k / 8, y: mid[1] + dy * k / 8, button: "left" });
+    await send("Input.dispatchMouseEvent", { type: "mouseReleased", x: mid[0] + dx, y: mid[1] + dy, button: "left", clickCount: 1 });
+    await sleep(2600);  // (the map coasts on after the hand lets go, and is brought back when it stops)
+    const kept = await js(`(() => { const a = document.querySelector("canvas.base").getBoundingClientRect(), f = { l: document.getElementById("chartbox").getBoundingClientRect().right, t: document.getElementById("top").getBoundingClientRect().bottom, r: innerWidth, b: innerHeight }; return [(Math.min(a.right, f.r) - Math.max(a.left, f.l)) / Math.min(a.width, f.r - f.l), (Math.min(a.bottom, f.b) - Math.max(a.top, f.t)) / Math.min(a.height, f.b - f.t)]; })()`);
+    assert.ok(kept[0] >= 0.25 && kept[1] >= 0.25, `after a wild drag by ${dx}, ${dy} the Amazon is still on the stage: ${kept}`);
+  }
+  await clickOn(".leaflet-control-zoom a.home");
+  await until(`location.hash.includes("${home0}") && document.querySelector(".leaflet-control-zoom a.home").classList.contains("off")`, "the reset, back to the centre and scale of the load");
+  // sectors are painted by what the hover and the ranking say, the km² expected in each: the order of the steps is the order of the figures
+  const uf = await fetch(`${SITE}data/sectors_uf.json`).then(r => r.json());
+  await send("Page.navigate", { url: SITE + "?story=0&r=b#l=pt&m=sectors&s=uf&t=months" });
+  await until(`document.documentElement.lang === "pt" && !!document.querySelector("#legend .ramp") && /s=uf/.test(location.hash) && !!document.querySelector(".leaflet-overlay-pane canvas")`, "the states");
+  await sleep(600);
+  const states = [...uf.items].sort((a, b) => b.e[fy] - a.e[fy]), stepOf = [];
+  for (const it of states) stepOf.push(await jsA(`prenuncio.step(${JSON.stringify(it.id)})`));
+  assert.ok(stepOf.every((x, i) => !i || x <= stepOf[i - 1]) && stepOf[0] === 4 && stepOf[2] >= 3 && stepOf.at(-1) === 0, `the states' steps follow their expected km², the third highest among the bright ones: ${states.map((it, i) => it.n + " " + Math.round(it.e[fy]) + " " + stepOf[i])}`);
+  assert.match(await text("#legend"), /menos km².*mais km²/, "and the key says what the colour counts");
+  // the fit holds at any window: clear ground between the Amazon and the column, in Sectors too
+  for (const [w, h] of [[1250, 750], [1100, 800], [1600, 700]]) {
+    await send("Emulation.setDeviceMetricsOverride", { width: w, height: h, deviceScaleFactor: 1, mobile: false });
+    await send("Page.navigate", { url: SITE + `?story=0&w=${w}#l=pt&m=sectors` });
+    await until(`innerWidth === ${w} && !!document.querySelector("#legend .ramp") && !!document.querySelector("canvas.base") && /v=/.test(location.hash)`, `Sectors at ${w} by ${h}`);
+    await sleep(500);
+    const g = await jsA(GAPS);
+    assert.ok(g.panel >= 24 && g.dock >= 24 && g.whole, `in Sectors at ${w} by ${h} the Amazon is whole, clear of the panel (${Math.round(g.panel)} px) and of the dock (${Math.round(g.dock)} px)`);
+  }
+  await send("Emulation.setDeviceMetricsOverride", DESK);
+  // what a cell says, for every hazard: the layer's own figure, decoded here from its picture, then where the cell is; a click pins it and Escape lets it go
+  const peak = name => jsA(`(async () => { const b = await createImageBitmap(await (await fetch("data/${name}.png")).blob(), { colorSpaceConversion: "none", premultiplyAlpha: "none" }), c = new OffscreenCanvas(b.width, b.height), x = c.getContext("2d", { willReadFrequently: true }); x.drawImage(b, 0, 0); const d = x.getImageData(0, 0, b.width, b.height).data; let m = 0, at = 0; for (let i = 0; i < d.length; i += 4) if (d[i] > m) { m = d[i]; at = i / 4; } return { row: Math.floor(at / b.width), col: at % b.width, code: m }; })()`);
+  const approxEn = x => (x < 9.95 ? x.toLocaleString("en-US", { minimumFractionDigits: 1, maximumFractionDigits: 1 }) : twoFig(x).toLocaleString("en-US"));
+  const hover = async () => { const c = await js(`(() => { const r = document.getElementById("map").getBoundingClientRect(); return [r.x + r.width / 2, r.y + r.height / 2]; })()`); await send("Input.dispatchMouseEvent", { type: "mouseMoved", x: c[0] + 1, y: c[1] + 1 }); await send("Input.dispatchMouseEvent", { type: "mouseMoved", x: c[0], y: c[1] }); await until(`!!document.querySelector(".leaflet-tooltip.cell")`, "what the cell says"); return c; };
+  for (const [layer, word] of [["mine12", "mining"], ["degr12", "degradation"], ["clear3", "clearing"], ["scar12", null]].filter(([k]) => meta.layers[k])) {
+    const pk = await peak(layer), lat = meta.north - (pk.row + 0.5) * meta.cell, lng = meta.west + (pk.col + 0.5) * meta.cell, I = meta.layers[layer], km2 = (pk.code / 255) ** 3;
+    await send("Page.navigate", { url: SITE + `?story=0&c=${layer}#l=en&k=${layer}&t=months&m=cells&v=${lat.toFixed(6)},${lng.toFixed(6)},11` });
+    await until(`document.documentElement.lang === "en" && document.querySelector("canvas.cells")?.dataset.key === "${layer}"`, "the cells of " + layer);
+    await sleep(400);
+    const c = await hover();
+    const band = ["0.2", "1", "5"].find(q => km2 >= I.cut[q]);
+    assert.equal(await tipLine(), word ? `About ${approxEn(100 * km2)} hectares of ${word} expected here in ${I.months} months` : `Among the ${band}% of forest where fire is most likely`, `${layer}: the cell says what the layer holds for it`);
+    await until(`!!document.querySelector(".leaflet-tooltip.cell small")`, layer + ": and where it is");
+    assert.match(await text(".leaflet-tooltip.cell small"), /^.+, [A-Z]{2}(\. (TI|UC) .+)?$/, "its municipality and state, and the protected land it lies in");
+    if (layer === "mine12") {
+      await click(...c);
+      await send("Input.dispatchMouseEvent", { type: "mouseMoved", x: c[0] + 260, y: c[1] - 140 });
+      await sleep(300);
+      assert.equal(await count(".leaflet-tooltip.cell"), 1, "a click pins what the cell says: it stays when the pointer leaves");
+      await key("Escape");
+      await sleep(200);
+      assert.equal(await count(".leaflet-tooltip.cell"), 0, "and Escape lets it go");
+    }
+  }
+  // The timeline's way to the stage and back, frame by frame, on the whole page. No frame is blank where the one
+  // before and the one after show the same thing, and no frame differs from the one before by a spike.
+  const filmed = async (start, done) => {
+    await js(`window.__f = []`);
+    await start();
+    for (let k = 0, over = 0; k < 90 && over < 2; k++) {
+      const { data } = await send("Page.captureScreenshot", { format: "png", clip: { x: 0, y: 0, width: vw0, height: vh0, scale: 0.125 } });
+      await jsA(`(async () => { const b = await createImageBitmap(await (await fetch("data:image/png;base64,${data}")).blob()), c = new OffscreenCanvas(b.width, b.height), x = c.getContext("2d"); x.drawImage(b, 0, 0); window.__f.push(x.getImageData(0, 0, b.width, b.height).data); })()`);
+      if (await js(done)) over++;
+    }
+    return js(`(() => { const F = window.__f, n = F[0].length / 4, ground = (d, i) => Math.abs(d[i] - 244) + Math.abs(d[i + 1] - 245) + Math.abs(d[i + 2] - 240) < 24, diff = [], blank = []; for (let k = 1; k < F.length; k++) { let s = 0, bl = 0; for (let i = 0; i < 4 * n; i += 4) { s += Math.abs(F[k][i] - F[k - 1][i]) + Math.abs(F[k][i + 1] - F[k - 1][i + 1]) + Math.abs(F[k][i + 2] - F[k - 1][i + 2]); if (k + 1 < F.length && ground(F[k], i) && !ground(F[k - 1], i) && !ground(F[k + 1], i) && Math.abs(F[k - 1][i] - F[k + 1][i]) + Math.abs(F[k - 1][i + 1] - F[k + 1][i + 1]) + Math.abs(F[k - 1][i + 2] - F[k + 1][i + 2]) < 40) bl++; } diff.push(s / (3 * 255 * n)); blank.push(bl / n); } return { diff, blank, frames: F.length }; })()`);
+  };
+  const smooth = (m, what) => {
+    assert.ok(m.frames >= 6, `${what}: frames were taken: ${m.frames}`);
+    assert.ok(Math.max(...m.blank) < 0.02, `${what}: no frame is blank where its neighbours are not: ${m.blank.map(x => x.toFixed(3))}`);
+    assert.ok(m.diff.every((x, i) => x < 0.3 && x <= 2.2 * Math.max(m.diff[i - 1] ?? x, m.diff[i + 1] ?? x) + 0.02), `${what}: the change from frame to frame has no spike in it: ${m.diff.map(x => x.toFixed(3))}`);
+  };
+  for (const q of ["", "&t=years", "&k=scar12&t=months&m=cells", "&k=scar12&t=years&m=cells", "&m=prio&b=1"]) {
+    await send("Page.navigate", { url: SITE + `?story=0&f=${encodeURIComponent(q)}#l=pt${q}` });
+    await until(`document.documentElement.lang === "pt" && !!document.querySelector("#chart .bar") && !!document.querySelector("canvas.cells")?.dataset.key && /v=/.test(location.hash)`, "the page to film at " + q);
+    await sleep(1500);
+    smooth(await filmed(() => clickOn("#chart-front"), `${settled("chart")} && !document.querySelector(".shot")`), "the timeline to the stage, " + (q || "default"));
+    await sleep(300);
+    smooth(await filmed(() => clickOn("#chart-front"), `${settled("map")} && !document.querySelector(".shot")`), "the timeline back to its dock, " + (q || "default"));
+  }
+
   await send("Page.navigate", { url: SITE + "#l=en" });
   // the default screen: the whole Amazon, every cell by its chance on the stage, and the bulletin docked with the months ahead
   await until(head("/^About [\\d,]+\\skm² of clearing expected by July 2027$/") + ` && !!document.querySelector("#legend .steps") && document.querySelector("canvas.cells")?.dataset.key === "${meta.forecast.year}" && /v=/.test(location.hash)`, "the forecast headline, the chances on the map and their key");
   assert.equal(await js(`document.getElementById("scope").hidden`), true, "the whole Amazon needs no label");
   assert.equal(await js(`!!document.getElementById("sure")`), false, "accuracy lives in About, not in the bulletin");
-  assert.match(await text("#sub"), /^Likely between [\d,]+ and [\d,]+\.$/);
+  assert.equal(await text("#sub"), await likeOf(meta.forecast.total_km2, "en"), "under the headline, the area as a place the reader knows; the range has left the line");
+  assert.doesNotMatch(await js(`document.getElementById("chartbox").innerText`), /Likely between|Provavelmente entre/);
+  assert.equal(await js(`document.getElementById("level").children.length + "/" + document.getElementById("level").textContent`), "2/Warning".replace("Warning", ["Quiet", "Watch", "Warning", "Alarm"][amazonLevel("clear")]), "the band is the bars and the level's word, and nothing beside them");
   assert.equal(+await level(), amazonLevel("clear"), "the clearing level for the Amazon is the one the data counts to");
   await redFollows(amazonLevel("clear"));
   assert.equal(await count("#hazard button"), 1 + hazardLayers.length, "one control per hazard that has a forecast");
@@ -381,7 +507,7 @@ try {
   assert.ok(dock0[0] < 0.05 * vw && dock0[3] > 0.95 * vh && dock0[2] < 0.4 * vw && dock0[1] > 0.5 * vh, "the timeline is docked in the lower left corner: " + dock0);
   // nothing has a frame: no border, no outline, no rule around the map, the panels, the dock or the switch
   assert.deepEqual(await js(`["mapbox", "chartbox", "mappanel", "top", "modes", "level", "story-back"].filter(id => { const e = document.getElementById(id); return [getComputedStyle(e), getComputedStyle(e, "::after")].some(s => ["Top", "Right", "Bottom", "Left"].some(k => parseFloat(s["border" + k + "Width"]) > 0) || (s.outlineStyle !== "none" && parseFloat(s.outlineWidth) > 0)); })`), [], "no box of rules around anything");
-  assert.deepEqual(await js(`[...document.querySelectorAll(".leaflet-control-zoom, .leaflet-control-zoom a")].map(e => getComputedStyle(e).borderTopWidth)`), ["0px", "0px", "0px"]);
+  assert.deepEqual(await js(`[...document.querySelectorAll(".leaflet-control-zoom, .leaflet-control-zoom a")].map(e => getComputedStyle(e).borderTopWidth)`), ["0px", "0px", "0px", "0px"]);
   // controls sit on what they control: the map's in its panel, the timeline's on the timeline, and the three columns of type share one edge
   assert.equal(await js(`["modes", "kinds", "rank-btn", "legend", "share"].every(id => document.getElementById("mappanel").contains(document.getElementById(id))) && document.getElementById("list").contains(document.getElementById("list-close")) && !!document.querySelector("#mapbox .leaflet-control-zoom")`), true, "mode, kinds, key and count are in the map's panel, the list has its way out, the zoom is on the map");
   assert.equal(await js(`["hazard", "scale", "shape", "ahead", "step", "signs"].every(id => document.getElementById("chartbox").contains(document.getElementById(id)))`), true, "hazard, scale, bars or line, window and year are on the timeline");
@@ -475,7 +601,7 @@ try {
   await until(`document.getElementById("scope").textContent.includes("Altamira")`, "the sector");
   await until(head("/^About [\\d,.]+\\skm² of clearing expected here by July 2027$/"), "the sector forecast");
   const fc = await text("#level") + " | " + await text("#say") + " " + await text("#sub");
-  assert.match(await text("#sub"), /^\d+(st|nd|rd|th) of \d+ municipalities\. [\d.]+% of the Amazon total\.$/);
+  assert.equal(await text("#sub"), await likeOf(mun.items.find(it => String(it.id) === "1500602").e[fy], "en"), "the sector's area as a place the reader knows");
   assert.match(await hash(), /r=1500602/, "the sector is in the link");
   assert.equal(await count(".leaflet-sel-pane path"), 2, "the sector is outlined");
   await redFollows(+await level());
@@ -524,7 +650,7 @@ try {
   await clickOn('#hazard button:nth-child(2)');
   await clickOn('#scale button[data-k="years"]');
   await until(head("/^[\\d,.]+\\skm² burned here in the last twelve months, [\\d,.]+ in the twelve before$/"), "fire by year, as observed");
-  assert.match(await text("#sub"), /^\d+(st|nd|rd|th) of \d+ municipalities on the map of where fire tends to occur\.$/);
+  assert.doesNotMatch(await text("#sub"), /municipalities|tends to occur/, "no rank line under the fire headline");
 
   // back to the map: cells, with the sector still selected. Then the clearing replay again, stepped to on the dock.
   await toFront("map");
@@ -562,7 +688,7 @@ try {
   await clickOn('#kinds button[data-k="ti"]');
   await until(`document.getElementById("scope").hidden && /s=ti/.test(location.hash) && !/r=/.test(location.hash)`, "the Indigenous lands overview");
   assert.equal(await text("#say"), `In 2023, ${Math.round(meta.years[2023].actual_km2).toLocaleString("en-US")} km² were cleared`, "a year whose chances were not checked says what was cleared");
-  assert.equal(await text("#sub"), "", "and the benchmark's 5% yardstick stays in About");
+  assert.equal(await text("#sub"), await likeOf(meta.years[2023].actual_km2, "en"), "with the place it compares to");
 
   // fire for the whole Amazon, by month, with the timeline on the stage: the level the data counts to, the red
   // that goes with it, and no forecast amount
@@ -571,6 +697,9 @@ try {
   await send("Page.navigate", { url: SITE + "#l=en&k=scar12&t=months&f=chart" });
   await until(head("/burned in the last three months/") + ` && document.getElementById("lead").dataset.l === "${amazonLevel("scar")}" && /^Where fire tends to occur/.test(document.getElementById("legend").textContent) && ${settled("chart")} && !!document.querySelector("#chart .unit")`, "the fire level");
   await redFollows(amazonLevel("scar"));
+  const bandPads = () => js(`(() => { const l = document.getElementById("lead"), lv = +l.dataset.l, box = (lv === 3 ? l : document.getElementById("level")).getBoundingClientRect(), first = document.querySelector("#level b").getBoundingClientRect(), last = (lv === 3 ? [document.getElementById("sub"), document.getElementById("say")].find(e => e.offsetParent && e.textContent) : document.querySelector("#level b")).getBoundingClientRect(); return [lv, Math.round(first.top - box.top), Math.round(box.bottom - last.bottom), !!document.getElementById("sub").offsetParent]; })()`);
+  const pads = await bandPads();
+  assert.ok(pads[0] >= 2 && Math.abs(pads[1] - pads[2]) <= 5, "on the stage the red band ends after its last line, with as much room under it as above: " + pads);
   const fire = await text("#level") + " | " + await text("#say") + " " + await text("#sub");
   if (monthly) {  // the headline is what burned: the last three months against the same months a year before
     const h = monthly.hazards.scar.history, [ly, lm] = monthly.last_month.split("-").map(Number);
@@ -596,20 +725,9 @@ try {
   await noFireForecast("by year");
   await toFront("map");
   await noFireForecast("docked");
+  const padsDock = await bandPads();
+  assert.ok(Math.abs(padsDock[1] - padsDock[2]) <= 5, "and in the dock: " + padsDock);
 
-  // how near the Amazon's outline comes to the map's panel and to the timeline's dock, in pixels of the screen,
-  // worked out from the border in the data and the place of the drawn map
-  const GAPS = `(async () => {
-    const R = await (await fetch("data/regions.json")).json(), M = await (await fetch("data/meta.json")).json(), r = document.querySelector("canvas.base").getBoundingClientRect(), m = document.getElementById("map").getBoundingClientRect();
-    const mer = la => Math.log(Math.tan(Math.PI / 4 + la * Math.PI / 360)), y0 = mer(M.north), y1 = mer(M.north - M.rows * M.cell), boxes = ["mappanel", "chartbox"].map(id => document.getElementById(id).getBoundingClientRect());
-    const out = { panel: 1e9, dock: 1e9, tall: r.height / m.height, whole: r.left >= 0 && r.right <= innerWidth && r.top >= 0 && r.bottom <= innerHeight };
-    for (const poly of R.border) for (const ring of poly) for (let i = 0, x = 0, y = 0; i < ring.length; i += 2) {
-      x += ring[i]; y += ring[i + 1];
-      const px = r.left + (x / R.q - M.west) / (M.cols * M.cell) * r.width, py = r.top + (y0 - mer(y / R.q)) / (y0 - y1) * r.height;
-      boxes.forEach((b, k) => { const d = Math.hypot(Math.max(b.left - px, 0, px - b.right), Math.max(b.top - py, 0, py - b.bottom)); if (d < out[k ? "dock" : "panel"]) out[k ? "dock" : "panel"] = d; });
-    }
-    return out;
-  })()`;
   // a cell says its own chance. The file is decoded here, a cell is picked from it, and the map must say the same.
   const fyear = meta.forecast.year, F = meta.years[fyear].flags500, pmap = F && await grey(`p${fyear}.png`);
   let cell = "";
@@ -624,7 +742,7 @@ try {
     await send("Input.dispatchMouseEvent", { type: "mouseMoved", x: mx + 1, y: my + 1 });
     await send("Input.dispatchMouseEvent", { type: "mouseMoved", x: mx, y: my });
     await until(`!!document.querySelector(".leaflet-tooltip.cell")`, "the cell's tooltip");
-    cell = await text(".leaflet-tooltip.cell");
+    cell = await tipLine();
     assert.equal(cell, want, "the hover text is the chance in the file for that cell");
     // the paint under the pointer is the step of that chance (over imagery the layer is see-through, so only the hue is checked)
     const stepOf = v => [0.001, 0.01, 0.05, 0.2].filter(c => (v / 255) ** 2 >= c).length, STEP = [null, ...RAMP];
@@ -637,8 +755,8 @@ try {
     await send("Input.dispatchMouseEvent", { type: "mouseMoved", x: mx + 1, y: my + 1 });
     await send("Input.dispatchMouseEvent", { type: "mouseMoved", x: mx, y: my });
     await until(`!!document.querySelector(".leaflet-tooltip.cell")`, "the cell's tooltip in the replay");
-    assert.match(await text(".leaflet-tooltip.cell"), new RegExp(`^In ${past} this cell was given (under 0\\.1%|[\\d.]+%)\\. (Clearing|No clearing) was mapped in it\\.$`));
-    cell += " / " + await text(".leaflet-tooltip.cell");
+    assert.match(await tipLine(), new RegExp(`^In ${past} this cell was given (under 0\\.1%|[\\d.]+%)\\. (Clearing|No clearing) was mapped in it\\.$`));
+    cell += " / " + await tipLine();
     // the replay line: cells expected to lose a hectare against cells that did
     const Y = prob?.years?.[past];
     if (Y) assert.equal(await text("#say"), `In ${past}, ${three3(Y.expected_cells)} cells were expected to lose a hectare and ${three3(Y.actual_cells)} did`);
@@ -667,7 +785,7 @@ try {
     await send("Input.dispatchMouseEvent", { type: "mouseMoved", x: fx + 1, y: fy_ + 1 });
     await send("Input.dispatchMouseEvent", { type: "mouseMoved", x: fx, y: fy_ });
     await until(`!!document.querySelector(".leaflet-tooltip.cell")`, "the block's tooltip");
-    assert.match(await text(".leaflet-tooltip.cell"), new RegExp(`^Up to [\\d.]+% chance a cell here loses a hectare by July ${fyear}$`));
+    assert.match(await tipLine(), new RegExp(`^Up to [\\d.]+% chance a cell here loses a hectare by July ${fyear}$`));
   }
 
   // the mode is a switch of its own, and the list of sector kinds shows only in Sectors. The ranking stands on the map's frame.
@@ -701,23 +819,24 @@ try {
   const prio = await fetch(`${SITE}data/priority.json`).then(r => (r.ok ? r.json() : null)).catch(() => null);
   if (prio) {
     await clickOn('#modes button[data-k="prio"]');
-    await until(`document.querySelectorAll("#list-rows li").length === ${prio.blocks.length} && document.getElementById("kinds").hidden`, "the priority list");
+    await until(`document.querySelectorAll("#list-rows li:not(.h)").length === ${prio.blocks.length} && document.getElementById("kinds").hidden`, "the priority list");
     assert.equal(await js(`!!document.getElementById("list-say").offsetParent || !!document.getElementById("list-key") || !!document.querySelector("#list .lk, #list .land")`), false, "no paragraph above the list, no legend, no glyphs");
     assert.deepEqual(await js(`(() => { const a = document.getElementById("list-csv"), x = document.getElementById("list-close").getBoundingClientRect(), r = a.getBoundingClientRect(); return [a.textContent, !!a.offsetParent, a.hasAttribute("download"), Math.abs(r.right - x.left) < 16 && Math.abs((r.top + r.bottom) / 2 - (x.top + x.bottom) / 2) < 6]; })()`), ["CSV", true, true, true], "a small CSV link beside the X");
     assert.equal((await fetch(await js(`document.getElementById("list-csv").href`), { method: "HEAD" })).ok, true, "the CSV is there to download");
     assert.equal(await text("#list-rows li .nm > span"), `${prio.blocks[0].municipality}, ${prio.blocks[0].state}`);
-    assert.equal(await js(`[...document.querySelectorAll("#list-rows li:first-child button > *")].map(e => e.textContent.trim()).join("|")`), `1|${prio.blocks[0].municipality}, ${prio.blocks[0].state}|`, "a row is its rank, the place and a bar: no figures");
-    assert.equal(await count("#list-rows .v, #list th, #list-rows .h"), 0, "no number columns and no headers");
+    assert.equal(await js(`[...document.querySelectorAll("#list-rows li:nth-child(2) button > *")].map(e => e.textContent.trim()).join("|")`), `1|${prio.blocks[0].municipality}, ${prio.blocks[0].state}||${Math.round(100 * prio.blocks[0].expected_cells / prio.blocks[0].forest_cells)}%`, "a row is its rank, the place, a bar and the place's chance");
+    assert.deepEqual(await js(`[document.querySelectorAll("#list th").length, [...document.querySelectorAll("#list-rows .h")].map(e => e.textContent).join()]`), [0, "chance"], "one small word over the figures, and no other heading");
     // the bar: thin, red, running from a stub for the last place to full length for the first, by the cells expected to lose a hectare
-    const prioMin = Math.min(...prio.blocks.map(b => b.expected_cells));
-    const bars = await js(`[...document.querySelectorAll("#list-rows .len i")].slice(0, 60).map(e => { const r = e.getBoundingClientRect(); return [r.width, r.height, getComputedStyle(e).backgroundColor]; })`);
-    assert.ok(bars.length === 60 && bars.every(([w, h, c], k) => Math.abs(w / bars[0][0] - (12 + 88 * (prio.blocks[k].expected_cells - prioMin) / (prio.blocks[0].expected_cells - prioMin)) / 100) < 0.02 && h <= 6 && c === RED), "a thin red bar a row, its length the expected cells: " + JSON.stringify(bars.slice(0, 3)));
+    // the chance of a place is the mean chance of its forest cells; the bar is as long as the figure says
+    const pcOf = b => b.expected_cells / b.forest_cells, pcTop = Math.max(...prio.blocks.map(pcOf));
+    const bars = await js(`[...document.querySelectorAll("#list-rows li:not(.h)")].slice(0, 60).map(li => { const e = li.querySelector(".len i"), r = e.getBoundingClientRect(), t = li.querySelector(".len").getBoundingClientRect(); return [r.width / t.width, r.height, getComputedStyle(e).backgroundColor, li.querySelector(".v").textContent]; })`);
+    assert.ok(bars.length === 60 && bars.every(([w, h, c, v], k) => Math.abs(w - pcOf(prio.blocks[k]) / pcTop) < 0.03 && h <= 6 && c === RED && v === Math.round(100 * pcOf(prio.blocks[k])) + "%"), "a figure a row, the place's chance, and a thin red bar of that length: " + JSON.stringify(bars.slice(0, 3)));
     assert.equal(await js(`[...document.querySelectorAll("#list-rows li:nth-child(-n+30) .len, #list-rows li:nth-child(-n+30) .tag")].every(e => { const r = e.getBoundingClientRect(), l = document.getElementById("list").getBoundingClientRect(); return r.right <= l.right - 4 && r.left >= l.left; })`), true, "nothing in the list is cut at its edge");
     assert.deepEqual(await js(`[...document.querySelectorAll("#list-rows .tag")].map(e => e.textContent)`), prio.blocks.filter(b => b.land).map(b => b.land.toUpperCase()), "a small text tag, TI or UC, on the places in protected land");
     assert.equal(await js(`document.querySelectorAll("#list table, #list-rows [style*=border]").length + (getComputedStyle(document.querySelector("#list-rows button")).borderTopWidth === "0px" ? 0 : 1)`), 0, "a typographic list: no table, no rules between rows");
     assert.match(await text("#legend"), /^Chance each cell loses a hectare by July \d+0\.1%/, "the blocks sit on the chances of the cells");
     assert.equal(await count("#chart .bar"), 20, "the timeline keeps its scale: the priority list is about the map");
-    await clickOn('#list-rows li:nth-child(3) button');
+    await clickOn('#list-rows li:nth-child(4) button');
     await until(`/b=3/.test(location.hash) && document.querySelectorAll(".leaflet-sel-pane path").length === 2 && +new URLSearchParams(location.hash.slice(1)).get("v").split(",")[2] >= 9`, "the third block outlined and in view");
     assert.equal(await js(`document.querySelector("#list-rows [aria-current]").dataset.b + "/" + getComputedStyle(document.querySelector("#list-rows [aria-current] .len i")).backgroundColor`), "3/rgb(255, 255, 255)", "the row is chosen, and its bar turns white on the green");
     await sleep(900);
@@ -922,14 +1041,12 @@ try {
       `The model, ${story.model.name}, learned from ${span} years of public data. For every ${story.forest.cell_m} metre square of forest it gives the chance of clearing in the year ahead.`,
       `We tested it on years it had never seen. In ${story.check.year}, ${hit5} of every ${of5} places it pointed to were cleared.`,
       "Benchmark", `The score is the mean of ${story.benchmark.years[0]} to ${story.benchmark.years.at(-1)}.`,
-      "The code, the data and the benchmark are open. Build a better model and it goes ahead of ours.", "Submit a modelGitHub",
-      "It gets things wrong. A 10% chance means 9 of 10 squares like that one are not cleared.", "Data from INPE, IBAMA, the University of Maryland, the JRC and Google."],
+      "The code, the data and the benchmark are open. Build a better model and it goes ahead of ours.", "Submit a modelGitHub"],
     pt: [`Prenúncio mostra onde a Amazônia deve ser desmatada até julho de ${story.forecast.year}.`, "Fizemos para quem fiscaliza conseguir chegar antes.",
       `O modelo, ${story.model.name}, aprendeu com ${span} anos de dados públicos. Para cada quadrado de ${story.forest.cell_m} metros de floresta ele dá a chance de desmate no ano seguinte.`,
       `Testamos em anos que ele nunca viu. Em ${story.check.year}, de cada ${of5} lugares que apontou, ${hit5} foram desmatados.`,
       "Benchmark", `A nota é a média de ${story.benchmark.years[0]} a ${story.benchmark.years.at(-1)}.`,
-      "O código, os dados e o benchmark são abertos. Quem fizer um modelo melhor passa na frente do nosso.", "Enviar um modeloGitHub",
-      "Ele erra. Uma chance de 10% quer dizer que 9 em cada 10 quadrados assim não caem.", "Dados do INPE, IBAMA, Universidade de Maryland, JRC e Google."],
+      "O código, os dados e o benchmark são abertos. Quem fizer um modelo melhor passa na frente do nosso.", "Enviar um modeloGitHub"],
   };
   assert.equal(span, 18, "the years of public data, from the first year of the record to the day the forecast was made");
   for (const l of ["en", "pt"]) {
@@ -937,7 +1054,7 @@ try {
     await send("Page.navigate", { url: SITE + `#l=${l}&about` });
     await until(`document.documentElement.lang === "${l}" && document.getElementById("about").open && !!document.querySelector("#about .lede") && !!document.querySelector("#about .bench")`, `${l}: About`);
     // exactly these parts, in this order, and nothing else but the X
-    assert.deepEqual(await js(`[...document.getElementById("about-body").children].map(e => e.tagName + (e.id ? "#" + e.id : "") + (e.className ? "." + e.className : ""))`), ["DIV.lede", "DIV#model-fig", "P", "P", "H3#about-benchmark", "TABLE.bench", "P.metric", "P", "P.go", "P", "P"], `${l}: the parts of About, in order`);
+    assert.deepEqual(await js(`[...document.getElementById("about-body").children].map(e => e.tagName + (e.id ? "#" + e.id : "") + (e.className ? "." + e.className : ""))`), ["DIV.lede", "DIV#model-fig", "P", "P", "H3#about-benchmark", "TABLE.bench", "P.metric", "P", "P.go"], `${l}: the parts of About, in order`);
     assert.deepEqual(await js(`[...document.querySelectorAll("#about-body .lede p, #about-body > p, #about-body > h3")].map(e => e.textContent.trim().replace(/\\s+/g, " "))`), ABOUT[l], `${l}: the words of About, as the brief has them`);
     assert.deepEqual(await js(`[...document.getElementById("about").children].map(e => e.id)`), ["about-bar", "about-body"]);
     const body = await js(`document.getElementById("about-body").textContent.replace(/\\s+/g, " ")`);
@@ -968,6 +1085,9 @@ try {
     assert.deepEqual(await js(`[document.querySelector("#about .go .btn").textContent, document.querySelector("#about .go .btn").getAttribute("href"), document.querySelector("#about .go a:not(.btn)").textContent, document.querySelector("#about .go a:not(.btn)").getAttribute("href")]`), [en ? "Submit a model" : "Enviar um modelo", story.links.benchmark, "GitHub", story.links.repository], `${l}: the way in is a button, the repository a link`);
     assert.deepEqual([...new Set(await js(`[...document.querySelectorAll("#about a")].map(a => a.getAttribute("href"))`))].sort(), [...new Set([story.links.benchmark, story.links.repository, ...rows.map(r => r.url)])].sort(), `${l}: the links are the benchmark, the repository and the models, from the data`);
     assert.equal(await count("#about [class*=card], #about [class*=grid], #about ul, #about h2"), 0, "no cards, no lists, no title");
+    assert.doesNotMatch(body, /It gets things wrong|Ele erra|Data from INPE|Dados do INPE/, `${l}: the two closing lines are gone`);
+    assert.equal(await js(`[...document.querySelectorAll("#about .go a, #about .bench a")].every(a => a.target === "_blank" && a.rel === "noopener") && document.querySelectorAll("#about .go a, #about .bench a").length`), 2 + rows.length, `${l}: the button, the GitHub link and the models open in a new tab`);
+    assert.equal(await js(`document.getElementById("about").dataset.only === undefined && [...document.getElementById("about-body").children].every(e => getComputedStyle(e).display !== "none")`), true, `${l}: outside the story About has all of its parts`);
     assert.doesNotMatch(body, /—|flagged|marcad|Amazônia Legal|Legal Amazon/);
     // the text passes under a bar that keeps the way out in reach
     await js(`document.getElementById("about").scrollTop = 400`);
@@ -999,8 +1119,24 @@ try {
     assert.ok(g.panel >= 24 && g.dock >= 24, `at ${w} by ${h} there is clear ground between the Amazon and the panel (${Math.round(g.panel)} px) and the dock (${Math.round(g.dock)} px)`);
     assert.ok(g.whole && g.tall > 0.8, `at ${w} by ${h} the Amazon is whole and takes most of the stage's height: ${JSON.stringify(g)}`);
     // the surfaces have no hard corner: where the map is moved under them, they thin out into the page
-    assert.equal(await js(`["top", "mappanel", "chartbox"].every(id => /rgba?\\(244, 245, 240/.test(getComputedStyle(document.getElementById(id)).boxShadow))`), true, "the surfaces fade at their edges, in the page's colour");
+    assert.deepEqual(await js(`[...["top", "mappanel", "chartbox", "legend", "modes"].map(id => document.getElementById(id)), ...document.querySelectorAll(".leaflet-control-zoom a, #modes button")].filter(e => { const s = getComputedStyle(e), b = getComputedStyle(e, "::before"), a = getComputedStyle(e, "::after"); return [s, b, a].some(x => x.boxShadow !== "none" || (x.maskImage || "none") !== "none" || x.filter !== "none" || x.backgroundImage !== "none" || parseFloat(x.borderTopWidth) > 0 || (x.outlineStyle !== "none" && parseFloat(x.outlineWidth) > 0)); }).map(e => e.id || e.className)`), [], "the surfaces are flat blocks: no shadow, no mask, no filter, no gradient, no rule");
+    assert.equal(await js(`["top", "mappanel", "chartbox"].every(id => getComputedStyle(document.getElementById(id)).backgroundColor === "rgb(244, 245, 240)")`), true, "of the page's own colour");
   }
+
+  // the same two steps on a short desktop screen: one piece on the stage, nothing scrolls
+  await send("Emulation.setDeviceMetricsOverride", { width: 1280, height: 720, deviceScaleFactor: 1, mobile: false });
+  await send("Page.navigate", { url: SITE + "?story=1&w=1280#l=pt" });
+  await until(`${onStory} && innerWidth === 1280 && document.documentElement.dataset.step === "forestA" && !!document.querySelector("canvas.base")`, "the story at 1280 by 720");
+  for (const id of IDS.slice(1, IDS.indexOf("open") + 1)) {
+    await js(`document.getElementById("story-next").click()`);
+    await until(`document.documentElement.dataset.step === "${id}"`, id + " at 1280 by 720");
+    if (id === "sources" || id === "open") {
+      await until(`document.getElementById("about").open && document.getElementById("about").dataset.only === "${id === "sources" ? "fig" : "bench"}" && ${id === "sources" ? `!!document.querySelector("#model-fig canvas")` : `!!document.querySelector("#about .bench")`}`, "the piece on the stage");
+      await sleep(900);
+      assert.deepEqual(await ONLY(), { shown: id === "sources" ? ["DIV#model-fig"] : ["H3#about-benchmark", "TABLE", "P"], scroll: false, inside: true }, `at 1280 by 720, ${id}: one piece, whole, no scroll`);
+    }
+  }
+  await js(`document.getElementById("skip-btn").click()`);
 
   // ---------- a phone, 390 by 844, in Portuguese. The map is the screen; the story's caption is at the bottom, at
   // the thumb, with the way on as a large arrow; one sheet shows at a time, the bulletin or the list, and their
@@ -1034,6 +1170,8 @@ try {
       const ab = await js(`(() => { const a = document.getElementById("about").getBoundingClientRect(), s = document.getElementById("story").getBoundingClientRect(), n = document.getElementById("story-next").getBoundingClientRect(), k = document.getElementById("skip-btn").getBoundingClientRect(), x = document.getElementById("about-close").getBoundingClientRect(), on = (r, id) => !!document.elementFromPoint(r.x + r.width / 2, r.y + r.height / 2)?.closest("#" + id); return [Math.round(a.bottom - s.top), a.top >= k.bottom - 1, on(n, "story-next"), on(k, "skip-btn"), on(x, "about-close"), x.width >= 44 && x.height >= 44]; })()`);
       assert.deepEqual(ab, [0, true, true, true, true, true], "About on a phone, in the story: on the caption, under the header, with the way on, Skip and its X in reach: " + ab);
     }
+    if (IDS[i] === "sources") assert.deepEqual(await ONLY(), { shown: ["DIV#model-fig"], scroll: false, inside: true }, "on a phone too: the figure alone, nothing scrolls");
+    if (IDS[i] === "open") assert.deepEqual(await ONLY(), { shown: ["H3#about-benchmark", "TABLE", "P"], scroll: false, inside: true }, "on a phone too: the benchmark alone, nothing scrolls");
     if (IDS[i] === "open") assert.equal(await js(`(() => { const r = document.getElementById("about").getBoundingClientRect(), t = document.querySelector("#about .bench").getBoundingClientRect(), b = document.querySelector("#about .go .btn").getBoundingClientRect(); return r.width === innerWidth && t.right <= innerWidth && document.getElementById("about").scrollWidth <= innerWidth && b.height >= 44; })()`), true, "the benchmark fits the screen, and its button is tall enough");
     if (IDS[i] === "first") {  // the list: a sheet over the lower part, standing on the caption, with its way out
       await until(`!document.getElementById("about").open && !!document.querySelector("#list-rows .why") && !!document.getElementById("list").offsetParent`, "the list's sheet");
@@ -1071,8 +1209,8 @@ try {
   const rest = await js(`(() => { const s = document.getElementById("say"), st = getComputedStyle(s); return { shown: ["level", "say", "chart"].every(id => !!document.getElementById(id).offsetParent), lines: Math.round(s.getBoundingClientRect().height / parseFloat(st.lineHeight)), base: Math.round(document.querySelector("canvas.base").getBoundingClientRect().bottom) }; })()`);
   assert.ok(ls === null && cs[1] === 844 && rest.shown && rest.lines <= 2 && await plot() >= 120 && cs[0] >= rest.base, `the bulletin rests at the bottom showing its level, its headline and a plot of 120 px or more, clear of the Amazon: ${JSON.stringify([cs, rest, await plot()])}`);
   // a phone's type: a headline about 20 px, text 15 to 16, labels 12 to 13
-  const type = { say: await px("#say"), level: await px("#level span:last-child"), ticks: await px("#legend .ticks"), what: await px("#legend .what"), axis: await px("#chart .bar text") };
-  assert.ok(type.say >= 20 && type.say <= 22 && [type.level, type.ticks, type.axis].every(x => x >= 12 && x <= 13.5) && type.what >= 13 && type.what <= 14, "the phone's type scale on the resting screen: " + JSON.stringify(type));
+  const type = { say: await px("#say"), ticks: await px("#legend .ticks"), what: await px("#legend .what"), axis: await px("#chart .bar text") };
+  assert.ok(type.say >= 20 && type.say <= 22 && [type.ticks, type.axis].every(x => x >= 12 && x <= 13.5) && type.what >= 13 && type.what <= 14, "the phone's type scale on the resting screen: " + JSON.stringify(type));
   assert.equal(await js(`[...document.querySelectorAll("#modes button, #hazard button, #menu-btn, #sheet-grab")].filter(e => e.offsetParent).every(e => { const r = e.getBoundingClientRect(), a = getComputedStyle(e, "::after"); return r.height >= 44 || (a.content !== "none" && r.height - parseFloat(a.top) - parseFloat(a.bottom) >= 44); })`), true, "what is tapped is 44 px tall, or has a target that is");
   assert.equal(await js(`document.getElementById("hazard").scrollWidth <= document.getElementById("hazard").clientWidth`), true, "the four hazards fit the sheet's width");
   // the bulletin: its top is tapped or pulled up to the header, where it is whole, and pushed back
@@ -1110,7 +1248,7 @@ try {
   assert.equal(await js(`[...document.querySelectorAll("#list-close, #list-csv, #list-grab, #list-rows li:nth-child(-n+4) button")].every(e => e.getBoundingClientRect().height >= 44)`), true, "the list's controls and rows are 44 px tall");
   assert.deepEqual([await px("#list-rows .nm"), await px("#list-rows .tag")].map(x => Math.round(x * 2) / 2), [15.5, 12.5], "the list's type");
   // a row brings its place into view above the sheet and says why
-  await clickOn('#list-rows li:nth-child(2) button');
+  await clickOn('#list-rows li:nth-child(3) button');
   await until(`/b=2/.test(location.hash) && !!document.querySelector("#list-rows .why")`, "a place chosen on a phone");
   await apart("with a row open");
   const whyP = await js(`(() => { const p = document.querySelector("#list-rows .why p"), r = p.getBoundingClientRect(); return [parseFloat(getComputedStyle(p).fontSize), r.left >= 0 && r.right <= innerWidth]; })()`);

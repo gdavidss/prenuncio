@@ -10,6 +10,8 @@ Number first, then the fact, then stop. Quantities are named for what happened t
 
 Where someone did something, the sentence says who, and it is we: we trained a model, we tested it, we built it. No slogans in pairs of fragments. No small print: a line that explains what the reader can already see, or how something was computed, is cut. What stays small is a unit, a forecast's range, what a step of the key means, and the one sentence that says the enforcement figure is a floor and not proof of cause. The benchmark is called the benchmark, in both languages.
 
+The band of the alert level holds the bars and the level's word and nothing else. Under a headline that states an area, the second line says it as a place the reader knows ("Twice Greater London."), from that language's own list of places, each sentence written out whole; no list for a language, no line. The forecast's range stays on the chart, as whiskers and in the hover.
+
 ## Colour
 
 | Name | Value | Meaning |
@@ -45,13 +47,13 @@ The other hazards never share a map with clearing. Each climbs from near the for
 
 ## Layout
 
-The map is the page, edge to edge, and the Amazon is the object on it. Nothing has a frame: no border, no outline, no box of rules around the map, a panel or a control. What stands on the page is type, set with space around it, on a surface of the page's own colour that only shows once the map is moved under it. A surface has no hard corner: at its edges it thins out into the page.
+The map is the page, edge to edge, and the Amazon is the object on it. Nothing has a frame: no border, no outline, no box of rules around the map, a panel or a control. What stands on the page is type, set with space around it, on a surface of the page's own colour that only shows once the map is moved under it. A surface that can stand over the map (the key with the mode switch, the dock, the list, the zoom controls) is a flat block of the page's colour with crisp edges, hugging its content: no fade, no glow, no shadow. Over the page it cannot be seen; when the map is moved under it, the map passes behind.
 
 The left of the page is a column of type. At its top, what the map shows and how to read it: the mode, the kinds of sector and the key, whose steps are the filter. At its bottom, docked, the bulletin with its timeline: the hazards, the level, the headline and the histogram. The ranked list stands on the right, with its way out. The Amazon is fitted to its own outline beside them, never under them, with clear ground between its outline and the column. When the list opens or closes, the Amazon glides once to its new place; nothing else moves it. The header has the mark, the story, About, the API and the language, and nothing else.
 
 The bulletin can come forward to fill the page. Its content keeps a measure of 1100 px in the middle and its plot a height that leaves the bars their proportion. The map is then a small picture of itself in the upper right corner: nothing in it answers the pointer, and a click on it swaps the two back. The swap is drawn, never cut. Every panel that opens has a clear way out. Every control sits on what it changes.
 
-The priority list is bare rows: the rank, the place, a small tag where it lies in protected land (TI, UC), and a thin red bar as long as the cells expected to lose a hectare there. No paragraph above it, no headings, no figures. A place that is opened says why in one plain sentence, two at most. Beside the way out, the same list as a file.
+The priority list is bare rows: the rank, the place, a small tag where it lies in protected land (TI, UC), and the place's chance (the mean chance of its forest cells) as a whole percentage with a thin red bar of that length, under the one small word "chance". No paragraph above it. A place that is opened says why in one plain sentence, two at most. Beside the way out, the same list as a file.
 
 On a phone the map is the screen. A band under the header says what it shows. One sheet stands at the bottom at a time. The bulletin rests there showing its level, its headline and its plot, and is pulled up to the header and pushed back. When the list is open it has the lower half, and the bulletin waits behind a small handle under it; closing the list brings it back. The two never overlap. The header is the mark and one menu. Type has a phone's own scale: the story's line 27 px, a headline 21, text 15.5, labels 12.5.
 
@@ -64,6 +66,10 @@ About takes the stage, as a column of text in the middle; on a phone it fills th
 The model is drawn as it works. Nine sources are nine sheets of the same territory, stacked, each with the Amazon's outline, a hint of what it holds, its name and who makes it. Traces fall from them into one point, the model, by its name, and leave it in red for the last sheet, which is the map of chance. Ink is what goes in; red is only what comes out. Small particles travel the traces, slowly. The figure is still when less motion is asked for, and it stops when it is off the screen.
 
 The benchmark is the one table on the site: rank, model, score, the year kept apart, who sent it and when, to one decimal in the reader's number format. No stripes, no rules between rows, no box. The row with no model is said plainly and set in grey. Under it at most one short line, then one green button to submit a model and a quieter link to the code.
+
+### The map in the reader's hands
+
+The wheel and a pinch zoom, about the pointer. The furthest out is the fit of the moment, the whole Amazon on the stage, never smaller. However the map is dragged, a good part of the Amazon stays in the part of the stage nothing covers. Above the zoom controls a third one goes back to the whole map, dimmed while that is the view. A cell answers the pointer in every layer: what the layer holds for it, in hectares or as a chance (for fire, the band of the forest it stands in, never an amount), then its municipality and state and the protected land it lies in; a click pins it, Escape lets it go. Sectors are painted by the km² expected in each, the figure the hover and the ranking give, so the order of the colours is the order of the ranking.
 
 ## The story
 
@@ -111,7 +117,7 @@ The actions view shows what measured enforcement accounts for. It has no level a
 - Boxes that hold one number, accent bars beside text, card grids, footers, tables in the interface. The benchmark is the one table.
 - The words placar, board or leaderboard on the screen. It is the benchmark.
 - Small print that explains. A second line under the story's caption.
-- A frame, a border or a box of rules around anything.
+- A frame, a border or a box of rules around anything. A fade, a glow or a shadow at the edge of a surface.
 - A control that sits away from what it changes.
 - A second thing moving by itself on a screen. The story's red, the swap, the one glide when the list opens and the particles of the model figure are the motion there is.
 - Paragraphs on the first screen. Depth is one click away.

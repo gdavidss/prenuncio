@@ -11,6 +11,22 @@ const T = {
     amazon: "Amazon", about: "About", close: "Close", copy: "Copy", copied: "Copied", story: "Story", skip: "Skip",
     front: { chart: "Bring the timeline forward", map: "Bring the map forward", back: "Back to the map" }, menu: "Menu", closeList: "Close the list",
     chanceOut: "the chance, for every cell",
+    // an area said as a place the reader knows: this language's own places, with every sentence written out whole
+    like: [
+      {"km": 59, "same": "The size of Manhattan.", "x2": "Twice Manhattan.", "x3": "Three times Manhattan.", "x4": "Four times Manhattan.", "x5": "Five times Manhattan.", "x10": "Ten times Manhattan.", "half": "Half of Manhattan.", "third": "A third of Manhattan."},
+      {"km": 105, "same": "The size of Paris.", "x2": "Twice Paris.", "x3": "Three times Paris.", "x4": "Four times Paris.", "x5": "Five times Paris.", "x10": "Ten times Paris.", "half": "Half of Paris.", "third": "A third of Paris."},
+      {"km": 177, "same": "The size of Washington, D.C.", "x2": "Twice Washington, D.C.", "x3": "Three times Washington, D.C.", "x4": "Four times Washington, D.C.", "x5": "Five times Washington, D.C.", "x10": "Ten times Washington, D.C.", "half": "Half of Washington, D.C.", "third": "A third of Washington, D.C."},
+      {"km": 735, "same": "The size of Singapore.", "x2": "Twice Singapore.", "x3": "Three times Singapore.", "x4": "Four times Singapore.", "x5": "Five times Singapore.", "x10": "Ten times Singapore.", "half": "Half of Singapore.", "third": "A third of Singapore."},
+      {"km": 1214, "same": "The size of the city of Los Angeles.", "x2": "Twice the city of Los Angeles.", "x3": "Three times the city of Los Angeles.", "x4": "Four times the city of Los Angeles.", "x5": "Five times the city of Los Angeles.", "x10": "Ten times the city of Los Angeles.", "half": "Half of the city of Los Angeles.", "third": "A third of the city of Los Angeles."},
+      {"km": 1572, "same": "The size of Greater London.", "x2": "Twice Greater London.", "x3": "Three times Greater London.", "x4": "Four times Greater London.", "x5": "Five times Greater London.", "x10": "Ten times Greater London.", "half": "Half of Greater London.", "third": "A third of Greater London."},
+      {"km": 2586, "same": "The size of Luxembourg.", "x2": "Twice Luxembourg.", "x3": "Three times Luxembourg.", "x4": "Four times Luxembourg.", "x5": "Five times Luxembourg.", "x10": "Ten times Luxembourg.", "half": "Half of Luxembourg.", "third": "A third of Luxembourg."},
+      {"km": 6446, "same": "The size of Delaware.", "x2": "Twice Delaware.", "x3": "Three times Delaware.", "x4": "Four times Delaware.", "x5": "Five times Delaware.", "x10": "Ten times Delaware.", "half": "Half of Delaware.", "third": "A third of Delaware."},
+      {"km": 10452, "same": "The size of Lebanon.", "x2": "Twice Lebanon.", "x3": "Three times Lebanon.", "x4": "Four times Lebanon.", "x5": "Five times Lebanon.", "x10": "Ten times Lebanon.", "half": "Half of Lebanon.", "third": "A third of Lebanon."},
+      {"km": 30528, "same": "The size of Belgium.", "x2": "Twice Belgium.", "x3": "Three times Belgium.", "x4": "Four times Belgium.", "x5": "Five times Belgium.", "x10": "Ten times Belgium.", "half": "Half of Belgium.", "third": "A third of Belgium."},
+      {"km": 41285, "same": "The size of Switzerland.", "x2": "Twice Switzerland.", "x3": "Three times Switzerland.", "x4": "Four times Switzerland.", "x5": "Five times Switzerland.", "x10": "Ten times Switzerland.", "half": "Half of Switzerland.", "third": "A third of Switzerland."},
+      {"km": 130279, "same": "The size of England.", "x2": "Twice England.", "x3": "Three times England.", "x4": "Four times England.", "x5": "Five times England.", "x10": "Ten times England.", "half": "Half of England.", "third": "A third of England."},
+    ],
+    chance: "chance", home: "Back to the whole map",
     bench: { head: ["", "model", "score", "", "by", "date"], submit: "Submit a model", repo: "GitHub", ref: "no model" },
     // the opening story: one line at a time. Numbers come from data/story.json and the other data files.
     num: n => ["zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten", "eleven", "twelve"][n] ?? String(n),
@@ -19,7 +35,7 @@ const T = {
       forestA: "This is the Amazon.",
       forestB: v => `${v.cells} million squares of forest, ${v.m} metres each.`,
       lossA: "Every year a piece of it falls.",
-      lossB: v => `Since ${v.y}, ${v.k} thousand km².${v.more ? " More than England." : ""}`,
+      lossB: v => `Since ${v.y}, ${v.k} thousand km².${v.more}`, more: { km: 130279, say: " More than England." },
       model: "We trained a model to predict the next one.",
       proof: v => `We tested it on the past. In ${v.y}, ${v.hit} of every ${v.of} places it pointed to were cleared.`,
       sources: v => `It learns from ${v.n} public sources, from satellite images to clearing permits.`,
@@ -33,6 +49,10 @@ const T = {
     onlyFrom: "Choose a step to show only cells at that chance or more",
     stepLo: c => `under ${c}`, stepMid: (a, b) => `${a} to ${b}`, stepHi: c => `over ${c}`, under: c => `under ${c}`,
     cellFc: v => `${v.p} chance this cell loses a hectare by July ${v.y}`,
+    cellHa: { clear: v => `About ${v.ha} hectares of clearing expected here in ${v.n} months`, degr: v => `About ${v.ha} hectares of degradation expected here in ${v.n} months`, mine: v => `About ${v.ha} hectares of mining expected here in ${v.n} months` },
+    cellHaLow: { clear: v => `Under 1 hectare of clearing expected here in ${v.n} months`, degr: v => `Under 1 hectare of degradation expected here in ${v.n} months`, mine: v => `Under 1 hectare of mining expected here in ${v.n} months` },
+    cellFire: v => `Among the ${v.p}% of forest where fire is most likely`, cellFireRest: "Outside the 5% of forest where fire is most likely",
+    cellPlace: v => `${v.mun}, ${v.uf}${v.land ? `. ${v.land}` : ""}`,
     cellPast: v => `In ${v.y} this cell was given ${v.p}. ${v.clr ? "Clearing was mapped in it." : "No clearing was mapped in it."}`,
     areaFc: v => (v.low ? `Every cell here has ${v.p} chance of losing a hectare by July ${v.y}` : `Up to ${v.p} chance a cell here loses a hectare by July ${v.y}`),
     areaPast: v => `In ${v.y} cells here were given ${v.low ? "" : "up to "}${v.p}. ${v.clr ? `Clearing was mapped in ${v.clr} of ${v.n}.` : "No clearing was mapped."}`,
@@ -57,17 +77,13 @@ const T = {
     tiny: "under 0.1",
     // the level, and the two facts it was counted from
     level: ["Quiet", "Watch", "Warning", "Alarm"], replay: "Past forecast", made: y => `made on 31 July ${y - 1}`,
-    none: s => `no ${s}`, rankWhy: (r, n) => `rank ${r} of ${n}`,
     // headlines: one short sentence each
     fc: v => `About ${v.km} km² of clearing expected${v.here} by July ${v.y}`,
     fcNone: v => `Almost no clearing expected here by July ${v.y}`,
-    fcSub: v => `Likely between ${v.lo} and ${v.hi}.`,
-    rankSub: v => `${v.rank} of ${v.n} ${v.many}. ${v.share}% of the Amazon total.`,
     past: v => `In ${v.y}, ${v.act} km² were cleared`,
     partial: " Priority scenes only, so far.",
     pastHere: v => `In ${v.y}, ${v.act} km² were cleared here`,
     pastHereNone: v => `In ${v.y} no clearing was mapped here`,
-    pastHereSub: v => `Forecast share ${v.ps}%, actual share ${v.as}%.`,
     mfc: {
       clear: v => `About ${v.km} km² expected to be cleared${v.here} in the next ${v.h} months`,
       degr: v => `About ${v.km} km² expected to be degraded${v.here} in the next ${v.h} months`,
@@ -79,11 +95,8 @@ const T = {
       degr: v => `${v.km} km² degraded${v.here} in the last three months`,
       mine: v => `${v.km} km² mined${v.here} in the last three months`,
     },
-    scaledSub: v => `${v.rank} of ${v.n} ${v.many}.`,
     // fire: what burned, never how much will burn
     burned: { months: v => `${v.km} km² burned${v.here} in the last three months, ${v.prev} a year before`, years: v => `${v.km} km² burned${v.here} in the last twelve months, ${v.prev} in the twelve before` },
-    fireRank: v => `${v.rank} of ${v.n} ${v.many} on the map of where fire tends to occur.`,
-    rankOnly: v => `${v.rank} of ${v.n} ${v.many} on the risk map.`,
     axisM: { clear: "km² cleared per month", fire: "km² burned per month", degr: "km² degraded per month", mine: "km² mined per month" },
     axisW: { fire: "km² burned per 12 months", degr: "km² degraded per 12 months", mine: "km² mined per 12 months" },
     whole: "Whole Amazon", to: (a, b) => `${a} to ${b}`,
@@ -98,13 +111,12 @@ const T = {
       mine: v => `${v.km} km² mined${v.here} in the last twelve months.`,
     },
     here: " here",
-    short: { clear: "clearing", scar: "burning", degr: "degradation", mine: "mining" },
     sign: { clear: "Clearing", scar: "Burning", degr: "Degradation", mine: "Mining", autos: "IBAMA fines" },
     now: "now", ahead: n => `${n} months`, byJuly: y => `to July ${y}`, window: "forecast",
     signs: "Signals, three months against last year",
     enso: ["El Niño", "La Niña", "Pacific"], ensoLevel: [["very strong", "strong", "moderate", "weak"], ["very strong", "strong", "moderate", "weak"], "neutral"],
     signTitle: v => `${v.now} in the last three months, ${v.prev} a year before`,
-    legend: { clear: "Clearing risk", fire: "Where fire tends to occur", degr: "Degradation risk", mine: "Mining risk" }, lower: "lower", higher: "higher", next: n => `next ${n} months`,
+    legend: { clear: "Clearing risk", fire: "Where fire tends to occur", degr: "Degradation risk", mine: "Mining risk" }, lower: "lower", higher: "higher", less: "less km²", more: "more km²", next: n => `next ${n} months`,
     about_: x => `about ${x} km²`, range: (lo, hi) => `likely ${lo} to ${hi}`,
     tipFc: v => `about ${v.exp} km² expected`, tipPast: v => `${v.exp} km² expected, ${v.act} cleared`, tipRank: v => `${v.rank} of ${v.n}`,
     // actions: what measured enforcement accounts for. A floor and an association, and the screen says so.
@@ -135,15 +147,30 @@ const T = {
       ${v.bench}
       <p class="metric">The score is the mean of ${v.b0} to ${v.b1}.</p>
       <p>The code, the data and the benchmark are open. Build a better model and it goes ahead of ours.</p>
-      <p class="go"><a class="btn" href="${v.links.benchmark}">${v.submit}</a><a href="${v.links.repository}">${v.repo}</a></p>
-      <p>It gets things wrong. A 10% chance means 9 of 10 squares like that one are not cleared.</p>
-      <p>Data from INPE, IBAMA, the University of Maryland, the JRC and Google.</p>`,
+      <p class="go"><a class="btn" href="${v.links.benchmark}" target="_blank" rel="noopener">${v.submit}</a><a href="${v.links.repository}" target="_blank" rel="noopener">${v.repo}</a></p>`,
   },
   pt: {
     hazard: { clear: "Desmatamento", fire: "Fogo", degr: "Degradação", mine: "Garimpo" }, scale: { years: "Anos", months: "Meses", actions: "Ações" },
     amazon: "Amazônia", about: "Sobre", close: "Fechar", copy: "Copiar", copied: "Copiado", story: "História", skip: "Pular",
     front: { chart: "Trazer a linha do tempo à frente", map: "Trazer o mapa à frente", back: "Voltar ao mapa" }, menu: "Menu", closeList: "Fechar a lista",
     chanceOut: "a chance, para cada célula",
+    like: [
+      {"km": 26, "same": "Do tamanho de Fernando de Noronha.", "x2": "Duas vezes Fernando de Noronha.", "x3": "Três vezes Fernando de Noronha.", "x4": "Quatro vezes Fernando de Noronha.", "x5": "Cinco vezes Fernando de Noronha.", "x10": "Dez vezes Fernando de Noronha.", "half": "Metade de Fernando de Noronha.", "third": "Um terço de Fernando de Noronha."},
+      {"km": 59, "same": "Do tamanho de Manhattan.", "x2": "Duas vezes Manhattan.", "x3": "Três vezes Manhattan.", "x4": "Quatro vezes Manhattan.", "x5": "Cinco vezes Manhattan.", "x10": "Dez vezes Manhattan.", "half": "Metade de Manhattan.", "third": "Um terço de Manhattan."},
+      {"km": 218, "same": "Do tamanho do Recife.", "x2": "Duas vezes o Recife.", "x3": "Três vezes o Recife.", "x4": "Quatro vezes o Recife.", "x5": "Cinco vezes o Recife.", "x10": "Dez vezes o Recife.", "half": "Metade do Recife.", "third": "Um terço do Recife."},
+      {"km": 331, "same": "Do tamanho de Belo Horizonte.", "x2": "Duas vezes Belo Horizonte.", "x3": "Três vezes Belo Horizonte.", "x4": "Quatro vezes Belo Horizonte.", "x5": "Cinco vezes Belo Horizonte.", "x10": "Dez vezes Belo Horizonte.", "half": "Metade de Belo Horizonte.", "third": "Um terço de Belo Horizonte."},
+      {"km": 675, "same": "Do tamanho de Florianópolis.", "x2": "Duas vezes Florianópolis.", "x3": "Três vezes Florianópolis.", "x4": "Quatro vezes Florianópolis.", "x5": "Cinco vezes Florianópolis.", "x10": "Dez vezes Florianópolis.", "half": "Metade de Florianópolis.", "third": "Um terço de Florianópolis."},
+      {"km": 1200, "same": "Do tamanho da cidade do Rio de Janeiro.", "x2": "Duas vezes a cidade do Rio de Janeiro.", "x3": "Três vezes a cidade do Rio de Janeiro.", "x4": "Quatro vezes a cidade do Rio de Janeiro.", "x5": "Cinco vezes a cidade do Rio de Janeiro.", "x10": "Dez vezes a cidade do Rio de Janeiro.", "half": "Metade da cidade do Rio de Janeiro.", "third": "Um terço da cidade do Rio de Janeiro."},
+      {"km": 1521, "same": "Do tamanho da cidade de São Paulo.", "x2": "Duas vezes a cidade de São Paulo.", "x3": "Três vezes a cidade de São Paulo.", "x4": "Quatro vezes a cidade de São Paulo.", "x5": "Cinco vezes a cidade de São Paulo.", "x10": "Dez vezes a cidade de São Paulo.", "half": "Metade da cidade de São Paulo.", "third": "Um terço da cidade de São Paulo."},
+      {"km": 2586, "same": "Do tamanho de Luxemburgo.", "x2": "Duas vezes Luxemburgo.", "x3": "Três vezes Luxemburgo.", "x4": "Quatro vezes Luxemburgo.", "x5": "Cinco vezes Luxemburgo.", "x10": "Dez vezes Luxemburgo.", "half": "Metade de Luxemburgo.", "third": "Um terço de Luxemburgo."},
+      {"km": 5761, "same": "Do tamanho do Distrito Federal.", "x2": "Duas vezes o Distrito Federal.", "x3": "Três vezes o Distrito Federal.", "x4": "Quatro vezes o Distrito Federal.", "x5": "Cinco vezes o Distrito Federal.", "x10": "Dez vezes o Distrito Federal.", "half": "Metade do Distrito Federal.", "third": "Um terço do Distrito Federal."},
+      {"km": 10452, "same": "Do tamanho do Líbano.", "x2": "Duas vezes o Líbano.", "x3": "Três vezes o Líbano.", "x4": "Quatro vezes o Líbano.", "x5": "Cinco vezes o Líbano.", "x10": "Dez vezes o Líbano.", "half": "Metade do Líbano.", "third": "Um terço do Líbano."},
+      {"km": 21938, "same": "Do tamanho de Sergipe.", "x2": "Duas vezes Sergipe.", "x3": "Três vezes Sergipe.", "x4": "Quatro vezes Sergipe.", "x5": "Cinco vezes Sergipe.", "x10": "Dez vezes Sergipe.", "half": "Metade de Sergipe.", "third": "Um terço de Sergipe."},
+      {"km": 30528, "same": "Do tamanho da Bélgica.", "x2": "Duas vezes a Bélgica.", "x3": "Três vezes a Bélgica.", "x4": "Quatro vezes a Bélgica.", "x5": "Cinco vezes a Bélgica.", "x10": "Dez vezes a Bélgica.", "half": "Metade da Bélgica.", "third": "Um terço da Bélgica."},
+      {"km": 41285, "same": "Do tamanho da Suíça.", "x2": "Duas vezes a Suíça.", "x3": "Três vezes a Suíça.", "x4": "Quatro vezes a Suíça.", "x5": "Cinco vezes a Suíça.", "x10": "Dez vezes a Suíça.", "half": "Metade da Suíça.", "third": "Um terço da Suíça."},
+      {"km": 130279, "same": "Do tamanho da Inglaterra.", "x2": "Duas vezes a Inglaterra.", "x3": "Três vezes a Inglaterra.", "x4": "Quatro vezes a Inglaterra.", "x5": "Cinco vezes a Inglaterra.", "x10": "Dez vezes a Inglaterra.", "half": "Metade da Inglaterra.", "third": "Um terço da Inglaterra."},
+    ],
+    chance: "chance", home: "Voltar ao mapa inteiro",
     bench: { head: ["", "modelo", "nota", "", "de", "data"], submit: "Enviar um modelo", repo: "GitHub", ref: "sem modelo", refName: "o ano anterior, por perto" },
     num: (n, fem) => (fem && n < 3 ? ["zero", "uma", "duas"] : ["zero", "um", "dois", "três", "quatro", "cinco", "seis", "sete", "oito", "nove", "dez", "onze", "doze"])[n] ?? String(n),
     st: {
@@ -151,7 +178,7 @@ const T = {
       forestA: "Isto é a Amazônia.",
       forestB: v => `${v.cells} milhões de quadrados de floresta, ${v.m} metros cada.`,
       lossA: "Todo ano uma parte cai.",
-      lossB: v => `Desde ${v.y}, ${v.k} mil km².${v.more ? " Mais que a Inglaterra." : ""}`,
+      lossB: v => `Desde ${v.y}, ${v.k} mil km².${v.more}`, more: { km: 130279, say: " Mais que a Inglaterra." },
       model: "Treinamos um modelo para prever a próxima.",
       proof: v => `Testamos no passado. Em ${v.y}, de cada ${v.of} lugares que ele apontou, ${v.hit} foram desmatados.`,
       sources: v => `Ele aprende com ${v.n} fontes públicas, de imagem de satélite a licença de desmate.`,
@@ -164,6 +191,10 @@ const T = {
     onlyFrom: "Escolha um degrau para mostrar só as células com essa chance ou mais",
     stepLo: c => `abaixo de ${c}`, stepMid: (a, b) => `${a} a ${b}`, stepHi: c => `acima de ${c}`, under: c => `menos de ${c}`,
     cellFc: v => `${v.p} de chance de esta célula perder um hectare até julho de ${v.y}`,
+    cellHa: { clear: v => `Cerca de ${v.ha} hectares de desmatamento esperados aqui em ${v.n} meses`, degr: v => `Cerca de ${v.ha} hectares de degradação esperados aqui em ${v.n} meses`, mine: v => `Cerca de ${v.ha} hectares de garimpo esperados aqui em ${v.n} meses` },
+    cellHaLow: { clear: v => `Menos de 1 hectare de desmatamento esperado aqui em ${v.n} meses`, degr: v => `Menos de 1 hectare de degradação esperado aqui em ${v.n} meses`, mine: v => `Menos de 1 hectare de garimpo esperado aqui em ${v.n} meses` },
+    cellFire: v => `Entre os ${v.p}% de floresta onde o fogo mais tende a ocorrer`, cellFireRest: "Fora dos 5% de floresta onde o fogo mais tende a ocorrer",
+    cellPlace: v => `${v.mun}, ${v.uf}${v.land ? `. ${v.land}` : ""}`,
     cellPast: v => `Em ${v.y} esta célula recebeu ${v.p}. ${v.clr ? "Houve desmatamento mapeado nela." : "Não houve desmatamento mapeado nela."}`,
     areaFc: v => (v.low ? `Cada célula aqui tem ${v.p} de chance de perder um hectare até julho de ${v.y}` : `Até ${v.p} de chance de uma célula aqui perder um hectare até julho de ${v.y}`),
     areaPast: v => `Em ${v.y} as células aqui receberam ${v.low ? "" : "até "}${v.p}. ${v.clr ? `Houve desmatamento mapeado em ${v.clr} de ${v.n}.` : "Não houve desmatamento mapeado."}`,
@@ -186,16 +217,12 @@ const T = {
     rank: n => n + "º",
     tiny: "menos de 0,1",
     level: ["Calmo", "Atenção", "Alerta", "Alarme"], replay: "Previsão passada", made: y => `feita em 31 de julho de ${y - 1}`,
-    none: s => `sem ${s}`, rankWhy: (r, n) => `${r}º de ${n}`,
     fc: v => `Cerca de ${v.km} km² de desmatamento esperados${v.here} até julho de ${v.y}`,
     fcNone: v => `Quase nenhum desmatamento esperado aqui até julho de ${v.y}`,
-    fcSub: v => `Provavelmente entre ${v.lo} e ${v.hi}.`,
-    rankSub: v => `${v.rank} entre ${v.n} ${v.many}. ${v.share}% do total da Amazônia.`,
     past: v => `Em ${v.y}, ${v.act} km² desmatados`,
     partial: " Só cenas prioritárias, por enquanto.",
     pastHere: v => `Em ${v.y}, ${v.act} km² desmatados aqui`,
     pastHereNone: v => `Em ${v.y}, nenhum desmatamento mapeado aqui`,
-    pastHereSub: v => `Fatia prevista de ${v.ps}%, fatia real de ${v.as}%.`,
     mfc: {
       clear: v => `Cerca de ${v.km} km² devem ser desmatados${v.here} nos próximos ${v.h} meses`,
       degr: v => `Cerca de ${v.km} km² devem ser degradados${v.here} nos próximos ${v.h} meses`,
@@ -207,10 +234,7 @@ const T = {
       degr: v => `${v.km} km² degradados${v.here} nos últimos três meses`,
       mine: v => `${v.km} km² de garimpo${v.here} nos últimos três meses`,
     },
-    scaledSub: v => `${v.rank} entre ${v.n} ${v.many}.`,
     burned: { months: v => `${v.km} km² queimados${v.here} nos últimos três meses, ${v.prev} um ano antes`, years: v => `${v.km} km² queimados${v.here} nos últimos doze meses, ${v.prev} nos doze anteriores` },
-    fireRank: v => `${v.rank} entre ${v.n} ${v.many} no mapa de onde o fogo costuma ocorrer.`,
-    rankOnly: v => `${v.rank} entre ${v.n} ${v.many} no mapa de risco.`,
     axisM: { clear: "km² desmatados por mês", fire: "km² queimados por mês", degr: "km² degradados por mês", mine: "km² de garimpo por mês" },
     axisW: { fire: "km² queimados em 12 meses", degr: "km² degradados em 12 meses", mine: "km² de garimpo em 12 meses" },
     whole: "Amazônia inteira", to: (a, b) => `${a} a ${b}`,
@@ -225,13 +249,12 @@ const T = {
       mine: v => `${v.km} km² de garimpo${v.here} nos últimos doze meses.`,
     },
     here: " aqui",
-    short: { clear: "desmatamento", scar: "queimadas", degr: "degradação", mine: "garimpo" },
     sign: { clear: "Desmate", scar: "Queimadas", degr: "Degradação", mine: "Garimpo", autos: "Autos IBAMA" },
     now: "agora", ahead: n => `${n} meses`, byJuly: y => `até julho de ${y}`, window: "previsão",
     signs: "Sinais, três meses contra o ano passado",
     enso: ["El Niño", "La Niña", "Pacífico"], ensoLevel: [["muito forte", "forte", "moderado", "fraco"], ["muito forte", "forte", "moderada", "fraca"], "neutro"],
     signTitle: v => `${v.now} nos últimos três meses, ${v.prev} um ano antes`,
-    legend: { clear: "Risco de desmatamento", fire: "Onde o fogo costuma ocorrer", degr: "Risco de degradação", mine: "Risco de garimpo" }, lower: "menor", higher: "maior", next: n => `próximos ${n} meses`,
+    legend: { clear: "Risco de desmatamento", fire: "Onde o fogo costuma ocorrer", degr: "Risco de degradação", mine: "Risco de garimpo" }, lower: "menor", higher: "maior", less: "menos km²", more: "mais km²", next: n => `próximos ${n} meses`,
     about_: x => `cerca de ${x} km²`, range: (lo, hi) => `provável de ${lo} a ${hi}`,
     tipFc: v => `cerca de ${v.exp} km² esperados`, tipPast: v => `${v.exp} km² esperados, ${v.act} desmatados`, tipRank: v => `${v.rank} entre ${v.n}`,
     act: {
@@ -261,11 +284,25 @@ const T = {
       ${v.bench}
       <p class="metric">A nota é a média de ${v.b0} a ${v.b1}.</p>
       <p>O código, os dados e o benchmark são abertos. Quem fizer um modelo melhor passa na frente do nosso.</p>
-      <p class="go"><a class="btn" href="${v.links.benchmark}">${v.submit}</a><a href="${v.links.repository}">${v.repo}</a></p>
-      <p>Ele erra. Uma chance de 10% quer dizer que 9 em cada 10 quadrados assim não caem.</p>
-      <p>Dados do INPE, IBAMA, Universidade de Maryland, JRC e Google.</p>`,
+      <p class="go"><a class="btn" href="${v.links.benchmark}" target="_blank" rel="noopener">${v.submit}</a><a href="${v.links.repository}" target="_blank" rel="noopener">${v.repo}</a></p>`,
   },
 };
+// An area as a place people know. A pure choice: among the language's places and the multiples it has a sentence
+// for (the same size, twice to five times, ten times, a half, a third), the pair whose area is nearest the one
+// given, if it is within 15% of it. On a tie the plain size comes first, then the small multiples, then the
+// fractions. Under 15 km², or with no table for the language, there is nothing to say.
+const LIKE = [["same", 1], ["x2", 2], ["x3", 3], ["x4", 4], ["x5", 5], ["x10", 10], ["half", 1 / 2], ["third", 1 / 3]];
+function likeArea(a, places) {
+  if (!places || !(a >= 15)) return "";
+  let best = null;
+  for (const [k, m] of LIKE) for (const p of places) {
+    if (!p[k] || Math.abs(p.km * m - a) > 0.15 * a) continue;
+    const d = Math.abs(Math.log(a / (p.km * m)));
+    if (!best || d < best.d - 0.02) best = { d, say: p[k] };  // (a plainer multiple keeps its place unless another is nearer by two points or more)
+  }
+  return best ? best.say : "";
+}
+window.prenuncio = { get zoom() { return map.getZoom(); }, like: (a, l) => likeArea(a, T[l]?.like), step: async id => classOf((await sectors(S.kind)).byId.get(String(id))) };  // (for the test: a comparison in a language, and the step of colour a sector is painted in)
 const H = new URLSearchParams(location.hash.slice(1));
 let lang = H.get("l") || localStorage.lang || ((navigator.language || "en").startsWith("pt") ? "pt" : "en");
 if (!T[lang]) lang = "en";
@@ -416,16 +453,13 @@ function alarm(it, K) {
   if (a) {
     const [now, prev] = three(a);
     pts += rising(now, prev);
-    why.push(delta(now, prev) ? `${L_.short[name]} ${delta(now, prev)}` : L_.none(L_.short[name]));
   }
   if (it) {
     const r = rankOf(it, K), n = K.items.length;
     if (expOf(it) > 0) pts += r <= Math.max(1, Math.ceil(0.02 * n)) ? 2 : r <= Math.max(3, Math.ceil(0.1 * n)) ? 1 : 0;
-    why.push(L_.rankWhy(r, n));
   } else {
     const e = enso();
     if (e.x >= 1.5) pts += 1;
-    why.push(`${L_.enso[e.side]} ${e.word}`);
   }
   return { l: Math.min(3, pts), why };
 }
@@ -488,13 +522,21 @@ function room() {
   if (mapSmall()) return { top: 6, right: 6, bottom: 6, left: 6 };
   if (narrow()) { const y = top + lengthOf("--panel-h") + 8; return { top: y, right: 10, left: 10, bottom: Math.max(10, m.y - y - (m.x - 20) / 1.27) }; }
   const left = pagePad() + lengthOf("--rail") + lengthOf("--in");  // the right edge of the left column's surfaces
-  return { top, right: listOn() ? lengthOf("--list-w") : 0, bottom: 0, left, panel: top + lengthOf("--panel-h"), dock: m.y - pagePad() - lengthOf("--dock-h"), column: listOn() || storyOn };
+  return { top, right: listOn() ? lengthOf("--list-w") : 0, bottom: 0, left, panel: Math.max(top + lengthOf("--panel-h"), $("mappanel").offsetParent ? rectOf($("mappanel")).bottom : 0), dock: Math.min(m.y - pagePad() - lengthOf("--dock-h"), docked("chart") && BOX.chart.offsetParent ? rectOf(BOX.chart).top : 1e9), column: listOn() || storyOn };
 }
 // the same room as the padding of a view that is sent somewhere: a sector or a block is brought to the middle of what is free
 const FIT = () => { const r = room(), g = mapSmall() || narrow() ? 0 : 14; return { paddingTopLeft: [r.left + g, r.top + g], paddingBottomRight: [r.right + g, r.bottom + g] }; };
 const BOUNDS = [[M.north - M.rows * M.cell, M.west], [M.north, M.west + M.cols * M.cell]];
-const map = L.map("map", { zoomControl: false, attributionControl: false, minZoom: 3, maxZoom: 14, zoomSnap: 0.25, maxBounds: [[-50, -170], [35, 10]], maxBoundsViscosity: 0.8 });  // wide: a fit may leave the Amazon to one side of the pane
+const FLOOR = 2;  // the furthest out the page itself ever sends the map (the docked picture); the reader's own limit is the fit, set in limit()
+const map = L.map("map", { zoomControl: false, attributionControl: false, minZoom: FLOOR, maxZoom: 14, zoomSnap: 0.25, wheelPxPerZoomLevel: 90, inertiaMaxSpeed: 900 });  // (no maxBounds: hold() keeps the Amazon in sight)
 L.control.zoom({ position: "bottomright" }).addTo(map);
+// above the two: back to the whole Amazon, as on load for the layout of the moment. Dimmed when that is the view.
+const homeBtn = L.DomUtil.create("a", "home");
+homeBtn.href = "#"; homeBtn.setAttribute("role", "button");
+homeBtn.innerHTML = `<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M2 6V2h4M10 2h4v4M14 10v4h-4M6 14H2v-4"/><circle cx="8" cy="8" r="1.5"/></svg>`;
+document.querySelector(".leaflet-control-zoom").prepend(homeBtn);
+L.DomEvent.disableClickPropagation(homeBtn);
+L.DomEvent.on(homeBtn, "click", e => { L.DomEvent.stop(e); pristine = true; whole(!calm()); });
 for (const [name, z] of [["veil", 250], ["base", 300], ["paint", 350], ["lines", 420], ["sel", 430], ["labels", 450]]) {
   const p = map.createPane(name);
   p.style.zIndex = z; p.style.pointerEvents = "none";
@@ -508,15 +550,17 @@ const cvSectors = L.canvas({ padding: 0.4 }), cvLines = L.canvas({ pane: "lines"
 function fitView(size, fit) {
   const b = L.latLngBounds(AMAZON), tl = L.point(fit.paddingTopLeft), br = L.point(fit.paddingBottomRight), sw = map.project(b.getSouthWest(), 0), ne = map.project(b.getNorthEast(), 0);
   const room = size.subtract(tl).subtract(br), z0 = Math.log2(Math.min(room.x / (ne.x - sw.x), room.y / (sw.y - ne.y)));
-  const z = Math.max(map.getMinZoom(), Math.min(map.getMaxZoom(), Math.floor(z0 * 16 + 1e-6) / 16));
+  const z = Math.max(FLOOR, Math.min(map.getMaxZoom(), Math.floor(z0 * 16 + 1e-6) / 16));
   return { c: map.unproject(map.project(b.getSouthWest(), z).add(map.project(b.getNorthEast(), z)).divideBy(2).add(br.subtract(tl).divideBy(2)), z), z };
 }
 // any zoom the map is sent to by the page may be fractional; the reader's own zooming is in whole steps
 // (satellite tiles show seams otherwise)
 function view(v, animate) {
+  if (v.z < map.getMinZoom()) map.setMinZoom(v.z);
+  animate ? map.once("moveend", limit) : setTimeout(limit);
   map.options.zoomSnap = 0;
   animate ? map.flyTo(v.c, v.z, { duration: 0.6 }) : map.setView(v.c, v.z, { animate: false });
-  map.options.zoomSnap = 1;
+  map.options.zoomSnap = 0.25;  // the reader's own zooming, by the wheel or a pinch, goes in quarter steps
 }
 // The whole Amazon on the page, as large as the room allows. The fit knows the Amazon's outline: its western
 // side may reach into the room between the map's panel and the timeline's dock, while its north-west and its
@@ -526,7 +570,7 @@ const SHAPE = rings(R.border).flatMap(p => p[0]).map(q => map.project(q, 0));
 function fitShape(size, r) {
   const b = L.latLngBounds(AMAZON), nw = map.project(b.getNorthWest(), 0), se = map.project(b.getSouthEast(), 0), pad = 14, gap = 30, whole_ = r.column;  // gap: the clear ground kept between the Amazon and the column's pieces
   const x0 = pad, x1 = size.x - r.right - pad, y0 = r.top + pad, y1 = size.y - r.bottom - pad;
-  for (let z = fitView(size, { paddingTopLeft: [x0, y0], paddingBottomRight: [size.x - x1, size.y - y1] }).z; z >= map.getMinZoom(); z -= 1 / 16) {
+  for (let z = fitView(size, { paddingTopLeft: [x0, y0], paddingBottomRight: [size.x - x1, size.y - y1] }).z; z >= FLOOR; z -= 1 / 16) {
     const s = 2 ** z, w = (se.x - nw.x) * s, h = (se.y - nw.y) * s, xMax = x1 - w, yMax = y1 - h, mid = (x0 + x1 - w) / 2;
     let best = null;
     for (let ty = y0; ty <= yMax + 0.5; ty += 4) {
@@ -540,9 +584,33 @@ function fitShape(size, r) {
   }
   return fitView(size, FIT());
 }
-function whole(animate) {
-  const size = map.getSize();
-  view(mapSmall() || narrow() ? fitView(size, FIT()) : fitShape(size, room()), animate);
+const fitNow = () => { const size = map.getSize(); return mapSmall() || narrow() ? fitView(size, FIT()) : fitShape(size, room()); };
+function whole(animate) { view(fitNow(), animate); }
+// The furthest out the reader can zoom is the fit of the moment: the whole Amazon on the stage, never smaller.
+// Worked out again whenever the stage changes (a resize, the list opening or closing, the map leaving or coming
+// back). And the way back to that view is dimmed while it is the view.
+function limit() {
+  if (swapping) return;
+  const v = fitNow(), z = mapSmall() ? FLOOR : v.z;
+  if (map.getZoom() >= z - 1e-6 || z < map.getMinZoom()) map.setMinZoom(z);
+  const at = map.getZoom() < v.z + 0.03 && map.latLngToContainerPoint(v.c).distanceTo(map.getSize().divideBy(2)) < 4;
+  homeBtn.classList.toggle("off", at);
+  homeBtn.setAttribute("aria-disabled", at);
+}
+// The Amazon cannot be lost: however the map is dragged, a good part of it stays in the part of the stage that
+// nothing covers. (Leaflet's own maxBounds will not do: the fitted view puts the Amazon to one side of the pane,
+// beside the left column, which bounds on the view would forbid.)
+let keeping = false;
+function hold() {
+  limit();
+  if (keeping || swapping || mapSmall() || map._animatingZoom) return;
+  const b = L.latLngBounds(AMAZON), nw = map.latLngToContainerPoint(b.getNorthWest()), se = map.latLngToContainerPoint(b.getSouthEast()), r = room(), s = map.getSize();
+  const fix = (a0, a1, f0, f1) => { const need = 0.3 * Math.min(a1 - a0, f1 - f0); return Math.min(a1, f1) - Math.max(a0, f0) >= need ? 0 : a1 < f0 + need ? f0 + need - a1 : f1 - need - a0; };
+  const dx = fix(nw.x, se.x, r.left ?? 0, s.x - r.right), dy = fix(nw.y, se.y, r.top, s.y - r.bottom);
+  if (!dx && !dy) return;
+  keeping = true;
+  map.panBy([-dx, -dy], { animate: !calm(), duration: 0.3 });
+  setTimeout(() => (keeping = false), 450);
 }
 let pristine = !H.get("v");  // until the reader moves the map, it keeps fitting the Amazon to its pane
 let stageView = null;        // while the map is docked: the view to give back to the stage, if the reader had moved it
@@ -550,7 +618,8 @@ if (!pristine) { const [la, lo, z] = H.get("v").split(",").map(Number); stageVie
 if (pristine || front === "chart") whole(); else view(stageView);
 if (front === "map") stageView = null;
 for (const ev of ["pointerdown", "wheel", "keydown"]) $("map").addEventListener(ev, () => (pristine = false), { capture: true, passive: true });
-new ResizeObserver(() => { if (swapping) return; map.invalidateSize(); if (pristine || mapSmall()) whole(); }).observe($("map"));
+new ResizeObserver(() => { if (swapping) return; map.invalidateSize(); if (pristine || mapSmall()) whole(); else limit(); }).observe($("map"));
+map.on("moveend", hold);
 
 // outside the Legal Amazon: bare ground when far, a veil over the imagery when close
 const GROUND = css("--ground"), INK = css("--ink");
@@ -645,13 +714,14 @@ async function kmLevels(y, I) {
   const lo = Math.max(1, code(I.cut["5"])), hi = Math.max(lo + 1, code(I.cut["0.2"])), past = I.actual_km2 != null;
   const lut = new Uint32Array(256);
   for (let v = lo; v < 256; v++) { const c = mix(Math.min(1, (v - lo) / (hi - lo))); lut[v] = rgba(c[0], c[1], c[2], 1); }
-  const color = new Uint32Array(M.cols * M.rows), tell = new Uint8Array(M.cols * M.rows), clr = past ? new Uint8Array(M.cols * M.rows) : null;  // tell: which cell wins in a block
+  const color = new Uint32Array(M.cols * M.rows), raw8 = new Uint8Array(M.cols * M.rows), tell = new Uint8Array(M.cols * M.rows), clr = past ? new Uint8Array(M.cols * M.rows) : null;  // tell: which cell wins in a block
   for (let i = 0; i < color.length; i++) {
     const R_ = d[4 * i], cleared = past && d[4 * i + 1] >= CLEARED_CODE;
+    raw8[i] = R_;
     color[i] = cleared ? MAPPED : lut[R_];
     if (cleared) clr[i] = 1; else if (color[i]) tell[i] = Math.min(255, R_);
   }
-  const levels = [{ f: 1, cols: M.cols, rows: M.rows, color, tell, clr }];
+  const levels = [{ f: 1, cols: M.cols, rows: M.rows, color, tell, clr, code: raw8 }];
   for (const k of [3, 2, 2]) {  // 3 km, 6 km and 12 km blocks
     const p = levels.at(-1), c2 = Math.ceil(p.cols / k), r2 = Math.ceil(p.rows / k), n2 = (p.f * k) ** 2;
     const q = { f: p.f * k, cols: c2, rows: r2, color: new Uint32Array(c2 * r2), raw: new Uint32Array(c2 * r2), tell: new Uint8Array(c2 * r2), n: new Uint16Array(c2 * r2), clr: clr && new Uint16Array(c2 * r2) };
@@ -854,12 +924,24 @@ function shareLine() {
 }
 // what a cell says when the pointer or a finger is on it. Close up it is the cell; from far it is the block on
 // screen: the highest chance among its cells and, in a replay, how many of them had clearing.
-const cellTip = L.tooltip({ className: "tip cell", direction: "top", offset: [0, -8], opacity: 1 });
-function cellSay(e) {
-  if (mapSmall()) return;
-  const on = cellsOn() && grid?.prob && grid.key === key() && gridLayer._container.dataset.key, l0 = on && grid.levels[0], f = +gridLayer._container.dataset.f || 1;
-  const r = on ? Math.floor((M.north - e.latlng.lat) / grid.cell) : -1, c = on ? Math.floor((e.latlng.lng - M.west) / grid.cell) : -1;
-  if (r < 0 || c < 0 || r >= l0.rows || c >= l0.cols) return map.closeTooltip(cellTip);
+// The first line: what the layer on screen says of the cell under the pointer. For the yearly clearing forecast,
+// its chance (from far, the highest among the cells of the block; in a replay, whether clearing was mapped). For
+// the 1 km layers, the hectares the layer expects there in its window, decoded as pipeline/export.py encodes them
+// (the red channel is 255 times the cube root of the km²); for fire, which has no forecast amount, the band of
+// the forest the cell stands in. Nothing where the layer has nothing.
+function cellLine(ll) {
+  const L_ = t();
+  if (!cellsOn() || !grid || grid.key !== key() || !gridLayer._container.dataset.key) return "";
+  const l0 = grid.levels[0], r = Math.floor((M.north - ll.lat) / grid.cell), c = Math.floor((ll.lng - M.west) / grid.cell);
+  if (r < 0 || c < 0 || r >= l0.rows || c >= l0.cols) return "";
+  if (!grid.prob) {
+    const code = l0.code?.[r * l0.cols + c], I = info(), hz = S.hazard;
+    if (!code) return "";
+    const km2 = (code / 255) ** 3;
+    if (hz === "fire") { const q = ["0.2", "1", "5"].find(k => km2 >= I.cut[k]); return q ? L_.cellFire({ p: fmt(+q, q === "0.2" ? 1 : 0) }) : L_.cellFireRest; }
+    return 100 * km2 < 0.95 ? L_.cellHaLow[hz]({ n: I.months }) : L_.cellHa[hz]({ ha: approx(100 * km2), n: I.months });
+  }
+  const f = +gridLayer._container.dataset.f || 1;
   let v = 0, n = 0, clr = 0;
   for (let y = r - r % f; y < Math.min(l0.rows, r - r % f + f); y++) for (let x = c - c % f, j = y * l0.cols + x; x < Math.min(l0.cols, c - c % f + f); x++, j++) {
     if (!l0.val[j]) continue;
@@ -867,14 +949,40 @@ function cellSay(e) {
     if (l0.val[j] > v) v = l0.val[j];
     if (l0.bits && (l0.bits[j >> 3] >> (j & 7)) & 1) clr++;
   }
-  if (!v) return map.closeTooltip(cellTip);
+  if (!v) return "";
   const ch = (v / 255) ** 2, o = { y: grid.key, p: chanceText(ch), low: ch < PCUT[0], clr: f === 1 ? clr : clr && fmt(clr), n: fmt(n) };
-  const text = (f === 1 ? (l0.bits ? t().cellPast : t().cellFc) : l0.bits ? t().areaPast : t().areaFc)(o);
-  cellTip.setLatLng(e.latlng).setContent(text[0].toUpperCase() + text.slice(1));
-  map.openTooltip(cellTip);
+  return (f === 1 ? (l0.bits ? L_.cellPast : L_.cellFc) : l0.bits ? L_.areaPast : L_.areaFc)(o);
+}
+// The second line: where that is. The municipality and its state, and the Indigenous land or conservation unit
+// the point lies in. The shapes are the sectors', fetched the first time they are asked for; until they are in,
+// the first line stands alone.
+const WHERE = { K: null, asked: false, last: {} };
+const ringHas = (ring, la, lo) => { let inside = false; for (let i = 0, j = ring.length - 1; i < ring.length; j = i++) { const [y1, x1] = ring[i], [y2, x2] = ring[j]; if ((y1 > la) !== (y2 > la) && lo < x1 + (la - y1) * (x2 - x1) / (y2 - y1)) inside = !inside; } return inside; };
+const sectorHas = (it, la, lo) => it.ll.some(poly => ringHas(poly[0], la, lo) && !poly.slice(1).some(h => ringHas(h, la, lo)));
+function placeAt(ll, again) {
+  if (!WHERE.K) { if (!WHERE.asked) { WHERE.asked = true; Promise.all(["mun", "ti", "uc"].map(sectors)).then(K => { WHERE.K = K; again(); }).catch(() => {}); } return ""; }
+  const find = (K, k) => (WHERE.last[k] && sectorHas(WHERE.last[k], ll.lat, ll.lng) ? WHERE.last[k] : (WHERE.last[k] = K.items.find(it => (it.bb ||= L.latLngBounds(it.ll.flat(2))).contains(ll) && sectorHas(it, ll.lat, ll.lng)) || null));
+  const [mun, ti, uc] = WHERE.K.map((K, n) => find(K, n));
+  return mun ? t().cellPlace({ mun: mun.n, uf: mun.s, land: ti ? `TI ${ti.n}` : uc ? `UC ${uc.n}` : "" }) : "";
+}
+// The pointer shows it; a click or a tap pins it, until a click elsewhere or Escape.
+const cellTip = L.tooltip({ className: "tip cell", direction: "top", offset: [0, -8], opacity: 1 });
+let pin = null;
+function cellSay(e) {
+  if (mapSmall()) return;
+  if (e.type === "mousemove") { if (pin && map.hasLayer(cellTip)) return; pin = null; }
+  const ll = e.latlng, line = cellLine(ll);
+  if (!line) { pin = null; return map.closeTooltip(cellTip); }
+  pin = e.type === "click" ? ll : null;
+  const show = () => {
+    const where = placeAt(ll, () => { if (map.hasLayer(cellTip) && cellTip.getLatLng().equals(ll)) show(); });
+    cellTip.setLatLng(ll).setContent(esc(line[0].toUpperCase() + line.slice(1)) + (where ? `<small>${esc(where)}</small>` : ""));
+    map.openTooltip(cellTip);
+  };
+  show();
 }
 map.on("mousemove click", cellSay);
-map.on("mouseout", () => map.closeTooltip(cellTip));
+map.on("mouseout", () => { if (!pin) map.closeTooltip(cellTip); });
 function zoomed() {
   const z = map.getZoom();
   gridLayer._container.style.opacity = z < SAT_ZOOM ? 1 : 0.7;  // over imagery, let the ground show through
@@ -888,9 +996,8 @@ map.on("zoomend", zoomed);
 
 // ---------- sectors on the map: five classes of forecast risk per area. The lowest is left as the base map
 // shows it, green where there is forest; the others take the hazard's four steps, up to red for clearing. ----------
-let shown = null, outline = null, cuts = [];
-const density = it => expOf(it) / it.a;
-const classOf = it => { const d = density(it); let c = 0; while (c < cuts.length && d >= cuts[c]) c++; return c; };
+let shown = null, outline = null, cls = new Map();
+const classOf = it => cls.get(it) ?? 0;
 function styleOf(it) {
   const c = classOf(it), close = map.getZoom() >= SAT_ZOOM, thin = shown === "mun";
   return { fillColor: `rgb(${steps()[Math.max(0, c - 1)]})`, fillOpacity: c ? (close ? 0.5 : 1) : 0, color: INK, opacity: thin ? 0.3 : 0.6, weight: thin ? 0.5 : 0.8 };
@@ -911,9 +1018,13 @@ async function drawSectors() {
     .on("mouseover", () => { it.layer.setStyle({ color: INK, opacity: 1, weight: 2 }); it.layer.setTooltipContent(tipOf(it, K)); })
     .on("mouseout", () => it.layer.setStyle(styleOf(it))))));
   if (shown !== want) { K.group.addTo(map); shown = want; }
-  // class breaks: the lower 60% stays bare, then the next 20%, 12%, 6% and the top 2%
-  const d = K.items.map(density).sort((a, b) => a - b), q = p => d[Math.min(d.length - 1, Math.floor(d.length * p))];
-  cuts = [0.6, 0.8, 0.92, 0.98].map(q).map((x, i, a) => Math.max(x, 1e-9, (a[i - 1] ?? 0) * 1.0001));
+  // The colour says what the hover and the ranking say: the km² expected in the sector. The steps follow the
+  // share of the total: the sectors that hold the first half of it take the brightest step, then those up to
+  // 80%, 95% and 99%; the rest, with almost nothing, stay as the base map has them, green where there is forest.
+  const by = [...K.items].sort((a, b) => expOf(b) - expOf(a)), tot = by.reduce((x, it) => x + expOf(it), 0);
+  cls = new Map();
+  let cum = 0;
+  for (const it of by) { const e = expOf(it); cls.set(it, !(e > 0) || !tot ? 0 : cum < 0.5 * tot ? 4 : cum < 0.8 * tot ? 3 : cum < 0.95 * tot ? 2 : cum < 0.99 * tot ? 1 : 0); cum += e; }
   for (const it of K.items) it.layer.setStyle(styleOf(it));
 }
 map.on("zoomend", () => { if (shown) SEC[shown].then(K => K.items.forEach(it => it.layer.setStyle(styleOf(it)))); });
@@ -942,6 +1053,7 @@ async function say() {
   const v = { y, here, many: L_.many[S.kind], n: K?.items.length };
   if (it) v.rank = L_.rank(rankOf(it, K));
   let head, sub = "", hint = "";
+  const like = a => likeArea(a, L_.like);  // the second line under a headline that states an area
   const D = acting() ? actsOf(it) : null;
   if (D) {
     // what enforcement accounts for, and in the same breath what it does not
@@ -955,16 +1067,16 @@ async function say() {
     const mo = monthsOf(it), a = (it ? it.L[k] : R.amazon.L[k]) || [], sum3 = from => mo.obs(from) + mo.obs(from + 1) + mo.obs(from + 2);
     const [now, prev] = S.scale === "months" ? [sum3(0), sum3(12)] : [a.at(-1) ?? 0, a.at(-2) ?? 0];
     head = L_.burned[S.scale]({ km: km(now), prev: km(prev), here });
-    if (it) sub = L_.fireRank(v);
+    sub = like(now);
   } else if (!yearly) {
     // what the model expects over the months ahead; where there is no monthly forecast, what was measured
     const mo = monthsOf(it), sum = ahead(mo, I.months);
     if (sum && (sum.km >= 0.05 || !it)) {
       head = L_.mfc[hz]({ km: approx(sum.km), here, h: I.months });
-      sub = mo.scaled ? L_.scaledSub(v) : sum.lo == null ? "" : L_.fcSub({ lo: approx(sum.lo), hi: approx(sum.hi) });
+      sub = like(sum.km);
     } else if (S.scale === "months") {
       head = L_.mobs[hz]({ km: km(mo.obs(0) + mo.obs(1) + mo.obs(2)), here });
-      if (it) sub = L_.rankOnly(v);
+      sub = like(mo.obs(0) + mo.obs(1) + mo.obs(2));
     } else {
       const a = it ? it.L[k] : R.amazon.L[k];
       head = it ? L_.whereHere({ ...v, risk: L_.risk[hz], end: endOf(I) }) : L_.where[hz]({ end: endOf(I) });
@@ -976,26 +1088,26 @@ async function say() {
     // how the forecast did: cells expected to lose a hectare against cells that did, where the chances were
     // checked for that year; otherwise what was cleared
     if (!it && Y) head = L_.pastP({ y, exp: n3(Y.expected_cells), act: n3(Y.actual_cells) });
-    else if (!it) head = L_.past({ y, act: fmt(act) });
+    else if (!it) { head = L_.past({ y, act: fmt(act) }); sub = like(act); }
     else {
       head = act < 0.05 ? L_.pastHereNone(v) : L_.pastHere({ y, act: km(act) });
-      sub = L_.pastHereSub({ ps: share(100 * expOf(it) / I.risk_km2), as: share(100 * act / I.actual_km2) });
+      sub = like(act);
     }
     if (y === PARTIAL) sub += L_.partial;
   } else if (it) {
     const e = expOf(it);
     head = e < 0.05 ? L_.fcNone(v) : L_.fc({ ...v, km: approx(e) });
-    sub = L_.rankSub({ ...v, share: share(100 * e / I.risk_km2) });
+    sub = like(e);
   } else {
     head = L_.fc({ ...v, km: approx(M.forecast.total_km2) });
-    sub = L_.fcSub({ lo: approx(M.forecast.range_km2[0]), hi: approx(M.forecast.range_km2[1]) });
+    sub = like(M.forecast.total_km2);
   }
   // the level sets how much red there is. A replayed year has none: the alarm is about now. Nor has the actions
   // view, which looks back and whose news is good.
   const A = past || D ? null : alarm(it, K), l = A ? A.l : "r", named = D && !D.own ? null : it;
   document.documentElement.dataset.level = $("lead").dataset.l = l;
   $("level").innerHTML = (A ? `<span class="meter" aria-hidden="true">${[1, 2, 3].map(n => `<i${n <= A.l ? ' class="on"' : ""}></i>`).join("")}</span>` : "")
-    + `<b>${A ? L_.level[A.l] : D ? L_.act.band : L_.replay}</b><span>${A ? A.why.join(", ") : D ? L_.act.bandSub({ n: D.own ? 0 : fmt(ACT.municipalities) }) : L_.made(y)}</span>`;
+    + `<b>${A ? L_.level[A.l] : D ? L_.act.band : L_.replay}</b>${A ? "" : `<span>${D ? L_.act.bandSub({ n: D.own ? 0 : fmt(ACT.municipalities) }) : L_.made(y)}</span>`}`;
   // the whole Amazon needs no label; a sector is named, with a way back. In the actions view a sector that has
   // no figure of its own is not named: the numbers are the Amazon's, and the label says so.
   $("scope").innerHTML = it ? `<span>${named ? esc(it.n) + (it.s ? ", " + it.s : "") : L_.amazon}</span><button aria-label="${L_.whole}" title="${L_.whole}">×</button>` : "";
@@ -1015,7 +1127,7 @@ async function legend() {
   if (k !== key()) return;
   const mapped = past && cellsOn() ? `<span class="sw" style="--c:rgb(${DARK})">${L_.mapped}</span>` : "";
   const what = `<span class="what">${glyph(hz)}<span>${prob ? (past ? L_.chanceFor(k) : L_.chanceBy(k)) : L_.legend[hz] + (yearly || hz === "fire" ? "" : ", " + L_.next(I.months))}</span></span>`;
-  $("legend").innerHTML = what + (prob ? rampKey(true) : `<span class="rng">${L_.lower}<span class="ramp">${[FOREST, ...steps()].map(c => `<i style="--c:rgb(${c})"></i>`).join("")}</span>${L_.higher}</span>`) + mapped;
+  $("legend").innerHTML = what + (prob ? rampKey(true) : `<span class="rng">${cellsOn() ? L_.lower : L_.less}<span class="ramp">${[FOREST, ...steps()].map(c => `<i style="--c:rgb(${c})"></i>`).join("")}</span>${cellsOn() ? L_.higher : L_.more}</span>`) + mapped;
   $("legend").classList.toggle("prob", !!prob);
   shareLine();
 }
@@ -1286,7 +1398,7 @@ function morph(box, big, small, ref, s, down, ms) {
 const dockOf = box => { box.dataset.as = "dock"; const r = [rectOf(box), rectOf($("map"))]; box.dataset.as = "stage"; return r; };
 // the view the docked map takes: the whole Amazon if the reader never moved the map, otherwise the same area as on the stage
 const dockView = size => (pristine ? fitView(size, { paddingTopLeft: [6, 6], paddingBottomRight: [6, 6] })
-  : { c: map.getCenter(), z: Math.max(map.getMinZoom(), map.getZoom() + Math.log2(Math.min(size.x / map.getSize().x, size.y / map.getSize().y))) });
+  : { c: map.getCenter(), z: Math.max(FLOOR, map.getZoom() + Math.log2(Math.min(size.x / map.getSize().x, size.y / map.getSize().y))) });
 const corner = (big, small) => ({ big: [big.x, big.y], small: [small.x, small.y] });  // contents that scale from the box's own corner
 // The map as it is drawn at this moment, in one bitmap: its canvases, in the order of their panes. (Satellite
 // tiles, which only show close up, are another site's pictures and cannot be copied: the ground stands in.)
@@ -1335,41 +1447,55 @@ async function mapMove(dock, ms) {
   }
   if (!ms) return;
   const anims = morph(shot, big, small, ref, s, dock, ms);
-  if (first) first.remove();
-  await Promise.all(anims.map(a => a.finished));
+  if (first) { $("app").append(first); first.animate({ opacity: [1, 0] }, { duration: 200, fill: "forwards" }).finished.then(() => first.remove(), () => first.remove()); }
+  await Promise.race([Promise.all(anims.map(a => a.finished)), new Promise(r => setTimeout(r, ms + 500))]).catch(() => {});  // (never left waiting on a drawing that was cut short)
   box.style.visibility = "";
   await frame();
   await shot.animate({ opacity: [1, 0] }, { duration: 180, easing: "linear" }).finished.catch(() => {});
   shot.remove();
 }
-// The swap of the map and the timeline. The timeline that grows takes its place on the stage at once and is
-// drawn out from the dock; the one that shrinks is drawn down to its dock and only then laid out there. The map
-// moves as a picture of itself (mapMove).
+// The timeline goes to the stage or back to its dock the same way: it is laid out and drawn in its new place at
+// once, out of sight, and what moves is a still copy of it as it is on the stage, scaled between the two places.
+// Going up, the copy of the dock fades from over it as it starts; arriving, the moving copy fades from over the
+// real one. So no bar, word or surface is seen being redrawn at the wrong size.
+async function chartMove(up, ms) {
+  const cb = BOX.chart;
+  if (!ms) { cb.dataset.as = up ? "stage" : "dock"; chart(); return; }
+  const copy = () => { const c = cb.cloneNode(true); c.classList.add("shot"); c.inert = true; c.setAttribute("aria-hidden", "true"); c.style.visibility = ""; c.style.zIndex = up ? 38 : 40; $("app").append(c); return c; };  // (growing, it passes under the picture of the map; shrinking, over it)
+  let big, small, pic, first = null;
+  if (up) {
+    small = rectOf(cb);
+    first = copy();
+    cb.style.visibility = "hidden";
+    cb.dataset.as = "stage";
+    chart();
+    big = rectOf(cb);
+    pic = copy();
+    $("app").append(first);
+  } else {
+    big = rectOf(cb);
+    pic = copy();
+    cb.dataset.as = "dock";
+    chart();
+    small = rectOf(cb);
+  }
+  const anims = morph(pic, big, small, corner(big, small), small.width / big.width, !up, ms);
+  if (first) first.animate({ opacity: [1, 0] }, { duration: 200, fill: "forwards" }).finished.then(() => first.remove(), () => first.remove());
+  await Promise.race([Promise.all(anims.map(a => a.finished)), new Promise(r => setTimeout(r, ms + 500))]).catch(() => {});
+  cb.style.visibility = "";
+  await new Promise(r => requestAnimationFrame(r));
+  await pic.animate({ opacity: [1, 0] }, { duration: 180, easing: "linear" }).finished.catch(() => {});
+  pic.remove();
+}
+// The swap of the map and the timeline: each moves as a picture of itself, at the same time.
 async function swap(to = front === "map" ? "chart" : "map") {
   if (swapping || to === front) return;
   if (narrow()) { front = to; place(); sheetAt(); refresh(); return; }  // a phone: the timeline's sheet goes up or down over the map, which stays where it is
   swapping = true;
   map.closeTooltip(cellTip); map.eachLayer(l => l.closeTooltip?.());  // no label rides the map into its dock
-  const cb = BOX.chart, ms = calm() ? 0 : 600;
-  let anims = [], moved;
+  const ms = calm() ? 0 : 600;
   root.dataset.swap = front = to;
-  if (to === "chart") {
-    const was = rectOf(cb);
-    cb.dataset.as = "stage";
-    chart();
-    moved = mapMove(true, ms);
-    const big = rectOf(cb);
-    if (ms) anims = morph(cb, big, was, corner(big, was), was.width / big.width, false, ms);
-  } else {
-    const big = rectOf(cb), [small] = dockOf(cb);
-    cb.classList.add("sinking");
-    moved = mapMove(false, ms);
-    if (ms) anims = morph(cb, big, small, corner(big, small), small.width / big.width, true, ms);
-  }
-  await Promise.all([moved, ...anims.map(a => a.finished)]);
-  cb.dataset.as = to === "chart" ? "stage" : "dock";
-  cb.classList.remove("sinking");
-  for (const a of anims) a.cancel();
+  await Promise.all([chartMove(to === "chart", ms), mapMove(to === "chart", ms)]);
   root.dataset.front = panel || to;
   delete root.dataset.swap;
   swapping = false;
@@ -1380,9 +1506,8 @@ async function mapTo(dock) {
   swapping = true;
   map.closeTooltip(cellTip); map.eachLayer(l => l.closeTooltip?.());
   root.dataset.swap = "map";
-  await mapMove(dock, calm() ? 0 : 600);
-  delete root.dataset.swap;
-  swapping = false;
+  try { await mapMove(dock, calm() ? 0 : 600); }
+  finally { BOX.map.dataset.as = dock ? "dock" : "stage"; BOX.map.style.visibility = ""; delete root.dataset.swap; swapping = false; }
 }
 // make the map's place agree with what holds the stage (a step of the story may change its mind while the map is on its way)
 let syncing = false;
@@ -1390,8 +1515,8 @@ async function stageSync() {
   root.dataset.front = panel || front;
   if (syncing) return;
   syncing = true;
-  while (!narrow() && !swapping && docked("map") !== (front !== "map" || !!panel)) await mapTo(!docked("map"));
-  syncing = false;
+  try { while (!narrow() && !swapping && docked("map") !== (front !== "map" || !!panel)) await mapTo(!docked("map")); }
+  finally { syncing = false; }
   refresh();
 }
 // a panel takes the stage, and gives it back when it is closed
@@ -1445,6 +1570,7 @@ function chrome() {
   // each box says how it comes forward; the timeline on the stage says how to send it back
   for (const [id, label] of [["chart-front", front === "chart" ? L_.close : L_.front.chart], ["map-front", L_.front.map]]) { $(id).setAttribute("aria-label", label); $(id).title = label; }
   for (const [id, label] of [["list-close", L_.closeList], ["about-close", L_.close], ["api-close", L_.close], ["menu-btn", L_.menu]]) { $(id).setAttribute("aria-label", label); $(id).title = label; }
+  homeBtn.setAttribute("aria-label", L_.home); homeBtn.title = L_.home;
   $("list-title").textContent = S.mode === "sectors" ? L_.ranking : L_.modes.prio;
   $("story-btn").textContent = L_.story;
   $("skip-btn").textContent = L_.skip;
@@ -1464,7 +1590,7 @@ async function refresh() {
   if (acting() && (S.hazard !== "clear" || !ACT)) S.scale = "years";
   if (S.hazard === "clear" && !replays()) S.year = FY;  // months and actions look around now; the map stays on the forecast
   chrome();
-  if (listOn() !== listWas) { listWas = listOn(); sheetAt("half"); if (pristine && !mapSmall() && !narrow()) whole(!calm()); }  // the Amazon glides to make room for the list, and to take it back
+  if (listOn() !== listWas) { listWas = listOn(); sheetAt("half"); if (pristine && !mapSmall() && !narrow()) whole(!calm()); else setTimeout(limit); }  // the Amazon glides to make room for the list, and to take it back
   link();
   say();  // the bulletin and the timeline need only the small JSON files, so they come first
   startMap(); paint(); drawSectors();
@@ -1497,10 +1623,9 @@ async function list() {
     if (S.mode === "prio") blocks.addTo(map);
     if (listed !== "prio" + lang) {
       // a place a row: its rank, its name, a tag if it lies in protected land, and a thin bar as long as the cells expected to lose a hectare there
-      const max = Math.max(...PR.blocks.map(b => b.expected_cells)), min = Math.min(...PR.blocks.map(b => b.expected_cells));
-      const len = v => 12 + 88 * (v - min) / Math.max(max - min, 1e-9);  // the last place keeps a stub, so the bars tell the places apart
+      const pc = b => b.expected_cells / Math.max(1, b.forest_cells), top = Math.max(...PR.blocks.map(pc));  // a place's chance: the mean chance of its forest cells
       $("list-say").textContent = "";
-      $("list-rows").innerHTML = PR.blocks.map(b => row(`data-b="${b.rank}"`, b.rank, `${esc(b.municipality)}, ${b.state}`, `<span class="len" aria-hidden="true"><i style="width:${len(b.expected_cells).toFixed(1)}%"></i></span>`, false, b.land ? `<abbr class="tag" title="${L_.land[b.land]}">${b.land.toUpperCase()}</abbr>` : "")).join("");
+      $("list-rows").innerHTML = `<li class="h" aria-hidden="true"><span>${L_.chance}</span></li>` + PR.blocks.map(b => row(`data-b="${b.rank}"`, b.rank, `${esc(b.municipality)}, ${b.state}`, `<span class="len" aria-hidden="true"><i style="width:${(100 * pc(b) / top).toFixed(1)}%"></i></span><span class="v">${fmt(100 * pc(b))}%</span>`, false, b.land ? `<abbr class="tag" title="${L_.land[b.land]}">${b.land.toUpperCase()}</abbr>` : "")).join("");
       listed = "prio" + lang;
     }
     $("list-rows").className = "prio";
@@ -1571,6 +1696,7 @@ $("step").onclick = e => {
 function pick(y) { if (y !== FY) leavePrio(); S.year = y; refresh(); }
 document.addEventListener("keydown", e => {
   if (storyOn) return;
+  if (e.key === "Escape" && pin) { pin = null; return map.closeTooltip(cellTip); }
   if (e.key === "Escape" && panel) return $(panel).close();
   if (panel) return;
   if (e.key === "Escape" && root.dataset.menu != null) return menu(false);
@@ -1593,7 +1719,7 @@ function bench() {
   // until the file carries the table, the same rows from the benchmark's own figures
   const rows = ST.leaderboard?.rows || [{ rank: 1, model: MODEL, url: ST.links.leaderboard, cap5: B.today, unseen_2026: B.unseen_2026, by: "Prenúncio", kind: "model" }, { rank: 2, model: "last year", url: ST.links.benchmark, cap5: B.naive, by: "reference", kind: "reference" }];
   const head = L_.head.map((h, i) => `<th${i === 2 || i === 3 ? ' class="n"' : ""}>${i === 3 ? ST.model.trained_on.last_outcome_year : h}</th>`).join("");
-  return `<table class="bench"><thead><tr>${head}</tr></thead><tbody>${rows.map(r => `<tr${r.kind === "reference" ? ' class="ref"' : ""}><td>${r.rank}</td><td><a href="${esc(r.url)}">${esc(r.kind === "reference" && L_.refName ? L_.refName : r.model)}</a></td><td class="n">${pc(r.cap5)}</td><td class="n">${pc(r.unseen_2026)}</td><td>${r.kind === "reference" ? L_.ref : esc(r.by)}</td><td>${r.date ? day(r.date) : ""}</td></tr>`).join("")}</tbody></table>`;
+  return `<table class="bench"><thead><tr>${head}</tr></thead><tbody>${rows.map(r => `<tr${r.kind === "reference" ? ' class="ref"' : ""}><td>${r.rank}</td><td><a href="${esc(r.url)}" target="_blank" rel="noopener">${esc(r.kind === "reference" && L_.refName ? L_.refName : r.model)}</a></td><td class="n">${pc(r.cap5)}</td><td class="n">${pc(r.unseen_2026)}</td><td>${r.kind === "reference" ? L_.ref : esc(r.by)}</td><td>${r.date ? day(r.date) : ""}</td></tr>`).join("")}</tbody></table>`;
 }
 function about(at) {
   if (!ST) return;
@@ -1602,10 +1728,13 @@ function about(at) {
     year: ST.forecast.year, name: MODEL, span: +ST.forecast.made_on.slice(0, 4) - ST.history.years[0], m: ST.forest.cell_m, y: ST.check.year, hit, of,
     bench: bench(), b0: ST.benchmark.years[0], b1: ST.benchmark.years.at(-1), links: ST.links, submit: t().bench.submit, repo: t().bench.repo,
   });
+  // in the story it is put together a piece at a time: the figure alone, then the benchmark alone, each entering as the other leaves
+  const only = storyOn ? (at === "about-benchmark" ? "bench" : "fig") : "";
+  if (only) { if ($("about").dataset.only !== only) { $("about-body").classList.remove("in"); void $("about-body").offsetWidth; $("about-body").classList.add("in"); } $("about").dataset.only = only; } else { delete $("about").dataset.only; $("about-body").classList.remove("in"); }
   stageOn("about");  // it takes the stage, and the map waits in its corner
   if (storyOn) $("story-next").focus({ preventScroll: true });  // (opening takes the focus to the panel's X; in the story it belongs to the way on, so Enter and Space go on)
   figure();
-  $("about").scrollTop = at && $(at) ? $(at).offsetTop - $("about-bar").offsetHeight : 0;  // that part, right under the bar
+  $("about").scrollTop = !only && at && $(at) ? $(at).offsetTop - $("about-bar").offsetHeight : 0;  // that part, right under the bar
 }
 $("about-btn").hidden = !ST;
 $("about-btn").onclick = () => about();
@@ -1663,7 +1792,6 @@ map.on("moveend", link);
 // Each step is a scene, a plain description of what is on the page, and scene() makes the page match it, so a
 // step can be reached forward, backward or by a change of language. Heavy layers load while the first lines are read.
 const CY = ST?.check?.year;  // the year the story replays
-const ENGLAND = 130279;      // km², for the measure of what has been cleared since the record began
 const SCENES = [
   { id: "forestA" },
   { id: "forestB", fx: "mosaic" },
@@ -1685,7 +1813,7 @@ function storyWords(id) {
     case "forestA": return L_.forestA;
     case "forestB": return L_.forestB({ cells: n0(ST.forest.cells / 1e6), m: ST.forest.cell_m });
     case "lossA": return L_.lossA;
-    case "lossB": return L_.lossB({ y: hist.years[0], k: n0(sum / 1000), more: sum > ENGLAND });
+    case "lossB": return L_.lossB({ y: hist.years[0], k: n0(sum / 1000), more: L_.more && sum > L_.more.km ? L_.more.say : "" });
     case "model": return L_.model;
     case "proof": return L_.proof({ y: chk.year, hit, of });
     case "sources": return L_.sources({ n: t().num(ST.model.inputs.length, true) });
@@ -1750,7 +1878,7 @@ function figLayers(w, h, D) {
 function figure() {
   const el = $("model-fig");
   cancelAnimationFrame(FIG.raf);
-  if (!el || !ST) return;
+  if (!el || !ST || !el.clientWidth) return;  // (in the story's benchmark step the figure is off the stage)
   if (!FIG.tenure && !FIG.wants) {  // the tenure layer is small: fetched once, the first time the figure is asked for
     FIG.wants = true;
     fetch("data/tenure.png").then(r => r.blob()).then(b => createImageBitmap(b, { colorSpaceConversion: "none", premultiplyAlpha: "none" })).then(bmp => { const c = new OffscreenCanvas(320, 249), cx = c.getContext("2d", { willReadFrequently: true }); cx.imageSmoothingEnabled = false; cx.drawImage(bmp, 0, 0, 320, 249); const d = cx.getImageData(0, 0, 320, 249).data; FIG.tenure = Uint8Array.from({ length: 320 * 249 }, (_, i) => d[4 * i]); if ($("about").open) figure(); }).catch(() => {});
