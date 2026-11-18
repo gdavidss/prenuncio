@@ -1,0 +1,541 @@
+{
+ "about": "À propos",
+ "aboutText": {
+  "benchmark": "Benchmark",
+  "line1": "Prenúncio montre où l'Amazonie risque d'être déboisée d'ici juillet {year}.",
+  "line2": "Nous l'avons conçu pour que ceux qui font respecter la loi arrivent les premiers.",
+  "metric": "Le score est la moyenne de {b0} à {b1}.",
+  "model": "Le modèle, {name}, a appris sur {span} ans de données publiques. Pour chaque carré de forêt de {m} mètres de côté, il donne la probabilité de déforestation dans l'année qui suit.",
+  "open": "Le code, les données et le benchmark sont ouverts. Faites un meilleur modèle et il passera devant le nôtre.",
+  "tested": "Nous l'avons testé sur des années qu'il n'avait jamais vues. En {y}, sur {of} lieux qu'il a désignés, {hit} ont été déboisés."
+ },
+ "about_": "environ {x} km²",
+ "act": {
+  "against": "contre {x}",
+  "axis": "km² déboisés par semestre",
+  "band": "Contrôles",
+  "bandSub": "procès-verbaux et embargos de l'IBAMA",
+  "bandSubN": {
+   "one": "procès-verbaux et embargos de l'IBAMA, {n} municipalité",
+   "other": "procès-verbaux et embargos de l'IBAMA, {n} municipalités"
+  },
+  "held": "en plus, avec les contrôles de {ref}",
+  "honest": "C'est un plancher et une association, pas une preuve de causalité.",
+  "measured": "mesuré",
+  "none": "Les contrôles n'expliquent aucun déboisement évité ici depuis {since}",
+  "parts": [
+   "un quart",
+   "un tiers",
+   "la moitié",
+   "les deux tiers",
+   "les trois quarts"
+  ],
+  "ref": "moyenne entre {from} et {to}",
+  "say": {
+   "all": "Les contrôles expliquent {km} km² non déboisés depuis {since}",
+   "here": "Les contrôles expliquent {km} km² non déboisés ici depuis {since}"
+  },
+  "sign": {
+   "collective": "Embargos collectifs",
+   "field": "Embargos sur le terrain",
+   "notices": "PV pour 100 km²",
+   "remote": "Embargos à distance"
+  },
+  "signTitle": {
+   "collective": "Terres indigènes entières et autres terres publiques mises sous embargo d'un seul coup",
+   "field": "Surface mise sous embargo lors d'une visite de terrain",
+   "notices": "Procès-verbaux d'infraction pour 100 km² de déforestation",
+   "remote": "Surface mise sous embargo par satellite, sans visite"
+  },
+  "signs": "Actions de l'IBAMA, année jusqu'en {now} contre année jusqu'en {ref}",
+  "sub": "Environ {part} de la baisse depuis. Le reste a baissé partout en même temps.",
+  "subHere": "{pct} % en plus de ce qui a été déboisé ici.",
+  "tipHeld": "{held} avec des contrôles maintenus",
+  "tipHeldRange": "{held} avec des contrôles maintenus, probablement entre {lo} et {hi}",
+  "tipObs": "{span}, {obs} km² déboisés"
+ },
+ "ahead": "{n} mois",
+ "amazon": "Amazonie",
+ "areaFc": {
+  "every": "Ici, chaque cellule a {p} de chances de perdre un hectare d'ici juillet {y}",
+  "upto": "Ici, une cellule a jusqu'à {p} de chances de perdre un hectare d'ici juillet {y}"
+ },
+ "areaPast": {
+  "everyNo": "En {y}, les cellules de cette zone avaient reçu {p}. Aucune déforestation n'a été cartographiée.",
+  "everyYes": "En {y}, les cellules de cette zone avaient reçu {p}. Une déforestation a été cartographiée dans {clr} sur {n}.",
+  "uptoNo": "En {y}, les cellules de cette zone avaient reçu jusqu'à {p}. Aucune déforestation n'a été cartographiée.",
+  "uptoYes": "En {y}, les cellules de cette zone avaient reçu jusqu'à {p}. Une déforestation a été cartographiée dans {clr} sur {n}."
+ },
+ "axisM": {
+  "clear": "km² déboisés par mois",
+  "degr": "km² dégradés par mois",
+  "fire": "km² brûlés par mois",
+  "mine": "km² d'orpaillage par mois"
+ },
+ "axisW": {
+  "degr": "km² dégradés sur 12 mois",
+  "fire": "km² brûlés sur 12 mois",
+  "mine": "km² d'orpaillage sur 12 mois"
+ },
+ "axisY": "km² déboisés par an, d'août à juillet",
+ "bars": "Barres",
+ "bench": {
+  "head": [
+   "",
+   "modèle",
+   "score",
+   "",
+   "par",
+   "date"
+  ],
+  "ref": "sans modèle",
+  "refName": "l'an dernier, à proximité",
+  "repo": "GitHub",
+  "submit": "Soumettre un modèle"
+ },
+ "burned": {
+  "months": {
+   "all": "{km} km² brûlés ces trois derniers mois, {prev} un an plus tôt",
+   "here": "{km} km² brûlés ici ces trois derniers mois, {prev} un an plus tôt"
+  },
+  "years": {
+   "all": "{km} km² brûlés ces douze derniers mois, {prev} les douze précédents",
+   "here": "{km} km² brûlés ici ces douze derniers mois, {prev} les douze précédents"
+  }
+ },
+ "byJuly": "d'ici juillet {y}",
+ "cellFc": "{p} de chances que cette cellule perde un hectare d'ici juillet {y}",
+ "cellFire": "Parmi les {p} % de forêt où le feu est le plus probable",
+ "cellFireRest": "Hors des 5 % de forêt où le feu est le plus probable",
+ "cellHa": {
+  "clear": "Environ {ha} hectares de déforestation attendus ici dans les {n} mois",
+  "degr": "Environ {ha} hectares de dégradation attendus ici dans les {n} mois",
+  "mine": "Environ {ha} hectares d'orpaillage attendus ici dans les {n} mois"
+ },
+ "cellHaLow": {
+  "clear": "Moins de 1 hectare de déforestation attendu ici dans les {n} mois",
+  "degr": "Moins de 1 hectare de dégradation attendu ici dans les {n} mois",
+  "mine": "Moins de 1 hectare d'orpaillage attendu ici dans les {n} mois"
+ },
+ "cellPast": {
+  "no": "En {y}, cette cellule avait reçu {p}. Aucune déforestation n'y a été cartographiée.",
+  "yes": "En {y}, cette cellule avait reçu {p}. Une déforestation y a été cartographiée."
+ },
+ "cellPlace": "{mun}, {uf}",
+ "cellPlaceIn": "{mun}, {uf}. {land}",
+ "chance": "probabilité",
+ "chanceBy": "Probabilité par cellule de perdre un hectare d'ici juillet {y}",
+ "chanceFor": "Probabilité donnée à chaque cellule pour {y}",
+ "chanceOut": "la probabilité, pour chaque cellule",
+ "close": "Fermer",
+ "closeList": "Fermer la liste",
+ "copied": "Copié",
+ "copy": "Copier",
+ "credit": "Images : Esri, Maxar, Earthstar Geographics",
+ "csv": "CSV",
+ "enso": [
+  "El Niño",
+  "La Niña",
+  "Pacifique"
+ ],
+ "ensoLevel": [
+  [
+   "très fort",
+   "fort",
+   "modéré",
+   "faible"
+  ],
+  [
+   "très forte",
+   "forte",
+   "modérée",
+   "faible"
+  ],
+  "neutre"
+ ],
+ "fc": {
+  "all": "Environ {km} km² de déforestation attendus d'ici juillet {y}",
+  "here": "Ici, environ {km} km² de déforestation attendus d'ici juillet {y}"
+ },
+ "fcNone": "Ici, presque aucune déforestation attendue d'ici juillet {y}",
+ "front": {
+  "back": "Retour à la carte",
+  "chart": "Mettre la chronologie au premier plan",
+  "map": "Mettre la carte au premier plan"
+ },
+ "hazard": {
+  "clear": "Déforestation",
+  "degr": "Dégradation",
+  "fire": "Feux",
+  "mine": "Orpaillage"
+ },
+ "higher": "plus élevé",
+ "home": "Retour à la carte entière",
+ "kinds": {
+  "mun": "Municipalités",
+  "ti": "Terres indigènes",
+  "uc": "Unités de conservation",
+  "uf": "États"
+ },
+ "km2": "{x} km²",
+ "land": {
+  "ti": "terre indigène",
+  "uc": "unité de conservation"
+ },
+ "language": "Langue",
+ "lastSub": {
+  "degr": {
+   "all": "{km} km² dégradés ou coupés ces douze derniers mois.",
+   "here": "{km} km² dégradés ou coupés ici ces douze derniers mois."
+  },
+  "mine": {
+   "all": "{km} km² d'orpaillage ces douze derniers mois.",
+   "here": "{km} km² d'orpaillage ici ces douze derniers mois."
+  }
+ },
+ "legend": {
+  "clear": "Risque de déforestation",
+  "degr": "Risque de dégradation",
+  "fire": "Où les feux sont fréquents",
+  "mine": "Risque d'orpaillage"
+ },
+ "legendNext": {
+  "clear": "Risque de déforestation dans les {n} mois",
+  "degr": "Risque de dégradation dans les {n} mois",
+  "mine": "Risque d'orpaillage dans les {n} mois"
+ },
+ "less": "moins de km²",
+ "level": [
+  "Calme",
+  "Vigilance",
+  "Alerte",
+  "Alarme"
+ ],
+ "like": [
+  {
+   "km": 23,
+   "same": "La taille de l'île d'Yeu.",
+   "x2": "Deux fois l'île d'Yeu.",
+   "x3": "Trois fois l'île d'Yeu.",
+   "x4": "Quatre fois l'île d'Yeu.",
+   "x5": "Cinq fois l'île d'Yeu.",
+   "x10": "Dix fois l'île d'Yeu.",
+   "half": "La moitié de l'île d'Yeu.",
+   "third": "Un tiers de l'île d'Yeu."
+  },
+  {
+   "km": 48,
+   "same": "La taille de Lyon.",
+   "x2": "Deux fois Lyon.",
+   "x3": "Trois fois Lyon.",
+   "x4": "Quatre fois Lyon.",
+   "x5": "Cinq fois Lyon.",
+   "x10": "Dix fois Lyon.",
+   "half": "La moitié de Lyon.",
+   "third": "Un tiers de Lyon."
+  },
+  {
+   "km": 105,
+   "same": "La taille de Paris.",
+   "x2": "Deux fois Paris.",
+   "x3": "Trois fois Paris.",
+   "x4": "Quatre fois Paris.",
+   "x5": "Cinq fois Paris.",
+   "x10": "Dix fois Paris.",
+   "half": "La moitié de Paris.",
+   "third": "Un tiers de Paris."
+  },
+  {
+   "km": 241,
+   "same": "La taille de Marseille.",
+   "x2": "Deux fois Marseille.",
+   "x3": "Trois fois Marseille.",
+   "x4": "Quatre fois Marseille.",
+   "x5": "Cinq fois Marseille.",
+   "x10": "Dix fois Marseille.",
+   "half": "La moitié de Marseille.",
+   "third": "Un tiers de Marseille."
+  },
+  {
+   "km": 374,
+   "same": "La taille de Mayotte.",
+   "x2": "Deux fois Mayotte.",
+   "x3": "Trois fois Mayotte.",
+   "x4": "Quatre fois Mayotte.",
+   "x5": "Cinq fois Mayotte.",
+   "x10": "Dix fois Mayotte.",
+   "half": "La moitié de Mayotte.",
+   "third": "Un tiers de Mayotte."
+  },
+  {
+   "km": 1128,
+   "same": "La taille de la Martinique.",
+   "x2": "Deux fois la Martinique.",
+   "x3": "Trois fois la Martinique.",
+   "x4": "Quatre fois la Martinique.",
+   "x5": "Cinq fois la Martinique.",
+   "x10": "Dix fois la Martinique.",
+   "half": "La moitié de la Martinique.",
+   "third": "Un tiers de la Martinique."
+  },
+  {
+   "km": 2512,
+   "same": "La taille de La Réunion.",
+   "x2": "Deux fois La Réunion.",
+   "x3": "Trois fois La Réunion.",
+   "x4": "Quatre fois La Réunion.",
+   "x5": "Cinq fois La Réunion.",
+   "x10": "Dix fois La Réunion.",
+   "half": "La moitié de La Réunion.",
+   "third": "Un tiers de La Réunion."
+  },
+  {
+   "km": 4388,
+   "same": "La taille de la Haute-Savoie.",
+   "x2": "Deux fois la Haute-Savoie.",
+   "x3": "Trois fois la Haute-Savoie.",
+   "x4": "Quatre fois la Haute-Savoie.",
+   "x5": "Cinq fois la Haute-Savoie.",
+   "x10": "Dix fois la Haute-Savoie.",
+   "half": "La moitié de la Haute-Savoie.",
+   "third": "Un tiers de la Haute-Savoie."
+  },
+  {
+   "km": 8680,
+   "same": "La taille de la Corse.",
+   "x2": "Deux fois la Corse.",
+   "x3": "Trois fois la Corse.",
+   "x4": "Quatre fois la Corse.",
+   "x5": "Cinq fois la Corse.",
+   "x10": "Dix fois la Corse.",
+   "half": "La moitié de la Corse.",
+   "third": "Un tiers de la Corse."
+  },
+  {
+   "km": 12012,
+   "same": "La taille de l'Île-de-France.",
+   "x2": "Deux fois l'Île-de-France.",
+   "x3": "Trois fois l'Île-de-France.",
+   "x4": "Quatre fois l'Île-de-France.",
+   "x5": "Cinq fois l'Île-de-France.",
+   "x10": "Dix fois l'Île-de-France.",
+   "half": "La moitié de l'Île-de-France.",
+   "third": "Un tiers de l'Île-de-France."
+  },
+  {
+   "km": 27208,
+   "same": "La taille de la Bretagne.",
+   "x2": "Deux fois la Bretagne.",
+   "x3": "Trois fois la Bretagne.",
+   "x4": "Quatre fois la Bretagne.",
+   "x5": "Cinq fois la Bretagne.",
+   "x10": "Dix fois la Bretagne.",
+   "half": "La moitié de la Bretagne.",
+   "third": "Un tiers de la Bretagne."
+  },
+  {
+   "km": 41285,
+   "same": "La taille de la Suisse.",
+   "x2": "Deux fois la Suisse.",
+   "x3": "Trois fois la Suisse.",
+   "x4": "Quatre fois la Suisse.",
+   "x5": "Cinq fois la Suisse.",
+   "x10": "Dix fois la Suisse.",
+   "half": "La moitié de la Suisse.",
+   "third": "Un tiers de la Suisse."
+  },
+  {
+   "km": 83534,
+   "same": "La taille de la Guyane.",
+   "x2": "Deux fois la Guyane.",
+   "x3": "Trois fois la Guyane.",
+   "x4": "Quatre fois la Guyane.",
+   "x5": "Cinq fois la Guyane.",
+   "x10": "Dix fois la Guyane.",
+   "half": "La moitié de la Guyane.",
+   "third": "Un tiers de la Guyane."
+  },
+  {
+   "km": 130279,
+   "same": "La taille de l'Angleterre.",
+   "x2": "Deux fois l'Angleterre.",
+   "x3": "Trois fois l'Angleterre.",
+   "x4": "Quatre fois l'Angleterre.",
+   "x5": "Cinq fois l'Angleterre.",
+   "x10": "Dix fois l'Angleterre.",
+   "half": "La moitié de l'Angleterre.",
+   "third": "Un tiers de l'Angleterre."
+  }
+ ],
+ "line": "Ligne",
+ "lower": "plus faible",
+ "made": "établie le {date}",
+ "many": {
+  "mun": "municipalités",
+  "ti": "terres indigènes",
+  "uc": "unités de conservation",
+  "uf": "États"
+ },
+ "mapped": "déforestation cartographiée",
+ "menu": "Menu",
+ "mfc": {
+  "clear": {
+   "all": "Environ {km} km² de déforestation attendus dans les {h} mois",
+   "here": "Environ {km} km² de déforestation attendus ici dans les {h} mois"
+  },
+  "degr": {
+   "all": "Environ {km} km² de dégradation attendus dans les {h} mois",
+   "here": "Environ {km} km² de dégradation attendus ici dans les {h} mois"
+  },
+  "mine": {
+   "all": "Environ {km} km² d'orpaillage attendus dans les {h} mois",
+   "here": "Environ {km} km² d'orpaillage attendus ici dans les {h} mois"
+  }
+ },
+ "mobs": {
+  "clear": {
+   "all": "{km} km² déboisés ces trois derniers mois",
+   "here": "{km} km² déboisés ici ces trois derniers mois"
+  },
+  "degr": {
+   "all": "{km} km² dégradés ces trois derniers mois",
+   "here": "{km} km² dégradés ici ces trois derniers mois"
+  },
+  "fire": {
+   "all": "{km} km² brûlés ces trois derniers mois",
+   "here": "{km} km² brûlés ici ces trois derniers mois"
+  },
+  "mine": {
+   "all": "{km} km² d'orpaillage ces trois derniers mois",
+   "here": "{km} km² d'orpaillage ici ces trois derniers mois"
+  }
+ },
+ "modes": {
+  "cells": "Cellules",
+  "prio": "Priorités",
+  "sectors": "Secteurs"
+ },
+ "more": "plus de km²",
+ "next": "{n} prochains mois",
+ "nextYear": "Année suivante",
+ "now": "maintenant",
+ "numSources": [
+  "zéro",
+  "une",
+  "deux",
+  "trois",
+  "quatre",
+  "cinq",
+  "six",
+  "sept",
+  "huit",
+  "neuf",
+  "dix",
+  "onze",
+  "douze"
+ ],
+ "onlyFrom": "Choisissez un palier pour n'afficher que les cellules à cette probabilité ou plus",
+ "pShareMin": "<b>{n}</b> cellules à {cut} ou plus, avec {share} % de la perte attendue",
+ "pSharePastMin": "<b>{n}</b> cellules à {cut} ou plus, avec {share} % des cellules où une déforestation a été cartographiée",
+ "partial": " Scènes prioritaires seulement, pour l'instant.",
+ "past": "En {y}, {act} km² ont été déboisés",
+ "pastHere": "En {y}, {act} km² ont été déboisés ici",
+ "pastHereNone": "En {y}, aucune déforestation n'a été cartographiée ici",
+ "pastP": "En {y}, {exp} cellules devaient perdre un hectare et {act} l'ont perdu",
+ "people": {
+  "credit": "Photo : {author}, {license}",
+  "also": "Aussi sur cette terre"
+ },
+ "prevYear": "Année précédente",
+ "range": "probablement entre {lo} et {hi}",
+ "rank": {
+  "one": "{n}er",
+  "other": "{n}e"
+ },
+ "rankSay": "{kind} par {what}",
+ "rankWhat": {
+  "fc": "déforestation attendue d'ici juillet {y}",
+  "fire": "part des zones où les feux sont fréquents",
+  "past": "déforestation attendue pour {y}",
+  "risk": "part de la carte de risque"
+ },
+ "ranking": "Classement",
+ "replay": "Prévision passée",
+ "risk": {
+  "degr": "risque de dégradation",
+  "mine": "risque d'orpaillage"
+ },
+ "scale": {
+  "actions": "Actions",
+  "months": "Mois",
+  "years": "Années"
+ },
+ "sign": {
+  "autos": "Amendes IBAMA",
+  "clear": "Déforestation",
+  "degr": "Dégradation",
+  "mine": "Orpaillage",
+  "scar": "Surfaces brûlées"
+ },
+ "signTitle": "{now} ces trois derniers mois, {prev} un an plus tôt",
+ "signs": "Signaux, trois mois contre l'an dernier",
+ "skip": "Passer",
+ "st": {
+  "ahead": {
+   "flat": "Le modèle prévoit encore {km} km² de déforestation d'ici {month}.",
+   "rise": "En trois mois, la déforestation a crû de {pct} % et le modèle prévoit encore {km} km² d'ici {month}."
+  },
+  "back": "Retour",
+  "done": "Terminé",
+  "first": "Pour ceux qui contrôlent, ces {n} lieux passent en premier.",
+  "forestA": "Voici l'Amazonie.",
+  "forestB": {
+   "one": "{cells} million de carrés de forêt, de {m} mètres chacun.",
+   "other": "{cells} millions de carrés de forêt, de {m} mètres chacun."
+  },
+  "lossA": "Chaque année, un morceau tombe.",
+  "lossB": "Depuis {y}, {k} mille km².",
+  "lossBMore": "Depuis {y}, {k} mille km². Plus que l'Angleterre.",
+  "model": "Nous avons entraîné un modèle pour prédire le prochain.",
+  "moreKm": 130279,
+  "next": "Suivant",
+  "open": "Le code et le benchmark sont ouverts. Faites un meilleur modèle et il passera devant le nôtre.",
+  "proof": "Nous l'avons testé sur le passé. En {y}, sur {of} lieux qu'il a désignés, {hit} ont été déboisés.",
+  "sources": {
+   "one": "Il apprend d'{n} source publique, des images satellite aux autorisations de déboisement.",
+   "other": "Il apprend de {n} sources publiques, des images satellite aux autorisations de déboisement."
+  }
+ },
+ "stepHi": "plus de {c}",
+ "stepLo": "moins de {c}",
+ "stepMid": "{a} à {b}",
+ "story": "Récit",
+ "tag": {
+  "ti": "TI",
+  "uc": "UC"
+ },
+ "tiny": "moins de 0,1",
+ "tipFc": "environ {exp} km² attendus",
+ "tipPast": "{exp} km² attendus, {act} déboisés",
+ "tipRank": "{rank} sur {n}",
+ "to": "{a} à {b}",
+ "under": "moins de {c}",
+ "where": {
+  "degr": "Où la forêt risque le plus d'être dégradée ou coupée d'ici {end}",
+  "mine": "Où l'orpaillage risque le plus de s'étendre d'ici {end}"
+ },
+ "whereHere": "{rank} sur {n} {many} pour le {risk} d'ici {end}",
+ "whole": "Toute l'Amazonie",
+ "why": {
+  "around": "{km} km² déboisés aux alentours ces trois dernières années.",
+  "degr": "{km} km² de forêt dégradée en un an.",
+  "fire": "{km} km² de forêt brûlée en un an.",
+  "land": {
+   "ti": "Dans une terre indigène.",
+   "uc": "Dans une unité de conservation."
+  },
+  "near": "Près d'une déforestation récente.",
+  "permit": "A une autorisation de déboiser {ha} hectares."
+ },
+ "window": "prévision"
+}

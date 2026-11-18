@@ -6,6 +6,9 @@ ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 SHIP="$(mktemp -d)/web"
 rsync -a "$ROOT/web/" "$SHIP/"
 cd "$SHIP"
+# a function lives in api/ (geo.js), and the host then serves nothing static from that folder:
+# the static API moves to /v1 and vercel.json rewrites /api/v1/* to it
+[ -d api/v1 ] && mv api/v1 v1
 [ "$(basename "$PWD")" = "web" ] && [ -f index.html ] && [ -f .vercel/project.json ] && [ ! -d data/raw ] || { echo "refusing: not the site folder"; exit 1; }
 ~/.claude/hooks/deploy-secret-guard.sh scan "$SHIP"
 D=""

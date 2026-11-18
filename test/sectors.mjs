@@ -88,7 +88,9 @@ try {
   const clickOn = async sel => { const [x, y] = await js(`(() => { const r = document.querySelector(${JSON.stringify(sel)}).getBoundingClientRect(); return [r.x + r.width / 2, r.y + r.height / 2]; })()`); await click(x, y); };
   const text = sel => js(`document.querySelector(${JSON.stringify(sel)}).textContent`);
   const tipLine = () => js(`document.querySelector(".leaflet-tooltip.cell").firstChild.textContent`);  // the first line of what a cell says (the second is where it is)
-  const likeOf = (a, l) => js(`prenuncio.like(${a}, "${l}")`);
+  const likeOf = (a, l) => jsA(`prenuncio.like(${a}, "${l}")`);
+  // the language is chosen in a menu that lists each by its own name: open it and pick the other of the two the test reads
+  const flip = async () => { const to = (await js(`document.documentElement.lang`)) === "pt" ? "en" : "pt"; await clickOn("#lang-btn"); await until(`!document.getElementById("lang-menu").hidden`, "the language menu"); await clickOn(`#lang-menu [data-l="${to}"]`); };
   const style = (sel, prop) => js(`getComputedStyle(document.querySelector(${JSON.stringify(sel)}))[${JSON.stringify(prop)}]`);
   const head = re => `${re}.test(document.getElementById("say").textContent)`;
   const level = () => js(`document.getElementById("lead").dataset.l`);
@@ -178,7 +180,7 @@ try {
   assert.ok(storyWords <= 10, `the first screen is almost empty: ${storyWords} words (${JSON.stringify(await js(`document.body.innerText`))})`);
   assert.equal(await onPage(), "", "no piece of the tool is on the first screen");
   assert.equal(await js(`!!document.querySelector(".leaflet-control-zoom")?.offsetParent && getComputedStyle(document.querySelector(".leaflet-control-zoom")).visibility === "visible"`), false);
-  assert.equal(await js(`[...document.querySelectorAll("#top button")].filter(b => b.offsetParent).map(b => b.textContent).join()`), "PT,Skip", "the header keeps the language and a way out");
+  assert.equal(await js(`[...document.querySelectorAll("#top button")].filter(b => b.offsetParent).map(b => b.textContent).join()`), "EN,Skip", "the header keeps the language and a way out");
   assert.equal(await js(`location.hash + location.search`), "", "the story plays at the bare address");
   assert.equal(await js(`document.getElementById("story-back").disabled`), true);
   assert.equal(await redPx(), 0, "the forest is green: no chance is painted yet");
@@ -231,12 +233,12 @@ try {
     if (id === "lossB") {
       assert.equal(await redPx(), 0, "still no chance on the map");
       // the language turns in the middle of the story
-      await clickOn("#lang-btn");
+      await flip();
       await until(`document.documentElement.lang === "pt" && /^Desde ${hist.years[0]}, /.test(document.getElementById("story-line").textContent)`, "the story in Portuguese");
       assert.equal(await line(), WORDS.pt.lossB);
-      assert.equal(await js(`[...document.querySelectorAll("#top button")].filter(b => b.offsetParent).map(b => b.textContent).join()`), "EN,Pular");
+      assert.equal(await js(`[...document.querySelectorAll("#top button")].filter(b => b.offsetParent).map(b => b.textContent).join()`), "PT,Pular");
       assert.deepEqual([await label("story-next"), await label("story-back")], ["Seguir", "Voltar"]);
-      await clickOn("#lang-btn");
+      await flip();
       await until(`document.documentElement.lang === "en" && /^Since ${hist.years[0]}, /.test(document.getElementById("story-line").textContent)`, "English again");
     }
     if (id === "model") {  // the chances of the forecast year arrive in red, and their key takes its place
@@ -253,7 +255,7 @@ try {
     }
     if (id === "sources") {  // About comes in: in the header, and open beside the map on the model's figure
       await until(`document.getElementById("about").open && !!document.querySelector("#model-fig canvas")`, "the model's figure, beside the map");
-      assert.equal(await js(`[...document.querySelectorAll("#top button")].filter(b => b.offsetParent).map(b => b.textContent).join()`), "About,API,PT,Skip", "About and the API are in the header from here on");
+      assert.equal(await js(`[...document.querySelectorAll("#top button")].filter(b => b.offsetParent).map(b => b.textContent).join()`), "About,API,EN,Skip", "About and the API are in the header from here on");
       assert.deepEqual(await ONLY(), { shown: ["DIV#model-fig"], scroll: false, inside: true }, "only the figure is on the stage, whole, and nothing scrolls");
     }
     if (id === "open") {  // the benchmark: a bare table, a model a row, and the way in as a button
@@ -303,7 +305,7 @@ try {
   assert.deepEqual(after, before, "the page after the story is the page of its last step");
   const VER = await js(`document.documentElement.dataset.storyVersion`);
   assert.equal(await js(`localStorage.story`), VER, "finishing is remembered, with the story's version");
-  assert.equal(await js(`[...document.querySelectorAll("#top button")].filter(b => b.offsetParent).map(b => b.textContent).join()`), "Story,About,API,PT");
+  assert.equal(await js(`[...document.querySelectorAll("#top button")].filter(b => b.offsetParent).map(b => b.textContent).join()`), "Story,About,API,EN");
   assert.equal(await js(`document.querySelector("#list-rows [aria-current]").dataset.b + "/" + !!document.querySelector("#list-rows .why") + "/" + document.getElementById("mapbox").dataset.as`), "1/true/stage");
   const endHash = (await hash()).replace(/&l=\w+/, "");
   // after that the bare address goes straight to the tool
@@ -494,7 +496,7 @@ try {
   assert.equal(await js(`!!document.getElementById("geo-input") || !!document.getElementById("draw-btn") || !!document.querySelector("footer")`), false, "no search, no draw, no footer");
   const words = await js(`document.body.innerText.split(/\\s+/).filter(w => /[A-Za-zÀ-ú]/.test(w)).length`);
   assert.ok(words <= 85, `the default screen stays scannable: ${words} words`);
-  assert.equal(await js(`[...document.querySelectorAll("#top nav button")].filter(b => b.offsetParent).map(b => b.textContent).join()`), "Story,About,API,PT", "the header: the story, About, the API and the language");
+  assert.equal(await js(`[...document.querySelectorAll("#top nav button")].filter(b => b.offsetParent).map(b => b.textContent).join()`), "Story,About,API,EN", "the header: the story, About, the API and the language");
   // the default timeline for clearing: months as bars, with the forecast, and the map stays on the year's chances
   assert.deepEqual([await js(`document.querySelector('#scale button[aria-pressed="true"]').dataset.k`), await js(`document.documentElement.dataset.scale`), await count("#chart .bar"), await count("#chart .bar .fc"), await count("#chart .line")], ["months", "months", 36, monthly ? 12 : 0, 0], "months, as bars, 24 back and 12 ahead");
   assert.match(await hash(), /t=months&m=cells/, "the link says the scale and the mode");
@@ -870,7 +872,7 @@ try {
     assert.ok(cases.length >= 5, "the rule's branches are in the data: " + cases.map(b => b.rank));
     // and in Portuguese, for the place that is open
     const open_ = cases.at(-1);
-    await clickOn("#lang-btn");
+    await flip();
     await until(`document.documentElement.lang === "pt" && document.querySelector("#list-rows .why")?.previousElementSibling.dataset.b === "${open_.rank}"`, "the reason in Portuguese");
     assert.deepEqual(await said(), why(open_, "pt"));
     await js(`document.querySelector('#list-rows [data-b="${cases[0].rank}"]').click()`);
@@ -890,9 +892,9 @@ try {
   const calm = await text("#level") + " | " + await text("#say");
 
   // Portuguese, and the About text
-  await clickOn("#lang-btn");
+  await flip();
   await until(`document.documentElement.lang === "pt" && /km²/.test(document.getElementById("say").textContent)`, "Portuguese");
-  assert.equal(await js(`[...document.querySelectorAll("#top nav button")].filter(b => b.offsetParent).map(b => b.textContent).join()`), "História,Sobre,API,EN");
+  assert.equal(await js(`[...document.querySelectorAll("#top nav button")].filter(b => b.offsetParent).map(b => b.textContent).join()`), "História,Sobre,API,PT");
   await clickOn("#about-btn");
   await until(`document.getElementById("about").open`, "the About text");
   assert.doesNotMatch(await js(`document.body.innerText + document.getElementById("about").innerText`), /—/, "no em dashes");
@@ -1003,7 +1005,7 @@ try {
   for (const l of ["en", "pt"]) {
     await send("Page.navigate", { url: SITE + `#l=${l}&k=clear3` });
     await until(`document.documentElement.lang === "${l}" && document.documentElement.dataset.hazard === "clear" && document.documentElement.dataset.scale === "months" && !!document.querySelector("#chart .bar")`, `${l}: the page before the API panel`);
-    assert.equal(await js(`[...document.querySelectorAll("#top nav button")].filter(b => b.offsetParent).map(b => b.textContent).join()`), l === "en" ? "Story,About,API,PT" : "História,Sobre,API,EN", `${l}: API sits next to About in the header`);
+    assert.equal(await js(`[...document.querySelectorAll("#top nav button")].filter(b => b.offsetParent).map(b => b.textContent).join()`), l === "en" ? "Story,About,API,EN" : "História,Sobre,API,PT", `${l}: API sits next to About in the header`);
     assert.equal(await js(`document.getElementById("api").open || !!document.getElementById("api-text").textContent`), false, "closed, and nothing fetched, until asked");
     await clickOn("#api-btn");
     await until(`document.getElementById("api").open && /How to connect/.test(document.getElementById("api-text").textContent)`, `${l}: the API panel`);
@@ -1138,6 +1140,122 @@ try {
   }
   await js(`document.getElementById("skip-btn").click()`);
 
+  // ---------- the people of an Indigenous land. Selected in Sectors, a land that has an entry opens on its
+  // people: the photograph whole, with its author and licence as a link to the source, the name, a few lines;
+  // the other peoples of the land as names that open. A land with no entry looks as it always did.
+  const peoples = await fetch(`${SITE}data/peoples.json`).then(r => (r.ok ? r.json() : null)).catch(() => null);
+  if (peoples) {
+    const ti = await fetch(`${SITE}data/sectors_ti.json`).then(r => r.json()), tiIds = ti.items.map(it => String(it.id));
+    const withPhoto = tiIds.find(id => peoples[id]?.[0]?.photo && peoples[id].length > 1), many = tiIds.filter(id => peoples[id]).sort((a, b) => peoples[b].length - peoples[a].length)[0], noPhoto = tiIds.find(id => peoples[id] && !peoples[id][0].photo), none = tiIds.find(id => !peoples[id]);
+    for (const l of ["pt", "en"]) {
+      const P = peoples[withPhoto], p0 = P[0];
+      await send("Page.navigate", { url: SITE + `?story=0&pp=${l}#l=${l}&m=sectors&s=ti&r=${withPhoto}&t=months` });
+      await until(`document.documentElement.lang === "${l}" && !document.getElementById("people").hidden && !!document.querySelector("#people img") && !document.getElementById("scope").hidden`, `${l}: the people of land ${withPhoto}`);
+      await until(`document.querySelector("#people img").complete && document.querySelector("#people img").naturalWidth > 0`, "the photograph");
+      await sleep(1800);
+      const got = await js(`(() => { const a = document.getElementById("people"), r = a.getBoundingClientRect(), im = a.querySelector("img"), ir = im.getBoundingClientRect(), c = a.querySelector("figcaption a"), kids = [...document.getElementById("people-in").children].map(e => e.tagName); return { kids: kids.slice(0, 3).join(), src: im.getAttribute("src"), alt: im.alt, lazy: im.loading, whole: Math.abs(ir.width / ir.height - im.naturalWidth / im.naturalHeight) < 0.02 && Math.round(ir.width) === Math.round(r.width), credit: c.textContent, href: c.getAttribute("href"), blank: c.target, name: a.querySelector("h2").textContent, text: a.querySelector("h2 + p").textContent, others: [...a.querySelectorAll("details summary")].map(e => e.textContent), right: r.right >= innerWidth - 1 && r.left > innerWidth * 0.6, x: !!document.getElementById("people-close").offsetParent, amazon: (q => (q.left + q.right) / 2 < r.left)(document.querySelector(".leaflet-sel-pane path").getBoundingClientRect()) }; })()`);
+      assert.deepEqual(got, { kids: "FIGURE,H2,P", src: p0.photo.file, alt: p0.photo.caption[l], lazy: "lazy", whole: true, credit: (l === "pt" ? "Foto: " : "Photo: ") + `${p0.photo.author}, ${p0.photo.license}`, href: p0.photo.source_url, blank: "_blank", name: p0.name, text: p0.text[l], others: P.slice(1).map(x => x.name), right: true, x: true, amazon: true }, `${l}: the photograph leads, whole, with its credit linked to the source; then the name and the lines; the others as names`);
+      assert.equal((await fetch(SITE + p0.photo.file, { method: "HEAD" })).ok, true, "the photograph is there");
+      assert.match(await text("#say"), /km²|\d/, "and the forecast for the land is where it was");
+    }
+    // a land of many peoples: the list is long, and the column scrolls
+    await send("Page.navigate", { url: SITE + `?story=0&pp=many#l=pt&m=sectors&s=ti&r=${many}&t=months` });
+    await until(`!document.getElementById("people").hidden && document.querySelectorAll("#people details").length === ${peoples[many].length - 1}`, "a land of many peoples");
+    await js(`document.querySelector("#people details:last-of-type summary").click()`);
+    assert.equal(await js(`(() => { const a = document.getElementById("people"); a.scrollTop = a.scrollHeight; const d = a.querySelector("details:last-of-type"), r = d.getBoundingClientRect(), b = a.getBoundingClientRect(); return d.open && r.bottom <= b.bottom + 1 && r.left >= b.left && r.right <= b.right; })()`), true, "the last of them opens, in reach at the foot of the column");
+    if (noPhoto) {
+      await send("Page.navigate", { url: SITE + `?story=0&pp=nophoto#l=pt&m=sectors&s=ti&r=${noPhoto}&t=months` });
+      await until(`!document.getElementById("people").hidden && !!document.querySelector("#people h2")`, "a people with no photograph");
+      assert.equal(await count("#people img, #people figure"), 0, "no photograph, and no placeholder for one");
+    }
+    await send("Page.navigate", { url: SITE + (none ? `?story=0&pp=none#l=pt&m=sectors&s=ti&r=${none}&t=months` : "?story=0&pp=none#l=pt&m=sectors&r=1500602&t=months") });  // (or, when every land has one, a municipality)
+    await until(`!document.getElementById("scope").hidden && /km²|\\d/.test(document.getElementById("say").textContent)`, "a land with no entry");
+    await sleep(700);
+    assert.equal(await js(`document.getElementById("people").hidden && document.getElementById("people-m").hidden`), true, "a land with no entry looks as it did");
+    // its X lets the land go, and the column closes
+    await send("Page.navigate", { url: SITE + `?story=0&pp=x#l=pt&m=sectors&s=ti&r=${withPhoto}&t=months` });
+    await until(`!document.getElementById("people").hidden`, "the people again");
+    await sleep(900);
+    await clickOn("#people-close");
+    await until(`document.getElementById("people").hidden && document.getElementById("scope").hidden`, "closed by its X");
+  }
+
+  // ---------- languages. Every string is in web/i18n/<code>.json. Every file has every key of the English one;
+  // each language draws the default screen and the story's first step with no hole in a sentence; Arabic runs
+  // right to left; the language is chosen by the address, then the saved choice, then the country, then the browser.
+  const LANGS15 = ["en", "pt", "es", "zh", "hi", "ar", "fr", "ru", "de", "ja", "id", "bn", "tr", "ko", "it"];
+  assert.deepEqual(await js(`prenuncio.langs`), LANGS15);
+  const FORMS = ["zero", "one", "two", "few", "many", "other"], isForms = o => o && typeof o === "object" && !Array.isArray(o) && "other" in o && Object.keys(o).every(k => FORMS.includes(k));
+  const keysOf = (o, p = "") => Object.entries(o).flatMap(([k, v]) => (k === "like" ? [] : v && typeof v === "object" && !Array.isArray(v) && !isForms(v) ? keysOf(v, p + k + ".") : [p + k]));
+  const files = Object.fromEntries(await Promise.all(LANGS15.map(async l => [l, await fetch(`${SITE}i18n/${l}.json`).then(r => r.json())])));
+  const wantKeys = keysOf(files.en).filter(k => !["st.lossBMore", "st.moreKm"].includes(k)).sort();
+  for (const l of LANGS15) {
+    const have = new Set(keysOf(files[l]));
+    assert.deepEqual(wantKeys.filter(k => !have.has(k)), [], `${l}.json has every key`);
+    assert.deepEqual([...have].filter(k => !wantKeys.includes(k) && !["st.lossBMore", "st.moreKm"].includes(k)), [], `${l}.json has no key the English file lacks`);
+    // a sentence keeps the placeholders of the English one
+    const flat = (o, p = "", out = {}) => { for (const [k, v] of Object.entries(o)) { if (k === "like") continue; if (typeof v === "string") out[p + k] = v; else if (v && typeof v === "object" && !Array.isArray(v) && !isForms(v)) flat(v, p + k + ".", out); } return out; };
+    const E = flat(files.en), F = flat(files[l]), holes = x => [...new Set(x.match(/\{\w+\}/g) || [])].sort().join();
+    assert.deepEqual(Object.keys(E).filter(k => k in F && holes(E[k]) !== holes(F[k])), [], `${l}.json keeps the placeholders of every sentence`);
+    if (files[l].like) assert.ok(files[l].like.every(p => p.km > 0 && typeof p.same === "string") && (!files[l].st.lossBMore || files[l].st.moreKm > 0), `${l}: the table of places is well formed`);
+  }
+  for (const l of LANGS15) {
+    await send("Page.navigate", { url: SITE + `?story=1&lang=${l}` });
+    await until(`${onStory} && document.documentElement.lang === "${l}" && document.documentElement.dataset.step === "forestA" && document.getElementById("story-line").textContent.length > 3`, `${l}: the story's first step`);
+    assert.equal(await line(), files[l].st.forestA, `${l}: the first line is the file's`);
+    assert.equal(await js(`document.documentElement.dir`), l === "ar" ? "rtl" : "ltr", `${l}: the direction of the page`);
+    // every caption of the story fits its place: inside the column, above where the timeline docks
+    for (const id of IDS.slice(1)) {
+      await js(`document.getElementById("story-next").click()`);
+      await until(`document.documentElement.dataset.step === "${id}"`, `${l}: ${id}`);
+      const fit = await js(`(() => { const c = getComputedStyle(document.documentElement), px = k => parseFloat(c.getPropertyValue(k)), s = document.getElementById("story").getBoundingClientRect(), ln = document.getElementById("story-line"); return [Math.round(s.bottom), Math.round(innerHeight - parseFloat(getComputedStyle(document.getElementById("top")).paddingLeft) - px("--dock-h")), ln.scrollWidth <= ln.clientWidth + 1, ln.textContent.length]; })()`);
+      assert.ok(fit[0] <= (id === "ahead" ? fit[1] : await js(`innerHeight`) - 16) && fit[2], `${l}: the caption of ${id} (${fit[3]} characters) fits its place, above the dock once that is in: ${fit}`);
+    }
+    await js(`document.getElementById("skip-btn").click()`);
+    await until(`!(${onStory}) && /km²|\\d/.test(document.getElementById("say").textContent) && !!document.querySelector("#legend .steps") && document.querySelectorAll("#chart .bar").length > 0`, `${l}: the default screen`);
+    const shown = await js(`document.body.innerText + " " + [...document.querySelectorAll("[title], [aria-label]")].map(e => (e.title || "") + " " + (e.getAttribute("aria-label") || "")).join(" ")`);
+    assert.doesNotMatch(shown, /\{\w+\}|undefined|\[object|NaN/, `${l}: no hole, no missing word on the default screen`);
+    assert.equal(await js(`document.documentElement.scrollWidth <= innerWidth`), true, `${l}: nothing wider than the page`);
+    const wide = await js(`["modes", "hazard", "legend", "say", "level"].filter(id => { const e = document.getElementById(id), r = e.getBoundingClientRect(), b = (e.closest("#mappanel") || document.getElementById("chartbox")).getBoundingClientRect(); return e.scrollWidth > e.clientWidth + 1 || r.left < b.left - 1 || r.right > b.right + 1; }).concat(document.getElementById("chart").getBoundingClientRect().height < 60 ? ["chart"] : [])`);
+    assert.deepEqual(wide, [], `${l}: the switch, the hazards, the key and the headline stay inside their blocks, and the plot keeps its room`);
+    assert.match(await text("#legend .ticks"), new RegExp(new Intl.NumberFormat(await js(`document.documentElement.lang`) === "ar" ? "ar-u-nu-latn" : undefined).format(1) === "1" ? "\\d|[০-৯]" : "."), `${l}: digits as the locale writes them`);
+    if (l === "ar") assert.match(await text("#legend .ticks"), /[0-9]/, "Arabic keeps Latin digits");
+    if (l === "bn") assert.match(await text("#legend .ticks"), /[০-৯]/, "Bengali has its own");
+    if (l === "fr" || l === "de") assert.match(await text("#legend .ticks"), /\d\s%/, "French and German put a space before the percent sign");
+    if (l === "tr") assert.match(await text("#legend .ticks"), /%\d/, "Turkish puts it first");
+  }
+  // Arabic: the page is mirrored. The key and the dock are on the right, the list on the left, the way on points left.
+  await send("Page.navigate", { url: SITE + "?story=0&lang=ar#m=prio" });
+  await until(`document.documentElement.lang === "ar" && !document.getElementById("list").hidden && document.querySelector("canvas.cells")?.dataset.key === "${meta.forecast.year}" && /v=/.test(location.hash)`, "the tool in Arabic");
+  await sleep(1200);
+  const rtl = await js(`(() => { const r = id => document.getElementById(id).getBoundingClientRect(), a = document.querySelector("canvas.base").getBoundingClientRect(); return { panel: r("mappanel").right > innerWidth * 0.9, dock: r("chartbox").right > innerWidth * 0.9, list: r("list").left < 2, brand: document.querySelector(".brand").getBoundingClientRect().right > innerWidth * 0.8, amazon: a.left >= r("list").right && a.right <= r("chartbox").left, next: (() => { const st = document.getElementById("story"); st.hidden = false; const m = getComputedStyle(document.querySelector("#story-next svg")).transform; st.hidden = true; return /^matrix\\(-1/.test(m); })() }; })()`);
+  assert.deepEqual(rtl, { panel: true, dock: true, list: true, brand: true, amazon: true, next: true }, "right to left: the column of type on the right, the list on the left, the Amazon between them, the arrows turned: " + JSON.stringify(rtl));
+  // the order of the choice: the address, the saved choice, the country of the request, the browser
+  assert.deepEqual(await js(`["BR", "MX", "CN", "IN", "EG", "FR", "RU", "DE", "JP", "ID", "BD", "TR", "KR", "IT", "BE", "CH", "US", null].map(c => prenuncio.country(c))`), ["pt", "es", "zh", "hi", "ar", "fr", "ru", "de", "ja", "id", "bn", "tr", "ko", "it", null, null, null, null], "a country to its language, and the ambiguous ones to none");
+  const langAt = async (url, what) => { await send("Page.navigate", { url: SITE + url }); await until(`!!document.getElementById("say").textContent && !!document.documentElement.dir`, what); return js(`document.documentElement.lang`); };
+  await js(`localStorage.setItem("lang", "de")`);
+  assert.equal(await langAt("?story=0&lang=fr&o=1", "the address"), "fr", "?lang= in the address comes first");
+  assert.equal(await js(`localStorage.getItem("lang")`), "de", "and reading a link does not overwrite the reader's choice");
+  assert.equal(await langAt("?story=0&o=2", "the saved choice"), "de", "then the saved choice");
+  await js(`localStorage.removeItem("lang")`);
+  await send("Page.enable");
+  const stub = (await send("Page.addScriptToEvaluateOnNewDocument", { source: `window.__country = "JP";` })).identifier;
+  assert.equal(await langAt("?story=0&o=3", "the country"), "ja", "then the country of the request");
+  await js(`localStorage.setItem("lang", "it")`);
+  assert.equal(await langAt("?story=0&o=4", "the saved choice over the country"), "it", "(the saved choice is ahead of the country)");
+  await js(`localStorage.removeItem("lang")`);
+  await send("Page.removeScriptToEvaluateOnNewDocument", { identifier: stub });
+  assert.equal(await langAt("?story=0&o=5", "the browser"), await js(`(navigator.languages || []).map(x => x.slice(0, 2)).find(x => prenuncio.langs.includes(x)) || "en"`), "then the browser's language: with no answer from /api/geo the country is unknown");
+  // the menu: every language by its own name; choosing one saves it and puts it in the link
+  await clickOn("#lang-btn");
+  await until(`!document.getElementById("lang-menu").hidden`, "the language menu");
+  assert.deepEqual(await js(`[...document.querySelectorAll("#lang-menu button")].map(b => b.textContent)`), ["English", "Português", "Español", "中文", "हिन्दी", "العربية", "Français", "Русский", "Deutsch", "日本語", "Bahasa Indonesia", "বাংলা", "Türkçe", "한국어", "Italiano"]);
+  assert.equal(await js(`(() => { const m = document.getElementById("lang-menu").getBoundingClientRect(); return m.right <= innerWidth && m.left >= 0 && m.bottom <= innerHeight && [...document.querySelectorAll("#lang-menu button")].every(b => b.getBoundingClientRect().height >= 40); })()`), true, "the menu is on the screen, its rows tall enough");
+  await clickOn('#lang-menu [data-l="pt"]');
+  await until(`document.documentElement.lang === "pt" && document.getElementById("lang-menu").hidden && /l=pt/.test(location.hash) && /km² de desmatamento/.test(document.getElementById("say").textContent)`, "Portuguese, from the menu");
+  assert.equal(await js(`localStorage.getItem("lang") + "/" + document.getElementById("lang-btn").textContent`), "pt/PT");
+  await js(`localStorage.setItem("lang", "en")`);
+
   // ---------- a phone, 390 by 844, in Portuguese. The map is the screen; the story's caption is at the bottom, at
   // the thumb, with the way on as a large arrow; one sheet shows at a time, the bulletin or the list, and their
   // rectangles never meet; the bulletin rests showing its level, its headline and a plot of 120 px or more, and
@@ -1153,7 +1271,7 @@ try {
   assert.deepEqual(await place("mapbox"), [0, 0, 390, 844], "the map is the screen");
   const cap = await js(`(() => { const s = document.getElementById("story").getBoundingClientRect(), b = document.getElementById("story-next").getBoundingClientRect(), k = document.getElementById("skip-btn").getBoundingClientRect(); return [s.top / innerHeight, s.bottom / innerHeight, b.width, b.height, b.bottom / innerHeight, k.height, k.top, b.right > innerWidth * 0.8]; })()`);
   assert.ok(cap[0] > 0.82 && cap[1] > 0.99 && cap[2] >= 96 && cap[3] >= 48 && cap[4] > 0.9 && cap[5] >= 44 && cap[6] < 10 && cap[7], "the caption is at the bottom and no taller than its one line needs, the way on is a large arrow at the thumb, and Skip is in the header: " + cap);
-  assert.equal(await js(`[...document.querySelectorAll("#top button")].filter(b => b.offsetParent).map(b => b.textContent).join()`), "EN,Pular");
+  assert.equal(await js(`[...document.querySelectorAll("#top button")].filter(b => b.offsetParent).map(b => b.textContent).join()`), "PT,Pular");
   const lineSize = await px("#story-line");
   assert.ok(lineSize >= 26 && lineSize <= 28, "the story's line is set at 26 to 28 px on a phone: " + lineSize);
   const whereP = await amazon(), ptSaid = [];
@@ -1199,8 +1317,8 @@ try {
   assert.equal(await js(`[...document.querySelectorAll("#top button")].filter(b => b.offsetParent).map(b => b.id).join()`), "menu-btn", "the header: the mark and one menu");
   await clickOn("#menu-btn");
   await until(`"menu" in document.documentElement.dataset && !!document.getElementById("about-btn").offsetParent`, "the menu");
-  assert.deepEqual(await js(`[...document.querySelectorAll("#nav button")].map(b => [b.textContent, b.getBoundingClientRect().height >= 44, b.getBoundingClientRect().right <= innerWidth])`), [["História", true, true], ["Sobre", true, true], ["API", true, true], ["EN", true, true]], "the menu holds the story, About, the API and the language");
-  await clickOn("#lang-btn");
+  assert.deepEqual(await js(`[...document.querySelectorAll("#nav button")].map(b => [b.textContent, b.getBoundingClientRect().height >= 44, b.getBoundingClientRect().right <= innerWidth])`), [["História", true, true], ["Sobre", true, true], ["API", true, true], ["PT", true, true]], "the menu holds the story, About, the API and the language");
+  await flip();
   await until(`document.documentElement.lang === "en" && !("menu" in document.documentElement.dataset)`, "English, and the menu closed");
   // the bulletin at rest: the level, the headline in two lines at most, and a plot of 120 px or more, under the Amazon
   await fits("the tool");
@@ -1295,6 +1413,18 @@ try {
   assert.ok(type3.p >= 15 && type3.p <= 16 && type3.lede >= 20 && type3.lede <= 22 && type3.label >= 12 && type3.label <= 13 && type3.th >= 12 && type3.th <= 13, "About's type on a phone: " + JSON.stringify(type3));
   await clickOn("#about-close");
   await until(`!document.getElementById("about").open`, "About closed");
+  if (peoples) {
+    const tiP = (await fetch(`${SITE}data/sectors_ti.json`).then(r => r.json())).items.map(it => String(it.id)).find(id => peoples[id]?.[0]?.photo);
+    await send("Page.navigate", { url: SITE + `?story=0&pp=phone#l=pt&m=sectors&s=ti&r=${tiP}&t=months` });
+    await until(`innerWidth === 390 && !document.getElementById("people-m").hidden && !!document.querySelector("#people-m img") && document.querySelector("#people-m img").complete`, "the people on a phone");
+    await sleep(600);
+    const pm = await js(`(() => { const im = document.querySelector("#people-m img").getBoundingClientRect(), c = document.getElementById("chartbox").getBoundingClientRect(); return [Math.round(im.left), Math.round(im.width), Math.round(im.top - c.top) < 30, !document.getElementById("people").offsetParent]; })()`);
+    assert.deepEqual(pm, [0, 390, true, true], "on a phone the photograph is across the screen at the top of the sheet: " + pm);
+    await clickOn("#people-m img");
+    await until(settled("chart"), "the sheet up, from the photograph");
+    await sleep(500);
+    assert.equal(await js(`(() => { const m = document.getElementById("people-m"), h = m.querySelector("h2"), p = m.querySelector("h2 + p"), a = m.querySelector("figcaption a"); return !!h.offsetParent && !!p.offsetParent && !!a.offsetParent && m.getBoundingClientRect().bottom <= document.getElementById("lead").getBoundingClientRect().top + 60 && document.documentElement.scrollWidth <= innerWidth; })()`), true, "pulled up: the photograph, its credit, the name and the lines, then the forecast");
+  }
   await send("Emulation.setDeviceMetricsOverride", DESK);
 
   assert.deepEqual(errors, [], "no script errors");

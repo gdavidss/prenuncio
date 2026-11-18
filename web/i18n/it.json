@@ -1,0 +1,532 @@
+{
+ "about": "Informazioni",
+ "aboutText": {
+  "benchmark": "Benchmark",
+  "line1": "Prenúncio mostra dove l'Amazzonia sarà probabilmente disboscata entro luglio {year}.",
+  "line2": "Lo abbiamo costruito perché chi fa rispettare la legge arrivi prima.",
+  "metric": "Il punteggio è la media dal {b0} al {b1}.",
+  "model": "Il modello, {name}, ha imparato da {span} anni di dati pubblici. Per ogni quadrato di foresta di {m} metri di lato dà la probabilità di disboscamento nell'anno successivo.",
+  "open": "Il codice, i dati e il benchmark sono aperti. Chi fa un modello migliore passa davanti al nostro.",
+  "tested": "Lo abbiamo provato su anni che non aveva mai visto. Nel {y}, su {of} luoghi che ha indicato, {hit} sono stati disboscati."
+ },
+ "about_": "circa {x} km²",
+ "act": {
+  "against": "contro {x}",
+  "axis": "km² disboscati per semestre",
+  "band": "Controlli",
+  "bandSub": "verbali ed embarghi dell'IBAMA",
+  "bandSubN": {
+   "one": "verbali ed embarghi dell'IBAMA, {n} comune",
+   "other": "verbali ed embarghi dell'IBAMA, {n} comuni"
+  },
+  "held": "in più, con i controlli del {ref}",
+  "honest": "È un minimo e un'associazione, non una prova di causa.",
+  "measured": "misurato",
+  "none": "I controlli non spiegano alcun disboscamento evitato qui da {since}",
+  "parts": [
+   "un quarto",
+   "un terzo",
+   "metà",
+   "due terzi",
+   "tre quarti"
+  ],
+  "ref": "media da {from} a {to}",
+  "say": {
+   "all": "I controlli spiegano {km} km² di disboscamento evitato da {since}",
+   "here": "I controlli spiegano {km} km² di disboscamento evitato qui da {since}"
+  },
+  "sign": {
+   "collective": "Embarghi collettivi",
+   "field": "Embarghi sul campo",
+   "notices": "Verbali ogni 100 km²",
+   "remote": "Embarghi da remoto"
+  },
+  "signTitle": {
+   "collective": "Intere terre indigene e altre aree pubbliche messe sotto embargo in una volta sola",
+   "field": "Area messa sotto embargo durante un sopralluogo",
+   "notices": "Verbali di infrazione ogni 100 km² di disboscamento",
+   "remote": "Area messa sotto embargo via satellite, senza sopralluogo"
+  },
+  "signs": "Azioni dell'IBAMA, anno fino a {now} contro anno fino a {ref}",
+  "sub": "Circa {part} del calo da allora. Il resto è calato ovunque nello stesso momento.",
+  "subHere": "{pct}% in più rispetto a quanto è stato disboscato qui.",
+  "tipHeld": "{held} con i controlli mantenuti",
+  "tipHeldRange": "{held} con i controlli mantenuti, probabilmente tra {lo} e {hi}",
+  "tipObs": "{span}, {obs} km² disboscati"
+ },
+ "ahead": {
+  "one": "{n} mese",
+  "other": "{n} mesi"
+ },
+ "amazon": "Amazzonia",
+ "areaFc": {
+  "every": "Qui ogni cella ha {p} di probabilità di perdere un ettaro entro luglio {y}",
+  "upto": "Fino a {p} di probabilità che una cella qui perda un ettaro entro luglio {y}"
+ },
+ "areaPast": {
+  "everyNo": "Nel {y} le celle qui avevano {p}. Non è stato mappato alcun disboscamento.",
+  "everyYes": "Nel {y} le celle qui avevano {p}. È stato mappato disboscamento in {clr} su {n}.",
+  "uptoNo": "Nel {y} le celle qui avevano fino a {p}. Non è stato mappato alcun disboscamento.",
+  "uptoYes": "Nel {y} le celle qui avevano fino a {p}. È stato mappato disboscamento in {clr} su {n}."
+ },
+ "axisM": {
+  "clear": "km² disboscati al mese",
+  "degr": "km² degradati al mese",
+  "fire": "km² bruciati al mese",
+  "mine": "km² di miniere al mese"
+ },
+ "axisW": {
+  "degr": "km² degradati in 12 mesi",
+  "fire": "km² bruciati in 12 mesi",
+  "mine": "km² di miniere in 12 mesi"
+ },
+ "axisY": "km² disboscati all'anno, da agosto a luglio",
+ "bars": "Barre",
+ "bench": {
+  "head": [
+   "",
+   "modello",
+   "punteggio",
+   "",
+   "di",
+   "data"
+  ],
+  "ref": "nessun modello",
+  "refName": "l'anno prima, nei dintorni",
+  "repo": "GitHub",
+  "submit": "Invia un modello"
+ },
+ "burned": {
+  "months": {
+   "all": "{km} km² bruciati negli ultimi tre mesi, {prev} un anno prima",
+   "here": "{km} km² bruciati qui negli ultimi tre mesi, {prev} un anno prima"
+  },
+  "years": {
+   "all": "{km} km² bruciati in dodici mesi, {prev} nei dodici precedenti",
+   "here": "{km} km² bruciati qui in dodici mesi, {prev} nei dodici precedenti"
+  }
+ },
+ "byJuly": "entro luglio {y}",
+ "cellFc": "{p} di probabilità che questa cella perda un ettaro entro luglio {y}",
+ "cellFire": "Tra le foreste dove il fuoco è più probabile ({p}% del totale)",
+ "cellFireRest": "Fuori dal 5% di foresta dove il fuoco è più probabile",
+ "cellHa": {
+  "clear": "Circa {ha} ettari di disboscamento attesi qui in {n} mesi",
+  "degr": "Circa {ha} ettari di degrado attesi qui in {n} mesi",
+  "mine": "Circa {ha} ettari di miniere attesi qui in {n} mesi"
+ },
+ "cellHaLow": {
+  "clear": "Meno di 1 ettaro di disboscamento atteso qui in {n} mesi",
+  "degr": "Meno di 1 ettaro di degrado atteso qui in {n} mesi",
+  "mine": "Meno di 1 ettaro di miniere atteso qui in {n} mesi"
+ },
+ "cellPast": {
+  "no": "Nel {y} questa cella aveva {p}. Non vi è stato mappato alcun disboscamento.",
+  "yes": "Nel {y} questa cella aveva {p}. Vi è stato mappato disboscamento."
+ },
+ "cellPlace": "{mun}, {uf}",
+ "cellPlaceIn": "{mun}, {uf}. {land}",
+ "chance": "probabilità",
+ "chanceBy": "Probabilità che ogni cella perda un ettaro entro luglio {y}",
+ "chanceFor": "Probabilità data a ogni cella per il {y}",
+ "chanceOut": "la probabilità, per ogni cella",
+ "close": "Chiudi",
+ "closeList": "Chiudi la lista",
+ "copied": "Copiato",
+ "copy": "Copia",
+ "credit": "Immagini: Esri, Maxar, Earthstar Geographics",
+ "csv": "CSV",
+ "enso": [
+  "El Niño",
+  "La Niña",
+  "Pacifico"
+ ],
+ "ensoLevel": [
+  [
+   "molto forte",
+   "forte",
+   "moderato",
+   "debole"
+  ],
+  [
+   "molto forte",
+   "forte",
+   "moderata",
+   "debole"
+  ],
+  "neutro"
+ ],
+ "fc": {
+  "all": "Circa {km} km² di disboscamento attesi entro luglio {y}",
+  "here": "Circa {km} km² di disboscamento attesi qui entro luglio {y}"
+ },
+ "fcNone": "Quasi nessun disboscamento atteso qui entro luglio {y}",
+ "front": {
+  "back": "Torna alla mappa",
+  "chart": "Porta la linea del tempo in primo piano",
+  "map": "Porta la mappa in primo piano"
+ },
+ "hazard": {
+  "clear": "Disboscamento",
+  "degr": "Degrado",
+  "fire": "Incendi",
+  "mine": "Miniere"
+ },
+ "higher": "più alto",
+ "home": "Torna alla mappa intera",
+ "kinds": {
+  "mun": "Comuni",
+  "ti": "Terre indigene",
+  "uc": "Unità di conservazione",
+  "uf": "Stati"
+ },
+ "km2": "{x} km²",
+ "land": {
+  "ti": "terra indigena",
+  "uc": "unità di conservazione"
+ },
+ "language": "Lingua",
+ "lastSub": {
+  "degr": {
+   "all": "{km} km² degradati o tagliati negli ultimi dodici mesi.",
+   "here": "{km} km² degradati o tagliati qui negli ultimi dodici mesi."
+  },
+  "mine": {
+   "all": "{km} km² di miniere negli ultimi dodici mesi.",
+   "here": "{km} km² di miniere qui negli ultimi dodici mesi."
+  }
+ },
+ "legend": {
+  "clear": "Rischio di disboscamento",
+  "degr": "Rischio di degrado",
+  "fire": "Dove il fuoco è abituale",
+  "mine": "Rischio di miniere"
+ },
+ "legendNext": {
+  "clear": "Rischio di disboscamento, prossimi {n} mesi",
+  "degr": "Rischio di degrado, prossimi {n} mesi",
+  "mine": "Rischio di miniere, prossimi {n} mesi"
+ },
+ "less": "meno km²",
+ "level": [
+  "Calma",
+  "Vigilanza",
+  "Allerta",
+  "Allarme"
+ ],
+ "like": [
+  {
+   "km": 20,
+   "same": "Grande come Lampedusa.",
+   "x2": "Due volte Lampedusa.",
+   "x3": "Tre volte Lampedusa.",
+   "x4": "Quattro volte Lampedusa.",
+   "x5": "Cinque volte Lampedusa.",
+   "x10": "Dieci volte Lampedusa.",
+   "half": "Metà di Lampedusa.",
+   "third": "Un terzo di Lampedusa."
+  },
+  {
+   "km": 46,
+   "same": "Grande come Ischia.",
+   "x2": "Due volte Ischia.",
+   "x3": "Tre volte Ischia.",
+   "x4": "Quattro volte Ischia.",
+   "x5": "Cinque volte Ischia.",
+   "x10": "Dieci volte Ischia.",
+   "half": "Metà di Ischia.",
+   "third": "Un terzo di Ischia."
+  },
+  {
+   "km": 61,
+   "same": "Grande come San Marino.",
+   "x2": "Due volte San Marino.",
+   "x3": "Tre volte San Marino.",
+   "x4": "Quattro volte San Marino.",
+   "x5": "Cinque volte San Marino.",
+   "x10": "Dieci volte San Marino.",
+   "half": "Metà di San Marino.",
+   "third": "Un terzo di San Marino."
+  },
+  {
+   "km": 117,
+   "same": "Grande come Napoli.",
+   "x2": "Due volte Napoli.",
+   "x3": "Tre volte Napoli.",
+   "x4": "Quattro volte Napoli.",
+   "x5": "Cinque volte Napoli.",
+   "x10": "Dieci volte Napoli.",
+   "half": "Metà di Napoli.",
+   "third": "Un terzo di Napoli."
+  },
+  {
+   "km": 182,
+   "same": "Grande come Milano.",
+   "x2": "Due volte Milano.",
+   "x3": "Tre volte Milano.",
+   "x4": "Quattro volte Milano.",
+   "x5": "Cinque volte Milano.",
+   "x10": "Dieci volte Milano.",
+   "half": "Metà di Milano.",
+   "third": "Un terzo di Milano."
+  },
+  {
+   "km": 370,
+   "same": "Grande come il lago di Garda.",
+   "x2": "Due volte il lago di Garda.",
+   "x3": "Tre volte il lago di Garda.",
+   "x4": "Quattro volte il lago di Garda.",
+   "x5": "Cinque volte il lago di Garda.",
+   "x10": "Dieci volte il lago di Garda.",
+   "half": "Metà del lago di Garda.",
+   "third": "Un terzo del lago di Garda."
+  },
+  {
+   "km": 1287,
+   "same": "Grande come Roma.",
+   "x2": "Due volte Roma.",
+   "x3": "Tre volte Roma.",
+   "x4": "Quattro volte Roma.",
+   "x5": "Cinque volte Roma.",
+   "x10": "Dieci volte Roma.",
+   "half": "Metà di Roma.",
+   "third": "Un terzo di Roma."
+  },
+  {
+   "km": 3261,
+   "same": "Grande come la Valle d'Aosta.",
+   "x2": "Due volte la Valle d'Aosta.",
+   "x3": "Tre volte la Valle d'Aosta.",
+   "x4": "Quattro volte la Valle d'Aosta.",
+   "x5": "Cinque volte la Valle d'Aosta.",
+   "x10": "Dieci volte la Valle d'Aosta.",
+   "half": "Metà della Valle d'Aosta.",
+   "third": "Un terzo della Valle d'Aosta."
+  },
+  {
+   "km": 8464,
+   "same": "Grande come l'Umbria.",
+   "x2": "Due volte l'Umbria.",
+   "x3": "Tre volte l'Umbria.",
+   "x4": "Quattro volte l'Umbria.",
+   "x5": "Cinque volte l'Umbria.",
+   "x10": "Dieci volte l'Umbria.",
+   "half": "Metà dell'Umbria.",
+   "third": "Un terzo dell'Umbria."
+  },
+  {
+   "km": 24090,
+   "same": "Grande come la Sardegna.",
+   "x2": "Due volte la Sardegna.",
+   "x3": "Tre volte la Sardegna.",
+   "x4": "Quattro volte la Sardegna.",
+   "x5": "Cinque volte la Sardegna.",
+   "x10": "Dieci volte la Sardegna.",
+   "half": "Metà della Sardegna.",
+   "third": "Un terzo della Sardegna."
+  },
+  {
+   "km": 41285,
+   "same": "Grande come la Svizzera.",
+   "x2": "Due volte la Svizzera.",
+   "x3": "Tre volte la Svizzera.",
+   "x4": "Quattro volte la Svizzera.",
+   "x5": "Cinque volte la Svizzera.",
+   "x10": "Dieci volte la Svizzera.",
+   "half": "Metà della Svizzera.",
+   "third": "Un terzo della Svizzera."
+  },
+  {
+   "km": 83879,
+   "same": "Grande come l'Austria.",
+   "x2": "Due volte l'Austria.",
+   "x3": "Tre volte l'Austria.",
+   "x4": "Quattro volte l'Austria.",
+   "x5": "Cinque volte l'Austria.",
+   "x10": "Dieci volte l'Austria.",
+   "half": "Metà dell'Austria.",
+   "third": "Un terzo dell'Austria."
+  },
+  {
+   "km": 131957,
+   "same": "Grande come la Grecia.",
+   "x2": "Due volte la Grecia.",
+   "x3": "Tre volte la Grecia.",
+   "x4": "Quattro volte la Grecia.",
+   "x5": "Cinque volte la Grecia.",
+   "x10": "Dieci volte la Grecia.",
+   "half": "Metà della Grecia.",
+   "third": "Un terzo della Grecia."
+  }
+ ],
+ "line": "Linea",
+ "lower": "più basso",
+ "made": "fatta in data {date}",
+ "many": {
+  "mun": "comuni",
+  "ti": "terre indigene",
+  "uc": "unità di conservazione",
+  "uf": "stati"
+ },
+ "mapped": "disboscamento mappato",
+ "menu": "Menu",
+ "mfc": {
+  "clear": {
+   "all": "Circa {km} km² di disboscamento attesi nei prossimi {h} mesi",
+   "here": "Circa {km} km² di disboscamento attesi qui nei prossimi {h} mesi"
+  },
+  "degr": {
+   "all": "Circa {km} km² di degrado attesi nei prossimi {h} mesi",
+   "here": "Circa {km} km² di degrado attesi qui nei prossimi {h} mesi"
+  },
+  "mine": {
+   "all": "Circa {km} km² di miniere attesi nei prossimi {h} mesi",
+   "here": "Circa {km} km² di miniere attesi qui nei prossimi {h} mesi"
+  }
+ },
+ "mobs": {
+  "clear": {
+   "all": "{km} km² disboscati negli ultimi tre mesi",
+   "here": "{km} km² disboscati qui negli ultimi tre mesi"
+  },
+  "degr": {
+   "all": "{km} km² degradati negli ultimi tre mesi",
+   "here": "{km} km² degradati qui negli ultimi tre mesi"
+  },
+  "fire": {
+   "all": "{km} km² bruciati negli ultimi tre mesi",
+   "here": "{km} km² bruciati qui negli ultimi tre mesi"
+  },
+  "mine": {
+   "all": "{km} km² di miniere negli ultimi tre mesi",
+   "here": "{km} km² di miniere qui negli ultimi tre mesi"
+  }
+ },
+ "modes": {
+  "cells": "Celle",
+  "prio": "Priorità",
+  "sectors": "Settori"
+ },
+ "more": "più km²",
+ "next": "prossimi {n} mesi",
+ "nextYear": "Anno successivo",
+ "now": "ora",
+ "numSources": [
+  "zero",
+  "una",
+  "due",
+  "tre",
+  "quattro",
+  "cinque",
+  "sei",
+  "sette",
+  "otto",
+  "nove",
+  "dieci",
+  "undici",
+  "dodici"
+ ],
+ "onlyFrom": "Scegli un gradino per mostrare solo le celle con quella probabilità o più",
+ "pShareMin": "<b>{n}</b> celle a {cut} o più, {share}% della perdita attesa",
+ "pSharePastMin": "<b>{n}</b> celle a {cut} o più, {share}% delle celle dove è stato mappato disboscamento",
+ "partial": " Solo scene prioritarie, per ora.",
+ "past": "Nel {y} sono stati disboscati {act} km²",
+ "pastHere": "Nel {y} qui sono stati disboscati {act} km²",
+ "pastHereNone": "Nel {y} qui non è stato mappato alcun disboscamento",
+ "pastP": "Nel {y} erano attese {exp} celle con un ettaro perso e sono state {act}",
+ "people": {
+  "credit": "Foto: {author}, {license}",
+  "also": "Anche su questa terra"
+ },
+ "prevYear": "Anno precedente",
+ "range": "probabilmente tra {lo} e {hi}",
+ "rank": {
+  "other": "{n}º"
+ },
+ "rankSay": "{kind} per {what}",
+ "rankWhat": {
+  "fc": "disboscamento atteso entro luglio {y}",
+  "fire": "quota di dove il fuoco è abituale",
+  "past": "disboscamento atteso per il {y}",
+  "risk": "quota della mappa di rischio"
+ },
+ "ranking": "Classifica",
+ "replay": "Previsione passata",
+ "risk": {
+  "degr": "rischio di degrado",
+  "mine": "rischio di miniere"
+ },
+ "scale": {
+  "actions": "Azioni",
+  "months": "Mesi",
+  "years": "Anni"
+ },
+ "sign": {
+  "autos": "Multe IBAMA",
+  "clear": "Disboscamento",
+  "degr": "Degrado",
+  "mine": "Miniere",
+  "scar": "Incendi"
+ },
+ "signTitle": "{now} negli ultimi tre mesi, {prev} un anno prima",
+ "signs": "Segnali, tre mesi contro l'anno scorso",
+ "skip": "Salta",
+ "st": {
+  "ahead": {
+   "flat": "Il modello prevede altri {km} km² di disboscamento entro {month}.",
+   "rise": "{pct}% di disboscamento in più in tre mesi, e il modello prevede altri {km} km² entro {month}."
+  },
+  "back": "Indietro",
+  "done": "Fine",
+  "first": "Per chi fa i controlli, questi {n} luoghi vengono prima.",
+  "forestA": "Questa è l'Amazzonia.",
+  "forestB": {
+   "one": "{cells} milione di quadrati di foresta, {m} metri ciascuno.",
+   "other": "{cells} milioni di quadrati di foresta, {m} metri ciascuno."
+  },
+  "lossA": "Ogni anno ne cade un pezzo.",
+  "lossB": "Dal {y}, {k} mila km².",
+  "lossBMore": "Dal {y}, {k} mila km². Più della Grecia.",
+  "model": "Abbiamo addestrato un modello per prevedere il prossimo.",
+  "moreKm": 131957,
+  "next": "Avanti",
+  "open": "Il codice e il benchmark sono aperti. Chi fa un modello migliore passa davanti al nostro.",
+  "proof": "Lo abbiamo provato sul passato. Nel {y}, su {of} luoghi indicati, {hit} sono stati disboscati.",
+  "sources": {
+   "one": "Impara da {n} fonte pubblica, dalle immagini satellitari ai permessi di disboscamento.",
+   "other": "Impara da {n} fonti pubbliche, dalle immagini satellitari ai permessi di disboscamento."
+  }
+ },
+ "stepHi": "oltre {c}",
+ "stepLo": "sotto {c}",
+ "stepMid": "{a}-{b}",
+ "story": "Storia",
+ "tag": {
+  "ti": "TI",
+  "uc": "UC"
+ },
+ "tiny": "meno di 0,1",
+ "tipFc": "circa {exp} km² attesi",
+ "tipPast": "{exp} km² attesi, {act} disboscati",
+ "tipRank": "{rank} su {n}",
+ "to": "{a}-{b}",
+ "under": "meno di {c}",
+ "where": {
+  "degr": "Dove sono più probabili il degrado o il taglio entro {end}",
+  "mine": "Dove è più probabile che le miniere avanzino entro {end}"
+ },
+ "whereHere": "{rank} su {n} {many} per {risk} entro {end}",
+ "whole": "Tutta l'Amazzonia",
+ "why": {
+  "around": "{km} km² disboscati nei dintorni negli ultimi tre anni.",
+  "degr": "{km} km² di foresta degradata nell'ultimo anno.",
+  "fire": "{km} km² di foresta bruciata nell'ultimo anno.",
+  "land": {
+   "ti": "In una terra indigena.",
+   "uc": "In un'unità di conservazione."
+  },
+  "near": "Vicino a disboscamento recente.",
+  "permit": "Ha un permesso per disboscare {ha} ettari."
+ },
+ "window": "previsione"
+}

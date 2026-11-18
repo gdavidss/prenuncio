@@ -1,0 +1,512 @@
+{
+ "about": "About",
+ "aboutText": {
+  "benchmark": "Benchmark",
+  "line1": "Prenúncio shows where the Amazon is likely to be cleared by July {year}.",
+  "line2": "We built it so the people who enforce the law can get there first.",
+  "metric": "The score is the mean of {b0} to {b1}.",
+  "model": "The model, {name}, learned from {span} years of public data. For every {m} metre square of forest it gives the chance of clearing in the year ahead.",
+  "open": "The code, the data and the benchmark are open. Build a better model and it goes ahead of ours.",
+  "tested": "We tested it on years it had never seen. In {y}, {hit} of every {of} places it pointed to were cleared."
+ },
+ "about_": "about {x} km²",
+ "act": {
+  "against": "against {x}",
+  "axis": "km² cleared per six months",
+  "band": "Enforcement",
+  "bandSub": "IBAMA notices and embargoes",
+  "bandSubN": "IBAMA notices and embargoes, {n} municipalities",
+  "held": "more, with enforcement as in {ref}",
+  "honest": "A floor and an association, not proof of cause.",
+  "measured": "measured",
+  "none": "Enforcement accounts for no clearing avoided here since {since}",
+  "parts": [
+   "a quarter",
+   "a third",
+   "half",
+   "two thirds",
+   "three quarters"
+  ],
+  "ref": "average of {from} to {to}",
+  "say": {
+   "all": "Enforcement accounts for {km} km² of clearing avoided since {since}",
+   "here": "Enforcement accounts for {km} km² of clearing avoided here since {since}"
+  },
+  "sign": {
+   "collective": "Collective embargoes",
+   "field": "Field embargoes",
+   "notices": "Notices per 100 km²",
+   "remote": "Remote embargoes"
+  },
+  "signTitle": {
+   "collective": "Whole Indigenous lands and other public areas embargoed at once",
+   "field": "Area embargoed on a field visit",
+   "notices": "Infraction notices per 100 km² of clearing",
+   "remote": "Area embargoed by satellite, with no visit"
+  },
+  "signs": "IBAMA actions, year to {now} against year to {ref}",
+  "sub": "About {part} of the fall since then. The rest fell everywhere at once.",
+  "subHere": "{pct}% on top of what was cleared here.",
+  "tipHeld": "{held} with enforcement held",
+  "tipHeldRange": "{held} with enforcement held, likely {lo} to {hi}",
+  "tipObs": "{span}, {obs} km² cleared"
+ },
+ "ahead": "{n} months",
+ "amazon": "Amazon",
+ "areaFc": {
+  "every": "Every cell here has {p} chance of losing a hectare by July {y}",
+  "upto": "Up to {p} chance a cell here loses a hectare by July {y}"
+ },
+ "areaPast": {
+  "everyNo": "In {y} cells here were given {p}. No clearing was mapped.",
+  "everyYes": "In {y} cells here were given {p}. Clearing was mapped in {clr} of {n}.",
+  "uptoNo": "In {y} cells here were given up to {p}. No clearing was mapped.",
+  "uptoYes": "In {y} cells here were given up to {p}. Clearing was mapped in {clr} of {n}."
+ },
+ "axisM": {
+  "clear": "km² cleared per month",
+  "degr": "km² degraded per month",
+  "fire": "km² burned per month",
+  "mine": "km² mined per month"
+ },
+ "axisW": {
+  "degr": "km² degraded per 12 months",
+  "fire": "km² burned per 12 months",
+  "mine": "km² mined per 12 months"
+ },
+ "axisY": "km² cleared per year, August to July",
+ "bars": "Bars",
+ "bench": {
+  "head": [
+   "",
+   "model",
+   "score",
+   "",
+   "by",
+   "date"
+  ],
+  "ref": "no model",
+  "refName": "last-year-nearby",
+  "repo": "GitHub",
+  "submit": "Submit a model"
+ },
+ "burned": {
+  "months": {
+   "all": "{km} km² burned in the last three months, {prev} a year before",
+   "here": "{km} km² burned here in the last three months, {prev} a year before"
+  },
+  "years": {
+   "all": "{km} km² burned in the last twelve months, {prev} in the twelve before",
+   "here": "{km} km² burned here in the last twelve months, {prev} in the twelve before"
+  }
+ },
+ "byJuly": "to July {y}",
+ "cellFc": "{p} chance this cell loses a hectare by July {y}",
+ "cellFire": "Among the {p}% of forest where fire is most likely",
+ "cellFireRest": "Outside the 5% of forest where fire is most likely",
+ "cellHa": {
+  "clear": "About {ha} hectares of clearing expected here in {n} months",
+  "degr": "About {ha} hectares of degradation expected here in {n} months",
+  "mine": "About {ha} hectares of mining expected here in {n} months"
+ },
+ "cellHaLow": {
+  "clear": "Under 1 hectare of clearing expected here in {n} months",
+  "degr": "Under 1 hectare of degradation expected here in {n} months",
+  "mine": "Under 1 hectare of mining expected here in {n} months"
+ },
+ "cellPast": {
+  "no": "In {y} this cell was given {p}. No clearing was mapped in it.",
+  "yes": "In {y} this cell was given {p}. Clearing was mapped in it."
+ },
+ "cellPlace": "{mun}, {uf}",
+ "cellPlaceIn": "{mun}, {uf}. {land}",
+ "chance": "chance",
+ "chanceBy": "Chance each cell loses a hectare by July {y}",
+ "chanceFor": "Chance given to each cell for {y}",
+ "chanceOut": "the chance, for every cell",
+ "close": "Close",
+ "closeList": "Close the list",
+ "copied": "Copied",
+ "copy": "Copy",
+ "credit": "Imagery: Esri, Maxar, Earthstar Geographics",
+ "csv": "CSV",
+ "enso": [
+  "El Niño",
+  "La Niña",
+  "Pacific"
+ ],
+ "ensoLevel": [
+  [
+   "very strong",
+   "strong",
+   "moderate",
+   "weak"
+  ],
+  [
+   "very strong",
+   "strong",
+   "moderate",
+   "weak"
+  ],
+  "neutral"
+ ],
+ "fc": {
+  "all": "About {km} km² of clearing expected by July {y}",
+  "here": "About {km} km² of clearing expected here by July {y}"
+ },
+ "fcNone": "Almost no clearing expected here by July {y}",
+ "front": {
+  "back": "Back to the map",
+  "chart": "Bring the timeline forward",
+  "map": "Bring the map forward"
+ },
+ "hazard": {
+  "clear": "Clearing",
+  "degr": "Degradation",
+  "fire": "Fire",
+  "mine": "Mining"
+ },
+ "higher": "higher",
+ "home": "Back to the whole map",
+ "kinds": {
+  "mun": "Municipalities",
+  "ti": "Indigenous lands",
+  "uc": "Conservation units",
+  "uf": "States"
+ },
+ "km2": "{x} km²",
+ "land": {
+  "ti": "Indigenous land",
+  "uc": "conservation unit"
+ },
+ "language": "Language",
+ "lastSub": {
+  "degr": {
+   "all": "{km} km² degraded or logged in the last twelve months.",
+   "here": "{km} km² degraded or logged here in the last twelve months."
+  },
+  "mine": {
+   "all": "{km} km² mined in the last twelve months.",
+   "here": "{km} km² mined here in the last twelve months."
+  }
+ },
+ "legend": {
+  "clear": "Clearing risk",
+  "degr": "Degradation risk",
+  "fire": "Where fire tends to occur",
+  "mine": "Mining risk"
+ },
+ "legendNext": {
+  "clear": "Clearing risk, next {n} months",
+  "degr": "Degradation risk, next {n} months",
+  "mine": "Mining risk, next {n} months"
+ },
+ "less": "less km²",
+ "level": [
+  "Quiet",
+  "Watch",
+  "Warning",
+  "Alarm"
+ ],
+ "like": [
+  {
+   "km": 59,
+   "same": "The size of Manhattan.",
+   "x2": "Twice Manhattan.",
+   "x3": "Three times Manhattan.",
+   "x4": "Four times Manhattan.",
+   "x5": "Five times Manhattan.",
+   "x10": "Ten times Manhattan.",
+   "half": "Half of Manhattan.",
+   "third": "A third of Manhattan."
+  },
+  {
+   "km": 105,
+   "same": "The size of Paris.",
+   "x2": "Twice Paris.",
+   "x3": "Three times Paris.",
+   "x4": "Four times Paris.",
+   "x5": "Five times Paris.",
+   "x10": "Ten times Paris.",
+   "half": "Half of Paris.",
+   "third": "A third of Paris."
+  },
+  {
+   "km": 177,
+   "same": "The size of Washington, D.C.",
+   "x2": "Twice Washington, D.C.",
+   "x3": "Three times Washington, D.C.",
+   "x4": "Four times Washington, D.C.",
+   "x5": "Five times Washington, D.C.",
+   "x10": "Ten times Washington, D.C.",
+   "half": "Half of Washington, D.C.",
+   "third": "A third of Washington, D.C."
+  },
+  {
+   "km": 735,
+   "same": "The size of Singapore.",
+   "x2": "Twice Singapore.",
+   "x3": "Three times Singapore.",
+   "x4": "Four times Singapore.",
+   "x5": "Five times Singapore.",
+   "x10": "Ten times Singapore.",
+   "half": "Half of Singapore.",
+   "third": "A third of Singapore."
+  },
+  {
+   "km": 1214,
+   "same": "The size of the city of Los Angeles.",
+   "x2": "Twice the city of Los Angeles.",
+   "x3": "Three times the city of Los Angeles.",
+   "x4": "Four times the city of Los Angeles.",
+   "x5": "Five times the city of Los Angeles.",
+   "x10": "Ten times the city of Los Angeles.",
+   "half": "Half of the city of Los Angeles.",
+   "third": "A third of the city of Los Angeles."
+  },
+  {
+   "km": 1572,
+   "same": "The size of Greater London.",
+   "x2": "Twice Greater London.",
+   "x3": "Three times Greater London.",
+   "x4": "Four times Greater London.",
+   "x5": "Five times Greater London.",
+   "x10": "Ten times Greater London.",
+   "half": "Half of Greater London.",
+   "third": "A third of Greater London."
+  },
+  {
+   "km": 2586,
+   "same": "The size of Luxembourg.",
+   "x2": "Twice Luxembourg.",
+   "x3": "Three times Luxembourg.",
+   "x4": "Four times Luxembourg.",
+   "x5": "Five times Luxembourg.",
+   "x10": "Ten times Luxembourg.",
+   "half": "Half of Luxembourg.",
+   "third": "A third of Luxembourg."
+  },
+  {
+   "km": 6446,
+   "same": "The size of Delaware.",
+   "x2": "Twice Delaware.",
+   "x3": "Three times Delaware.",
+   "x4": "Four times Delaware.",
+   "x5": "Five times Delaware.",
+   "x10": "Ten times Delaware.",
+   "half": "Half of Delaware.",
+   "third": "A third of Delaware."
+  },
+  {
+   "km": 10452,
+   "same": "The size of Lebanon.",
+   "x2": "Twice Lebanon.",
+   "x3": "Three times Lebanon.",
+   "x4": "Four times Lebanon.",
+   "x5": "Five times Lebanon.",
+   "x10": "Ten times Lebanon.",
+   "half": "Half of Lebanon.",
+   "third": "A third of Lebanon."
+  },
+  {
+   "km": 30528,
+   "same": "The size of Belgium.",
+   "x2": "Twice Belgium.",
+   "x3": "Three times Belgium.",
+   "x4": "Four times Belgium.",
+   "x5": "Five times Belgium.",
+   "x10": "Ten times Belgium.",
+   "half": "Half of Belgium.",
+   "third": "A third of Belgium."
+  },
+  {
+   "km": 41285,
+   "same": "The size of Switzerland.",
+   "x2": "Twice Switzerland.",
+   "x3": "Three times Switzerland.",
+   "x4": "Four times Switzerland.",
+   "x5": "Five times Switzerland.",
+   "x10": "Ten times Switzerland.",
+   "half": "Half of Switzerland.",
+   "third": "A third of Switzerland."
+  },
+  {
+   "km": 130279,
+   "same": "The size of England.",
+   "x2": "Twice England.",
+   "x3": "Three times England.",
+   "x4": "Four times England.",
+   "x5": "Five times England.",
+   "x10": "Ten times England.",
+   "half": "Half of England.",
+   "third": "A third of England."
+  }
+ ],
+ "line": "Line",
+ "lower": "lower",
+ "made": "made on {date}",
+ "many": {
+  "mun": "municipalities",
+  "ti": "Indigenous lands",
+  "uc": "conservation units",
+  "uf": "states"
+ },
+ "mapped": "clearing mapped",
+ "menu": "Menu",
+ "mfc": {
+  "clear": {
+   "all": "About {km} km² expected to be cleared in the next {h} months",
+   "here": "About {km} km² expected to be cleared here in the next {h} months"
+  },
+  "degr": {
+   "all": "About {km} km² expected to be degraded in the next {h} months",
+   "here": "About {km} km² expected to be degraded here in the next {h} months"
+  },
+  "mine": {
+   "all": "About {km} km² of mining expected in the next {h} months",
+   "here": "About {km} km² of mining expected here in the next {h} months"
+  }
+ },
+ "mobs": {
+  "clear": {
+   "all": "{km} km² cleared in the last three months",
+   "here": "{km} km² cleared here in the last three months"
+  },
+  "degr": {
+   "all": "{km} km² degraded in the last three months",
+   "here": "{km} km² degraded here in the last three months"
+  },
+  "fire": {
+   "all": "{km} km² burned in the last three months",
+   "here": "{km} km² burned here in the last three months"
+  },
+  "mine": {
+   "all": "{km} km² mined in the last three months",
+   "here": "{km} km² mined here in the last three months"
+  }
+ },
+ "modes": {
+  "cells": "Cells",
+  "prio": "Priorities",
+  "sectors": "Sectors"
+ },
+ "more": "more km²",
+ "next": "next {n} months",
+ "nextYear": "Next year",
+ "now": "now",
+ "numSources": [
+  "zero",
+  "one",
+  "two",
+  "three",
+  "four",
+  "five",
+  "six",
+  "seven",
+  "eight",
+  "nine",
+  "ten",
+  "eleven",
+  "twelve"
+ ],
+ "onlyFrom": "Choose a step to show only cells at that chance or more",
+ "pShareMin": "<b>{n}</b> cells at {cut} or more, with {share}% of the expected loss",
+ "pSharePastMin": "<b>{n}</b> cells at {cut} or more, with {share}% of the cells where clearing was mapped",
+ "partial": " Priority scenes only, so far.",
+ "past": "In {y}, {act} km² were cleared",
+ "pastHere": "In {y}, {act} km² were cleared here",
+ "pastHereNone": "In {y} no clearing was mapped here",
+ "pastP": "In {y}, {exp} cells were expected to lose a hectare and {act} did",
+ "people": {
+  "credit": "Photo: {author}, {license}",
+  "also": "Also on this land"
+ },
+ "prevYear": "Previous year",
+ "range": "likely {lo} to {hi}",
+ "rank": {
+  "few": "{n}rd",
+  "one": "{n}st",
+  "other": "{n}th",
+  "two": "{n}nd"
+ },
+ "rankSay": "{kind} by {what}",
+ "rankWhat": {
+  "fc": "clearing expected by July {y}",
+  "fire": "share of where fire tends to occur",
+  "past": "clearing expected for {y}",
+  "risk": "share of the risk map"
+ },
+ "ranking": "Ranking",
+ "replay": "Past forecast",
+ "risk": {
+  "degr": "degradation risk",
+  "mine": "mining risk"
+ },
+ "scale": {
+  "actions": "Actions",
+  "months": "Months",
+  "years": "Years"
+ },
+ "sign": {
+  "autos": "IBAMA fines",
+  "clear": "Clearing",
+  "degr": "Degradation",
+  "mine": "Mining",
+  "scar": "Burning"
+ },
+ "signTitle": "{now} in the last three months, {prev} a year before",
+ "signs": "Signals, three months against last year",
+ "skip": "Skip",
+ "st": {
+  "ahead": {
+   "flat": "The model expects another {km} km² of clearing by {month}.",
+   "rise": "In the last three months clearing rose {pct}%, and the model expects another {km} km² by {month}."
+  },
+  "back": "Back",
+  "done": "Done",
+  "first": "For those who enforce, these {n} places come first.",
+  "forestA": "This is the Amazon.",
+  "forestB": "{cells} million squares of forest, {m} metres each.",
+  "lossA": "Every year a piece of it falls.",
+  "lossB": "Since {y}, {k} thousand km².",
+  "lossBMore": "Since {y}, {k} thousand km². More than England.",
+  "model": "We trained a model to predict the next one.",
+  "moreKm": 130279,
+  "next": "Next",
+  "open": "The code and the benchmark are open. Build a better model and it goes ahead of ours.",
+  "proof": "We tested it on the past. In {y}, {hit} of every {of} places it pointed to were cleared.",
+  "sources": "It learns from {n} public sources, from satellite images to clearing permits."
+ },
+ "stepHi": "over {c}",
+ "stepLo": "under {c}",
+ "stepMid": "{a} to {b}",
+ "story": "Story",
+ "tag": {
+  "ti": "TI",
+  "uc": "UC"
+ },
+ "tiny": "under 0.1",
+ "tipFc": "about {exp} km² expected",
+ "tipPast": "{exp} km² expected, {act} cleared",
+ "tipRank": "{rank} of {n}",
+ "to": "{a} to {b}",
+ "under": "under {c}",
+ "where": {
+  "degr": "Where forest is most likely to be degraded or logged by {end}",
+  "mine": "Where mining is most likely to spread by {end}"
+ },
+ "whereHere": "Ranks {rank} of {n} {many} for {risk} by {end}",
+ "whole": "Whole Amazon",
+ "why": {
+  "around": "{km} km² cleared around it in the last three years.",
+  "degr": "{km} km² of forest degraded in the last year.",
+  "fire": "{km} km² of forest burned in the last year.",
+  "land": {
+   "ti": "Inside an Indigenous land.",
+   "uc": "Inside a conservation unit."
+  },
+  "near": "Close to recent clearing.",
+  "permit": "Has a permit to clear {ha} hectares."
+ },
+ "window": "forecast"
+}

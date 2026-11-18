@@ -5,288 +5,46 @@
 const $ = id => document.getElementById(id);
 const root = document.documentElement;
 
-const T = {
-  en: {
-    hazard: { clear: "Clearing", fire: "Fire", degr: "Degradation", mine: "Mining" }, scale: { years: "Years", months: "Months", actions: "Actions" },
-    amazon: "Amazon", about: "About", close: "Close", copy: "Copy", copied: "Copied", story: "Story", skip: "Skip",
-    front: { chart: "Bring the timeline forward", map: "Bring the map forward", back: "Back to the map" }, menu: "Menu", closeList: "Close the list",
-    chanceOut: "the chance, for every cell",
-    // an area said as a place the reader knows: this language's own places, with every sentence written out whole
-    like: [
-      {"km": 59, "same": "The size of Manhattan.", "x2": "Twice Manhattan.", "x3": "Three times Manhattan.", "x4": "Four times Manhattan.", "x5": "Five times Manhattan.", "x10": "Ten times Manhattan.", "half": "Half of Manhattan.", "third": "A third of Manhattan."},
-      {"km": 105, "same": "The size of Paris.", "x2": "Twice Paris.", "x3": "Three times Paris.", "x4": "Four times Paris.", "x5": "Five times Paris.", "x10": "Ten times Paris.", "half": "Half of Paris.", "third": "A third of Paris."},
-      {"km": 177, "same": "The size of Washington, D.C.", "x2": "Twice Washington, D.C.", "x3": "Three times Washington, D.C.", "x4": "Four times Washington, D.C.", "x5": "Five times Washington, D.C.", "x10": "Ten times Washington, D.C.", "half": "Half of Washington, D.C.", "third": "A third of Washington, D.C."},
-      {"km": 735, "same": "The size of Singapore.", "x2": "Twice Singapore.", "x3": "Three times Singapore.", "x4": "Four times Singapore.", "x5": "Five times Singapore.", "x10": "Ten times Singapore.", "half": "Half of Singapore.", "third": "A third of Singapore."},
-      {"km": 1214, "same": "The size of the city of Los Angeles.", "x2": "Twice the city of Los Angeles.", "x3": "Three times the city of Los Angeles.", "x4": "Four times the city of Los Angeles.", "x5": "Five times the city of Los Angeles.", "x10": "Ten times the city of Los Angeles.", "half": "Half of the city of Los Angeles.", "third": "A third of the city of Los Angeles."},
-      {"km": 1572, "same": "The size of Greater London.", "x2": "Twice Greater London.", "x3": "Three times Greater London.", "x4": "Four times Greater London.", "x5": "Five times Greater London.", "x10": "Ten times Greater London.", "half": "Half of Greater London.", "third": "A third of Greater London."},
-      {"km": 2586, "same": "The size of Luxembourg.", "x2": "Twice Luxembourg.", "x3": "Three times Luxembourg.", "x4": "Four times Luxembourg.", "x5": "Five times Luxembourg.", "x10": "Ten times Luxembourg.", "half": "Half of Luxembourg.", "third": "A third of Luxembourg."},
-      {"km": 6446, "same": "The size of Delaware.", "x2": "Twice Delaware.", "x3": "Three times Delaware.", "x4": "Four times Delaware.", "x5": "Five times Delaware.", "x10": "Ten times Delaware.", "half": "Half of Delaware.", "third": "A third of Delaware."},
-      {"km": 10452, "same": "The size of Lebanon.", "x2": "Twice Lebanon.", "x3": "Three times Lebanon.", "x4": "Four times Lebanon.", "x5": "Five times Lebanon.", "x10": "Ten times Lebanon.", "half": "Half of Lebanon.", "third": "A third of Lebanon."},
-      {"km": 30528, "same": "The size of Belgium.", "x2": "Twice Belgium.", "x3": "Three times Belgium.", "x4": "Four times Belgium.", "x5": "Five times Belgium.", "x10": "Ten times Belgium.", "half": "Half of Belgium.", "third": "A third of Belgium."},
-      {"km": 41285, "same": "The size of Switzerland.", "x2": "Twice Switzerland.", "x3": "Three times Switzerland.", "x4": "Four times Switzerland.", "x5": "Five times Switzerland.", "x10": "Ten times Switzerland.", "half": "Half of Switzerland.", "third": "A third of Switzerland."},
-      {"km": 130279, "same": "The size of England.", "x2": "Twice England.", "x3": "Three times England.", "x4": "Four times England.", "x5": "Five times England.", "x10": "Ten times England.", "half": "Half of England.", "third": "A third of England."},
-    ],
-    chance: "chance", home: "Back to the whole map",
-    bench: { head: ["", "model", "score", "", "by", "date"], submit: "Submit a model", repo: "GitHub", ref: "no model" },
-    // the opening story: one line at a time. Numbers come from data/story.json and the other data files.
-    num: n => ["zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten", "eleven", "twelve"][n] ?? String(n),
-    st: {
-      next: "Next", back: "Back", done: "Done",
-      forestA: "This is the Amazon.",
-      forestB: v => `${v.cells} million squares of forest, ${v.m} metres each.`,
-      lossA: "Every year a piece of it falls.",
-      lossB: v => `Since ${v.y}, ${v.k} thousand km².${v.more}`, more: { km: 130279, say: " More than England." },
-      model: "We trained a model to predict the next one.",
-      proof: v => `We tested it on the past. In ${v.y}, ${v.hit} of every ${v.of} places it pointed to were cleared.`,
-      sources: v => `It learns from ${v.n} public sources, from satellite images to clearing permits.`,
-      open: "The code and the benchmark are open. Build a better model and it goes ahead of ours.",
-      first: v => `For those who enforce, these ${v.n} places come first.`,
-      ahead: v => (v.pct ? `In the last three months clearing rose ${v.pct}%, and the model expects another ${v.km} km² by ${v.month}.` : `The model expects another ${v.km} km² of clearing by ${v.month}.`),
-    },
-    axisY: "km² cleared per year, August to July",
-    // cells: every forest cell has its own chance
-    chanceBy: y => `Chance each cell loses a hectare by July ${y}`, chanceFor: y => `Chance given to each cell for ${y}`, mapped: "clearing mapped",
-    onlyFrom: "Choose a step to show only cells at that chance or more",
-    stepLo: c => `under ${c}`, stepMid: (a, b) => `${a} to ${b}`, stepHi: c => `over ${c}`, under: c => `under ${c}`,
-    cellFc: v => `${v.p} chance this cell loses a hectare by July ${v.y}`,
-    cellHa: { clear: v => `About ${v.ha} hectares of clearing expected here in ${v.n} months`, degr: v => `About ${v.ha} hectares of degradation expected here in ${v.n} months`, mine: v => `About ${v.ha} hectares of mining expected here in ${v.n} months` },
-    cellHaLow: { clear: v => `Under 1 hectare of clearing expected here in ${v.n} months`, degr: v => `Under 1 hectare of degradation expected here in ${v.n} months`, mine: v => `Under 1 hectare of mining expected here in ${v.n} months` },
-    cellFire: v => `Among the ${v.p}% of forest where fire is most likely`, cellFireRest: "Outside the 5% of forest where fire is most likely",
-    cellPlace: v => `${v.mun}, ${v.uf}${v.land ? `. ${v.land}` : ""}`,
-    cellPast: v => `In ${v.y} this cell was given ${v.p}. ${v.clr ? "Clearing was mapped in it." : "No clearing was mapped in it."}`,
-    areaFc: v => (v.low ? `Every cell here has ${v.p} chance of losing a hectare by July ${v.y}` : `Up to ${v.p} chance a cell here loses a hectare by July ${v.y}`),
-    areaPast: v => `In ${v.y} cells here were given ${v.low ? "" : "up to "}${v.p}. ${v.clr ? `Clearing was mapped in ${v.clr} of ${v.n}.` : "No clearing was mapped."}`,
-    pShareMin: v => `<b>${v.n}</b> cells at ${v.cut} or more, with ${v.share}% of the expected loss`,
-    pSharePastMin: v => `<b>${v.n}</b> cells at ${v.cut} or more, with ${v.share}% of the cells where clearing was mapped`,
-    pastP: v => `In ${v.y}, ${v.exp} cells were expected to lose a hectare and ${v.act} did`, prevYear: "Previous year", nextYear: "Next year",
-    modes: { sectors: "Sectors", cells: "Cells", prio: "Priorities" }, ranking: "Ranking", bars: "Bars", line: "Line",
-    // the priority list: where to look first. A place that is opened says why in one plain sentence, two at most.
-    land: { ti: "Indigenous land", uc: "conservation unit" },
-    why: {
-      around: v => `${v.km} km² cleared around it in the last three years.`,
-      fire: v => `${v.km} km² of forest burned in the last year.`,
-      degr: v => `${v.km} km² of forest degraded in the last year.`,
-      near: "Close to recent clearing.",
-      permit: v => `Has a permit to clear ${v.ha} hectares.`,
-      land: { ti: "Inside an Indigenous land.", uc: "Inside a conservation unit." },
-    },
-    rankSay: v => `${v.kind} by ${v.what}`, rankWhat: { fc: y => `clearing expected by July ${y}`, past: y => `clearing expected for ${y}`, risk: "share of the risk map", fire: "share of where fire tends to occur" },
-    kinds: { uf: "States", mun: "Municipalities", ti: "Indigenous lands", uc: "Conservation units" },
-    many: { uf: "states", mun: "municipalities", ti: "Indigenous lands", uc: "conservation units" },
-    rank: n => n + (n % 100 > 10 && n % 100 < 14 ? "th" : ["th", "st", "nd", "rd"][n % 10] || "th"),
-    tiny: "under 0.1",
-    // the level, and the two facts it was counted from
-    level: ["Quiet", "Watch", "Warning", "Alarm"], replay: "Past forecast", made: y => `made on 31 July ${y - 1}`,
-    // headlines: one short sentence each
-    fc: v => `About ${v.km} km² of clearing expected${v.here} by July ${v.y}`,
-    fcNone: v => `Almost no clearing expected here by July ${v.y}`,
-    past: v => `In ${v.y}, ${v.act} km² were cleared`,
-    partial: " Priority scenes only, so far.",
-    pastHere: v => `In ${v.y}, ${v.act} km² were cleared here`,
-    pastHereNone: v => `In ${v.y} no clearing was mapped here`,
-    mfc: {
-      clear: v => `About ${v.km} km² expected to be cleared${v.here} in the next ${v.h} months`,
-      degr: v => `About ${v.km} km² expected to be degraded${v.here} in the next ${v.h} months`,
-      mine: v => `About ${v.km} km² of mining expected${v.here} in the next ${v.h} months`,
-    },
-    mobs: {
-      clear: v => `${v.km} km² cleared${v.here} in the last three months`,
-      fire: v => `${v.km} km² burned${v.here} in the last three months`,
-      degr: v => `${v.km} km² degraded${v.here} in the last three months`,
-      mine: v => `${v.km} km² mined${v.here} in the last three months`,
-    },
-    // fire: what burned, never how much will burn
-    burned: { months: v => `${v.km} km² burned${v.here} in the last three months, ${v.prev} a year before`, years: v => `${v.km} km² burned${v.here} in the last twelve months, ${v.prev} in the twelve before` },
-    axisM: { clear: "km² cleared per month", fire: "km² burned per month", degr: "km² degraded per month", mine: "km² mined per month" },
-    axisW: { fire: "km² burned per 12 months", degr: "km² degraded per 12 months", mine: "km² mined per 12 months" },
-    whole: "Whole Amazon", to: (a, b) => `${a} to ${b}`,
-    where: {
-      degr: v => `Where forest is most likely to be degraded or logged by ${v.end}`,
-      mine: v => `Where mining is most likely to spread by ${v.end}`,
-    },
-    whereHere: v => `Ranks ${v.rank} of ${v.n} ${v.many} for ${v.risk} by ${v.end}`,
-    risk: { degr: "degradation risk", mine: "mining risk" },
-    lastSub: {
-      degr: v => `${v.km} km² degraded or logged${v.here} in the last twelve months.`,
-      mine: v => `${v.km} km² mined${v.here} in the last twelve months.`,
-    },
-    here: " here",
-    sign: { clear: "Clearing", scar: "Burning", degr: "Degradation", mine: "Mining", autos: "IBAMA fines" },
-    now: "now", ahead: n => `${n} months`, byJuly: y => `to July ${y}`, window: "forecast",
-    signs: "Signals, three months against last year",
-    enso: ["El Niño", "La Niña", "Pacific"], ensoLevel: [["very strong", "strong", "moderate", "weak"], ["very strong", "strong", "moderate", "weak"], "neutral"],
-    signTitle: v => `${v.now} in the last three months, ${v.prev} a year before`,
-    legend: { clear: "Clearing risk", fire: "Where fire tends to occur", degr: "Degradation risk", mine: "Mining risk" }, lower: "lower", higher: "higher", less: "less km²", more: "more km²", next: n => `next ${n} months`,
-    about_: x => `about ${x} km²`, range: (lo, hi) => `likely ${lo} to ${hi}`,
-    tipFc: v => `about ${v.exp} km² expected`, tipPast: v => `${v.exp} km² expected, ${v.act} cleared`, tipRank: v => `${v.rank} of ${v.n}`,
-    // actions: what measured enforcement accounts for. A floor and an association, and the screen says so.
-    act: {
-      band: "Enforcement", bandSub: v => `IBAMA notices and embargoes${v.n ? `, ${v.n} municipalities` : ""}`,
-      say: v => `Enforcement accounts for ${v.km} km² of clearing avoided${v.here} since ${v.since}`,
-      none: v => `Enforcement accounts for no clearing avoided here since ${v.since}`,
-      sub: v => `About ${v.part} of the fall since then. The rest fell everywhere at once.`,
-      subHere: v => `${v.pct}% on top of what was cleared here.`,
-      parts: ["a quarter", "a third", "half", "two thirds", "three quarters"],
-      honest: "A floor and an association, not proof of cause.",
-      axis: "km² cleared per six months", measured: "measured", held: v => `more, with enforcement as in ${v.ref}`, ref: v => `average of ${v.from} to ${v.to}`,
-      tipObs: v => `${v.span}, ${v.obs} km² cleared`, tipHeld: v => `${v.held} with enforcement held${v.lo ? `, likely ${v.lo} to ${v.hi}` : ""}`,
-      signs: v => `IBAMA actions, year to ${v.now} against year to ${v.ref}`, against: x => `against ${x}`,
-      sign: { notices: "Notices per 100 km²", remote: "Remote embargoes", field: "Field embargoes", collective: "Collective embargoes" },
-      signTitle: { notices: "Infraction notices per 100 km² of clearing", remote: "Area embargoed by satellite, with no visit", field: "Area embargoed on a field visit", collective: "Whole Indigenous lands and other public areas embargoed at once" },
-    },
-    credit: "Imagery: Esri, Maxar, Earthstar Geographics",
-    aboutHtml: v => `
-      <div class="lede">
-        <p>Prenúncio shows where the Amazon is likely to be cleared by July ${v.year}.</p>
-        <p>We built it so the people who enforce the law can get there first.</p>
-      </div>
-      <div id="model-fig"></div>
-      <p>The model, <b>${v.name}</b>, learned from ${v.span} years of public data. For every ${v.m} metre square of forest it gives the chance of clearing in the year ahead.</p>
-      <p>We tested it on years it had never seen. In ${v.y}, ${v.hit} of every ${v.of} places it pointed to were cleared.</p>
-      <h3 id="about-benchmark">Benchmark</h3>
-      ${v.bench}
-      <p class="metric">The score is the mean of ${v.b0} to ${v.b1}.</p>
-      <p>The code, the data and the benchmark are open. Build a better model and it goes ahead of ours.</p>
-      <p class="go"><a class="btn" href="${v.links.benchmark}" target="_blank" rel="noopener">${v.submit}</a><a href="${v.links.repository}" target="_blank" rel="noopener">${v.repo}</a></p>`,
-  },
-  pt: {
-    hazard: { clear: "Desmatamento", fire: "Fogo", degr: "Degradação", mine: "Garimpo" }, scale: { years: "Anos", months: "Meses", actions: "Ações" },
-    amazon: "Amazônia", about: "Sobre", close: "Fechar", copy: "Copiar", copied: "Copiado", story: "História", skip: "Pular",
-    front: { chart: "Trazer a linha do tempo à frente", map: "Trazer o mapa à frente", back: "Voltar ao mapa" }, menu: "Menu", closeList: "Fechar a lista",
-    chanceOut: "a chance, para cada célula",
-    like: [
-      {"km": 26, "same": "Do tamanho de Fernando de Noronha.", "x2": "Duas vezes Fernando de Noronha.", "x3": "Três vezes Fernando de Noronha.", "x4": "Quatro vezes Fernando de Noronha.", "x5": "Cinco vezes Fernando de Noronha.", "x10": "Dez vezes Fernando de Noronha.", "half": "Metade de Fernando de Noronha.", "third": "Um terço de Fernando de Noronha."},
-      {"km": 59, "same": "Do tamanho de Manhattan.", "x2": "Duas vezes Manhattan.", "x3": "Três vezes Manhattan.", "x4": "Quatro vezes Manhattan.", "x5": "Cinco vezes Manhattan.", "x10": "Dez vezes Manhattan.", "half": "Metade de Manhattan.", "third": "Um terço de Manhattan."},
-      {"km": 218, "same": "Do tamanho do Recife.", "x2": "Duas vezes o Recife.", "x3": "Três vezes o Recife.", "x4": "Quatro vezes o Recife.", "x5": "Cinco vezes o Recife.", "x10": "Dez vezes o Recife.", "half": "Metade do Recife.", "third": "Um terço do Recife."},
-      {"km": 331, "same": "Do tamanho de Belo Horizonte.", "x2": "Duas vezes Belo Horizonte.", "x3": "Três vezes Belo Horizonte.", "x4": "Quatro vezes Belo Horizonte.", "x5": "Cinco vezes Belo Horizonte.", "x10": "Dez vezes Belo Horizonte.", "half": "Metade de Belo Horizonte.", "third": "Um terço de Belo Horizonte."},
-      {"km": 675, "same": "Do tamanho de Florianópolis.", "x2": "Duas vezes Florianópolis.", "x3": "Três vezes Florianópolis.", "x4": "Quatro vezes Florianópolis.", "x5": "Cinco vezes Florianópolis.", "x10": "Dez vezes Florianópolis.", "half": "Metade de Florianópolis.", "third": "Um terço de Florianópolis."},
-      {"km": 1200, "same": "Do tamanho da cidade do Rio de Janeiro.", "x2": "Duas vezes a cidade do Rio de Janeiro.", "x3": "Três vezes a cidade do Rio de Janeiro.", "x4": "Quatro vezes a cidade do Rio de Janeiro.", "x5": "Cinco vezes a cidade do Rio de Janeiro.", "x10": "Dez vezes a cidade do Rio de Janeiro.", "half": "Metade da cidade do Rio de Janeiro.", "third": "Um terço da cidade do Rio de Janeiro."},
-      {"km": 1521, "same": "Do tamanho da cidade de São Paulo.", "x2": "Duas vezes a cidade de São Paulo.", "x3": "Três vezes a cidade de São Paulo.", "x4": "Quatro vezes a cidade de São Paulo.", "x5": "Cinco vezes a cidade de São Paulo.", "x10": "Dez vezes a cidade de São Paulo.", "half": "Metade da cidade de São Paulo.", "third": "Um terço da cidade de São Paulo."},
-      {"km": 2586, "same": "Do tamanho de Luxemburgo.", "x2": "Duas vezes Luxemburgo.", "x3": "Três vezes Luxemburgo.", "x4": "Quatro vezes Luxemburgo.", "x5": "Cinco vezes Luxemburgo.", "x10": "Dez vezes Luxemburgo.", "half": "Metade de Luxemburgo.", "third": "Um terço de Luxemburgo."},
-      {"km": 5761, "same": "Do tamanho do Distrito Federal.", "x2": "Duas vezes o Distrito Federal.", "x3": "Três vezes o Distrito Federal.", "x4": "Quatro vezes o Distrito Federal.", "x5": "Cinco vezes o Distrito Federal.", "x10": "Dez vezes o Distrito Federal.", "half": "Metade do Distrito Federal.", "third": "Um terço do Distrito Federal."},
-      {"km": 10452, "same": "Do tamanho do Líbano.", "x2": "Duas vezes o Líbano.", "x3": "Três vezes o Líbano.", "x4": "Quatro vezes o Líbano.", "x5": "Cinco vezes o Líbano.", "x10": "Dez vezes o Líbano.", "half": "Metade do Líbano.", "third": "Um terço do Líbano."},
-      {"km": 21938, "same": "Do tamanho de Sergipe.", "x2": "Duas vezes Sergipe.", "x3": "Três vezes Sergipe.", "x4": "Quatro vezes Sergipe.", "x5": "Cinco vezes Sergipe.", "x10": "Dez vezes Sergipe.", "half": "Metade de Sergipe.", "third": "Um terço de Sergipe."},
-      {"km": 30528, "same": "Do tamanho da Bélgica.", "x2": "Duas vezes a Bélgica.", "x3": "Três vezes a Bélgica.", "x4": "Quatro vezes a Bélgica.", "x5": "Cinco vezes a Bélgica.", "x10": "Dez vezes a Bélgica.", "half": "Metade da Bélgica.", "third": "Um terço da Bélgica."},
-      {"km": 41285, "same": "Do tamanho da Suíça.", "x2": "Duas vezes a Suíça.", "x3": "Três vezes a Suíça.", "x4": "Quatro vezes a Suíça.", "x5": "Cinco vezes a Suíça.", "x10": "Dez vezes a Suíça.", "half": "Metade da Suíça.", "third": "Um terço da Suíça."},
-      {"km": 130279, "same": "Do tamanho da Inglaterra.", "x2": "Duas vezes a Inglaterra.", "x3": "Três vezes a Inglaterra.", "x4": "Quatro vezes a Inglaterra.", "x5": "Cinco vezes a Inglaterra.", "x10": "Dez vezes a Inglaterra.", "half": "Metade da Inglaterra.", "third": "Um terço da Inglaterra."},
-    ],
-    chance: "chance", home: "Voltar ao mapa inteiro",
-    bench: { head: ["", "modelo", "nota", "", "de", "data"], submit: "Enviar um modelo", repo: "GitHub", ref: "sem modelo", refName: "o ano anterior, por perto" },
-    num: (n, fem) => (fem && n < 3 ? ["zero", "uma", "duas"] : ["zero", "um", "dois", "três", "quatro", "cinco", "seis", "sete", "oito", "nove", "dez", "onze", "doze"])[n] ?? String(n),
-    st: {
-      next: "Seguir", back: "Voltar", done: "Pronto",
-      forestA: "Isto é a Amazônia.",
-      forestB: v => `${v.cells} milhões de quadrados de floresta, ${v.m} metros cada.`,
-      lossA: "Todo ano uma parte cai.",
-      lossB: v => `Desde ${v.y}, ${v.k} mil km².${v.more}`, more: { km: 130279, say: " Mais que a Inglaterra." },
-      model: "Treinamos um modelo para prever a próxima.",
-      proof: v => `Testamos no passado. Em ${v.y}, de cada ${v.of} lugares que ele apontou, ${v.hit} foram desmatados.`,
-      sources: v => `Ele aprende com ${v.n} fontes públicas, de imagem de satélite a licença de desmate.`,
-      open: "O código e o benchmark são abertos. Quem fizer um modelo melhor passa na frente do nosso.",
-      first: v => `Para quem fiscaliza, estes ${v.n} lugares vêm primeiro.`,
-      ahead: v => (v.pct ? `Nos últimos três meses o desmate subiu ${v.pct}%, e o modelo espera mais ${v.km} km² até ${v.month}.` : `O modelo espera mais ${v.km} km² de desmate até ${v.month}.`),
-    },
-    axisY: "km² desmatados por ano, de agosto a julho",
-    chanceBy: y => `Chance de cada célula perder um hectare até julho de ${y}`, chanceFor: y => `Chance dada a cada célula para ${y}`, mapped: "desmatamento mapeado",
-    onlyFrom: "Escolha um degrau para mostrar só as células com essa chance ou mais",
-    stepLo: c => `abaixo de ${c}`, stepMid: (a, b) => `${a} a ${b}`, stepHi: c => `acima de ${c}`, under: c => `menos de ${c}`,
-    cellFc: v => `${v.p} de chance de esta célula perder um hectare até julho de ${v.y}`,
-    cellHa: { clear: v => `Cerca de ${v.ha} hectares de desmatamento esperados aqui em ${v.n} meses`, degr: v => `Cerca de ${v.ha} hectares de degradação esperados aqui em ${v.n} meses`, mine: v => `Cerca de ${v.ha} hectares de garimpo esperados aqui em ${v.n} meses` },
-    cellHaLow: { clear: v => `Menos de 1 hectare de desmatamento esperado aqui em ${v.n} meses`, degr: v => `Menos de 1 hectare de degradação esperado aqui em ${v.n} meses`, mine: v => `Menos de 1 hectare de garimpo esperado aqui em ${v.n} meses` },
-    cellFire: v => `Entre os ${v.p}% de floresta onde o fogo mais tende a ocorrer`, cellFireRest: "Fora dos 5% de floresta onde o fogo mais tende a ocorrer",
-    cellPlace: v => `${v.mun}, ${v.uf}${v.land ? `. ${v.land}` : ""}`,
-    cellPast: v => `Em ${v.y} esta célula recebeu ${v.p}. ${v.clr ? "Houve desmatamento mapeado nela." : "Não houve desmatamento mapeado nela."}`,
-    areaFc: v => (v.low ? `Cada célula aqui tem ${v.p} de chance de perder um hectare até julho de ${v.y}` : `Até ${v.p} de chance de uma célula aqui perder um hectare até julho de ${v.y}`),
-    areaPast: v => `Em ${v.y} as células aqui receberam ${v.low ? "" : "até "}${v.p}. ${v.clr ? `Houve desmatamento mapeado em ${v.clr} de ${v.n}.` : "Não houve desmatamento mapeado."}`,
-    pShareMin: v => `<b>${v.n}</b> células com ${v.cut} ou mais, com ${v.share}% da perda esperada`,
-    pSharePastMin: v => `<b>${v.n}</b> células com ${v.cut} ou mais, com ${v.share}% das células com desmatamento mapeado`,
-    pastP: v => `Em ${v.y}, esperava-se que ${v.exp} células perdessem um hectare e ${v.act} perderam`, prevYear: "Ano anterior", nextYear: "Ano seguinte",
-    modes: { sectors: "Setores", cells: "Células", prio: "Prioridades" }, ranking: "Ranking", bars: "Barras", line: "Linha",
-    land: { ti: "terra indígena", uc: "unidade de conservação" },
-    why: {
-      around: v => `${v.km} km² desmatados em volta nos últimos três anos.`,
-      fire: v => `${v.km} km² de floresta queimada no último ano.`,
-      degr: v => `${v.km} km² de floresta degradada no último ano.`,
-      near: "Fica perto de desmate recente.",
-      permit: v => `Tem licença para desmatar ${v.ha} hectares.`,
-      land: { ti: "Fica em terra indígena.", uc: "Fica em unidade de conservação." },
-    },
-    rankSay: v => `${v.kind} por ${v.what}`, rankWhat: { fc: y => `desmatamento esperado até julho de ${y}`, past: y => `desmatamento esperado para ${y}`, risk: "fatia do mapa de risco", fire: "fatia de onde o fogo costuma ocorrer" },
-    kinds: { uf: "Estados", mun: "Municípios", ti: "Terras indígenas", uc: "Unidades de conservação" },
-    many: { uf: "estados", mun: "municípios", ti: "terras indígenas", uc: "unidades de conservação" },
-    rank: n => n + "º",
-    tiny: "menos de 0,1",
-    level: ["Calmo", "Atenção", "Alerta", "Alarme"], replay: "Previsão passada", made: y => `feita em 31 de julho de ${y - 1}`,
-    fc: v => `Cerca de ${v.km} km² de desmatamento esperados${v.here} até julho de ${v.y}`,
-    fcNone: v => `Quase nenhum desmatamento esperado aqui até julho de ${v.y}`,
-    past: v => `Em ${v.y}, ${v.act} km² desmatados`,
-    partial: " Só cenas prioritárias, por enquanto.",
-    pastHere: v => `Em ${v.y}, ${v.act} km² desmatados aqui`,
-    pastHereNone: v => `Em ${v.y}, nenhum desmatamento mapeado aqui`,
-    mfc: {
-      clear: v => `Cerca de ${v.km} km² devem ser desmatados${v.here} nos próximos ${v.h} meses`,
-      degr: v => `Cerca de ${v.km} km² devem ser degradados${v.here} nos próximos ${v.h} meses`,
-      mine: v => `Cerca de ${v.km} km² de garimpo devem surgir${v.here} nos próximos ${v.h} meses`,
-    },
-    mobs: {
-      clear: v => `${v.km} km² desmatados${v.here} nos últimos três meses`,
-      fire: v => `${v.km} km² queimados${v.here} nos últimos três meses`,
-      degr: v => `${v.km} km² degradados${v.here} nos últimos três meses`,
-      mine: v => `${v.km} km² de garimpo${v.here} nos últimos três meses`,
-    },
-    burned: { months: v => `${v.km} km² queimados${v.here} nos últimos três meses, ${v.prev} um ano antes`, years: v => `${v.km} km² queimados${v.here} nos últimos doze meses, ${v.prev} nos doze anteriores` },
-    axisM: { clear: "km² desmatados por mês", fire: "km² queimados por mês", degr: "km² degradados por mês", mine: "km² de garimpo por mês" },
-    axisW: { fire: "km² queimados em 12 meses", degr: "km² degradados em 12 meses", mine: "km² de garimpo em 12 meses" },
-    whole: "Amazônia inteira", to: (a, b) => `${a} a ${b}`,
-    where: {
-      degr: v => `Onde a floresta tem mais chance de ser degradada até ${v.end}`,
-      mine: v => `Onde o garimpo tem mais chance de avançar até ${v.end}`,
-    },
-    whereHere: v => `${v.rank} entre ${v.n} ${v.many} em risco de ${v.risk} até ${v.end}`,
-    risk: { degr: "degradação", mine: "garimpo" },
-    lastSub: {
-      degr: v => `${v.km} km² degradados${v.here} nos últimos doze meses.`,
-      mine: v => `${v.km} km² de garimpo${v.here} nos últimos doze meses.`,
-    },
-    here: " aqui",
-    sign: { clear: "Desmate", scar: "Queimadas", degr: "Degradação", mine: "Garimpo", autos: "Autos IBAMA" },
-    now: "agora", ahead: n => `${n} meses`, byJuly: y => `até julho de ${y}`, window: "previsão",
-    signs: "Sinais, três meses contra o ano passado",
-    enso: ["El Niño", "La Niña", "Pacífico"], ensoLevel: [["muito forte", "forte", "moderado", "fraco"], ["muito forte", "forte", "moderada", "fraca"], "neutro"],
-    signTitle: v => `${v.now} nos últimos três meses, ${v.prev} um ano antes`,
-    legend: { clear: "Risco de desmatamento", fire: "Onde o fogo costuma ocorrer", degr: "Risco de degradação", mine: "Risco de garimpo" }, lower: "menor", higher: "maior", less: "menos km²", more: "mais km²", next: n => `próximos ${n} meses`,
-    about_: x => `cerca de ${x} km²`, range: (lo, hi) => `provável de ${lo} a ${hi}`,
-    tipFc: v => `cerca de ${v.exp} km² esperados`, tipPast: v => `${v.exp} km² esperados, ${v.act} desmatados`, tipRank: v => `${v.rank} entre ${v.n}`,
-    act: {
-      band: "Fiscalização", bandSub: v => `autos e embargos do IBAMA${v.n ? `, ${v.n} municípios` : ""}`,
-      say: v => `A fiscalização responde por ${v.km} km² de desmate evitado${v.here} desde ${v.since}`,
-      none: v => `A fiscalização não responde por desmate evitado aqui desde ${v.since}`,
-      sub: v => `Cerca de ${v.part} da queda desde então. O resto caiu em toda parte ao mesmo tempo.`,
-      subHere: v => `${v.pct}% a mais do que foi desmatado aqui.`,
-      parts: ["um quarto", "um terço", "metade", "dois terços", "três quartos"],
-      honest: "É um piso e uma associação, não prova de causa.",
-      axis: "km² desmatados por semestre", measured: "medido", held: v => `a mais, com a fiscalização de ${v.ref}`, ref: v => `média de ${v.from} a ${v.to}`,
-      tipObs: v => `${v.span}, ${v.obs} km² desmatados`, tipHeld: v => `${v.held} com a fiscalização mantida${v.lo ? `, provável de ${v.lo} a ${v.hi}` : ""}`,
-      signs: v => `Ações do IBAMA, ano até ${v.now} contra o ano até ${v.ref}`, against: x => `contra ${x}`,
-      sign: { notices: "Autos por 100 km²", remote: "Embargos remotos", field: "Embargos em campo", collective: "Embargos coletivos" },
-      signTitle: { notices: "Autos de infração por 100 km² de desmatamento", remote: "Área embargada por satélite, sem visita", field: "Área embargada em visita a campo", collective: "Terras indígenas inteiras e outras áreas públicas embargadas de uma vez" },
-    },
-    credit: "Imagens: Esri, Maxar, Earthstar Geographics",
-    aboutHtml: v => `
-      <div class="lede">
-        <p>Prenúncio mostra onde a Amazônia deve ser desmatada até julho de ${v.year}.</p>
-        <p>Fizemos para quem fiscaliza conseguir chegar antes.</p>
-      </div>
-      <div id="model-fig"></div>
-      <p>O modelo, <b>${v.name}</b>, aprendeu com ${v.span} anos de dados públicos. Para cada quadrado de ${v.m} metros de floresta ele dá a chance de desmate no ano seguinte.</p>
-      <p>Testamos em anos que ele nunca viu. Em ${v.y}, de cada ${v.of} lugares que apontou, ${v.hit} foram desmatados.</p>
-      <h3 id="about-benchmark">Benchmark</h3>
-      ${v.bench}
-      <p class="metric">A nota é a média de ${v.b0} a ${v.b1}.</p>
-      <p>O código, os dados e o benchmark são abertos. Quem fizer um modelo melhor passa na frente do nosso.</p>
-      <p class="go"><a class="btn" href="${v.links.benchmark}" target="_blank" rel="noopener">${v.submit}</a><a href="${v.links.repository}" target="_blank" rel="noopener">${v.repo}</a></p>`,
-  },
-};
+// ---------- words. Every string a reader sees is in web/i18n/<code>.json, one file a language, fetched when the
+// language is asked for (web/i18n/README.md says what each key is). A string is a whole sentence with named
+// placeholders in braces. Where a sentence changes with a count it is an object of plural forms (one, few, many,
+// other...) chosen by Intl.PluralRules; where it changes with a sector being selected it is { all, here }. A key
+// a language lacks falls back to English, except its table of places for comparisons (like) and the story's
+// sentence that uses one, which are never borrowed from another language.
+const LANGS = { en: ["English", "en-US"], pt: ["Português", "pt-BR"], es: ["Español", "es"], zh: ["中文", "zh-CN"], hi: ["हिन्दी", "hi-IN"], ar: ["العربية", "ar-u-nu-latn"], fr: ["Français", "fr-FR"], ru: ["Русский", "ru-RU"], de: ["Deutsch", "de-DE"], ja: ["日本語", "ja-JP"], id: ["Bahasa Indonesia", "id-ID"], bn: ["বাংলা", "bn-BD"], tr: ["Türkçe", "tr-TR"], ko: ["한국어", "ko-KR"], it: ["Italiano", "it-IT"] };
+const RTL = new Set(["ar"]), FORMS = new Set(["zero", "one", "two", "few", "many", "other"]);
+const plural = o => "other" in o && Object.keys(o).every(k => FORMS.has(k)), plain = o => o && typeof o === "object" && !Array.isArray(o);
+const RAW = {}, T = {};
+function compile(x, l, ordinal) {
+  if (typeof x === "string") return /\{\w+\}/.test(x) ? v => x.replace(/\{(\w+)\}/g, (m, k) => v?.[k] ?? m) : x;
+  if (Array.isArray(x)) return x.map(y => compile(y, l));
+  if (!plain(x)) return x;
+  const ks = Object.keys(x), sub = Object.fromEntries(ks.map(k => [k, compile(x[k], l)])), say = (f, v) => (typeof f === "function" ? f(v) : f);
+  if (ks.length === 2 && "all" in x && "here" in x) return v => say(v?.here ? sub.here : sub.all, v);
+  if (plural(x)) { const pr = new Intl.PluralRules(LANGS[l][1], ordinal ? { type: "ordinal" } : {}); return v => say(sub[pr.select(+v?.count || 0)] ?? sub.other, v); }
+  return sub;
+}
+const over = (a, b) => { for (const k in b) a[k] = plain(b[k]) && plain(a[k]) && !plural(b[k]) ? over(a[k], b[k]) : b[k]; return a; };
+async function loadLang(l) {
+  if (!LANGS[l]) return null;
+  if (T[l]) return T[l];
+  const get = c => (RAW[c] ||= fetch(`i18n/${c}.json`).then(r => (r.ok ? r.json() : null)).catch(() => null));
+  const [en, own] = await Promise.all([get("en"), get(l)]);
+  const m = over(structuredClone(en), own || {});
+  m.like = own?.like; m.st.lossBMore = own?.st?.lossBMore; m.st.moreKm = own?.st?.moreKm;  // a language's own places, or none
+  T[l] = compile(m, l);
+  T[l].rank = compile(m.rank, l, true);
+  return T[l];
+}
+// Which language. In this order: ?lang= in the address (or l= in a link's fragment), the reader's saved choice,
+// the country the request comes from (/api/geo, a small function on the host; no answer within a moment counts
+// as unknown), the browser's languages, English.
+const COUNTRY = Object.fromEntries(Object.entries({
+  pt: "BR PT AO MZ", es: "ES MX AR CO CL PE VE EC GT CU BO DO HN PY SV NI CR PA UY PR GQ", zh: "CN SG", hi: "IN",
+  ar: "DZ BH KM DJ EG IQ JO KW LB LY MR MA OM PS QA SA SO SD SY TN AE YE", fr: "FR CD CI SN", ru: "RU BY KZ", de: "DE AT",
+  ja: "JP", id: "ID", bn: "BD", tr: "TR", ko: "KR", it: "IT",
+}).flatMap(([l, cs]) => cs.split(" ").map(c => [c, l])));
+
 // An area as a place people know. A pure choice: among the language's places and the multiples it has a sentence
 // for (the same size, twice to five times, ten times, a half, a third), the pair whose area is nearest the one
 // given, if it is within 15% of it. On a tie the plain size comes first, then the small multiples, then the
@@ -302,17 +60,26 @@ function likeArea(a, places) {
   }
   return best ? best.say : "";
 }
-window.prenuncio = { get zoom() { return map.getZoom(); }, like: (a, l) => likeArea(a, T[l]?.like), step: async id => classOf((await sectors(S.kind)).byId.get(String(id))) };  // (for the test: a comparison in a language, and the step of colour a sector is painted in)
-const H = new URLSearchParams(location.hash.slice(1));
-let lang = H.get("l") || localStorage.lang || ((navigator.language || "en").startsWith("pt") ? "pt" : "en");
-if (!T[lang]) lang = "en";
-let langInLink = H.has("l");
+const H = new URLSearchParams(location.hash.slice(1)), Q = new URLSearchParams(location.search);
+const browserLang = () => (navigator.languages?.length ? navigator.languages : [navigator.language || "en"]).map(x => x.slice(0, 2).toLowerCase()).find(x => LANGS[x]) || "en";
+let lang = [Q.get("lang"), H.get("l"), (() => { try { return localStorage.lang; } catch (err) { return null; } })()].find(x => LANGS[x]);
+let langInLink = !!LANGS[H.get("l")];
+if (!lang) {
+  lang = browserLang();
+  const country = window.__country !== undefined ? window.__country : await Promise.race([fetch("/api/geo").then(r => (r.ok ? r.json() : null)).then(j => j?.country ?? null).catch(() => null), new Promise(r => setTimeout(r, 350, null))]);
+  if (COUNTRY[country]) lang = COUNTRY[country];
+}
+await loadLang(lang);
 const t = () => T[lang];
-const loc = () => (lang === "pt" ? "pt-BR" : "en-US");
+const loc = () => LANGS[lang][1];
+window.prenuncio = { get zoom() { return map.getZoom(); }, like: async (a, l) => likeArea(a, (await loadLang(l))?.like), country: c => COUNTRY[c] ?? null, langs: Object.keys(LANGS), step: async id => classOf((await sectors(S.kind)).byId.get(String(id))) };  // (for the test)
 const fmt = (x, d = 0) => x.toLocaleString(loc(), { maximumFractionDigits: d, minimumFractionDigits: d });
 const km = x => fmt(x, x < 9.95 ? 1 : 0);
 const round = (x, n) => { const p = 10 ** (Math.floor(Math.log10(x)) - n + 1); return Math.round(x / p) * p; };
 const approx = x => (x < 9.95 ? fmt(x, 1) : fmt(round(x, 2)));    // forecasts: two figures is all they are good for
+// a share as a percentage, written the way the language writes it (12%, 12 %, %12)
+const pcOf = (x, d = 0, signed = false) => new Intl.NumberFormat(loc(), { style: "percent", maximumFractionDigits: d, minimumFractionDigits: d, signDisplay: signed ? "always" : "auto" }).format(x);
+const ordinal = n => t().rank({ n: fmt(n), count: n });
 const share = x => (x < 0.1 ? t().tiny : fmt(x, 1));
 const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
 const css = name => getComputedStyle(document.documentElement).getPropertyValue(name).trim();
@@ -320,7 +87,7 @@ const css = name => getComputedStyle(document.documentElement).getPropertyValue(
 // The story was decided in the page's head, before the first paint (index.html). Its first line needs no data,
 // so it is on the screen before anything is fetched.
 let storyOn = "story" in root.dataset;
-if (storyOn) { $("story").hidden = false; $("story-line").textContent = t().st.forestA; $("story-next").setAttribute("aria-label", t().st.next); $("skip-btn").textContent = t().skip; $("lang-btn").textContent = lang === "pt" ? "EN" : "PT"; }
+if (storyOn) { $("story").hidden = false; $("story-line").textContent = t().st.forestA; $("story-next").setAttribute("aria-label", t().st.next); $("skip-btn").textContent = t().skip; $("lang-btn").textContent = lang.toUpperCase(); }
 const [M, R, MO, P, ACT, ST] = await Promise.all(["meta", "regions", "monthly", "prob", "actions", "story"].map(f => fetch(`data/${f}.json`).then(r => (r.ok ? r.json() : null)).catch(() => null)));  // monthly.json, prob.json, actions.json and story.json may not be there yet
 if (!ST) storyOn = false;
 M.layers ||= {};
@@ -362,7 +129,7 @@ S.mode = ["sectors", "cells", "prio"].includes(H.get("m")) ? H.get("m") : OLD ? 
 if (H.get("b") > 0) S.block = +H.get("b");
 S.rank = H.get("g") === "1"; S.line = H.get("c") === "line";
 if (H.get("p") > 0 && H.get("p") < 5) S.min = +H.get("p");
-if (T.en.kinds[H.get("s")]) S.kind = H.get("s");
+if (["uf", "mun", "ti", "uc"].includes(H.get("s"))) S.kind = H.get("s");
 if (H.get("r")) S.sel = H.get("r");
 // which forecast map is on screen: a PRODES year, or one of the shorter layers
 const key = () => (S.hazard !== "clear" ? HAZ[S.hazard].layer : S.scale === "months" && S.h ? "clear" + S.h : S.year);
@@ -402,7 +169,7 @@ const monthly = (it, name) => (it ? it.m[R.months.names.indexOf(name)] : R.month
 const ago = (a, k) => a[a.length - 1 - k] ?? 0;
 const three = a => [ago(a, 0) + ago(a, 1) + ago(a, 2), ago(a, 12) + ago(a, 13) + ago(a, 14)];
 // how a three-month total compares with a year before, as short text. Under 1 a year before, a ratio means nothing.
-const delta = (now, prev, unit = " km²") => (prev < 1 ? (now < 0.05 ? null : km(now) + unit) : now / prev >= 2 ? "×" + fmt(now / prev, 1) : (now >= prev ? "+" : "−") + fmt(Math.abs(100 * (now / prev - 1))) + "%");
+const delta = (now, prev, unit = " km²") => (prev < 1 ? (now < 0.05 ? null : km(now) + unit) : now / prev >= 2 ? "×" + fmt(now / prev, 1) : pcOf(now / prev - 1, 0, true));
 const rising = (now, prev) => (now < 1 ? 0 : now / Math.max(prev, 1) >= 2 ? 2 : now / Math.max(prev, 1) >= 1.1 ? 1 : 0);
 const enso = () => { const x = R.months.oni.v.at(-1), side = x >= 0.5 ? 0 : x <= -0.5 ? 1 : 2, a = Math.abs(x); return { x, side, word: side === 2 ? t().ensoLevel[2] : t().ensoLevel[side][a >= 2 ? 0 : a >= 1.5 ? 1 : a >= 1 ? 2 : 3] }; };
 
@@ -440,7 +207,7 @@ function actsOf(it) {
   const own = (it && S.kind === "uf" && ACT.states?.[it.id]) || null, rows = own || ACT.semesters, sum = k => rows.reduce((x, r) => x + r[k], 0);
   const avoided = own ? sum("held") - sum("observed") : ACT.summary.avoided, [a, b] = ACT.reference.split(" to ").map(ymOf);
   return { own: !!own, rows, avoided, over: own ? avoided / Math.max(1, sum("observed")) : ACT.summary.avoided_share,
-    since: month(ymOf(rows[0].start)[0], ymOf(rows[0].start)[1] - 1), from: month(a[0], a[1] - 1), to: month(b[0], b[1] - 1), years: t().to(a[0], b[0]) };
+    since: month(ymOf(rows[0].start)[0], ymOf(rows[0].start)[1] - 1), from: month(a[0], a[1] - 1), to: month(b[0], b[1] - 1), years: t().to({ a: a[0], b: b[0] }) };
 }
 // a share in plain words where it is close to a simple fraction, as a percentage otherwise
 const partOf = x => { const i = [1 / 4, 1 / 3, 1 / 2, 2 / 3, 3 / 4].findIndex(f => Math.abs(x - f) < 0.03); return i < 0 ? fmt(100 * x) + "%" : t().act.parts[i]; };
@@ -508,7 +275,10 @@ grip($("list-grab"), $("list"), dy => sheetAt(dy ? (dy < -40 ? "full" : dy > 40 
 const menu = on => { if (on) root.dataset.menu = ""; else delete root.dataset.menu; $("menu-btn").setAttribute("aria-expanded", !!on); };
 $("menu-btn").onclick = e => { e.stopPropagation(); menu(root.dataset.menu == null); };
 document.addEventListener("click", () => menu(false));
-const listOn = () => S.mode === "prio" || (S.mode === "sectors" && S.rank);  // the ranked list stands on the right of the page
+const listOn = () => S.mode === "prio" || (S.mode === "sectors" && S.rank);
+// the people of the Indigenous land that is selected stand in the same column, over the list (on a phone, at the top of the bulletin's sheet)
+let peopleOf = null;
+const sideOn = () => listOn() || (!!peopleOf && !narrow());  // the ranked list stands on the right of the page
 // The room the page's own pieces take from the map, in pixels of its pane. The map is the whole page, and the
 // Amazon is fitted beside what stands on it: under the header; right of the left column, which holds the map's
 // panel at the top and the timeline's dock at the bottom; left of the ranked list when that is open. When the
@@ -522,7 +292,8 @@ function room() {
   if (mapSmall()) return { top: 6, right: 6, bottom: 6, left: 6 };
   if (narrow()) { const y = top + lengthOf("--panel-h") + 8; return { top: y, right: 10, left: 10, bottom: Math.max(10, m.y - y - (m.x - 20) / 1.27) }; }
   const left = pagePad() + lengthOf("--rail") + lengthOf("--in");  // the right edge of the left column's surfaces
-  return { top, right: listOn() ? lengthOf("--list-w") : 0, bottom: 0, left, panel: Math.max(top + lengthOf("--panel-h"), $("mappanel").offsetParent ? rectOf($("mappanel")).bottom : 0), dock: Math.min(m.y - pagePad() - lengthOf("--dock-h"), docked("chart") && BOX.chart.offsetParent ? rectOf(BOX.chart).top : 1e9), column: listOn() || storyOn };
+  if (RTL.has(lang)) return { top, left: sideOn() ? lengthOf("--list-w") : 0, right: left + 16, bottom: 0 };  // mirrored: the column is on the right, the list on the left
+  return { top, right: sideOn() ? lengthOf("--list-w") : 0, bottom: 0, left, panel: Math.max(top + lengthOf("--panel-h"), $("mappanel").offsetParent ? rectOf($("mappanel")).bottom : 0), dock: Math.min(m.y - pagePad() - lengthOf("--dock-h"), docked("chart") && BOX.chart.offsetParent ? rectOf(BOX.chart).top : 1e9), column: sideOn() || storyOn };
 }
 // the same room as the padding of a view that is sent somewhere: a sector or a block is brought to the middle of what is free
 const FIT = () => { const r = room(), g = mapSmall() || narrow() ? 0 : 14; return { paddingTopLeft: [r.left + g, r.top + g], paddingBottomRight: [r.right + g, r.bottom + g] }; };
@@ -584,7 +355,7 @@ function fitShape(size, r) {
   }
   return fitView(size, FIT());
 }
-const fitNow = () => { const size = map.getSize(); return mapSmall() || narrow() ? fitView(size, FIT()) : fitShape(size, room()); };
+const fitNow = () => { const size = map.getSize(); return mapSmall() || narrow() || RTL.has(lang) ? fitView(size, FIT()) : fitShape(size, room()); };
 function whole(animate) { view(fitNow(), animate); }
 // The furthest out the reader can zoom is the fit of the moment: the whole Amazon on the stage, never smaller.
 // Worked out again whenever the stage changes (a resize, the list opening or closing, the map leaving or coming
@@ -835,8 +606,8 @@ const probs = {};
 const hasProb = y => (probs[y] ??= M.years[y]?.flags500 ? fetch(`data/p${y}.png`, { method: "HEAD" }).then(r => r.ok).catch(() => false) : Promise.resolve(false));
 // the five steps: forest under 0.1% is left as the base map shows it, green; then clearing's four reds
 const PRGB = HAZ.clear.steps, PCOL = [0, ...PRGB.map(c => rgba(...c, 1))], PCSS = [FOREST, ...PRGB].map(c => `rgb(${c})`);
-const pct = c => fmt(100 * c, c < 0.01 ? 1 : 0) + "%";
-const chanceText = ch => (ch < PCUT[0] ? t().under(pct(PCUT[0])) : pct(ch));
+const pct = c => pcOf(c, c < 0.01 ? 1 : 0);
+const chanceText = ch => (ch < PCUT[0] ? t().under({ c: pct(PCUT[0]) }) : pct(ch));
 
 let grid = null;  // what the cells layer draws: { key, cell, levels }. One layer at a time (a 500 m one is 45 MB).
 // The story draws the same layer in parts. off: nothing yet. th: only the blocks whose highest chance reaches this
@@ -939,7 +710,7 @@ function cellLine(ll) {
     if (!code) return "";
     const km2 = (code / 255) ** 3;
     if (hz === "fire") { const q = ["0.2", "1", "5"].find(k => km2 >= I.cut[k]); return q ? L_.cellFire({ p: fmt(+q, q === "0.2" ? 1 : 0) }) : L_.cellFireRest; }
-    return 100 * km2 < 0.95 ? L_.cellHaLow[hz]({ n: I.months }) : L_.cellHa[hz]({ ha: approx(100 * km2), n: I.months });
+    return 100 * km2 < 0.95 ? L_.cellHaLow[hz]({ n: I.months, count: I.months }) : L_.cellHa[hz]({ ha: approx(100 * km2), n: I.months, count: Math.round(100 * km2) });
   }
   const f = +gridLayer._container.dataset.f || 1;
   let v = 0, n = 0, clr = 0;
@@ -950,8 +721,9 @@ function cellLine(ll) {
     if (l0.bits && (l0.bits[j >> 3] >> (j & 7)) & 1) clr++;
   }
   if (!v) return "";
-  const ch = (v / 255) ** 2, o = { y: grid.key, p: chanceText(ch), low: ch < PCUT[0], clr: f === 1 ? clr : clr && fmt(clr), n: fmt(n) };
-  return (f === 1 ? (l0.bits ? L_.cellPast : L_.cellFc) : l0.bits ? L_.areaPast : L_.areaFc)(o);
+  const ch = (v / 255) ** 2, low = ch < PCUT[0], o = { y: grid.key, p: chanceText(ch), clr: fmt(clr), n: fmt(n), count: n };
+  if (f === 1) return l0.bits ? (clr ? L_.cellPast.yes : L_.cellPast.no)(o) : L_.cellFc(o);
+  return l0.bits ? L_.areaPast[(low ? "every" : "upto") + (clr ? "Yes" : "No")](o) : (low ? L_.areaFc.every : L_.areaFc.upto)(o);
 }
 // The second line: where that is. The municipality and its state, and the Indigenous land or conservation unit
 // the point lies in. The shapes are the sectors', fetched the first time they are asked for; until they are in,
@@ -959,11 +731,12 @@ function cellLine(ll) {
 const WHERE = { K: null, asked: false, last: {} };
 const ringHas = (ring, la, lo) => { let inside = false; for (let i = 0, j = ring.length - 1; i < ring.length; j = i++) { const [y1, x1] = ring[i], [y2, x2] = ring[j]; if ((y1 > la) !== (y2 > la) && lo < x1 + (la - y1) * (x2 - x1) / (y2 - y1)) inside = !inside; } return inside; };
 const sectorHas = (it, la, lo) => it.ll.some(poly => ringHas(poly[0], la, lo) && !poly.slice(1).some(h => ringHas(h, la, lo)));
-function placeAt(ll, again) {
-  if (!WHERE.K) { if (!WHERE.asked) { WHERE.asked = true; Promise.all(["mun", "ti", "uc"].map(sectors)).then(K => { WHERE.K = K; again(); }).catch(() => {}); } return ""; }
+function placeAt(ll) {
+  if (!WHERE.K) { if (!WHERE.asked) { WHERE.asked = true; Promise.all(["mun", "ti", "uc"].map(sectors)).then(K => { WHERE.K = K; if (map.hasLayer(cellTip)) WHERE.show?.(); }).catch(() => {}); } return ""; }  // (once they are in, whatever is being said gets its second line)
   const find = (K, k) => (WHERE.last[k] && sectorHas(WHERE.last[k], ll.lat, ll.lng) ? WHERE.last[k] : (WHERE.last[k] = K.items.find(it => (it.bb ||= L.latLngBounds(it.ll.flat(2))).contains(ll) && sectorHas(it, ll.lat, ll.lng)) || null));
   const [mun, ti, uc] = WHERE.K.map((K, n) => find(K, n));
-  return mun ? t().cellPlace({ mun: mun.n, uf: mun.s, land: ti ? `TI ${ti.n}` : uc ? `UC ${uc.n}` : "" }) : "";
+  const land = ti ? `${t().tag.ti} ${ti.n}` : uc ? `${t().tag.uc} ${uc.n}` : "";
+  return mun ? (land ? t().cellPlaceIn : t().cellPlace)({ mun: mun.n, uf: mun.s, land }) : "";
 }
 // The pointer shows it; a click or a tap pins it, until a click elsewhere or Escape.
 const cellTip = L.tooltip({ className: "tip cell", direction: "top", offset: [0, -8], opacity: 1 });
@@ -975,10 +748,11 @@ function cellSay(e) {
   if (!line) { pin = null; return map.closeTooltip(cellTip); }
   pin = e.type === "click" ? ll : null;
   const show = () => {
-    const where = placeAt(ll, () => { if (map.hasLayer(cellTip) && cellTip.getLatLng().equals(ll)) show(); });
+    const where = placeAt(ll);
     cellTip.setLatLng(ll).setContent(esc(line[0].toUpperCase() + line.slice(1)) + (where ? `<small>${esc(where)}</small>` : ""));
     map.openTooltip(cellTip);
   };
+  WHERE.show = show;
   show();
 }
 map.on("mousemove click", cellSay);
@@ -1003,7 +777,7 @@ function styleOf(it) {
   return { fillColor: `rgb(${steps()[Math.max(0, c - 1)]})`, fillOpacity: c ? (close ? 0.5 : 1) : 0, color: INK, opacity: thin ? 0.3 : 0.6, weight: thin ? 0.5 : 0.8 };
 }
 function tipOf(it, K) {
-  const L_ = t(), v = { exp: approx(expOf(it)), act: km(actOf(it)), rank: L_.rank(rankOf(it, K)), n: K.items.length };
+  const L_ = t(), v = { exp: approx(expOf(it)), act: km(actOf(it)), rank: ordinal(rankOf(it, K)), n: K.items.length };
   return `<b>${esc(it.n)}${it.s ? ", " + it.s : ""}</b><span>${(isPast() ? L_.tipPast : typeof key() === "number" ? L_.tipFc : L_.tipRank)(v)}</span>`;
 }
 async function drawSectors() {
@@ -1030,6 +804,31 @@ async function drawSectors() {
 map.on("zoomend", () => { if (shown) SEC[shown].then(K => K.items.forEach(it => it.layer.setStyle(styleOf(it)))); });
 map.on("click", () => { if (S.mode === "sectors" && S.sel != null) select(null); });
 
+// The people of an Indigenous land (data/peoples.json, where there is an entry for it): the photograph first,
+// whole, with its author and licence under it as the licence asks; then the people's name and a few lines. Other
+// peoples of the same land follow as names that open. Text in the reader's language, or in English.
+let PEOPLES = null;
+async function people() {
+  const id = S.mode === "sectors" && S.kind === "ti" ? S.sel : null;
+  const all = id ? await (PEOPLES ||= fetch("data/peoples.json").then(r => (r.ok ? r.json() : {})).catch(() => ({}))) : {};
+  if (id !== (S.mode === "sectors" && S.kind === "ti" ? S.sel : null)) return;
+  const list = all[id] || [], was = !!peopleOf, own = x => x?.[lang] || x?.en || "", L_ = t().people;
+  peopleOf = list.length ? id : null;
+  const one = (p, head) => `${p.photo && head ? `<figure><img src="${esc(p.photo.file)}" alt="${esc(own(p.photo.caption))}" loading="lazy"><figcaption><a href="${esc(p.photo.source_url)}" target="_blank" rel="noopener">${esc(L_.credit({ author: p.photo.author, license: p.photo.license }))}</a></figcaption></figure>` : ""}`
+    + (head ? `<h2>${esc(p.name)}</h2><p>${esc(own(p.text))}</p>` : `<details><summary>${esc(p.name)}</summary><p>${esc(own(p.text))}</p></details>`);
+  const html = list.length ? one(list[0], true) + (list.length > 1 ? `<h3>${esc(L_.also)}</h3>` + list.slice(1).map(p => one(p, false)).join("") : "") : "";
+  $("people-in").innerHTML = $("people-m").innerHTML = html;
+  $("people").hidden = $("people-m").hidden = !list.length;
+  if (was !== !!peopleOf) refresh();  // the column opens or closes: the Amazon makes room, as for the list
+  beside();
+}
+// the land that is selected is never left under the people's column
+function beside() {
+  if (!peopleOf || !outline || narrow() || mapSmall()) return;
+  const b = outline.getBounds();
+  if (map.latLngToContainerPoint(b.getNorthEast()).x > map.getSize().x - lengthOf("--list-w") - 10 && !RTL.has(lang) || RTL.has(lang) && map.latLngToContainerPoint(b.getSouthWest()).x < lengthOf("--list-w") + 10) { pristine = false; map.flyToBounds(b, { ...FIT(), maxZoom: 8, duration: calm() ? 0 : 0.6 }); }
+}
+$("people-close").onclick = () => select(null);
 async function select(id, fit = true) {
   S.sel = id == null ? null : String(id);
   if (outline) { outline.remove(); outline = null; }
@@ -1041,6 +840,7 @@ async function select(id, fit = true) {
   // move only if the sector is partly off screen or too small to read
   const b = outline.getBounds(), size = map.latLngToContainerPoint(b.getNorthEast()).distanceTo(map.latLngToContainerPoint(b.getSouthWest()));
   if (fit && (size < 110 || !map.getBounds().contains(b))) { pristine = false; map.flyToBounds(b, { ...FIT(), maxZoom: 8, duration: calm() ? 0 : 0.6 }); }
+  else beside();
 }
 
 // ---------- the bulletin: the level, then what is happening or what to expect, in one sentence ----------
@@ -1049,15 +849,15 @@ async function say() {
   const mine = ++turn, L_ = t(), I = info(), k = key(), yearly = typeof k === "number", past = isPast(), y = S.year, hz = S.hazard;
   const K = S.sel != null ? await sectors(S.kind) : null;  // the sector's numbers; the whole Amazon needs none
   if (mine !== turn) return;
-  const it = S.sel != null ? K.byId.get(S.sel) : null, here = it ? L_.here : "";
+  const it = S.sel != null ? K.byId.get(S.sel) : null, here = !!it;
   const v = { y, here, many: L_.many[S.kind], n: K?.items.length };
-  if (it) v.rank = L_.rank(rankOf(it, K));
+  if (it) v.rank = ordinal(rankOf(it, K));
   let head, sub = "", hint = "";
   const like = a => likeArea(a, L_.like);  // the second line under a headline that states an area
   const D = acting() ? actsOf(it) : null;
   if (D) {
     // what enforcement accounts for, and in the same breath what it does not
-    const o = { km: approx(D.avoided), here: D.own ? L_.here : "", since: D.since };
+    const o = { km: approx(D.avoided), here: !!D.own, since: D.since };
     head = D.avoided < 0.5 ? L_.act.none(o) : L_.act.say(o);
     sub = !D.own ? L_.act.sub({ part: partOf(ACT.summary.fall_accounted_share) }) : D.avoided < 0.5 ? "" : L_.act.subHere({ pct: fmt(100 * D.over) });
     hint = L_.act.honest;
@@ -1107,7 +907,7 @@ async function say() {
   const A = past || D ? null : alarm(it, K), l = A ? A.l : "r", named = D && !D.own ? null : it;
   document.documentElement.dataset.level = $("lead").dataset.l = l;
   $("level").innerHTML = (A ? `<span class="meter" aria-hidden="true">${[1, 2, 3].map(n => `<i${n <= A.l ? ' class="on"' : ""}></i>`).join("")}</span>` : "")
-    + `<b>${A ? L_.level[A.l] : D ? L_.act.band : L_.replay}</b>${A ? "" : `<span>${D ? L_.act.bandSub({ n: D.own ? 0 : fmt(ACT.municipalities) }) : L_.made(y)}</span>`}`;
+    + `<b>${A ? L_.level[A.l] : D ? L_.act.band : L_.replay}</b>${A ? "" : `<span>${D ? (D.own ? L_.act.bandSub : L_.act.bandSubN({ n: fmt(ACT.municipalities), count: ACT.municipalities })) : L_.made({ date: (([oy, om, od]) => new Date(oy, om - 1, od).toLocaleDateString(loc(), { day: "numeric", month: "long", year: "numeric" }))(M.years[y].origin.split("-").map(Number)) })}</span>`}`;
   // the whole Amazon needs no label; a sector is named, with a way back. In the actions view a sector that has
   // no figure of its own is not named: the numbers are the Amazon's, and the label says so.
   $("scope").innerHTML = it ? `<span>${named ? esc(it.n) + (it.s ? ", " + it.s : "") : L_.amazon}</span><button aria-label="${L_.whole}" title="${L_.whole}">×</button>` : "";
@@ -1126,14 +926,14 @@ async function legend() {
   const prob = cellsOn() && hz === "clear" && yearly && await hasProb(k);
   if (k !== key()) return;
   const mapped = past && cellsOn() ? `<span class="sw" style="--c:rgb(${DARK})">${L_.mapped}</span>` : "";
-  const what = `<span class="what">${glyph(hz)}<span>${prob ? (past ? L_.chanceFor(k) : L_.chanceBy(k)) : L_.legend[hz] + (yearly || hz === "fire" ? "" : ", " + L_.next(I.months))}</span></span>`;
+  const what = `<span class="what">${glyph(hz)}<span>${prob ? (past ? L_.chanceFor({ y: k }) : L_.chanceBy({ y: k })) : yearly || hz === "fire" ? L_.legend[hz] : L_.legendNext[hz]({ n: I.months, count: I.months })}</span></span>`;
   $("legend").innerHTML = what + (prob ? rampKey(true) : `<span class="rng">${cellsOn() ? L_.lower : L_.less}<span class="ramp">${[FOREST, ...steps()].map(c => `<i style="--c:rgb(${c})"></i>`).join("")}</span>${cellsOn() ? L_.higher : L_.more}</span>`) + mapped;
   $("legend").classList.toggle("prob", !!prob);
   shareLine();
 }
 // The key to the chances: one strip, forest green and then the four reds, with the chance written where two
 // steps meet. On the map each step is a button, and each says its own range to a pointer or a screen reader.
-const stepName = n => (n === 0 ? t().stepLo(pct(PCUT[0])) : n === 4 ? t().stepHi(pct(PCUT[3])) : t().stepMid(fmt(100 * PCUT[n - 1], PCUT[n - 1] < 0.01 ? 1 : 0), pct(PCUT[n])));
+const stepName = n => (n === 0 ? t().stepLo({ c: pct(PCUT[0]) }) : n === 4 ? t().stepHi({ c: pct(PCUT[3]) }) : t().stepMid({ a: fmt(100 * PCUT[n - 1], PCUT[n - 1] < 0.01 ? 1 : 0), b: pct(PCUT[n]) }));
 const rampKey = live => `<span class="steps"${live ? ` role="group" title="${t().onlyFrom}" aria-label="${t().onlyFrom}"` : ""}>${PCSS.map((c, n) => (live ? `<button data-min="${n}" aria-pressed="${n >= S.min}" aria-label="${stepName(n)}" style="--c:${c}"></button>` : `<i style="--c:${c}"></i>`)).join("")}</span><span class="ticks">${PCUT.map(c => `<span>${pct(c)}</span>`).join("")}</span>`;
 $("legend").onclick = e => { const b = e.target.closest("[data-min]"); if (b) { S.min = +b.dataset.min === S.min ? 0 : +b.dataset.min; refresh(); } };
 $("scope").onclick = e => { if (e.target.closest("button")) { select(null); if (!docked("map")) { pristine = true; whole(!calm()); } } };
@@ -1151,7 +951,7 @@ function actSigns() {
   const L_ = t().act, a = ACT.actions, n = a.start.length, [r0, r1] = ACT.reference.split(" to "), ref = a.start.flatMap((s, i) => (s >= r0 && s <= r1 ? [i] : [])), now = [n - 2, n - 1];
   const tot = (v, ix) => ix.reduce((x, i) => x + v[i], 0), rate = ix => ix.reduce((x, i) => x + a.notices_per_100km2[i] * a.clearing_km2[i], 0) / tot(a.clearing_km2, ix);
   const end = s => { const [y, m_] = ymOf(s); return month(y, m_ + 4); };  // a semester ends five months after it starts
-  const item = (k, v, x, x0, unit) => `<div data-k="${k}" title="${L_.signTitle[k]}">${trace(v, false, 2)}<span>${L_.sign[k]}</span><b>${fmt(x)}${unit}</b><span>${L_.against(fmt(x0))}</span></div>`;
+  const item = (k, v, x, x0, unit) => `<div data-k="${k}" title="${L_.signTitle[k]}">${trace(v, false, 2)}<span>${L_.sign[k]}</span><b>${fmt(x)}${unit}</b><span>${L_.against({ x: fmt(x0) })}</span></div>`;
   $("signs").className = "acts";
   $("signs").removeAttribute("title");
   $("signs").innerHTML = `<p>${L_.signs({ now: end(a.start[n - 1]), ref: end(a.start[ref.at(-1)]) })}</p>` + item("notices", a.notices_per_100km2, rate(now), rate(ref), "")
@@ -1200,7 +1000,7 @@ function series(it) {
   }
   if (S.hazard !== "clear") {
     const vals = (it ? it.L[k] : R.amazon.L[k]) || [], sum = ahead(monthsOf(it), I.months);
-    const span = w => { const [y, m_] = w.split("-").map(Number); return t().to(month(y, m_ - 1), month(y, m_ - 2 + I.months)); };
+    const span = w => { const [y, m_] = w.split("-").map(Number); return t().to({ a: month(y, m_ - 1), b: month(y, m_ - 2 + I.months) }); };
     const end = w => new Date(+w.slice(0, 4), +w.slice(5) - 2 + I.months, 1).getFullYear();
     // the last slot is the forecast: the months ahead added up, or only the window when there is no monthly forecast
     const last = sum ? { v: sum.km, fc: true, on: true, range: sum.lo == null ? null : [sum.lo, sum.hi], sub: span(I.from) } : { v: null, win: true };
@@ -1224,7 +1024,7 @@ function actsChart(it) {
   const gut = small ? 0 : 42, top = small ? 8 : 58, pw = W - gut, pitch = pw / rows.length, tight = pitch < 50, bot = small ? 16 : tight ? 36 : 22, ph = H - top - bot, bw = Math.max(3, pitch * 0.56);  // tight: the year goes under the month
   const peak = r => Math.max(r.observed, r.held, r.held_hi ?? 0), max = Math.max(D.own ? 0.5 : 1, ref ?? 0, ...rows.map(peak)) * 1.06;
   const Y = v => top + ph - ph * Math.min(v, max) / max, X = i => gut + i * pitch, mid = i => X(i) + pitch / 2, y0 = Y(0), [tk, dec] = ticks(max / 1.06);
-  const span = r => { const [y, m_] = ymOf(r.start), o = { month: "short", year: "numeric" }; return t().to(month(y, m_ - 1, o), month(y, m_ + 4, o)); };
+  const span = r => { const [y, m_] = ymOf(r.start), o = { month: "short", year: "numeric" }; return t().to({ a: month(y, m_ - 1, o), b: month(y, m_ + 4, o) }); };
   const label = r => { const [y, m_] = ymOf(r.start); return [month(y, m_ - 1, { month: "short" }).replace(".", ""), String(y).slice(-2)]; };
   let s = `<svg class="acts" width="${W}" height="${H}" role="img"><defs><pattern id="spared" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect class="s0" width="6" height="6"/><rect class="s1" width="3" height="6"/></pattern></defs><g class="grid">`;
   if (!small) for (const v of tk) s += `<line x1="${gut}" x2="${W}" y1="${Y(v)}" y2="${Y(v)}"/><text x="${gut - 8}" y="${Y(v) + 4}" text-anchor="end">${fmt(v, dec)}</text>`;
@@ -1265,7 +1065,7 @@ function actsChart(it) {
     rows.forEach((c, j) => { if (X(j) + pitch > left && X(j) < left + 2 * hw) up = Math.min(up, Y(peak(c))); });
     up = Math.max(up, top + 38);  // stay clear of the key along the top
     t1.textContent = L_.tipObs({ span: span(r), obs: n(r.observed) });
-    t2.textContent = L_.tipHeld({ held: n(r.held), lo: r.held_lo != null && n(r.held_lo), hi: r.held_hi != null && n(r.held_hi) });
+    t2.textContent = (r.held_lo != null ? L_.tipHeldRange : L_.tipHeld)({ held: n(r.held), lo: r.held_lo != null && n(r.held_lo), hi: r.held_hi != null && n(r.held_hi) });
     for (const [el_, dy] of [[t1, -27], [t2, -9]]) { el_.setAttribute("x", x); el_.setAttribute("y", up + dy); el_.setAttribute("text-anchor", anchor); }
     lead.setAttribute("d", Y(peak(r)) - up > 8 ? `M${cx} ${Y(peak(r)) - 3}V${up - 3}` : "");
     // the label lies over the reference rule and its caption, so it gets the ground behind it
@@ -1297,7 +1097,7 @@ function chart(it = scope) {
     // the window the headline is about. For clearing there are three to choose from: the year being forecast,
     // which began last August and so takes in the months of it already measured, or the next 3 or 6 months.
     const yearly = typeof key() === "number", n = reach(), now = X(24), from = yearly ? X(24 + n - 12) : now, on = yearly ? 0 : n;
-    const hs = S.hazard === "clear" ? horizons() : [n], name = h => (h ? L_.ahead(h) : L_.byJuly(FY));
+    const hs = S.hazard === "clear" ? horizons() : [n], name = h => (h ? L_.ahead({ n: h, count: h }) : L_.byJuly({ y: FY }));
     s += `<rect class="win" x="${from}" y="${top}" width="${now + n * pitch - from}" height="${ph}"/><line class="winrule" x1="${from}" x2="${now + n * pitch}" y1="${top}" y2="${top}"/>`;
     s += `<line class="now" x1="${now}" x2="${now}" y1="${small ? top : top - 24}" y2="${y0}"/>`;
     if (!small) s += `<text class="caps" x="${now - 7}" y="${top - 10}" text-anchor="end">${L_.now}</text><text x="${now + 8}" y="${top - 10}">${hs.map((h, k) => `<tspan class="h${h === on ? " on" : ""}"${k ? ' dx="14"' : ""}${hs.length > 1 ? ` data-h="${h}" tabindex="0" role="button" aria-pressed="${h === on}"` : ""}>${name(h)}</tspan>`).join("")}</text>`;
@@ -1344,7 +1144,7 @@ function chart(it = scope) {
     const [t1, t2] = el.querySelectorAll(".tip text"), lead = el.querySelector(".tip path"), b = small ? null : bars[i];
     if (!b || b.win || (b.v == null && !monthsView)) { t1.textContent = t2.textContent = ""; lead.setAttribute("d", ""); return; }
     const exact = x => `${sector || typeof key() !== "number" ? km(x) : fmt(x)} km²`;
-    const lines = b.fc ? [(monthsView ? b.sub + ", " : "") + L_.about_(approx(b.v)), b.range ? L_.range(approx(b.range[0]), approx(b.range[1])) : ""]
+    const lines = b.fc ? [(monthsView ? b.sub + ", " : "") + L_.about_({ x: approx(b.v) }), b.range ? L_.range({ lo: approx(b.range[0]), hi: approx(b.range[1]) }) : ""]
       : monthsView ? [b.v == null ? b.sub : `${b.sub}, ${exact(b.v)}`, ""]
       : [exact(b.v), b.sub || ""];
     const x0 = X(i) + (pitch - bw) / 2, cx = x0 + bw / 2, yy = Y(b.v ?? 0);
@@ -1402,11 +1202,11 @@ const dockView = size => (pristine ? fitView(size, { paddingTopLeft: [6, 6], pad
 const corner = (big, small) => ({ big: [big.x, big.y], small: [small.x, small.y] });  // contents that scale from the box's own corner
 // The map as it is drawn at this moment, in one bitmap: its canvases, in the order of their panes. (Satellite
 // tiles, which only show close up, are another site's pictures and cannot be copied: the ground stands in.)
-function mapShot() {
+function mapShot(clear) {  // clear: the ground is left out, so what is under the picture shows around the Amazon
   const r = rectOf($("map")), k = Math.min(2, devicePixelRatio || 1), cv = document.createElement("canvas"), cx = cv.getContext("2d");
   cv.width = Math.max(1, Math.round(r.width * k)); cv.height = Math.max(1, Math.round(r.height * k));
   cv.style.cssText = `display:block;width:${r.width}px;height:${r.height}px`;
-  cx.fillStyle = GROUND; cx.fillRect(0, 0, cv.width, cv.height);
+  if (!clear) { cx.fillStyle = GROUND; cx.fillRect(0, 0, cv.width, cv.height); }
   const z = c => +getComputedStyle(c.closest(".leaflet-pane")).zIndex || 0;
   for (const c of [...$("map").querySelectorAll(".leaflet-pane canvas")].sort((a, b) => z(a) - z(b))) {
     const q = rectOf(c), o = +getComputedStyle(c).opacity;
@@ -1443,7 +1243,7 @@ async function mapMove(dock, ms) {
     stageView ? view(stageView) : whole();
     stageView = null;
     big = rectOf(box); ref = { big: at(), small: g1 }; s = 2 ** (z1 - map.getZoom());
-    if (ms) { await frame(); await frame(); shot = boxed(mapShot(), big); }  // (the lines are drawn on the next frame)
+    if (ms) { await frame(); await frame(); shot = boxed(mapShot(true), big); shot.style.background = "none"; }  // (the lines are drawn on the next frame; the picture is the Amazon alone, so the timeline going down to its dock shows under it)
   }
   if (!ms) return;
   const anims = morph(shot, big, small, ref, s, dock, ms);
@@ -1461,7 +1261,7 @@ async function mapMove(dock, ms) {
 async function chartMove(up, ms) {
   const cb = BOX.chart;
   if (!ms) { cb.dataset.as = up ? "stage" : "dock"; chart(); return; }
-  const copy = () => { const c = cb.cloneNode(true); c.classList.add("shot"); c.inert = true; c.setAttribute("aria-hidden", "true"); c.style.visibility = ""; c.style.zIndex = up ? 38 : 40; $("app").append(c); return c; };  // (growing, it passes under the picture of the map; shrinking, over it)
+  const copy = () => { const c = cb.cloneNode(true); c.classList.add("shot"); c.inert = true; c.setAttribute("aria-hidden", "true"); c.style.visibility = ""; c.style.zIndex = 38; $("app").append(c); return c; };  // (under the picture of the map, both ways)
   let big, small, pic, first = null;
   if (up) {
     small = rectOf(cb);
@@ -1541,6 +1341,7 @@ BOX.chart.addEventListener("click", e => {
 function chrome() {
   const L_ = t(), btn = (k, label, on) => `<button data-k="${k}" aria-pressed="${on}">${label}</button>`;
   document.documentElement.lang = lang;
+  document.documentElement.dir = RTL.has(lang) ? "rtl" : "ltr";
   document.documentElement.dataset.hazard = S.hazard;
   document.documentElement.dataset.scale = S.scale;
   document.documentElement.style.setProperty("--hue", `var(--${S.hazard})`);
@@ -1553,14 +1354,15 @@ function chrome() {
   $("rank-btn").setAttribute("aria-pressed", S.rank);
   $("rank-btn").hidden = S.mode !== "sectors";
   document.documentElement.dataset.list = listOn();
+  document.documentElement.dataset.side = sideOn();
   // bars or a line: two small glyphs, no words
   $("shape").innerHTML = [["bars", "M1 12V6h3v6zM6 12V2h3v6zM11 12V8h3v4z"], ["line", "M1 11L5 5l4 3 5-6"]].map(([k, d]) => `<button data-k="${k}" aria-pressed="${(k === "line") === S.line}" aria-label="${L_[k]}" title="${L_[k]}"><svg viewBox="0 0 15 13" aria-hidden="true"><path d="${d}"/></svg></button>`).join("");
-  $("kinds").innerHTML = Object.keys(L_.kinds).map(k => btn(k, L_.kinds[k], k === S.kind)).join("");
+  $("kinds").innerHTML = ["uf", "mun", "ti", "uc"].map(k => btn(k, L_.kinds[k], k === S.kind)).join("");
   $("kinds").hidden = S.mode !== "sectors";
   // the window ahead as buttons (on a phone; on a wide screen it is chosen on the chart itself), and a stepper
   // for the years, which also stands on the docked timeline
   const hs = S.hazard === "clear" && S.scale === "months" ? horizons() : [];
-  $("ahead").innerHTML = hs.map(h => btn(h, h ? L_.ahead(h) : L_.byJuly(FY), h === S.h)).join("");
+  $("ahead").innerHTML = hs.map(h => btn(h, h ? L_.ahead({ n: h, count: h }) : L_.byJuly({ y: FY }), h === S.h)).join("");
   $("ahead").hidden = hs.length < 2;
   const ys = Object.keys(M.years).map(Number).sort(), at = ys.indexOf(S.year), [prev, , next] = $("step").children;
   $("step").hidden = !replays();
@@ -1569,15 +1371,27 @@ function chrome() {
   prev.setAttribute("aria-label", L_.prevYear); next.setAttribute("aria-label", L_.nextYear);
   // each box says how it comes forward; the timeline on the stage says how to send it back
   for (const [id, label] of [["chart-front", front === "chart" ? L_.close : L_.front.chart], ["map-front", L_.front.map]]) { $(id).setAttribute("aria-label", label); $(id).title = label; }
-  for (const [id, label] of [["list-close", L_.closeList], ["about-close", L_.close], ["api-close", L_.close], ["menu-btn", L_.menu]]) { $(id).setAttribute("aria-label", label); $(id).title = label; }
+  for (const [id, label] of [["list-close", L_.closeList], ["about-close", L_.close], ["api-close", L_.close], ["people-close", L_.close], ["menu-btn", L_.menu]]) { $(id).setAttribute("aria-label", label); $(id).title = label; }
   homeBtn.setAttribute("aria-label", L_.home); homeBtn.title = L_.home;
+  // a row of words that is too long for its place in some language steps its type down until it fits
+  for (const el of [$("hazard"), $("modes"), $("scale"), $("kinds")]) {
+    for (const b of el.children) b.style.fontSize = b.style.letterSpacing = "";
+    el.style.gap = "";
+    for (const [size, gap] of [[14, "0 12px"], [13, "0 9px"], [12, "0 7px"], [11, "0 5px"]]) {
+      if (!el.offsetParent || el.scrollWidth <= el.clientWidth + 1 && el.getBoundingClientRect().right <= (el.parentElement.closest("#mappanel, #chartin") || el.parentElement).getBoundingClientRect().right + 1) break;
+      for (const b of el.children) { b.style.fontSize = size + "px"; b.style.letterSpacing = "0.02em"; }
+      if (el !== $("modes")) el.style.gap = gap;
+    }
+  }
   $("list-title").textContent = S.mode === "sectors" ? L_.ranking : L_.modes.prio;
   $("story-btn").textContent = L_.story;
   $("skip-btn").textContent = L_.skip;
   $("about-btn").textContent = L_.about;
   $("api-copy").textContent = L_.copy;
-  $("lang-btn").textContent = lang === "pt" ? "EN" : "PT";
-  $("lang-btn").setAttribute("aria-label", lang === "pt" ? "English" : "Português");
+  $("lang-btn").textContent = lang.toUpperCase();
+  $("lang-btn").setAttribute("aria-label", L_.language); $("lang-btn").title = L_.language;
+  $("lang-menu").innerHTML = Object.keys(LANGS).map(l => `<button data-l="${l}" lang="${l}" role="menuitemradio" aria-checked="${l === lang}">${LANGS[l][0]}</button>`).join("");
+  $("list-csv").textContent = L_.csv;
   $("credit").textContent = L_.credit;
 }
 // only the yearly clearing timeline replays a past year: its bars and its stepper are the year control
@@ -1590,18 +1404,19 @@ async function refresh() {
   if (acting() && (S.hazard !== "clear" || !ACT)) S.scale = "years";
   if (S.hazard === "clear" && !replays()) S.year = FY;  // months and actions look around now; the map stays on the forecast
   chrome();
-  if (listOn() !== listWas) { listWas = listOn(); sheetAt("half"); if (pristine && !mapSmall() && !narrow()) whole(!calm()); else setTimeout(limit); }  // the Amazon glides to make room for the list, and to take it back
+  if (sideOn() !== listWas) { listWas = sideOn(); sheetAt("half"); if (pristine && !mapSmall() && !narrow()) whole(!calm()); else setTimeout(limit); }  // the Amazon glides to make room for the list, and to take it back
   link();
   say();  // the bulletin and the timeline need only the small JSON files, so they come first
   startMap(); paint(); drawSectors();
   list();
+  people();
 }
 
 // ---------- the ranked list, on the map's frame: where to look first ----------
 // Priorities: the 500 blocks of 5 km where the most cells are expected to lose a hectare (data/priority.json),
 // drawn as outlines over the cells. Sectors: the same idea at a coarser scale, the sectors of the kind on screen
 // ranked by the forecast.
-let PRIO = null, blocks = null, blockSel = null, here = null, listed = "", flown = false, listWas = listOn();
+let PRIO = null, blocks = null, blockSel = null, here = null, listed = "", flown = false, listWas = sideOn();
 const priority = () => (PRIO ||= fetch("data/priority.json").then(r => r.json()));
 const blockBox = (PR, b) => { const h = PR.block_km * M.years[PR.year].flags500.cell; return [[b.lat - h, b.lon - h], [b.lat + h, b.lon + h]]; };  // 5 km is ten 500 m cells
 // (the name gives way when the row is narrow; the mark of protected land after it does not)
@@ -1625,7 +1440,7 @@ async function list() {
       // a place a row: its rank, its name, a tag if it lies in protected land, and a thin bar as long as the cells expected to lose a hectare there
       const pc = b => b.expected_cells / Math.max(1, b.forest_cells), top = Math.max(...PR.blocks.map(pc));  // a place's chance: the mean chance of its forest cells
       $("list-say").textContent = "";
-      $("list-rows").innerHTML = `<li class="h" aria-hidden="true"><span>${L_.chance}</span></li>` + PR.blocks.map(b => row(`data-b="${b.rank}"`, b.rank, `${esc(b.municipality)}, ${b.state}`, `<span class="len" aria-hidden="true"><i style="width:${(100 * pc(b) / top).toFixed(1)}%"></i></span><span class="v">${fmt(100 * pc(b))}%</span>`, false, b.land ? `<abbr class="tag" title="${L_.land[b.land]}">${b.land.toUpperCase()}</abbr>` : "")).join("");
+      $("list-rows").innerHTML = `<li class="h" aria-hidden="true"><span>${L_.chance}</span></li>` + PR.blocks.map(b => row(`data-b="${b.rank}"`, b.rank, `${esc(b.municipality)}, ${b.state}`, `<span class="len" aria-hidden="true"><i style="width:${(100 * pc(b) / top).toFixed(1)}%"></i></span><span class="v">${pcOf(pc(b))}</span>`, false, b.land ? `<abbr class="tag" title="${L_.land[b.land]}">${L_.tag[b.land]}</abbr>` : "")).join("");
       listed = "prio" + lang;
     }
     $("list-rows").className = "prio";
@@ -1634,7 +1449,7 @@ async function list() {
     const K = await sectors(S.kind), I = info(), yearly = typeof k === "number", past = isPast();
     if (!(S.mode === "sectors" && S.rank) || k !== key()) return;
     const top = [...K.items].sort((a, b) => expOf(b) - expOf(a)).slice(0, 100).filter(it => expOf(it) > 0);
-    $("list-say").textContent = L_.rankSay({ kind: L_.kinds[S.kind], what: yearly ? (past ? L_.rankWhat.past(k) : L_.rankWhat.fc(k)) : S.hazard === "fire" ? L_.rankWhat.fire : L_.rankWhat.risk });
+    $("list-say").textContent = L_.rankSay({ kind: L_.kinds[S.kind], what: yearly ? (past ? L_.rankWhat.past : L_.rankWhat.fc)({ y: k }) : S.hazard === "fire" ? L_.rankWhat.fire : L_.rankWhat.risk });
     $("list-rows").className = "";
     $("list-rows").innerHTML = top.map((it, n) => row(`data-id="${esc(it.id)}"`, n + 1, esc(it.n) + (it.s ? ", " + it.s : ""), `<span class="v">${yearly ? `${approx(expOf(it))} km²` : `${share(100 * expOf(it) / I.risk_km2)}%`}</span>`, String(it.id) === S.sel)).join("");
     listed = "";
@@ -1707,7 +1522,19 @@ document.addEventListener("keydown", e => {
   const ys = Object.keys(M.years).map(Number).sort(), i = ys.indexOf(S.year) + (e.key === "ArrowLeft" ? -1 : 1);
   if (ys[i]) pick(ys[i]);
 });
-$("lang-btn").onclick = () => { lang = localStorage.lang = lang === "pt" ? "en" : "pt"; langInLink = true; refresh(); if (storyOn) storyText(); };
+// the language: a menu of every language by its own name. Choosing one fetches its words, saves the choice and puts it in the link.
+async function setLang(l) {
+  if (!(await loadLang(l))) return;
+  lang = l;
+  try { localStorage.lang = l; } catch (err) { /* private mode */ }
+  langInLink = true;
+  refresh();
+  if (storyOn) storyText();
+}
+const langMenu = on => { $("lang-menu").hidden = !on; $("lang-btn").setAttribute("aria-expanded", !!on); };
+$("lang-btn").onclick = e => { e.stopPropagation(); langMenu($("lang-menu").hidden); };
+$("lang-menu").onclick = e => { const b = e.target.closest("[data-l]"); if (b) { langMenu(false); setLang(b.dataset.l); } };
+document.addEventListener("click", () => langMenu(false));
 
 // About: a panel beside the map. What this is and who it is for, the model's figure, what the model is and how
 // it did, the benchmark as a bare table with the way in as a button, and that it gets things wrong. Every number
@@ -1715,7 +1542,7 @@ $("lang-btn").onclick = () => { lang = localStorage.lang = lang === "pt" ? "en" 
 const MODEL = ST?.model?.name || ST?.leaderboard?.rows?.find(r => r.kind === "model")?.model || "prenuncio";  // the model on this site, by the name it has in the benchmark
 const of5 = x => (Math.abs(x * 5 - Math.round(x * 5)) < 0.02 ? [Math.round(x * 5), 5] : [Math.round(x * 10), 10]);  // a share as so many in five, or in ten
 function bench() {
-  const L_ = t().bench, B = ST.benchmark, pc = x => (x == null ? "" : fmt(100 * x, 1) + "%"), day = d => { const [y, m_, dd] = d.split("-").map(Number); return new Date(y, m_ - 1, dd).toLocaleDateString(loc(), { day: "numeric", month: "short", year: "numeric" }); };
+  const L_ = t().bench, B = ST.benchmark, pc = x => (x == null ? "" : pcOf(x, 1)), day = d => { const [y, m_, dd] = d.split("-").map(Number); return new Date(y, m_ - 1, dd).toLocaleDateString(loc(), { day: "numeric", month: "short", year: "numeric" }); };
   // until the file carries the table, the same rows from the benchmark's own figures
   const rows = ST.leaderboard?.rows || [{ rank: 1, model: MODEL, url: ST.links.leaderboard, cap5: B.today, unseen_2026: B.unseen_2026, by: "Prenúncio", kind: "model" }, { rank: 2, model: "last year", url: ST.links.benchmark, cap5: B.naive, by: "reference", kind: "reference" }];
   const head = L_.head.map((h, i) => `<th${i === 2 || i === 3 ? ' class="n"' : ""}>${i === 3 ? ST.model.trained_on.last_outcome_year : h}</th>`).join("");
@@ -1724,10 +1551,12 @@ function bench() {
 function about(at) {
   if (!ST) return;
   const [hit, of] = of5(ST.check.priority_blocks_that_lost_10ha);
-  $("about-body").innerHTML = t().aboutHtml({
-    year: ST.forecast.year, name: MODEL, span: +ST.forecast.made_on.slice(0, 4) - ST.history.years[0], m: ST.forest.cell_m, y: ST.check.year, hit, of,
-    bench: bench(), b0: ST.benchmark.years[0], b1: ST.benchmark.years.at(-1), links: ST.links, submit: t().bench.submit, repo: t().bench.repo,
-  });
+  const A = t().aboutText, B = t().bench, p = x => `<p>${x}</p>`;
+  $("about-body").innerHTML = `<div class="lede">${p(esc(A.line1({ year: ST.forecast.year })))}${p(esc(A.line2))}</div><div id="model-fig"></div>`
+    + p(esc(A.model({ name: "\u0001", span: +ST.forecast.made_on.slice(0, 4) - ST.history.years[0], m: ST.forest.cell_m })).replace("\u0001", `<b>${esc(MODEL)}</b>`)) + p(esc(A.tested({ y: ST.check.year, hit, of })))
+    + `<h3 id="about-benchmark">${esc(A.benchmark)}</h3>${bench()}<p class="metric">${esc(A.metric({ b0: ST.benchmark.years[0], b1: ST.benchmark.years.at(-1) }))}</p>` + p(esc(A.open))
+    + `<p class="go"><a class="btn" href="${esc(ST.links.benchmark)}" target="_blank" rel="noopener">${esc(B.submit)}</a><a href="${esc(ST.links.repository)}" target="_blank" rel="noopener">${esc(B.repo)}</a></p>`;
+
   // in the story it is put together a piece at a time: the figure alone, then the benchmark alone, each entering as the other leaves
   const only = storyOn ? (at === "about-benchmark" ? "bench" : "fig") : "";
   if (only) { if ($("about").dataset.only !== only) { $("about-body").classList.remove("in"); void $("about-body").offsetWidth; $("about-body").classList.add("in"); } $("about").dataset.only = only; } else { delete $("about").dataset.only; $("about-body").classList.remove("in"); }
@@ -1811,19 +1640,19 @@ function storyWords(id) {
   const L_ = t().st, n0 = x => fmt(Math.round(x)), hist = ST.history, chk = ST.check, sum = hist.km2.reduce((a, b) => a + b, 0), [hit, of] = of5(chk.priority_blocks_that_lost_10ha);
   switch (id) {
     case "forestA": return L_.forestA;
-    case "forestB": return L_.forestB({ cells: n0(ST.forest.cells / 1e6), m: ST.forest.cell_m });
+    case "forestB": return L_.forestB({ cells: n0(ST.forest.cells / 1e6), m: ST.forest.cell_m, count: Math.round(ST.forest.cells / 1e6) });
     case "lossA": return L_.lossA;
-    case "lossB": return L_.lossB({ y: hist.years[0], k: n0(sum / 1000), more: L_.more && sum > L_.more.km ? L_.more.say : "" });
+    case "lossB": return (L_.lossBMore && sum > L_.moreKm ? L_.lossBMore : L_.lossB)({ y: hist.years[0], k: n0(sum / 1000), km: n0(sum) });
     case "model": return L_.model;
     case "proof": return L_.proof({ y: chk.year, hit, of });
-    case "sources": return L_.sources({ n: t().num(ST.model.inputs.length, true) });
+    case "sources": return L_.sources({ n: t().numSources[ST.model.inputs.length] ?? fmt(ST.model.inputs.length), count: ST.model.inputs.length });
     case "open": return L_.open;
-    case "first": return L_.first({ n: n0(ST.priority.blocks) });
+    case "first": return L_.first({ n: n0(ST.priority.blocks), count: ST.priority.blocks });
     case "ahead": {  // the three months behind against a year before, as the level counts them, and the three ahead
       const [now, prev] = three(monthly(null, "clear")), hz = MO?.hazards?.clear, f = hz?.forecast?.[2], rise = prev >= 1 ? Math.round(100 * (now / prev - 1)) : 0;
       if (!hz?.sums?.[3] || !f) return t().fc({ km: approx(M.forecast.total_km2), here: "", y: FY }) + ".";
       const [y, m_] = f.month.split("-").map(Number);
-      return L_.ahead({ pct: rise > 0 ? fmt(rise) : 0, km: approx(hz.sums[3].p50), month: month(y, m_ - 1, { month: "long" }) });
+      return (rise > 0 ? L_.ahead.rise : L_.ahead.flat)({ pct: fmt(rise), km: approx(hz.sums[3].p50), month: month(y, m_ - 1, { month: "long" }) });
     }
   }
 }
@@ -1883,7 +1712,7 @@ function figure() {
     FIG.wants = true;
     fetch("data/tenure.png").then(r => r.blob()).then(b => createImageBitmap(b, { colorSpaceConversion: "none", premultiplyAlpha: "none" })).then(bmp => { const c = new OffscreenCanvas(320, 249), cx = c.getContext("2d", { willReadFrequently: true }); cx.imageSmoothingEnabled = false; cx.drawImage(bmp, 0, 0, 320, 249); const d = cx.getImageData(0, 0, 320, 249).data; FIG.tenure = Uint8Array.from({ length: 320 * 249 }, (_, i) => d[4 * i]); if ($("about").open) figure(); }).catch(() => {});
   }
-  const W = el.clientWidth, slim = W < 440, src = ST.model.inputs.map(x => x[lang] || x.en).map(x => { const q = x.match(/^(.*?)\s*\(([^)]*)\)$/); return q ? [q[1], q[2]] : [x, ""]; });  // the layer, and who makes it
+  const W = el.clientWidth, slim = W < 440, src = ST.model.inputs.map(x => x[lang] || x.en).map(x => { const q = x.match(/^(.*?)\s*[(（]([^)）]*)[)）]$/); return q ? [q[1], q[2]] : [x, ""]; });  // the layer, and who makes it
   const n = src.length, S = slim ? W * 0.47 : Math.min(W * 0.42, Math.max(200, (innerHeight - lengthOf("--top") - 160) / 2.3)), asp = (M.cols * M.cell) / (M.rows * M.cell) * Math.cos(6.4 * Math.PI / 180);  // the grid's shape on the ground
   const E = [0.8 * S, 0.24 * S], So = [-0.5 * S / asp, 0.36 * S / asp], gap = slim ? 31 : Math.round(S * 0.157), ph = E[1] + So[1], x0 = (slim ? 2 : 6) - So[0], y0 = 10;
   const yM = y0 + (n - 1) * gap + ph + (slim ? 34 : 42), yO = yM + (slim ? 30 : 38), H = Math.ceil(yO + ph + 12), mid = [x0 + (E[0] + So[0]) / 2, 0];

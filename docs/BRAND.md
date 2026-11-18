@@ -87,6 +87,18 @@ A forest green square with its corner coming away in red. It is the clearing gly
 
 Barlow Condensed and Barlow, one family drawn from highway signs and number plates. Condensed at weight 800 sets the wordmark, the level and the headline, because a warning is read from a distance. Regular width sets everything small, with tabular figures. Capitals are for the wordmark, the level and controls. The API panel is the one exception: it shows the instructions file for agents exactly as it is, in the reader's system monospace.
 
+### Other languages and scripts
+
+Every string is in `web/i18n/<code>.json`, one file a language, as whole sentences; `web/i18n/README.md` is the brief for translators. Numbers, percentages, dates and ordinals are written by the reader's locale. The language is the one in the address, else the reader's saved choice, else the country of the request, else the browser's, else English; the header lists every language by its own name.
+
+Barlow is Latin only. Cyrillic uses the system's sans with a narrow face for headlines (Arial Narrow, Roboto Condensed). Arabic, Devanagari, Bengali, Chinese, Japanese and Korean use the system face of the script (SF Arabic or Geeza Pro, Kohinoor or Noto Sans Devanagari and Bengali, PingFang SC, Hiragino Sans, Apple SD Gothic Neo, with the Windows and Noto equivalents after them); no webfont is loaded for them. There a headline is the script's bold at a size a little under the Latin one, with a line height of 1.25, no tracking and no capitals: weight and size carry the warning where a condensed face does not exist. The wordmark stays in Barlow Condensed in every language.
+
+Arabic runs right to left and the page is mirrored: the column of type on the right, the ranked list and the people of a land on the left, the small map in the upper left corner, the arrows of the story turned. Time on the charts still runs left to right, as dates do in Arabic-language charts; the map and the model's figure are not mirrored. Arabic keeps Latin digits.
+
+### The people of an Indigenous land
+
+When an Indigenous land is selected and there is an entry for it, its people come first: a photograph, whole and never cropped to a face, with its author and licence under it as a link to the source (the one small line that is owed, a condition of the licence); then the people's name and two or three lines about them; then the forecast for the land. Other peoples of the same land follow as names that open. No photograph, no placeholder. On a phone the photograph leads the bulletin's sheet.
+
 ## How urgency scales
 
 The level is counted, never chosen. For the hazard and place on screen:

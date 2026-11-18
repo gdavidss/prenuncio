@@ -1,0 +1,520 @@
+{
+ "about": "Hakkında",
+ "aboutText": {
+  "benchmark": "Benchmark",
+  "line1": "Prenúncio, Amazon'da Temmuz {year} sonuna kadar ormansızlaşması muhtemel yerleri gösterir.",
+  "line2": "Denetim yapanlar oraya önce varabilsin diye yaptık.",
+  "metric": "Puan, {b0} ile {b1} arasındaki yılların ortalamasıdır.",
+  "model": "{name} adlı model {span} yıllık kamuya açık veriden öğrendi. Kenarı {m} metre olan her orman karesi için gelecek yıl içinde ormansızlaşma olasılığını verir.",
+  "open": "Kod, veri ve benchmark açık. Daha iyi bir model yapan bizimkinin önüne geçer.",
+  "tested": "Modeli hiç görmediği yıllarda sınadık. {y} yılında işaret ettiği her {of} yerden {hit} tanesi ormansızlaştı."
+ },
+ "about_": "yaklaşık {x} km²",
+ "act": {
+  "against": "önceki {x}",
+  "axis": "altı ayda ormansızlaşan km²",
+  "band": "Denetim",
+  "bandSub": "IBAMA ceza tutanakları ve ambargoları",
+  "bandSubN": "IBAMA ceza tutanakları ve ambargoları, {n} belediye",
+  "held": "fazlası, denetim {ref} düzeyinde kalsaydı",
+  "honest": "Bu bir alt sınır ve bir ilişkidir, nedensellik kanıtı değildir.",
+  "measured": "ölçülen",
+  "none": "{since} ayından beri burada denetime bağlanan önlenmiş ormansızlaşma yok",
+  "parts": [
+   "dörtte biri",
+   "üçte biri",
+   "yarısı",
+   "üçte ikisi",
+   "dörtte üçü"
+  ],
+  "ref": "{from} – {to} ortalaması",
+  "say": {
+   "all": "{since} ayından beri önlenen {km} km² ormansızlaşma denetime bağlanıyor",
+   "here": "Burada {since} ayından beri önlenen {km} km² ormansızlaşma denetime bağlanıyor"
+  },
+  "sign": {
+   "collective": "Toplu ambargolar",
+   "field": "Saha ambargoları",
+   "notices": "100 km² başına tutanak",
+   "remote": "Uzaktan ambargolar"
+  },
+  "signTitle": {
+   "collective": "Bir kerede ambargo konan yerli topraklarının tamamı ve diğer kamu alanları",
+   "field": "Saha ziyaretinde ambargo konan alan",
+   "notices": "100 km² ormansızlaşma başına ceza tutanağı",
+   "remote": "Ziyaret olmadan, uyduyla ambargo konan alan"
+  },
+  "signs": "IBAMA işlemleri, {now} ile biten yıl, {ref} ile biten yıla karşı",
+  "sub": "O zamandan beri yaşanan düşüşün yaklaşık {part}. Kalanı her yerde aynı anda düştü.",
+  "subHere": "Burada ormansızlaşan alana ek olarak %{pct}.",
+  "tipHeld": "denetim sabit kalsaydı {held}",
+  "tipHeldRange": "denetim sabit kalsaydı {held}, muhtemelen {lo} – {hi}",
+  "tipObs": "{span}, {obs} km² ormansızlaştı"
+ },
+ "ahead": "{n} ay",
+ "amazon": "Amazon",
+ "areaFc": {
+  "every": "Buradaki her hücrenin Temmuz {y} sonuna kadar bir hektar kaybetme olasılığı {p}",
+  "upto": "Buradaki bir hücrenin Temmuz {y} sonuna kadar bir hektar kaybetme olasılığı en çok {p}"
+ },
+ "areaPast": {
+  "everyNo": "{y} yılında buradaki hücrelere {p} verildi. Ormansızlaşma haritalanmadı.",
+  "everyYes": "{y} yılında buradaki hücrelere {p} verildi. {n} hücrenin {clr} tanesinde ormansızlaşma haritalandı.",
+  "uptoNo": "{y} yılında buradaki hücrelere en çok {p} verildi. Ormansızlaşma haritalanmadı.",
+  "uptoYes": "{y} yılında buradaki hücrelere en çok {p} verildi. {n} hücrenin {clr} tanesinde ormansızlaşma haritalandı."
+ },
+ "axisM": {
+  "clear": "ayda ormansızlaşan km²",
+  "degr": "ayda bozulan km²",
+  "fire": "ayda yanan km²",
+  "mine": "ayda madenciliğe açılan km²"
+ },
+ "axisW": {
+  "degr": "12 ayda bozulan km²",
+  "fire": "12 ayda yanan km²",
+  "mine": "12 ayda madenciliğe açılan km²"
+ },
+ "axisY": "yılda ormansızlaşan km², ağustostan temmuza",
+ "bars": "Çubuk",
+ "bench": {
+  "head": [
+   "",
+   "model",
+   "puan",
+   "",
+   "gönderen",
+   "tarih"
+  ],
+  "ref": "model yok",
+  "refName": "geçen yıl, yakın çevre",
+  "repo": "GitHub",
+  "submit": "Model gönder"
+ },
+ "burned": {
+  "months": {
+   "all": "Son üç ayda {km} km² yandı, bir yıl önce {prev}",
+   "here": "Burada son üç ayda {km} km² yandı, bir yıl önce {prev}"
+  },
+  "years": {
+   "all": "Son on iki ayda {km} km² yandı, önceki on iki ayda {prev}",
+   "here": "Burada son on iki ayda {km} km² yandı, önceki on iki ayda {prev}"
+  }
+ },
+ "byJuly": "Temmuz {y} sonuna kadar",
+ "cellFc": "Bu hücrenin Temmuz {y} sonuna kadar bir hektar kaybetme olasılığı {p}",
+ "cellFire": "Yangının en olası olduğu %{p}'lik orman içinde",
+ "cellFireRest": "Yangının en olası olduğu %5'lik ormanın dışında",
+ "cellHa": {
+  "clear": "Burada {n} ayda yaklaşık {ha} hektar ormansızlaşma bekleniyor",
+  "degr": "Burada {n} ayda yaklaşık {ha} hektar bozulma bekleniyor",
+  "mine": "Burada {n} ayda yaklaşık {ha} hektar madencilik bekleniyor"
+ },
+ "cellHaLow": {
+  "clear": "Burada {n} ayda 1 hektardan az ormansızlaşma bekleniyor",
+  "degr": "Burada {n} ayda 1 hektardan az bozulma bekleniyor",
+  "mine": "Burada {n} ayda 1 hektardan az madencilik bekleniyor"
+ },
+ "cellPast": {
+  "no": "{y} yılında bu hücreye {p} verildi. İçinde ormansızlaşma haritalanmadı.",
+  "yes": "{y} yılında bu hücreye {p} verildi. İçinde ormansızlaşma haritalandı."
+ },
+ "cellPlace": "{mun}, {uf}",
+ "cellPlaceIn": "{mun}, {uf}. {land}",
+ "chance": "olasılık",
+ "chanceBy": "Hücrelerin Temmuz {y} sonuna dek bir hektar kaybetme olasılığı",
+ "chanceFor": "{y} için her hücreye verilen olasılık",
+ "chanceOut": "her hücre için olasılık",
+ "close": "Kapat",
+ "closeList": "Listeyi kapat",
+ "copied": "Kopyalandı",
+ "copy": "Kopyala",
+ "credit": "Görüntüler: Esri, Maxar, Earthstar Geographics",
+ "csv": "CSV",
+ "enso": [
+  "El Niño",
+  "La Niña",
+  "Pasifik"
+ ],
+ "ensoLevel": [
+  [
+   "çok güçlü",
+   "güçlü",
+   "orta",
+   "zayıf"
+  ],
+  [
+   "çok güçlü",
+   "güçlü",
+   "orta",
+   "zayıf"
+  ],
+  "nötr"
+ ],
+ "fc": {
+  "all": "Temmuz {y} sonuna kadar yaklaşık {km} km² ormansızlaşma bekleniyor",
+  "here": "Burada Temmuz {y} sonuna kadar yaklaşık {km} km² ormansızlaşma bekleniyor"
+ },
+ "fcNone": "Burada Temmuz {y} sonuna kadar neredeyse hiç ormansızlaşma beklenmiyor",
+ "front": {
+  "back": "Haritaya dön",
+  "chart": "Zaman çizelgesini öne getir",
+  "map": "Haritayı öne getir"
+ },
+ "hazard": {
+  "clear": "Ormansızlaşma",
+  "degr": "Bozulma",
+  "fire": "Yangın",
+  "mine": "Madencilik"
+ },
+ "higher": "daha yüksek",
+ "home": "Tüm haritaya dön",
+ "kinds": {
+  "mun": "Belediyeler",
+  "ti": "Yerli toprakları",
+  "uc": "Koruma alanları",
+  "uf": "Eyaletler"
+ },
+ "km2": "{x} km²",
+ "land": {
+  "ti": "yerli toprağı",
+  "uc": "koruma alanı"
+ },
+ "language": "Dil",
+ "lastSub": {
+  "degr": {
+   "all": "Son on iki ayda {km} km² orman bozuldu veya kesildi.",
+   "here": "Burada son on iki ayda {km} km² orman bozuldu veya kesildi."
+  },
+  "mine": {
+   "all": "Son on iki ayda {km} km² madenciliğe açıldı.",
+   "here": "Burada son on iki ayda {km} km² madenciliğe açıldı."
+  }
+ },
+ "legend": {
+  "clear": "Ormansızlaşma riski",
+  "degr": "Bozulma riski",
+  "fire": "Yangının sık görüldüğü yerler",
+  "mine": "Madencilik riski"
+ },
+ "legendNext": {
+  "clear": "Ormansızlaşma riski, önümüzdeki {n} ay",
+  "degr": "Bozulma riski, önümüzdeki {n} ay",
+  "mine": "Madencilik riski, önümüzdeki {n} ay"
+ },
+ "less": "daha az km²",
+ "level": [
+  "Sakin",
+  "Dikkat",
+  "Uyarı",
+  "Alarm"
+ ],
+ "like": [
+  {
+   "km": 25,
+   "same": "Kadıköy büyüklüğünde.",
+   "x2": "Kadıköy'ün iki katı.",
+   "x3": "Kadıköy'ün üç katı.",
+   "x4": "Kadıköy'ün dört katı.",
+   "x5": "Kadıköy'ün beş katı.",
+   "x10": "Kadıköy'ün on katı.",
+   "half": "Kadıköy'ün yarısı.",
+   "third": "Kadıköy'ün üçte biri."
+  },
+  {
+   "km": 59,
+   "same": "Manhattan büyüklüğünde.",
+   "x2": "Manhattan'ın iki katı.",
+   "x3": "Manhattan'ın üç katı.",
+   "x4": "Manhattan'ın dört katı.",
+   "x5": "Manhattan'ın beş katı.",
+   "x10": "Manhattan'ın on katı.",
+   "half": "Manhattan'ın yarısı.",
+   "third": "Manhattan'ın üçte biri."
+  },
+  {
+   "km": 105,
+   "same": "Paris büyüklüğünde.",
+   "x2": "Paris'in iki katı.",
+   "x3": "Paris'in üç katı.",
+   "x4": "Paris'in dört katı.",
+   "x5": "Paris'in beş katı.",
+   "x10": "Paris'in on katı.",
+   "half": "Paris'in yarısı.",
+   "third": "Paris'in üçte biri."
+  },
+  {
+   "km": 279,
+   "same": "Gökçeada büyüklüğünde.",
+   "x2": "Gökçeada'nın iki katı.",
+   "x3": "Gökçeada'nın üç katı.",
+   "x4": "Gökçeada'nın dört katı.",
+   "x5": "Gökçeada'nın beş katı.",
+   "x10": "Gökçeada'nın on katı.",
+   "half": "Gökçeada'nın yarısı.",
+   "third": "Gökçeada'nın üçte biri."
+  },
+  {
+   "km": 735,
+   "same": "Singapur büyüklüğünde.",
+   "x2": "Singapur'un iki katı.",
+   "x3": "Singapur'un üç katı.",
+   "x4": "Singapur'un dört katı.",
+   "x5": "Singapur'un beş katı.",
+   "x10": "Singapur'un on katı.",
+   "half": "Singapur'un yarısı.",
+   "third": "Singapur'un üçte biri."
+  },
+  {
+   "km": 1572,
+   "same": "Büyük Londra büyüklüğünde.",
+   "x2": "Büyük Londra'nın iki katı.",
+   "x3": "Büyük Londra'nın üç katı.",
+   "x4": "Büyük Londra'nın dört katı.",
+   "x5": "Büyük Londra'nın beş katı.",
+   "x10": "Büyük Londra'nın on katı.",
+   "half": "Büyük Londra'nın yarısı.",
+   "third": "Büyük Londra'nın üçte biri."
+  },
+  {
+   "km": 3713,
+   "same": "Van Gölü büyüklüğünde.",
+   "x2": "Van Gölü'nün iki katı.",
+   "x3": "Van Gölü'nün üç katı.",
+   "x4": "Van Gölü'nün dört katı.",
+   "x5": "Van Gölü'nün beş katı.",
+   "x10": "Van Gölü'nün on katı.",
+   "half": "Van Gölü'nün yarısı.",
+   "third": "Van Gölü'nün üçte biri."
+  },
+  {
+   "km": 5461,
+   "same": "İstanbul büyüklüğünde.",
+   "x2": "İstanbul'un iki katı.",
+   "x3": "İstanbul'un üç katı.",
+   "x4": "İstanbul'un dört katı.",
+   "x5": "İstanbul'un beş katı.",
+   "x10": "İstanbul'un on katı.",
+   "half": "İstanbul'un yarısı.",
+   "third": "İstanbul'un üçte biri."
+  },
+  {
+   "km": 9251,
+   "same": "Kıbrıs büyüklüğünde.",
+   "x2": "Kıbrıs'ın iki katı.",
+   "x3": "Kıbrıs'ın üç katı.",
+   "x4": "Kıbrıs'ın dört katı.",
+   "x5": "Kıbrıs'ın beş katı.",
+   "x10": "Kıbrıs'ın on katı.",
+   "half": "Kıbrıs'ın yarısı.",
+   "third": "Kıbrıs'ın üçte biri."
+  },
+  {
+   "km": 23764,
+   "same": "Trakya büyüklüğünde.",
+   "x2": "Trakya'nın iki katı.",
+   "x3": "Trakya'nın üç katı.",
+   "x4": "Trakya'nın dört katı.",
+   "x5": "Trakya'nın beş katı.",
+   "x10": "Trakya'nın on katı.",
+   "half": "Trakya'nın yarısı.",
+   "third": "Trakya'nın üçte biri."
+  },
+  {
+   "km": 41285,
+   "same": "İsviçre büyüklüğünde.",
+   "x2": "İsviçre'nin iki katı.",
+   "x3": "İsviçre'nin üç katı.",
+   "x4": "İsviçre'nin dört katı.",
+   "x5": "İsviçre'nin beş katı.",
+   "x10": "İsviçre'nin on katı.",
+   "half": "İsviçre'nin yarısı.",
+   "third": "İsviçre'nin üçte biri."
+  },
+  {
+   "km": 86600,
+   "same": "Azerbaycan büyüklüğünde.",
+   "x2": "Azerbaycan'ın iki katı.",
+   "x3": "Azerbaycan'ın üç katı.",
+   "x4": "Azerbaycan'ın dört katı.",
+   "x5": "Azerbaycan'ın beş katı.",
+   "x10": "Azerbaycan'ın on katı.",
+   "half": "Azerbaycan'ın yarısı.",
+   "third": "Azerbaycan'ın üçte biri."
+  },
+  {
+   "km": 131957,
+   "same": "Yunanistan büyüklüğünde.",
+   "x2": "Yunanistan'ın iki katı.",
+   "x3": "Yunanistan'ın üç katı.",
+   "x4": "Yunanistan'ın dört katı.",
+   "x5": "Yunanistan'ın beş katı.",
+   "x10": "Yunanistan'ın on katı.",
+   "half": "Yunanistan'ın yarısı.",
+   "third": "Yunanistan'ın üçte biri."
+  }
+ ],
+ "line": "Çizgi",
+ "lower": "daha düşük",
+ "made": "{date} tarihinde yapıldı",
+ "many": {
+  "mun": "belediye",
+  "ti": "yerli toprağı",
+  "uc": "koruma alanı",
+  "uf": "eyalet"
+ },
+ "mapped": "haritalanan ormansızlaşma",
+ "menu": "Menü",
+ "mfc": {
+  "clear": {
+   "all": "Önümüzdeki {h} ayda yaklaşık {km} km² ormansızlaşma bekleniyor",
+   "here": "Burada önümüzdeki {h} ayda yaklaşık {km} km² ormansızlaşma bekleniyor"
+  },
+  "degr": {
+   "all": "Önümüzdeki {h} ayda yaklaşık {km} km² bozulma bekleniyor",
+   "here": "Burada önümüzdeki {h} ayda yaklaşık {km} km² bozulma bekleniyor"
+  },
+  "mine": {
+   "all": "Önümüzdeki {h} ayda yaklaşık {km} km² madencilik bekleniyor",
+   "here": "Burada önümüzdeki {h} ayda yaklaşık {km} km² madencilik bekleniyor"
+  }
+ },
+ "mobs": {
+  "clear": {
+   "all": "Son üç ayda {km} km² ormansızlaştı",
+   "here": "Burada son üç ayda {km} km² ormansızlaştı"
+  },
+  "degr": {
+   "all": "Son üç ayda {km} km² bozuldu",
+   "here": "Burada son üç ayda {km} km² bozuldu"
+  },
+  "fire": {
+   "all": "Son üç ayda {km} km² yandı",
+   "here": "Burada son üç ayda {km} km² yandı"
+  },
+  "mine": {
+   "all": "Son üç ayda {km} km² madenciliğe açıldı",
+   "here": "Burada son üç ayda {km} km² madenciliğe açıldı"
+  }
+ },
+ "modes": {
+  "cells": "Hücreler",
+  "prio": "Öncelikler",
+  "sectors": "Bölgeler"
+ },
+ "more": "daha çok km²",
+ "next": "önümüzdeki {n} ay",
+ "nextYear": "Sonraki yıl",
+ "now": "şimdi",
+ "numSources": [
+  "sıfır",
+  "bir",
+  "iki",
+  "üç",
+  "dört",
+  "beş",
+  "altı",
+  "yedi",
+  "sekiz",
+  "dokuz",
+  "on",
+  "on bir",
+  "on iki"
+ ],
+ "onlyFrom": "Yalnızca o olasılıktaki ve üstündeki hücreleri göstermek için bir basamak seçin",
+ "pShareMin": "{cut} ve üstü <b>{n}</b> hücre, beklenen kaybın %{share} kadarı",
+ "pSharePastMin": "{cut} ve üstü <b>{n}</b> hücre, ormansızlaşma haritalanan hücrelerin %{share} kadarı",
+ "partial": " Şimdilik yalnızca öncelikli görüntüler.",
+ "past": "{y} yılında {act} km² ormansızlaştı",
+ "pastHere": "{y} yılında burada {act} km² ormansızlaştı",
+ "pastHereNone": "{y} yılında burada ormansızlaşma haritalanmadı",
+ "pastP": "{y} yılında {exp} hücrede bir hektar kayıp bekleniyordu, {act} hücrede oldu",
+ "people": {
+  "credit": "Fotoğraf: {author}, {license}",
+  "also": "Bu toprakta ayrıca"
+ },
+ "prevYear": "Önceki yıl",
+ "range": "muhtemelen {lo} – {hi}",
+ "rank": {
+  "other": "{n}."
+ },
+ "rankSay": "{kind}, {what}",
+ "rankWhat": {
+  "fc": "Temmuz {y} sonuna kadar beklenen ormansızlaşmaya göre",
+  "fire": "yangının sık görüldüğü yerlerdeki paya göre",
+  "past": "{y} için beklenen ormansızlaşmaya göre",
+  "risk": "risk haritasındaki paya göre"
+ },
+ "ranking": "Sıralama",
+ "replay": "Geçmiş tahmin",
+ "risk": {
+  "degr": "bozulma riski",
+  "mine": "madencilik riski"
+ },
+ "scale": {
+  "actions": "Denetim",
+  "months": "Aylar",
+  "years": "Yıllar"
+ },
+ "sign": {
+  "autos": "IBAMA cezaları",
+  "clear": "Ormansızlaşma",
+  "degr": "Bozulma",
+  "mine": "Madencilik",
+  "scar": "Yanan alan"
+ },
+ "signTitle": "Son üç ayda {now}, bir yıl önce {prev}",
+ "signs": "Sinyaller, son üç ay geçen yıla karşı",
+ "skip": "Geç",
+ "st": {
+  "ahead": {
+   "flat": "Model, {month} sonuna kadar {km} km² daha ormansızlaşma bekliyor.",
+   "rise": "Son üç ayda ormansızlaşma %{pct} arttı. Model {month} sonuna kadar {km} km² daha bekliyor."
+  },
+  "back": "Geri",
+  "done": "Bitti",
+  "first": "Denetim yapanlar için önce bu {n} yer gelir.",
+  "forestA": "Burası Amazon.",
+  "forestB": "Her biri {m} metre olan {cells} milyon orman karesi.",
+  "lossA": "Her yıl bir parçası yok oluyor.",
+  "lossB": "{y} yılından beri {k} bin km².",
+  "lossBMore": "{y} yılından beri {k} bin km². Yunanistan'dan büyük.",
+  "model": "Bir sonrakini tahmin etmesi için bir model eğittik.",
+  "moreKm": 131957,
+  "next": "İleri",
+  "open": "Kod ve benchmark açık. Daha iyi bir model yapan bizimkinin önüne geçer.",
+  "proof": "Modeli geçmişte sınadık. {y} yılında işaret ettiği her {of} yerden {hit} tanesi ormansızlaştı.",
+  "sources": "Uydu görüntülerinden kesim izinlerine, kamuya açık {n} kaynaktan öğreniyor."
+ },
+ "stepHi": "{c} üstü",
+ "stepLo": "{c} altı",
+ "stepMid": "{a} – {b}",
+ "story": "Hikâye",
+ "tag": {
+  "ti": "TI",
+  "uc": "UC"
+ },
+ "tiny": "0,1'den az",
+ "tipFc": "yaklaşık {exp} km² bekleniyor",
+ "tipPast": "{exp} km² bekleniyordu, {act} ormansızlaştı",
+ "tipRank": "{n} arasında {rank} sırada",
+ "to": "{a} – {b}",
+ "under": "{c} altı",
+ "where": {
+  "degr": "{end} sonuna kadar ormanın en çok bozulabileceği veya kesilebileceği yerler",
+  "mine": "{end} sonuna kadar madenciliğin en çok yayılabileceği yerler"
+ },
+ "whereHere": "{end} sonuna kadar {risk} açısından {n} {many} arasında {rank} sırada",
+ "whole": "Amazon'un tamamı",
+ "why": {
+  "around": "Son üç yılda çevresinde {km} km² ormansızlaştı.",
+  "degr": "Son bir yılda {km} km² orman bozuldu.",
+  "fire": "Son bir yılda {km} km² orman yandı.",
+  "land": {
+   "ti": "Yerli toprağı içinde.",
+   "uc": "Koruma alanı içinde."
+  },
+  "near": "Yakın zamanda ormansızlaşan bir alana yakın.",
+  "permit": "{ha} hektarlık kesim izni var."
+ },
+ "window": "tahmin"
+}

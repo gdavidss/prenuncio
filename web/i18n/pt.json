@@ -1,0 +1,531 @@
+{
+ "about": "Sobre",
+ "aboutText": {
+  "benchmark": "Benchmark",
+  "line1": "Prenúncio mostra onde a Amazônia deve ser desmatada até julho de {year}.",
+  "line2": "Fizemos para quem fiscaliza conseguir chegar antes.",
+  "metric": "A nota é a média de {b0} a {b1}.",
+  "model": "O modelo, {name}, aprendeu com {span} anos de dados públicos. Para cada quadrado de {m} metros de floresta ele dá a chance de desmate no ano seguinte.",
+  "open": "O código, os dados e o benchmark são abertos. Quem fizer um modelo melhor passa na frente do nosso.",
+  "tested": "Testamos em anos que ele nunca viu. Em {y}, de cada {of} lugares que apontou, {hit} foram desmatados."
+ },
+ "about_": "cerca de {x} km²",
+ "act": {
+  "against": "contra {x}",
+  "axis": "km² desmatados por semestre",
+  "band": "Fiscalização",
+  "bandSub": "autos e embargos do IBAMA",
+  "bandSubN": "autos e embargos do IBAMA, {n} municípios",
+  "held": "a mais, com a fiscalização de {ref}",
+  "honest": "É um piso e uma associação, não prova de causa.",
+  "measured": "medido",
+  "none": "A fiscalização não responde por desmate evitado aqui desde {since}",
+  "parts": [
+   "um quarto",
+   "um terço",
+   "metade",
+   "dois terços",
+   "três quartos"
+  ],
+  "ref": "média de {from} a {to}",
+  "say": {
+   "all": "A fiscalização responde por {km} km² de desmate evitado desde {since}",
+   "here": "A fiscalização responde por {km} km² de desmate evitado aqui desde {since}"
+  },
+  "sign": {
+   "collective": "Embargos coletivos",
+   "field": "Embargos em campo",
+   "notices": "Autos por 100 km²",
+   "remote": "Embargos remotos"
+  },
+  "signTitle": {
+   "collective": "Terras indígenas inteiras e outras áreas públicas embargadas de uma vez",
+   "field": "Área embargada em visita a campo",
+   "notices": "Autos de infração por 100 km² de desmatamento",
+   "remote": "Área embargada por satélite, sem visita"
+  },
+  "signs": "Ações do IBAMA, ano até {now} contra o ano até {ref}",
+  "sub": "Cerca de {part} da queda desde então. O resto caiu em toda parte ao mesmo tempo.",
+  "subHere": "{pct}% a mais do que foi desmatado aqui.",
+  "tipHeld": "{held} com a fiscalização mantida",
+  "tipHeldRange": "{held} com a fiscalização mantida, provável de {lo} a {hi}",
+  "tipObs": "{span}, {obs} km² desmatados"
+ },
+ "ahead": "{n} meses",
+ "amazon": "Amazônia",
+ "areaFc": {
+  "every": "Cada célula aqui tem {p} de chance de perder um hectare até julho de {y}",
+  "upto": "Até {p} de chance de uma célula aqui perder um hectare até julho de {y}"
+ },
+ "areaPast": {
+  "everyNo": "Em {y} as células aqui receberam {p}. Não houve desmatamento mapeado.",
+  "everyYes": "Em {y} as células aqui receberam {p}. Houve desmatamento mapeado em {clr} de {n}.",
+  "uptoNo": "Em {y} as células aqui receberam até {p}. Não houve desmatamento mapeado.",
+  "uptoYes": "Em {y} as células aqui receberam até {p}. Houve desmatamento mapeado em {clr} de {n}."
+ },
+ "axisM": {
+  "clear": "km² desmatados por mês",
+  "degr": "km² degradados por mês",
+  "fire": "km² queimados por mês",
+  "mine": "km² de garimpo por mês"
+ },
+ "axisW": {
+  "degr": "km² degradados em 12 meses",
+  "fire": "km² queimados em 12 meses",
+  "mine": "km² de garimpo em 12 meses"
+ },
+ "axisY": "km² desmatados por ano, de agosto a julho",
+ "bars": "Barras",
+ "bench": {
+  "head": [
+   "",
+   "modelo",
+   "nota",
+   "",
+   "de",
+   "data"
+  ],
+  "ref": "sem modelo",
+  "refName": "o ano anterior, por perto",
+  "repo": "GitHub",
+  "submit": "Enviar um modelo"
+ },
+ "burned": {
+  "months": {
+   "all": "{km} km² queimados nos últimos três meses, {prev} um ano antes",
+   "here": "{km} km² queimados aqui nos últimos três meses, {prev} um ano antes"
+  },
+  "years": {
+   "all": "{km} km² queimados nos últimos doze meses, {prev} nos doze anteriores",
+   "here": "{km} km² queimados aqui nos últimos doze meses, {prev} nos doze anteriores"
+  }
+ },
+ "byJuly": "até julho de {y}",
+ "cellFc": "{p} de chance de esta célula perder um hectare até julho de {y}",
+ "cellFire": "Entre os {p}% de floresta onde o fogo mais tende a ocorrer",
+ "cellFireRest": "Fora dos 5% de floresta onde o fogo mais tende a ocorrer",
+ "cellHa": {
+  "clear": "Cerca de {ha} hectares de desmatamento esperados aqui em {n} meses",
+  "degr": "Cerca de {ha} hectares de degradação esperados aqui em {n} meses",
+  "mine": "Cerca de {ha} hectares de garimpo esperados aqui em {n} meses"
+ },
+ "cellHaLow": {
+  "clear": "Menos de 1 hectare de desmatamento esperado aqui em {n} meses",
+  "degr": "Menos de 1 hectare de degradação esperado aqui em {n} meses",
+  "mine": "Menos de 1 hectare de garimpo esperado aqui em {n} meses"
+ },
+ "cellPast": {
+  "no": "Em {y} esta célula recebeu {p}. Não houve desmatamento mapeado nela.",
+  "yes": "Em {y} esta célula recebeu {p}. Houve desmatamento mapeado nela."
+ },
+ "cellPlace": "{mun}, {uf}",
+ "cellPlaceIn": "{mun}, {uf}. {land}",
+ "chance": "chance",
+ "chanceBy": "Chance de cada célula perder um hectare até julho de {y}",
+ "chanceFor": "Chance dada a cada célula para {y}",
+ "chanceOut": "a chance, para cada célula",
+ "close": "Fechar",
+ "closeList": "Fechar a lista",
+ "copied": "Copiado",
+ "copy": "Copiar",
+ "credit": "Imagens: Esri, Maxar, Earthstar Geographics",
+ "csv": "CSV",
+ "enso": [
+  "El Niño",
+  "La Niña",
+  "Pacífico"
+ ],
+ "ensoLevel": [
+  [
+   "muito forte",
+   "forte",
+   "moderado",
+   "fraco"
+  ],
+  [
+   "muito forte",
+   "forte",
+   "moderada",
+   "fraca"
+  ],
+  "neutro"
+ ],
+ "fc": {
+  "all": "Cerca de {km} km² de desmatamento esperados até julho de {y}",
+  "here": "Cerca de {km} km² de desmatamento esperados aqui até julho de {y}"
+ },
+ "fcNone": "Quase nenhum desmatamento esperado aqui até julho de {y}",
+ "front": {
+  "back": "Voltar ao mapa",
+  "chart": "Trazer a linha do tempo à frente",
+  "map": "Trazer o mapa à frente"
+ },
+ "hazard": {
+  "clear": "Desmatamento",
+  "degr": "Degradação",
+  "fire": "Fogo",
+  "mine": "Garimpo"
+ },
+ "higher": "maior",
+ "home": "Voltar ao mapa inteiro",
+ "kinds": {
+  "mun": "Municípios",
+  "ti": "Terras indígenas",
+  "uc": "Unidades de conservação",
+  "uf": "Estados"
+ },
+ "km2": "{x} km²",
+ "land": {
+  "ti": "terra indígena",
+  "uc": "unidade de conservação"
+ },
+ "language": "Idioma",
+ "lastSub": {
+  "degr": {
+   "all": "{km} km² degradados nos últimos doze meses.",
+   "here": "{km} km² degradados aqui nos últimos doze meses."
+  },
+  "mine": {
+   "all": "{km} km² de garimpo nos últimos doze meses.",
+   "here": "{km} km² de garimpo aqui nos últimos doze meses."
+  }
+ },
+ "legend": {
+  "clear": "Risco de desmatamento",
+  "degr": "Risco de degradação",
+  "fire": "Onde o fogo costuma ocorrer",
+  "mine": "Risco de garimpo"
+ },
+ "legendNext": {
+  "clear": "Risco de desmatamento, próximos {n} meses",
+  "degr": "Risco de degradação, próximos {n} meses",
+  "mine": "Risco de garimpo, próximos {n} meses"
+ },
+ "less": "menos km²",
+ "level": [
+  "Calmo",
+  "Atenção",
+  "Alerta",
+  "Alarme"
+ ],
+ "like": [
+  {
+   "km": 26,
+   "same": "Do tamanho de Fernando de Noronha.",
+   "x2": "Duas vezes Fernando de Noronha.",
+   "x3": "Três vezes Fernando de Noronha.",
+   "x4": "Quatro vezes Fernando de Noronha.",
+   "x5": "Cinco vezes Fernando de Noronha.",
+   "x10": "Dez vezes Fernando de Noronha.",
+   "half": "Metade de Fernando de Noronha.",
+   "third": "Um terço de Fernando de Noronha."
+  },
+  {
+   "km": 59,
+   "same": "Do tamanho de Manhattan.",
+   "x2": "Duas vezes Manhattan.",
+   "x3": "Três vezes Manhattan.",
+   "x4": "Quatro vezes Manhattan.",
+   "x5": "Cinco vezes Manhattan.",
+   "x10": "Dez vezes Manhattan.",
+   "half": "Metade de Manhattan.",
+   "third": "Um terço de Manhattan."
+  },
+  {
+   "km": 218,
+   "same": "Do tamanho do Recife.",
+   "x2": "Duas vezes o Recife.",
+   "x3": "Três vezes o Recife.",
+   "x4": "Quatro vezes o Recife.",
+   "x5": "Cinco vezes o Recife.",
+   "x10": "Dez vezes o Recife.",
+   "half": "Metade do Recife.",
+   "third": "Um terço do Recife."
+  },
+  {
+   "km": 331,
+   "same": "Do tamanho de Belo Horizonte.",
+   "x2": "Duas vezes Belo Horizonte.",
+   "x3": "Três vezes Belo Horizonte.",
+   "x4": "Quatro vezes Belo Horizonte.",
+   "x5": "Cinco vezes Belo Horizonte.",
+   "x10": "Dez vezes Belo Horizonte.",
+   "half": "Metade de Belo Horizonte.",
+   "third": "Um terço de Belo Horizonte."
+  },
+  {
+   "km": 675,
+   "same": "Do tamanho de Florianópolis.",
+   "x2": "Duas vezes Florianópolis.",
+   "x3": "Três vezes Florianópolis.",
+   "x4": "Quatro vezes Florianópolis.",
+   "x5": "Cinco vezes Florianópolis.",
+   "x10": "Dez vezes Florianópolis.",
+   "half": "Metade de Florianópolis.",
+   "third": "Um terço de Florianópolis."
+  },
+  {
+   "km": 1200,
+   "same": "Do tamanho da cidade do Rio de Janeiro.",
+   "x2": "Duas vezes a cidade do Rio de Janeiro.",
+   "x3": "Três vezes a cidade do Rio de Janeiro.",
+   "x4": "Quatro vezes a cidade do Rio de Janeiro.",
+   "x5": "Cinco vezes a cidade do Rio de Janeiro.",
+   "x10": "Dez vezes a cidade do Rio de Janeiro.",
+   "half": "Metade da cidade do Rio de Janeiro.",
+   "third": "Um terço da cidade do Rio de Janeiro."
+  },
+  {
+   "km": 1521,
+   "same": "Do tamanho da cidade de São Paulo.",
+   "x2": "Duas vezes a cidade de São Paulo.",
+   "x3": "Três vezes a cidade de São Paulo.",
+   "x4": "Quatro vezes a cidade de São Paulo.",
+   "x5": "Cinco vezes a cidade de São Paulo.",
+   "x10": "Dez vezes a cidade de São Paulo.",
+   "half": "Metade da cidade de São Paulo.",
+   "third": "Um terço da cidade de São Paulo."
+  },
+  {
+   "km": 2586,
+   "same": "Do tamanho de Luxemburgo.",
+   "x2": "Duas vezes Luxemburgo.",
+   "x3": "Três vezes Luxemburgo.",
+   "x4": "Quatro vezes Luxemburgo.",
+   "x5": "Cinco vezes Luxemburgo.",
+   "x10": "Dez vezes Luxemburgo.",
+   "half": "Metade de Luxemburgo.",
+   "third": "Um terço de Luxemburgo."
+  },
+  {
+   "km": 5761,
+   "same": "Do tamanho do Distrito Federal.",
+   "x2": "Duas vezes o Distrito Federal.",
+   "x3": "Três vezes o Distrito Federal.",
+   "x4": "Quatro vezes o Distrito Federal.",
+   "x5": "Cinco vezes o Distrito Federal.",
+   "x10": "Dez vezes o Distrito Federal.",
+   "half": "Metade do Distrito Federal.",
+   "third": "Um terço do Distrito Federal."
+  },
+  {
+   "km": 10452,
+   "same": "Do tamanho do Líbano.",
+   "x2": "Duas vezes o Líbano.",
+   "x3": "Três vezes o Líbano.",
+   "x4": "Quatro vezes o Líbano.",
+   "x5": "Cinco vezes o Líbano.",
+   "x10": "Dez vezes o Líbano.",
+   "half": "Metade do Líbano.",
+   "third": "Um terço do Líbano."
+  },
+  {
+   "km": 21938,
+   "same": "Do tamanho de Sergipe.",
+   "x2": "Duas vezes Sergipe.",
+   "x3": "Três vezes Sergipe.",
+   "x4": "Quatro vezes Sergipe.",
+   "x5": "Cinco vezes Sergipe.",
+   "x10": "Dez vezes Sergipe.",
+   "half": "Metade de Sergipe.",
+   "third": "Um terço de Sergipe."
+  },
+  {
+   "km": 30528,
+   "same": "Do tamanho da Bélgica.",
+   "x2": "Duas vezes a Bélgica.",
+   "x3": "Três vezes a Bélgica.",
+   "x4": "Quatro vezes a Bélgica.",
+   "x5": "Cinco vezes a Bélgica.",
+   "x10": "Dez vezes a Bélgica.",
+   "half": "Metade da Bélgica.",
+   "third": "Um terço da Bélgica."
+  },
+  {
+   "km": 41285,
+   "same": "Do tamanho da Suíça.",
+   "x2": "Duas vezes a Suíça.",
+   "x3": "Três vezes a Suíça.",
+   "x4": "Quatro vezes a Suíça.",
+   "x5": "Cinco vezes a Suíça.",
+   "x10": "Dez vezes a Suíça.",
+   "half": "Metade da Suíça.",
+   "third": "Um terço da Suíça."
+  },
+  {
+   "km": 130279,
+   "same": "Do tamanho da Inglaterra.",
+   "x2": "Duas vezes a Inglaterra.",
+   "x3": "Três vezes a Inglaterra.",
+   "x4": "Quatro vezes a Inglaterra.",
+   "x5": "Cinco vezes a Inglaterra.",
+   "x10": "Dez vezes a Inglaterra.",
+   "half": "Metade da Inglaterra.",
+   "third": "Um terço da Inglaterra."
+  }
+ ],
+ "line": "Linha",
+ "lower": "menor",
+ "made": "feita em {date}",
+ "many": {
+  "mun": "municípios",
+  "ti": "terras indígenas",
+  "uc": "unidades de conservação",
+  "uf": "estados"
+ },
+ "mapped": "desmatamento mapeado",
+ "menu": "Menu",
+ "mfc": {
+  "clear": {
+   "all": "Cerca de {km} km² devem ser desmatados nos próximos {h} meses",
+   "here": "Cerca de {km} km² devem ser desmatados aqui nos próximos {h} meses"
+  },
+  "degr": {
+   "all": "Cerca de {km} km² devem ser degradados nos próximos {h} meses",
+   "here": "Cerca de {km} km² devem ser degradados aqui nos próximos {h} meses"
+  },
+  "mine": {
+   "all": "Cerca de {km} km² de garimpo devem surgir nos próximos {h} meses",
+   "here": "Cerca de {km} km² de garimpo devem surgir aqui nos próximos {h} meses"
+  }
+ },
+ "mobs": {
+  "clear": {
+   "all": "{km} km² desmatados nos últimos três meses",
+   "here": "{km} km² desmatados aqui nos últimos três meses"
+  },
+  "degr": {
+   "all": "{km} km² degradados nos últimos três meses",
+   "here": "{km} km² degradados aqui nos últimos três meses"
+  },
+  "fire": {
+   "all": "{km} km² queimados nos últimos três meses",
+   "here": "{km} km² queimados aqui nos últimos três meses"
+  },
+  "mine": {
+   "all": "{km} km² de garimpo nos últimos três meses",
+   "here": "{km} km² de garimpo aqui nos últimos três meses"
+  }
+ },
+ "modes": {
+  "cells": "Células",
+  "prio": "Prioridades",
+  "sectors": "Setores"
+ },
+ "more": "mais km²",
+ "next": "próximos {n} meses",
+ "nextYear": "Ano seguinte",
+ "now": "agora",
+ "numSources": [
+  "zero",
+  "uma",
+  "duas",
+  "três",
+  "quatro",
+  "cinco",
+  "seis",
+  "sete",
+  "oito",
+  "nove",
+  "dez",
+  "onze",
+  "doze"
+ ],
+ "onlyFrom": "Escolha um degrau para mostrar só as células com essa chance ou mais",
+ "pShareMin": "<b>{n}</b> células com {cut} ou mais, com {share}% da perda esperada",
+ "pSharePastMin": "<b>{n}</b> células com {cut} ou mais, com {share}% das células com desmatamento mapeado",
+ "partial": " Só cenas prioritárias, por enquanto.",
+ "past": "Em {y}, {act} km² desmatados",
+ "pastHere": "Em {y}, {act} km² desmatados aqui",
+ "pastHereNone": "Em {y}, nenhum desmatamento mapeado aqui",
+ "pastP": "Em {y}, esperava-se que {exp} células perdessem um hectare e {act} perderam",
+ "people": {
+  "credit": "Foto: {author}, {license}",
+  "also": "Também nesta terra"
+ },
+ "prevYear": "Ano anterior",
+ "range": "provável de {lo} a {hi}",
+ "rank": {
+  "other": "{n}º"
+ },
+ "rankSay": "{kind} por {what}",
+ "rankWhat": {
+  "fc": "desmatamento esperado até julho de {y}",
+  "fire": "fatia de onde o fogo costuma ocorrer",
+  "past": "desmatamento esperado para {y}",
+  "risk": "fatia do mapa de risco"
+ },
+ "ranking": "Ranking",
+ "replay": "Previsão passada",
+ "risk": {
+  "degr": "degradação",
+  "mine": "garimpo"
+ },
+ "scale": {
+  "actions": "Ações",
+  "months": "Meses",
+  "years": "Anos"
+ },
+ "sign": {
+  "autos": "Autos IBAMA",
+  "clear": "Desmate",
+  "degr": "Degradação",
+  "mine": "Garimpo",
+  "scar": "Queimadas"
+ },
+ "signTitle": "{now} nos últimos três meses, {prev} um ano antes",
+ "signs": "Sinais, três meses contra o ano passado",
+ "skip": "Pular",
+ "st": {
+  "ahead": {
+   "flat": "O modelo espera mais {km} km² de desmate até {month}.",
+   "rise": "Nos últimos três meses o desmate subiu {pct}%, e o modelo espera mais {km} km² até {month}."
+  },
+  "back": "Voltar",
+  "done": "Pronto",
+  "first": "Para quem fiscaliza, estes {n} lugares vêm primeiro.",
+  "forestA": "Isto é a Amazônia.",
+  "forestB": "{cells} milhões de quadrados de floresta, {m} metros cada.",
+  "lossA": "Todo ano uma parte cai.",
+  "lossB": "Desde {y}, {k} mil km².",
+  "lossBMore": "Desde {y}, {k} mil km². Mais que a Inglaterra.",
+  "model": "Treinamos um modelo para prever a próxima.",
+  "moreKm": 130279,
+  "next": "Seguir",
+  "open": "O código e o benchmark são abertos. Quem fizer um modelo melhor passa na frente do nosso.",
+  "proof": "Testamos no passado. Em {y}, de cada {of} lugares que ele apontou, {hit} foram desmatados.",
+  "sources": "Ele aprende com {n} fontes públicas, de imagem de satélite a licença de desmate."
+ },
+ "stepHi": "acima de {c}",
+ "stepLo": "abaixo de {c}",
+ "stepMid": "{a} a {b}",
+ "story": "História",
+ "tag": {
+  "ti": "TI",
+  "uc": "UC"
+ },
+ "tiny": "menos de 0,1",
+ "tipFc": "cerca de {exp} km² esperados",
+ "tipPast": "{exp} km² esperados, {act} desmatados",
+ "tipRank": "{rank} entre {n}",
+ "to": "{a} a {b}",
+ "under": "menos de {c}",
+ "where": {
+  "degr": "Onde a floresta tem mais chance de ser degradada até {end}",
+  "mine": "Onde o garimpo tem mais chance de avançar até {end}"
+ },
+ "whereHere": "{rank} entre {n} {many} em risco de {risk} até {end}",
+ "whole": "Amazônia inteira",
+ "why": {
+  "around": "{km} km² desmatados em volta nos últimos três anos.",
+  "degr": "{km} km² de floresta degradada no último ano.",
+  "fire": "{km} km² de floresta queimada no último ano.",
+  "land": {
+   "ti": "Fica em terra indígena.",
+   "uc": "Fica em unidade de conservação."
+  },
+  "near": "Fica perto de desmate recente.",
+  "permit": "Tem licença para desmatar {ha} hectares."
+ },
+ "window": "previsão"
+}

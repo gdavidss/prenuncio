@@ -1,0 +1,498 @@
+{
+ "about": "Tentang",
+ "aboutText": {
+  "benchmark": "Benchmark",
+  "line1": "Prenúncio menunjukkan bagian Amazon yang kemungkinan besar dibuka sampai Juli {year}.",
+  "line2": "Kami membuatnya agar para penegak hukum bisa tiba lebih dulu.",
+  "metric": "Skor adalah rata-rata {b0} sampai {b1}.",
+  "model": "Model ini, {name}, belajar dari {span} tahun data publik. Untuk setiap petak hutan bersisi {m} meter, model memberikan peluang deforestasi pada tahun berikutnya.",
+  "open": "Kode, data, dan benchmark terbuka. Buat model yang lebih baik, dan model itu naik di atas model kami.",
+  "tested": "Kami mengujinya pada tahun-tahun yang belum pernah dilihatnya. Pada {y}, {hit} dari setiap {of} tempat yang ditunjuknya benar-benar dibuka."
+ },
+ "about_": "sekitar {x} km²",
+ "act": {
+  "against": "dibanding {x}",
+  "axis": "km² hutan dibuka per enam bulan",
+  "band": "Penegakan hukum",
+  "bandSub": "Surat pelanggaran dan embargo IBAMA",
+  "bandSubN": "Surat pelanggaran dan embargo IBAMA, {n} kotamadya",
+  "held": "tambahan, jika penegakan hukum setara {ref}",
+  "honest": "Ini batas bawah dan sebuah keterkaitan, bukan bukti sebab-akibat.",
+  "measured": "terukur",
+  "none": "Sejak {since}, penegakan hukum tidak mencegah deforestasi di sini",
+  "parts": [
+   "seperempat",
+   "sepertiga",
+   "setengah",
+   "dua pertiga",
+   "tiga perempat"
+  ],
+  "ref": "rata-rata {from} sampai {to}",
+  "say": {
+   "all": "{km} km² deforestasi tercegah terkait penegakan hukum sejak {since}",
+   "here": "{km} km² deforestasi tercegah di sini terkait penegakan hukum sejak {since}"
+  },
+  "sign": {
+   "collective": "Embargo kolektif",
+   "field": "Embargo lapangan",
+   "notices": "Surat per 100 km²",
+   "remote": "Embargo jarak jauh"
+  },
+  "signTitle": {
+   "collective": "Seluruh tanah adat dan kawasan publik lain yang diembargo sekaligus",
+   "field": "Luas yang diembargo dalam kunjungan lapangan",
+   "notices": "Surat pelanggaran per 100 km² deforestasi",
+   "remote": "Luas yang diembargo lewat satelit, tanpa kunjungan"
+  },
+  "signs": "Tindakan IBAMA, setahun sampai {now} dibanding setahun sampai {ref}",
+  "sub": "Sekitar {part} dari penurunan sejak saat itu. Sisanya turun serentak di semua tempat.",
+  "subHere": "{pct}% di atas luas yang dibuka di sini.",
+  "tipHeld": "{held} jika penegakan hukum tetap",
+  "tipHeldRange": "{held} jika penegakan hukum tetap, kemungkinan {lo} sampai {hi}",
+  "tipObs": "{span}, {obs} km² dibuka"
+ },
+ "ahead": "{n} bulan",
+ "amazon": "Amazon",
+ "areaFc": {
+  "every": "Setiap sel di sini berpeluang {p} kehilangan satu hektare sampai Juli {y}",
+  "upto": "Sel di sini berpeluang hingga {p} kehilangan satu hektare sampai Juli {y}"
+ },
+ "areaPast": {
+  "everyNo": "Pada {y} sel-sel di sini diberi peluang {p}. Tidak ada deforestasi yang terpetakan.",
+  "everyYes": "Pada {y} sel-sel di sini diberi peluang {p}. Deforestasi terpetakan di {clr} dari {n} sel.",
+  "uptoNo": "Pada {y} sel-sel di sini diberi peluang hingga {p}. Tidak ada deforestasi yang terpetakan.",
+  "uptoYes": "Pada {y} sel-sel di sini diberi peluang hingga {p}. Deforestasi terpetakan di {clr} dari {n} sel."
+ },
+ "axisM": {
+  "clear": "km² hutan dibuka per bulan",
+  "degr": "km² terdegradasi per bulan",
+  "fire": "km² terbakar per bulan",
+  "mine": "km² ditambang per bulan"
+ },
+ "axisW": {
+  "degr": "km² terdegradasi per 12 bulan",
+  "fire": "km² terbakar per 12 bulan",
+  "mine": "km² ditambang per 12 bulan"
+ },
+ "axisY": "km² hutan dibuka per tahun, Agustus sampai Juli",
+ "bars": "Batang",
+ "bench": {
+  "head": [
+   "",
+   "model",
+   "skor",
+   "",
+   "oleh",
+   "tanggal"
+  ],
+  "ref": "tanpa model",
+  "refName": "tahun lalu di sekitarnya",
+  "repo": "GitHub",
+  "submit": "Kirim model"
+ },
+ "burned": {
+  "months": {
+   "all": "{km} km² terbakar dalam tiga bulan terakhir, {prev} setahun sebelumnya",
+   "here": "{km} km² terbakar di sini dalam tiga bulan terakhir, {prev} setahun sebelumnya"
+  },
+  "years": {
+   "all": "{km} km² terbakar dalam 12 bulan terakhir, {prev} pada 12 bulan sebelumnya",
+   "here": "{km} km² terbakar di sini dalam 12 bulan terakhir, {prev} pada 12 bulan sebelumnya"
+  }
+ },
+ "byJuly": "sampai Juli {y}",
+ "cellFc": "Peluang {p} sel ini kehilangan satu hektare sampai Juli {y}",
+ "cellFire": "Termasuk {p}% hutan yang paling rawan terbakar",
+ "cellFireRest": "Di luar 5% hutan yang paling rawan terbakar",
+ "cellHa": {
+  "clear": "Sekitar {ha} hektare deforestasi diperkirakan di sini dalam {n} bulan",
+  "degr": "Sekitar {ha} hektare degradasi diperkirakan di sini dalam {n} bulan",
+  "mine": "Sekitar {ha} hektare penambangan diperkirakan di sini dalam {n} bulan"
+ },
+ "cellHaLow": {
+  "clear": "Kurang dari 1 hektare deforestasi diperkirakan di sini dalam {n} bulan",
+  "degr": "Kurang dari 1 hektare degradasi diperkirakan di sini dalam {n} bulan",
+  "mine": "Kurang dari 1 hektare penambangan diperkirakan di sini dalam {n} bulan"
+ },
+ "cellPast": {
+  "no": "Pada {y} sel ini diberi peluang {p}. Tidak ada deforestasi yang terpetakan di dalamnya.",
+  "yes": "Pada {y} sel ini diberi peluang {p}. Deforestasi terpetakan di dalamnya."
+ },
+ "cellPlace": "{mun}, {uf}",
+ "cellPlaceIn": "{mun}, {uf}. {land}",
+ "chance": "peluang",
+ "chanceBy": "Peluang tiap sel kehilangan satu hektare sampai Juli {y}",
+ "chanceFor": "Peluang yang diberikan kepada tiap sel untuk {y}",
+ "chanceOut": "peluang, untuk setiap sel",
+ "close": "Tutup",
+ "closeList": "Tutup daftar",
+ "copied": "Tersalin",
+ "copy": "Salin",
+ "credit": "Citra: Esri, Maxar, Earthstar Geographics",
+ "csv": "CSV",
+ "enso": [
+  "El Niño",
+  "La Niña",
+  "Pasifik"
+ ],
+ "ensoLevel": [
+  [
+   "sangat kuat",
+   "kuat",
+   "sedang",
+   "lemah"
+  ],
+  [
+   "sangat kuat",
+   "kuat",
+   "sedang",
+   "lemah"
+  ],
+  "netral"
+ ],
+ "fc": {
+  "all": "Sekitar {km} km² deforestasi diperkirakan sampai Juli {y}",
+  "here": "Sekitar {km} km² deforestasi diperkirakan di sini sampai Juli {y}"
+ },
+ "fcNone": "Hampir tidak ada deforestasi yang diperkirakan di sini sampai Juli {y}",
+ "front": {
+  "back": "Kembali ke peta",
+  "chart": "Bawa lini masa ke depan",
+  "map": "Bawa peta ke depan"
+ },
+ "hazard": {
+  "clear": "Deforestasi",
+  "degr": "Degradasi",
+  "fire": "Kebakaran",
+  "mine": "Tambang"
+ },
+ "higher": "lebih tinggi",
+ "home": "Kembali ke seluruh peta",
+ "kinds": {
+  "mun": "Kotamadya",
+  "ti": "Tanah adat",
+  "uc": "Kawasan konservasi",
+  "uf": "Negara bagian"
+ },
+ "km2": "{x} km²",
+ "land": {
+  "ti": "tanah adat",
+  "uc": "kawasan konservasi"
+ },
+ "language": "Bahasa",
+ "lastSub": {
+  "degr": {
+   "all": "{km} km² terdegradasi atau ditebang dalam 12 bulan terakhir.",
+   "here": "{km} km² terdegradasi atau ditebang di sini dalam 12 bulan terakhir."
+  },
+  "mine": {
+   "all": "{km} km² ditambang dalam 12 bulan terakhir.",
+   "here": "{km} km² ditambang di sini dalam 12 bulan terakhir."
+  }
+ },
+ "legend": {
+  "clear": "Risiko deforestasi",
+  "degr": "Risiko degradasi",
+  "fire": "Tempat kebakaran biasa terjadi",
+  "mine": "Risiko tambang"
+ },
+ "legendNext": {
+  "clear": "Risiko deforestasi, {n} bulan ke depan",
+  "degr": "Risiko degradasi, {n} bulan ke depan",
+  "mine": "Risiko tambang, {n} bulan ke depan"
+ },
+ "less": "km² lebih sedikit",
+ "level": [
+  "Tenang",
+  "Waspada",
+  "Siaga",
+  "Awas"
+ ],
+ "like": [
+  {
+   "km": 32.5,
+   "same": "Seluas Kota Yogyakarta.",
+   "x2": "Dua kali luas Kota Yogyakarta.",
+   "x3": "Tiga kali luas Kota Yogyakarta.",
+   "x4": "Empat kali luas Kota Yogyakarta.",
+   "x5": "Lima kali luas Kota Yogyakarta.",
+   "x10": "Sepuluh kali luas Kota Yogyakarta.",
+   "half": "Setengah luas Kota Yogyakarta.",
+   "third": "Sepertiga luas Kota Yogyakarta."
+  },
+  {
+   "km": 118.5,
+   "same": "Seluas Kota Bogor.",
+   "x2": "Dua kali luas Kota Bogor.",
+   "x3": "Tiga kali luas Kota Bogor.",
+   "x4": "Empat kali luas Kota Bogor.",
+   "x5": "Lima kali luas Kota Bogor.",
+   "x10": "Sepuluh kali luas Kota Bogor.",
+   "half": "Setengah luas Kota Bogor.",
+   "third": "Sepertiga luas Kota Bogor."
+  },
+  {
+   "km": 167,
+   "same": "Seluas Kota Bandung.",
+   "x2": "Dua kali luas Kota Bandung.",
+   "x3": "Tiga kali luas Kota Bandung.",
+   "x4": "Empat kali luas Kota Bandung.",
+   "x5": "Lima kali luas Kota Bandung.",
+   "x10": "Sepuluh kali luas Kota Bandung.",
+   "half": "Setengah luas Kota Bandung.",
+   "third": "Sepertiga luas Kota Bandung."
+  },
+  {
+   "km": 374,
+   "same": "Seluas Kota Semarang.",
+   "x2": "Dua kali luas Kota Semarang.",
+   "x3": "Tiga kali luas Kota Semarang.",
+   "x4": "Empat kali luas Kota Semarang.",
+   "x5": "Lima kali luas Kota Semarang.",
+   "x10": "Sepuluh kali luas Kota Semarang.",
+   "half": "Setengah luas Kota Semarang.",
+   "third": "Sepertiga luas Kota Semarang."
+  },
+  {
+   "km": 662,
+   "same": "Seluas Jakarta.",
+   "x2": "Dua kali luas Jakarta.",
+   "x3": "Tiga kali luas Jakarta.",
+   "x4": "Empat kali luas Jakarta.",
+   "x5": "Lima kali luas Jakarta.",
+   "x10": "Sepuluh kali luas Jakarta.",
+   "half": "Setengah luas Jakarta.",
+   "third": "Sepertiga luas Jakarta."
+  },
+  {
+   "km": 3186,
+   "same": "Seluas Daerah Istimewa Yogyakarta.",
+   "x2": "Dua kali luas Daerah Istimewa Yogyakarta.",
+   "x3": "Tiga kali luas Daerah Istimewa Yogyakarta.",
+   "x4": "Empat kali luas Daerah Istimewa Yogyakarta.",
+   "x5": "Lima kali luas Daerah Istimewa Yogyakarta.",
+   "x10": "Sepuluh kali luas Daerah Istimewa Yogyakarta.",
+   "half": "Setengah luas Daerah Istimewa Yogyakarta.",
+   "third": "Sepertiga luas Daerah Istimewa Yogyakarta."
+  },
+  {
+   "km": 5780,
+   "same": "Seluas Bali.",
+   "x2": "Dua kali luas Bali.",
+   "x3": "Tiga kali luas Bali.",
+   "x4": "Empat kali luas Bali.",
+   "x5": "Lima kali luas Bali.",
+   "x10": "Sepuluh kali luas Bali.",
+   "half": "Setengah luas Bali.",
+   "third": "Sepertiga luas Bali."
+  },
+  {
+   "km": 9663,
+   "same": "Seluas Banten.",
+   "x2": "Dua kali luas Banten.",
+   "x3": "Tiga kali luas Banten.",
+   "x4": "Empat kali luas Banten.",
+   "x5": "Lima kali luas Banten.",
+   "x10": "Sepuluh kali luas Banten.",
+   "half": "Setengah luas Banten.",
+   "third": "Sepertiga luas Banten."
+  },
+  {
+   "km": 32801,
+   "same": "Seluas Jawa Tengah.",
+   "x2": "Dua kali luas Jawa Tengah.",
+   "x3": "Tiga kali luas Jawa Tengah.",
+   "x4": "Empat kali luas Jawa Tengah.",
+   "x5": "Lima kali luas Jawa Tengah.",
+   "x10": "Sepuluh kali luas Jawa Tengah.",
+   "half": "Setengah luas Jawa Tengah.",
+   "third": "Sepertiga luas Jawa Tengah."
+  },
+  {
+   "km": 72981,
+   "same": "Seluas Sumatera Utara.",
+   "x2": "Dua kali luas Sumatera Utara.",
+   "x3": "Tiga kali luas Sumatera Utara.",
+   "x4": "Empat kali luas Sumatera Utara.",
+   "x5": "Lima kali luas Sumatera Utara.",
+   "x10": "Sepuluh kali luas Sumatera Utara.",
+   "half": "Setengah luas Sumatera Utara.",
+   "third": "Sepertiga luas Sumatera Utara."
+  },
+  {
+   "km": 128297,
+   "same": "Seluas Pulau Jawa.",
+   "x2": "Dua kali luas Pulau Jawa.",
+   "x3": "Tiga kali luas Pulau Jawa.",
+   "x4": "Empat kali luas Pulau Jawa.",
+   "x5": "Lima kali luas Pulau Jawa.",
+   "x10": "Sepuluh kali luas Pulau Jawa.",
+   "half": "Setengah luas Pulau Jawa.",
+   "third": "Sepertiga luas Pulau Jawa."
+  }
+ ],
+ "line": "Garis",
+ "lower": "lebih rendah",
+ "made": "dibuat pada {date}",
+ "many": {
+  "mun": "kotamadya",
+  "ti": "tanah adat",
+  "uc": "kawasan konservasi",
+  "uf": "negara bagian"
+ },
+ "mapped": "deforestasi terpetakan",
+ "menu": "Menu",
+ "mfc": {
+  "clear": {
+   "all": "Sekitar {km} km² hutan diperkirakan dibuka dalam {h} bulan ke depan",
+   "here": "Sekitar {km} km² hutan diperkirakan dibuka di sini dalam {h} bulan ke depan"
+  },
+  "degr": {
+   "all": "Sekitar {km} km² diperkirakan terdegradasi dalam {h} bulan ke depan",
+   "here": "Sekitar {km} km² diperkirakan terdegradasi di sini dalam {h} bulan ke depan"
+  },
+  "mine": {
+   "all": "Sekitar {km} km² tambang diperkirakan muncul dalam {h} bulan ke depan",
+   "here": "Sekitar {km} km² tambang diperkirakan muncul di sini dalam {h} bulan ke depan"
+  }
+ },
+ "mobs": {
+  "clear": {
+   "all": "{km} km² hutan dibuka dalam tiga bulan terakhir",
+   "here": "{km} km² hutan dibuka di sini dalam tiga bulan terakhir"
+  },
+  "degr": {
+   "all": "{km} km² terdegradasi dalam tiga bulan terakhir",
+   "here": "{km} km² terdegradasi di sini dalam tiga bulan terakhir"
+  },
+  "fire": {
+   "all": "{km} km² terbakar dalam tiga bulan terakhir",
+   "here": "{km} km² terbakar di sini dalam tiga bulan terakhir"
+  },
+  "mine": {
+   "all": "{km} km² ditambang dalam tiga bulan terakhir",
+   "here": "{km} km² ditambang di sini dalam tiga bulan terakhir"
+  }
+ },
+ "modes": {
+  "cells": "Sel",
+  "prio": "Prioritas",
+  "sectors": "Wilayah"
+ },
+ "more": "km² lebih banyak",
+ "next": "{n} bulan ke depan",
+ "nextYear": "Tahun berikutnya",
+ "now": "kini",
+ "numSources": [
+  "nol",
+  "satu",
+  "dua",
+  "tiga",
+  "empat",
+  "lima",
+  "enam",
+  "tujuh",
+  "delapan",
+  "sembilan",
+  "sepuluh",
+  "sebelas",
+  "dua belas"
+ ],
+ "onlyFrom": "Pilih satu jenjang untuk menampilkan hanya sel dengan peluang itu atau lebih",
+ "pShareMin": "<b>{n}</b> sel dengan peluang {cut} atau lebih, memuat {share}% kehilangan yang diperkirakan",
+ "pSharePastMin": "<b>{n}</b> sel dengan peluang {cut} atau lebih, memuat {share}% sel yang deforestasinya terpetakan",
+ "partial": " Sejauh ini hanya citra prioritas.",
+ "past": "Pada {y}, {act} km² hutan dibuka",
+ "pastHere": "Pada {y}, {act} km² hutan dibuka di sini",
+ "pastHereNone": "Pada {y} tidak ada deforestasi yang terpetakan di sini",
+ "pastP": "Pada {y}, diperkirakan {exp} sel kehilangan satu hektare, nyatanya {act}",
+ "people": {
+  "credit": "Foto: {author}, {license}",
+  "also": "Juga di tanah ini"
+ },
+ "prevYear": "Tahun sebelumnya",
+ "range": "kemungkinan {lo} sampai {hi}",
+ "rank": {
+  "other": "ke-{n}"
+ },
+ "rankSay": "{kind} menurut {what}",
+ "rankWhat": {
+  "fc": "deforestasi yang diperkirakan sampai Juli {y}",
+  "fire": "porsi tempat kebakaran biasa terjadi",
+  "past": "deforestasi yang diperkirakan untuk {y}",
+  "risk": "porsi peta risiko"
+ },
+ "ranking": "Peringkat",
+ "replay": "Prakiraan lampau",
+ "risk": {
+  "degr": "risiko degradasi",
+  "mine": "risiko tambang"
+ },
+ "scale": {
+  "actions": "Tindakan",
+  "months": "Bulan",
+  "years": "Tahun"
+ },
+ "sign": {
+  "autos": "Denda IBAMA",
+  "clear": "Deforestasi",
+  "degr": "Degradasi",
+  "mine": "Tambang",
+  "scar": "Kebakaran"
+ },
+ "signTitle": "{now} dalam tiga bulan terakhir, {prev} setahun sebelumnya",
+ "signs": "Sinyal, tiga bulan dibanding tahun lalu",
+ "skip": "Lewati",
+ "st": {
+  "ahead": {
+   "flat": "Model memperkirakan {km} km² lagi dibuka sampai {month}.",
+   "rise": "Tiga bulan terakhir deforestasi naik {pct}%. Model memperkirakan {km} km² lagi sampai {month}."
+  },
+  "back": "Kembali",
+  "done": "Selesai",
+  "first": "Bagi para penegak hukum, {n} tempat ini didahulukan.",
+  "forestA": "Inilah Amazon.",
+  "forestB": "{cells} juta petak hutan, masing-masing {m} meter.",
+  "lossA": "Setiap tahun sebagian darinya tumbang.",
+  "lossB": "Sejak {y}, {k} ribu km².",
+  "lossBMore": "Sejak {y}, {k} ribu km². Lebih luas dari Pulau Jawa.",
+  "model": "Kami melatih sebuah model untuk memprakirakan bagian berikutnya.",
+  "moreKm": 128297,
+  "next": "Lanjut",
+  "open": "Kode dan benchmark terbuka. Buat model yang lebih baik, dan model itu naik di atas model kami.",
+  "proof": "Kami mengujinya pada masa lalu. Pada {y}, {hit} dari tiap {of} tempat yang ditunjuknya dibuka.",
+  "sources": "Model belajar dari {n} sumber publik, dari citra satelit sampai izin pembukaan hutan."
+ },
+ "stepHi": "di atas {c}",
+ "stepLo": "di bawah {c}",
+ "stepMid": "{a} sampai {b}",
+ "story": "Cerita",
+ "tag": {
+  "ti": "TI",
+  "uc": "UC"
+ },
+ "tiny": "di bawah 0,1",
+ "tipFc": "sekitar {exp} km² diperkirakan",
+ "tipPast": "{exp} km² diperkirakan, {act} dibuka",
+ "tipRank": "{rank} dari {n}",
+ "to": "{a} sampai {b}",
+ "under": "di bawah {c}",
+ "where": {
+  "degr": "Tempat hutan paling mungkin terdegradasi atau ditebang sampai {end}",
+  "mine": "Tempat tambang paling mungkin meluas sampai {end}"
+ },
+ "whereHere": "Peringkat {rank} dari {n} {many} untuk {risk} sampai {end}",
+ "whole": "Seluruh Amazon",
+ "why": {
+  "around": "{km} km² hutan dibuka di sekitarnya dalam tiga tahun terakhir.",
+  "degr": "{km} km² hutan terdegradasi dalam setahun terakhir.",
+  "fire": "{km} km² hutan terbakar dalam setahun terakhir.",
+  "land": {
+   "ti": "Berada di dalam tanah adat.",
+   "uc": "Berada di dalam kawasan konservasi."
+  },
+  "near": "Dekat dengan deforestasi yang baru terjadi.",
+  "permit": "Memiliki izin membuka {ha} hektare."
+ },
+ "window": "prakiraan"
+}

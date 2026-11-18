@@ -1,0 +1,532 @@
+{
+ "about": "Info",
+ "aboutText": {
+  "benchmark": "Benchmark",
+  "line1": "Prenúncio zeigt, wo in Amazonien bis Juli {year} wahrscheinlich gerodet wird.",
+  "line2": "Wir haben es gebaut, damit alle, die das Recht durchsetzen, früher dort sind.",
+  "metric": "Der Score ist der Mittelwert von {b0} bis {b1}.",
+  "model": "Das Modell, {name}, hat aus {span} Jahren öffentlicher Daten gelernt. Für jedes Waldquadrat von {m} Metern gibt es die Wahrscheinlichkeit einer Rodung im Folgejahr an.",
+  "open": "Code, Daten und Benchmark sind offen. Wer ein besseres Modell baut, steht vor unserem.",
+  "tested": "Wir haben es an Jahren getestet, die es nie gesehen hatte. {y} wurden von {of} Orten, auf die es zeigte, {hit} gerodet."
+ },
+ "about_": "etwa {x} km²",
+ "act": {
+  "against": "gegenüber {x}",
+  "axis": "km² gerodet pro Halbjahr",
+  "band": "Kontrollen",
+  "bandSub": "Bescheide und Embargos des IBAMA",
+  "bandSubN": {
+   "one": "Bescheide und Embargos des IBAMA, {n} Gemeinde",
+   "other": "Bescheide und Embargos des IBAMA, {n} Gemeinden"
+  },
+  "held": "zusätzlich, bei Kontrollen wie {ref}",
+  "honest": "Eine Untergrenze und ein Zusammenhang, kein Beweis für eine Ursache.",
+  "measured": "gemessen",
+  "none": "Die Kontrollen erklären hier seit {since} keine vermiedene Rodung",
+  "parts": [
+   "ein Viertel",
+   "ein Drittel",
+   "die Hälfte",
+   "zwei Drittel",
+   "drei Viertel"
+  ],
+  "ref": "Mittel von {from} bis {to}",
+  "say": {
+   "all": "Die Kontrollen erklären {km} km² vermiedene Rodung seit {since}",
+   "here": "Die Kontrollen erklären hier {km} km² vermiedene Rodung seit {since}"
+  },
+  "sign": {
+   "collective": "Sammelembargos",
+   "field": "Embargos vor Ort",
+   "notices": "Bescheide je 100 km²",
+   "remote": "Fernembargos"
+  },
+  "signTitle": {
+   "collective": "Ganze indigene Gebiete und andere öffentliche Flächen, auf einmal mit Embargo belegt",
+   "field": "Bei einem Besuch vor Ort mit Embargo belegte Fläche",
+   "notices": "Bußgeldbescheide je 100 km² Rodung",
+   "remote": "Per Satellit mit Embargo belegte Fläche, ohne Besuch"
+  },
+  "signs": "IBAMA-Maßnahmen, Jahr bis {now} gegenüber Jahr bis {ref}",
+  "sub": "Etwa {part} des Rückgangs seitdem. Der Rest ging überall zugleich zurück.",
+  "subHere": "{pct} % zusätzlich zu dem, was hier gerodet wurde.",
+  "tipHeld": "{held} bei gleichbleibenden Kontrollen",
+  "tipHeldRange": "{held} bei gleichbleibenden Kontrollen, wahrscheinlich {lo} bis {hi}",
+  "tipObs": "{span}, {obs} km² gerodet"
+ },
+ "ahead": {
+  "one": "{n} Monat",
+  "other": "{n} Monate"
+ },
+ "amazon": "Amazonien",
+ "areaFc": {
+  "every": "Jede Zelle hier verliert mit {p} Wahrscheinlichkeit bis Juli {y} einen Hektar",
+  "upto": "Bis zu {p} Wahrscheinlichkeit, dass eine Zelle hier bis Juli {y} einen Hektar verliert"
+ },
+ "areaPast": {
+  "everyNo": "{y} erhielten die Zellen hier {p}. Es wurde keine Rodung kartiert.",
+  "everyYes": "{y} erhielten die Zellen hier {p}. In {clr} von {n} wurde Rodung kartiert.",
+  "uptoNo": "{y} erhielten die Zellen hier bis zu {p}. Es wurde keine Rodung kartiert.",
+  "uptoYes": "{y} erhielten die Zellen hier bis zu {p}. In {clr} von {n} wurde Rodung kartiert."
+ },
+ "axisM": {
+  "clear": "km² gerodet pro Monat",
+  "degr": "km² degradiert pro Monat",
+  "fire": "km² verbrannt pro Monat",
+  "mine": "km² Bergbau pro Monat"
+ },
+ "axisW": {
+  "degr": "km² degradiert in 12 Monaten",
+  "fire": "km² verbrannt in 12 Monaten",
+  "mine": "km² Bergbau in 12 Monaten"
+ },
+ "axisY": "km² gerodet pro Jahr, August bis Juli",
+ "bars": "Balken",
+ "bench": {
+  "head": [
+   "",
+   "Modell",
+   "Score",
+   "",
+   "von",
+   "Datum"
+  ],
+  "ref": "kein Modell",
+  "refName": "Vorjahr in der Nähe",
+  "repo": "GitHub",
+  "submit": "Modell einreichen"
+ },
+ "burned": {
+  "months": {
+   "all": "{km} km² verbrannt in den letzten drei Monaten, {prev} ein Jahr zuvor",
+   "here": "{km} km² hier verbrannt in den letzten drei Monaten, {prev} ein Jahr zuvor"
+  },
+  "years": {
+   "all": "{km} km² verbrannt in zwölf Monaten, {prev} in den zwölf davor",
+   "here": "{km} km² hier verbrannt in zwölf Monaten, {prev} in den zwölf davor"
+  }
+ },
+ "byJuly": "bis Juli {y}",
+ "cellFc": "{p} Wahrscheinlichkeit, dass diese Zelle bis Juli {y} einen Hektar verliert",
+ "cellFire": "Unter den {p} % des Waldes, wo Feuer am wahrscheinlichsten ist",
+ "cellFireRest": "Außerhalb der 5 % des Waldes, wo Feuer am wahrscheinlichsten ist",
+ "cellHa": {
+  "clear": "Etwa {ha} Hektar Rodung hier in {n} Monaten erwartet",
+  "degr": "Etwa {ha} Hektar Degradation hier in {n} Monaten erwartet",
+  "mine": "Etwa {ha} Hektar Bergbau hier in {n} Monaten erwartet"
+ },
+ "cellHaLow": {
+  "clear": "Unter 1 Hektar Rodung hier in {n} Monaten erwartet",
+  "degr": "Unter 1 Hektar Degradation hier in {n} Monaten erwartet",
+  "mine": "Unter 1 Hektar Bergbau hier in {n} Monaten erwartet"
+ },
+ "cellPast": {
+  "no": "{y} erhielt diese Zelle {p}. Es wurde darin keine Rodung kartiert.",
+  "yes": "{y} erhielt diese Zelle {p}. Darin wurde Rodung kartiert."
+ },
+ "cellPlace": "{mun}, {uf}",
+ "cellPlaceIn": "{mun}, {uf}. {land}",
+ "chance": "Wahrscheinlichkeit",
+ "chanceBy": "Wahrscheinlichkeit je Zelle für 1 Hektar Verlust bis Juli {y}",
+ "chanceFor": "Wahrscheinlichkeit je Zelle für {y}",
+ "chanceOut": "die Wahrscheinlichkeit, für jede Zelle",
+ "close": "Schließen",
+ "closeList": "Liste schließen",
+ "copied": "Kopiert",
+ "copy": "Kopieren",
+ "credit": "Bilder: Esri, Maxar, Earthstar Geographics",
+ "csv": "CSV",
+ "enso": [
+  "El Niño",
+  "La Niña",
+  "Pazifik"
+ ],
+ "ensoLevel": [
+  [
+   "sehr stark",
+   "stark",
+   "mäßig",
+   "schwach"
+  ],
+  [
+   "sehr stark",
+   "stark",
+   "mäßig",
+   "schwach"
+  ],
+  "neutral"
+ ],
+ "fc": {
+  "all": "Etwa {km} km² Rodung bis Juli {y} erwartet",
+  "here": "Etwa {km} km² Rodung hier bis Juli {y} erwartet"
+ },
+ "fcNone": "Hier wird bis Juli {y} fast keine Rodung erwartet",
+ "front": {
+  "back": "Zurück zur Karte",
+  "chart": "Zeitleiste nach vorn holen",
+  "map": "Karte nach vorn holen"
+ },
+ "hazard": {
+  "clear": "Rodung",
+  "degr": "Degradation",
+  "fire": "Feuer",
+  "mine": "Bergbau"
+ },
+ "higher": "höher",
+ "home": "Zurück zur ganzen Karte",
+ "kinds": {
+  "mun": "Gemeinden",
+  "ti": "Indigene Gebiete",
+  "uc": "Schutzgebiete",
+  "uf": "Bundesstaaten"
+ },
+ "km2": "{x} km²",
+ "land": {
+  "ti": "indigenes Gebiet",
+  "uc": "Schutzgebiet"
+ },
+ "language": "Sprache",
+ "lastSub": {
+  "degr": {
+   "all": "{km} km² Degradation oder Holzeinschlag in den letzten zwölf Monaten.",
+   "here": "{km} km² Degradation oder Holzeinschlag hier in den letzten zwölf Monaten."
+  },
+  "mine": {
+   "all": "{km} km² Bergbau in den letzten zwölf Monaten.",
+   "here": "{km} km² Bergbau hier in den letzten zwölf Monaten."
+  }
+ },
+ "legend": {
+  "clear": "Rodungsrisiko",
+  "degr": "Degradationsrisiko",
+  "fire": "Wo es gewöhnlich brennt",
+  "mine": "Bergbaurisiko"
+ },
+ "legendNext": {
+  "clear": "Rodungsrisiko, nächste {n} Monate",
+  "degr": "Degradationsrisiko, nächste {n} Monate",
+  "mine": "Bergbaurisiko, nächste {n} Monate"
+ },
+ "less": "weniger km²",
+ "level": [
+  "Ruhig",
+  "Achtung",
+  "Warnung",
+  "Alarm"
+ ],
+ "like": [
+  {
+   "km": 26,
+   "same": "So groß wie Norderney.",
+   "x2": "Doppelt so groß wie Norderney.",
+   "x3": "Dreimal so groß wie Norderney.",
+   "x4": "Viermal so groß wie Norderney.",
+   "x5": "Fünfmal so groß wie Norderney.",
+   "x10": "Zehnmal so groß wie Norderney.",
+   "half": "Halb so groß wie Norderney.",
+   "third": "Ein Drittel so groß wie Norderney."
+  },
+  {
+   "km": 99,
+   "same": "So groß wie Sylt.",
+   "x2": "Doppelt so groß wie Sylt.",
+   "x3": "Dreimal so groß wie Sylt.",
+   "x4": "Viermal so groß wie Sylt.",
+   "x5": "Fünfmal so groß wie Sylt.",
+   "x10": "Zehnmal so groß wie Sylt.",
+   "half": "Halb so groß wie Sylt.",
+   "third": "Ein Drittel so groß wie Sylt."
+  },
+  {
+   "km": 311,
+   "same": "So groß wie München.",
+   "x2": "Doppelt so groß wie München.",
+   "x3": "Dreimal so groß wie München.",
+   "x4": "Viermal so groß wie München.",
+   "x5": "Fünfmal so groß wie München.",
+   "x10": "Zehnmal so groß wie München.",
+   "half": "Halb so groß wie München.",
+   "third": "Ein Drittel so groß wie München."
+  },
+  {
+   "km": 536,
+   "same": "So groß wie der Bodensee.",
+   "x2": "Doppelt so groß wie der Bodensee.",
+   "x3": "Dreimal so groß wie der Bodensee.",
+   "x4": "Viermal so groß wie der Bodensee.",
+   "x5": "Fünfmal so groß wie der Bodensee.",
+   "x10": "Zehnmal so groß wie der Bodensee.",
+   "half": "Halb so groß wie der Bodensee.",
+   "third": "Ein Drittel so groß wie der Bodensee."
+  },
+  {
+   "km": 892,
+   "same": "So groß wie Berlin.",
+   "x2": "Doppelt so groß wie Berlin.",
+   "x3": "Dreimal so groß wie Berlin.",
+   "x4": "Viermal so groß wie Berlin.",
+   "x5": "Fünfmal so groß wie Berlin.",
+   "x10": "Zehnmal so groß wie Berlin.",
+   "half": "Halb so groß wie Berlin.",
+   "third": "Ein Drittel so groß wie Berlin."
+  },
+  {
+   "km": 2570,
+   "same": "So groß wie das Saarland.",
+   "x2": "Doppelt so groß wie das Saarland.",
+   "x3": "Dreimal so groß wie das Saarland.",
+   "x4": "Viermal so groß wie das Saarland.",
+   "x5": "Fünfmal so groß wie das Saarland.",
+   "x10": "Zehnmal so groß wie das Saarland.",
+   "half": "Halb so groß wie das Saarland.",
+   "third": "Ein Drittel so groß wie das Saarland."
+  },
+  {
+   "km": 3640,
+   "same": "So groß wie Mallorca.",
+   "x2": "Doppelt so groß wie Mallorca.",
+   "x3": "Dreimal so groß wie Mallorca.",
+   "x4": "Viermal so groß wie Mallorca.",
+   "x5": "Fünfmal so groß wie Mallorca.",
+   "x10": "Zehnmal so groß wie Mallorca.",
+   "half": "Halb so groß wie Mallorca.",
+   "third": "Ein Drittel so groß wie Mallorca."
+  },
+  {
+   "km": 15804,
+   "same": "So groß wie Schleswig-Holstein.",
+   "x2": "Doppelt so groß wie Schleswig-Holstein.",
+   "x3": "Dreimal so groß wie Schleswig-Holstein.",
+   "x4": "Viermal so groß wie Schleswig-Holstein.",
+   "x5": "Fünfmal so groß wie Schleswig-Holstein.",
+   "x10": "Zehnmal so groß wie Schleswig-Holstein.",
+   "half": "Halb so groß wie Schleswig-Holstein.",
+   "third": "Ein Drittel so groß wie Schleswig-Holstein."
+  },
+  {
+   "km": 21115,
+   "same": "So groß wie Hessen.",
+   "x2": "Doppelt so groß wie Hessen.",
+   "x3": "Dreimal so groß wie Hessen.",
+   "x4": "Viermal so groß wie Hessen.",
+   "x5": "Fünfmal so groß wie Hessen.",
+   "x10": "Zehnmal so groß wie Hessen.",
+   "half": "Halb so groß wie Hessen.",
+   "third": "Ein Drittel so groß wie Hessen."
+  },
+  {
+   "km": 41285,
+   "same": "So groß wie die Schweiz.",
+   "x2": "Doppelt so groß wie die Schweiz.",
+   "x3": "Dreimal so groß wie die Schweiz.",
+   "x4": "Viermal so groß wie die Schweiz.",
+   "x5": "Fünfmal so groß wie die Schweiz.",
+   "x10": "Zehnmal so groß wie die Schweiz.",
+   "half": "Halb so groß wie die Schweiz.",
+   "third": "Ein Drittel so groß wie die Schweiz."
+  },
+  {
+   "km": 70550,
+   "same": "So groß wie Bayern.",
+   "x2": "Doppelt so groß wie Bayern.",
+   "x3": "Dreimal so groß wie Bayern.",
+   "x4": "Viermal so groß wie Bayern.",
+   "x5": "Fünfmal so groß wie Bayern.",
+   "x10": "Zehnmal so groß wie Bayern.",
+   "half": "Halb so groß wie Bayern.",
+   "third": "Ein Drittel so groß wie Bayern."
+  },
+  {
+   "km": 83879,
+   "same": "So groß wie Österreich.",
+   "x2": "Doppelt so groß wie Österreich.",
+   "x3": "Dreimal so groß wie Österreich.",
+   "x4": "Viermal so groß wie Österreich.",
+   "x5": "Fünfmal so groß wie Österreich.",
+   "x10": "Zehnmal so groß wie Österreich.",
+   "half": "Halb so groß wie Österreich.",
+   "third": "Ein Drittel so groß wie Österreich."
+  },
+  {
+   "km": 130279,
+   "same": "So groß wie England.",
+   "x2": "Doppelt so groß wie England.",
+   "x3": "Dreimal so groß wie England.",
+   "x4": "Viermal so groß wie England.",
+   "x5": "Fünfmal so groß wie England.",
+   "x10": "Zehnmal so groß wie England.",
+   "half": "Halb so groß wie England.",
+   "third": "Ein Drittel so groß wie England."
+  }
+ ],
+ "line": "Linie",
+ "lower": "niedriger",
+ "made": "erstellt am {date}",
+ "many": {
+  "mun": "Gemeinden",
+  "ti": "indigenen Gebieten",
+  "uc": "Schutzgebieten",
+  "uf": "Bundesstaaten"
+ },
+ "mapped": "Rodung kartiert",
+ "menu": "Menü",
+ "mfc": {
+  "clear": {
+   "all": "Etwa {km} km² Rodung in den nächsten {h} Monaten erwartet",
+   "here": "Etwa {km} km² Rodung hier in den nächsten {h} Monaten erwartet"
+  },
+  "degr": {
+   "all": "Etwa {km} km² Degradation in den nächsten {h} Monaten erwartet",
+   "here": "Etwa {km} km² Degradation hier in den nächsten {h} Monaten erwartet"
+  },
+  "mine": {
+   "all": "Etwa {km} km² Bergbau in den nächsten {h} Monaten erwartet",
+   "here": "Etwa {km} km² Bergbau hier in den nächsten {h} Monaten erwartet"
+  }
+ },
+ "mobs": {
+  "clear": {
+   "all": "{km} km² gerodet in den letzten drei Monaten",
+   "here": "{km} km² hier gerodet in den letzten drei Monaten"
+  },
+  "degr": {
+   "all": "{km} km² degradiert in den letzten drei Monaten",
+   "here": "{km} km² hier degradiert in den letzten drei Monaten"
+  },
+  "fire": {
+   "all": "{km} km² verbrannt in den letzten drei Monaten",
+   "here": "{km} km² hier verbrannt in den letzten drei Monaten"
+  },
+  "mine": {
+   "all": "{km} km² Bergbau in den letzten drei Monaten",
+   "here": "{km} km² Bergbau hier in den letzten drei Monaten"
+  }
+ },
+ "modes": {
+  "cells": "Zellen",
+  "prio": "Prioritäten",
+  "sectors": "Sektoren"
+ },
+ "more": "mehr km²",
+ "next": "nächste {n} Monate",
+ "nextYear": "Nächstes Jahr",
+ "now": "jetzt",
+ "numSources": [
+  "null",
+  "einer",
+  "zwei",
+  "drei",
+  "vier",
+  "fünf",
+  "sechs",
+  "sieben",
+  "acht",
+  "neun",
+  "zehn",
+  "elf",
+  "zwölf"
+ ],
+ "onlyFrom": "Stufe wählen, um nur Zellen mit dieser Wahrscheinlichkeit oder mehr zu zeigen",
+ "pShareMin": "<b>{n}</b> Zellen mit {cut} oder mehr, mit {share} % des erwarteten Verlusts",
+ "pSharePastMin": "<b>{n}</b> Zellen mit {cut} oder mehr, mit {share} % der Zellen, in denen Rodung kartiert wurde",
+ "partial": " Bisher nur vorrangige Szenen.",
+ "past": "{y} wurden {act} km² gerodet",
+ "pastHere": "{y} wurden hier {act} km² gerodet",
+ "pastHereNone": "{y} wurde hier keine Rodung kartiert",
+ "pastP": "{y} sollten {exp} Zellen einen Hektar verlieren, {act} verloren ihn",
+ "people": {
+  "credit": "Foto: {author}, {license}",
+  "also": "Auch auf diesem Land"
+ },
+ "prevYear": "Vorheriges Jahr",
+ "range": "wahrscheinlich {lo} bis {hi}",
+ "rank": {
+  "other": "{n}."
+ },
+ "rankSay": "{kind} nach {what}",
+ "rankWhat": {
+  "fc": "erwarteter Rodung bis Juli {y}",
+  "fire": "Anteil an den Gebieten, wo es gewöhnlich brennt",
+  "past": "erwarteter Rodung für {y}",
+  "risk": "Anteil an der Risikokarte"
+ },
+ "ranking": "Rangliste",
+ "replay": "Frühere Prognose",
+ "risk": {
+  "degr": "Degradationsrisiko",
+  "mine": "Bergbaurisiko"
+ },
+ "scale": {
+  "actions": "Maßnahmen",
+  "months": "Monate",
+  "years": "Jahre"
+ },
+ "sign": {
+  "autos": "IBAMA-Bußgelder",
+  "clear": "Rodung",
+  "degr": "Degradation",
+  "mine": "Bergbau",
+  "scar": "Brandflächen"
+ },
+ "signTitle": "{now} in den letzten drei Monaten, {prev} ein Jahr zuvor",
+ "signs": "Signale, drei Monate gegenüber dem Vorjahr",
+ "skip": "Überspringen",
+ "st": {
+  "ahead": {
+   "flat": "Das Modell erwartet bis {month} weitere {km} km² Rodung.",
+   "rise": "In drei Monaten stieg die Rodung um {pct} %, und das Modell erwartet bis {month} weitere {km} km²."
+  },
+  "back": "Zurück",
+  "done": "Fertig",
+  "first": "Für alle, die kontrollieren, kommen diese {n} Orte zuerst.",
+  "forestA": "Das ist Amazonien.",
+  "forestB": {
+   "one": "{cells} Million Waldquadrate, je {m} Meter.",
+   "other": "{cells} Millionen Waldquadrate, je {m} Meter."
+  },
+  "lossA": "Jedes Jahr fällt ein Stück davon.",
+  "lossB": "Seit {y} sind es {k} Tausend km².",
+  "lossBMore": "Seit {y} sind es {k} Tausend km². Mehr als England.",
+  "model": "Wir haben ein Modell trainiert, das das nächste vorhersagt.",
+  "moreKm": 130279,
+  "next": "Weiter",
+  "open": "Code und Benchmark sind offen. Wer ein besseres Modell baut, steht vor unserem.",
+  "proof": "Wir haben es an der Vergangenheit getestet. {y} wurden {hit} von {of} gezeigten Orten gerodet.",
+  "sources": {
+   "one": "Es lernt aus {n} öffentlichen Quelle, von Satellitenbildern bis zu Rodungsgenehmigungen.",
+   "other": "Es lernt aus {n} öffentlichen Quellen, von Satellitenbildern bis zu Rodungsgenehmigungen."
+  }
+ },
+ "stepHi": "über {c}",
+ "stepLo": "unter {c}",
+ "stepMid": "{a} bis {b}",
+ "story": "Geschichte",
+ "tag": {
+  "ti": "TI",
+  "uc": "UC"
+ },
+ "tiny": "unter 0,1",
+ "tipFc": "etwa {exp} km² erwartet",
+ "tipPast": "{exp} km² erwartet, {act} gerodet",
+ "tipRank": "{rank} von {n}",
+ "to": "{a} bis {b}",
+ "under": "unter {c}",
+ "where": {
+  "degr": "Wo bis {end} am ehesten Degradation oder Holzeinschlag droht",
+  "mine": "Wo sich der Bergbau bis {end} am ehesten ausbreitet"
+ },
+ "whereHere": "{rank} von {n} {many} beim {risk} bis {end}",
+ "whole": "Ganz Amazonien",
+ "why": {
+  "around": "{km} km² im Umkreis in den letzten drei Jahren gerodet.",
+  "degr": "{km} km² Wald im letzten Jahr degradiert.",
+  "fire": "{km} km² Wald im letzten Jahr verbrannt.",
+  "land": {
+   "ti": "In einem indigenen Gebiet.",
+   "uc": "In einem Schutzgebiet."
+  },
+  "near": "Nahe an jüngster Rodung.",
+  "permit": "Hat eine Genehmigung, {ha} Hektar zu roden."
+ },
+ "window": "Prognose"
+}
