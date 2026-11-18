@@ -1423,9 +1423,10 @@ async function list() {
     if (S.mode === "prio") blocks.addTo(map);
     if (listed !== "prio" + lang) {
       // a place a row: its rank, its name, a tag if it lies in protected land, and a thin bar as long as the cells expected to lose a hectare there
-      const max = Math.max(...PR.blocks.map(b => b.expected_cells));
+      const max = Math.max(...PR.blocks.map(b => b.expected_cells)), min = Math.min(...PR.blocks.map(b => b.expected_cells));
+      const len = v => 12 + 88 * (v - min) / Math.max(max - min, 1e-9);  // the last place keeps a stub, so the bars tell the places apart
       $("list-say").textContent = "";
-      $("list-rows").innerHTML = PR.blocks.map(b => row(`data-b="${b.rank}"`, b.rank, `${esc(b.municipality)}, ${b.state}`, `<span class="len" aria-hidden="true"><i style="width:${(100 * b.expected_cells / max).toFixed(1)}%"></i></span>`, false, b.land ? `<abbr class="tag" title="${L_.land[b.land]}">${b.land.toUpperCase()}</abbr>` : "")).join("");
+      $("list-rows").innerHTML = PR.blocks.map(b => row(`data-b="${b.rank}"`, b.rank, `${esc(b.municipality)}, ${b.state}`, `<span class="len" aria-hidden="true"><i style="width:${len(b.expected_cells).toFixed(1)}%"></i></span>`, false, b.land ? `<abbr class="tag" title="${L_.land[b.land]}">${b.land.toUpperCase()}</abbr>` : "")).join("");
       listed = "prio" + lang;
     }
     $("list-rows").className = "prio";

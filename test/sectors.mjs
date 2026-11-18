@@ -676,9 +676,10 @@ try {
     assert.equal(await text("#list-rows li .nm > span"), `${prio.blocks[0].municipality}, ${prio.blocks[0].state}`);
     assert.equal(await js(`[...document.querySelectorAll("#list-rows li:first-child button > *")].map(e => e.textContent.trim()).join("|")`), `1|${prio.blocks[0].municipality}, ${prio.blocks[0].state}|`, "a row is its rank, the place and a bar: no figures");
     assert.equal(await count("#list-rows .v, #list th, #list-rows .h"), 0, "no number columns and no headers");
-    // the bar: thin, red, as long as the cells expected to lose a hectare there
+    // the bar: thin, red, running from a stub for the last place to full length for the first, by the cells expected to lose a hectare
+    const prioMin = Math.min(...prio.blocks.map(b => b.expected_cells));
     const bars = await js(`[...document.querySelectorAll("#list-rows .len i")].slice(0, 60).map(e => { const r = e.getBoundingClientRect(); return [r.width, r.height, getComputedStyle(e).backgroundColor]; })`);
-    assert.ok(bars.length === 60 && bars.every(([w, h, c], k) => Math.abs(w / bars[0][0] - prio.blocks[k].expected_cells / prio.blocks[0].expected_cells) < 0.02 && h <= 6 && c === RED), "a thin red bar a row, its length the expected cells: " + JSON.stringify(bars.slice(0, 3)));
+    assert.ok(bars.length === 60 && bars.every(([w, h, c], k) => Math.abs(w / bars[0][0] - (12 + 88 * (prio.blocks[k].expected_cells - prioMin) / (prio.blocks[0].expected_cells - prioMin)) / 100) < 0.02 && h <= 6 && c === RED), "a thin red bar a row, its length the expected cells: " + JSON.stringify(bars.slice(0, 3)));
     assert.equal(await js(`[...document.querySelectorAll("#list-rows li:nth-child(-n+30) .len, #list-rows li:nth-child(-n+30) .tag")].every(e => { const r = e.getBoundingClientRect(), l = document.getElementById("list").getBoundingClientRect(); return r.right <= l.right - 4 && r.left >= l.left; })`), true, "nothing in the list is cut at its edge");
     assert.deepEqual(await js(`[...document.querySelectorAll("#list-rows .tag")].map(e => e.textContent)`), prio.blocks.filter(b => b.land).map(b => b.land.toUpperCase()), "a small text tag, TI or UC, on the places in protected land");
     assert.equal(await js(`document.querySelectorAll("#list table, #list-rows [style*=border]").length + (getComputedStyle(document.querySelector("#list-rows button")).borderTopWidth === "0px" ? 0 : 1)`), 0, "a typographic list: no table, no rules between rows");
