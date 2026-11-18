@@ -1796,7 +1796,7 @@ function lossShow(n, again) {
   const f = LOSS.f, c = Math.ceil(F.cols / f), r = Math.ceil(F.rows / f);
   if (!LOSS.sheet) { if (!n) return; LOSS.sheet = sheet(c, r, BOUNDS, "paint"); LOSS.sheet.layer.getElement().classList.add("loss"); }
   if (n) {
-    const sum = new Uint16Array(c * r), px = new Uint32Array(c * r), lut = Uint32Array.from({ length: 8 * f * f + 1 }, (_, k) => (k ? rgba(...DARK, Math.min(1, 0.22 + 0.9 * Math.sqrt(k / (f * f)))) : 0));
+    const sum = new Uint16Array(c * r), px = new Uint32Array(c * r), lut = Uint32Array.from({ length: 8 * f * f + 1 }, (_, k) => (k ? rgba(228, 0, 43, Math.min(1, 0.35 + 0.9 * Math.sqrt(k / (f * f)))) : 0));  // what fell is red: the story has no chances on the map yet
     for (const y of LOSS.years.slice(0, n)) { const a = LOSS.got[y]; if (a) for (let i = 0; i < a.length; i++) sum[i] += a[i]; }
     for (let i = 0; i < px.length; i++) px[i] = lut[sum[i]];
     LOSS.sheet.cx.putImageData(toMercatorRows(px, c, r, F.cell * f), 0, 0);
