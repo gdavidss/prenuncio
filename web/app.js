@@ -80,7 +80,7 @@ const ras = F => (LITE ? { cols: Math.ceil(F.cols / 2), rows: Math.ceil(F.rows /
 const MEM = { decode: 0 };  // the largest picture decoded so far, in pixels (for the test's budget)
 const t = () => T[lang];
 const loc = () => LANGS[lang][1];
-window.prenuncio = { get zoom() { return map.getZoom(); }, get mapped() { return veil.mapped ? veil.amt : 0; }, lite: LITE, mem: () => ({ decodeMP: MEM.decode / 1e6, canvasMP: [...document.querySelectorAll("canvas")].reduce((x, c) => x + c.width * c.height, 0) / 1e6 }), like: async (a, l) => likeArea(a, (await loadLang(l))?.like), country: c => COUNTRY[c] ?? null, pick: id => select(id), langs: Object.keys(LANGS), step: async id => classOf((await sectors(S.kind)).byId.get(String(id))) };  // (for the test)
+window.prenuncio = { get zoom() { return map.getZoom(); }, get zooming() { return ZOOM.to != null; }, get mapped() { return veil.mapped ? veil.amt : 0; }, lite: LITE, mem: () => ({ decodeMP: MEM.decode / 1e6, canvasMP: [...document.querySelectorAll("canvas")].reduce((x, c) => x + c.width * c.height, 0) / 1e6 }), like: async (a, l) => likeArea(a, (await loadLang(l))?.like), country: c => COUNTRY[c] ?? null, pick: id => select(id), langs: Object.keys(LANGS), step: async id => classOf((await sectors(S.kind)).byId.get(String(id))) };  // (for the test)
 const fmt = (x, d = 0) => x.toLocaleString(loc(), { maximumFractionDigits: d, minimumFractionDigits: d });
 const km = x => fmt(x, x < 9.95 ? 1 : 0);
 const round = (x, n) => { const p = 10 ** (Math.floor(Math.log10(x)) - n + 1); return Math.round(x / p) * p; };
@@ -294,6 +294,10 @@ const sideOn = listOn;  // the ranked list stands on the right of the page
 // the list is open, the left column is kept whole: the story's caption stands in it.
 // On a phone the panel is a band under the header and the Amazon sits right under it, above the sheets.
 const lengthOf = name => parseFloat(css(name)) || 0;
+// where the map's panel ends: the people's dock stops under it, however tall the kinds and the key make it
+const panelAt = () => root.style.setProperty("--panel-bottom", Math.round(rectOf($("mappanel")).bottom) + "px");
+new ResizeObserver(panelAt).observe($("mappanel"));
+addEventListener("resize", panelAt);
 const CAP_FIT = 164, KEY_FIT = 98;  // on a phone, in the story: the room kept for the caption and for the key, the same at every step so the map stays put
 let restPeek = 0;
 const pagePad = () => parseFloat(getComputedStyle($("top")).paddingLeft) || 0;
@@ -314,7 +318,7 @@ function room() {
 const FIT = () => { const r = room(), g = mapSmall() || narrow() ? 0 : 14; return { paddingTopLeft: [r.left + g, r.top + g], paddingBottomRight: [r.right + g, r.bottom + g] }; };
 const BOUNDS = [[M.north - M.rows * M.cell, M.west], [M.north, M.west + M.cols * M.cell]];
 const FLOOR = 2;  // the furthest out the page itself ever sends the map (the docked picture); the reader's own limit is the fit, set in limit()
-const map = L.map("map", { zoomControl: false, attributionControl: false, minZoom: FLOOR, maxZoom: 14, zoomSnap: 0, zoomDelta: 0.75, wheelPxPerZoomLevel: 110, wheelDebounceTime: 16, inertiaMaxSpeed: 900 });  // (no maxBounds: hold() keeps the Amazon in sight)
+const map = L.map("map", { zoomControl: false, attributionControl: false, minZoom: FLOOR, maxZoom: 14, zoomSnap: 0, zoomDelta: 0.75, scrollWheelZoom: false, doubleClickZoom: false, inertiaMaxSpeed: 900 });  // (no maxBounds: hold() keeps the Amazon in sight)
 L.control.zoom({ position: "bottomright" }).addTo(map);
 // above the two: back to the whole Amazon, as on load for the layout of the moment. Dimmed when that is the view.
 const homeBtn = L.DomUtil.create("a", "home");
@@ -409,6 +413,36 @@ if (front === "map") stageView = null;
 for (const ev of ["pointerdown", "wheel", "keydown"]) $("map").addEventListener(ev, () => (pristine = false), { capture: true, passive: true });
 new ResizeObserver(() => { if (swapping) return; map.invalidateSize(); if (pristine || mapSmall()) whole(); else limit(); }).observe($("map"));
 map.on("moveend", hold);
+// The wheel, the + and − and the double click zoom through one easing, the page's own. (Leaflet's wheel handler
+// starts a 250 ms animation and drops what the wheel says meanwhile, so a long scroll gave a few uneven lurches.)
+// What the wheel says adds to a target zoom; at every frame the zoom goes part of the way there, about the
+// point under the pointer. During the gesture the layers are only scaled, as in a pinch; they are drawn again
+// once, when it settles. Nothing is dropped: a notch of a mouse wheel is half a level, a hand's width of two
+// fingers on a trackpad about two, a pinch on a trackpad four times as strong.
+const ZOOM = { per: 0.005, pinch: 0.02, tau: 75, to: null, at: null, t: 0, raf: 0 };
+function zoomStep(now) {
+  const z = map.getZoom(), dt = Math.max(0, Math.min(64, now - ZOOM.t)), gap = ZOOM.to - z, done = Math.abs(gap) < 0.01;
+  ZOOM.t = now;
+  const nz = done ? ZOOM.to : z + gap * (1 - Math.exp(-dt / ZOOM.tau)), half = map.getSize().divideBy(2), k = 1 - 1 / map.getZoomScale(nz, z);
+  map._move(map.containerPointToLatLng(half.add(ZOOM.at.subtract(half).multiplyBy(k))), nz, { pinch: true, round: false });  // (as a pinch: the layers scale, nothing is redrawn)
+  if (done) { ZOOM.raf = 0; ZOOM.to = null; map._moveEnd(true); return; }
+  ZOOM.raf = requestAnimationFrame(zoomStep);
+}
+function zoomBy(levels, at) {  // at: the point of the map's pane that stays where it is
+  if (ZOOM.to == null) { map._stop(); map._moveStart(true, false); ZOOM.to = map.getZoom(); ZOOM.t = performance.now(); }
+  ZOOM.to = Math.max(map.getMinZoom(), Math.min(map.getMaxZoom(), ZOOM.to + levels));
+  ZOOM.at = at || map.getSize().divideBy(2);
+  if (!ZOOM.raf) ZOOM.raf = requestAnimationFrame(zoomStep);
+}
+$("map").addEventListener("wheel", e => {
+  if ($("mapin").inert || e.target.closest(".leaflet-control")) return;
+  e.preventDefault();
+  const px = e.deltaY * (e.deltaMode === 1 ? 100 / 3 : e.deltaMode === 2 ? innerHeight : 1);  // lines and pages, in pixels
+  zoomBy(-px * (e.ctrlKey ? ZOOM.pinch : ZOOM.per), map.mouseEventToContainerPoint(e));
+}, { passive: false });
+map.zoomIn = (d = map.options.zoomDelta) => (zoomBy(d), map);  // the + and the − of the control
+map.zoomOut = (d = map.options.zoomDelta) => (zoomBy(-d), map);
+map.on("dblclick", e => zoomBy(e.originalEvent.shiftKey ? -1 : 1, e.containerPoint));
 
 // outside the Legal Amazon: bare ground when far, a veil over the imagery when close
 const GROUND = css("--ground"), INK = css("--ink");
@@ -798,13 +832,13 @@ function zoomed() {
 }
 map.on("zoomend", zoomed);
 
-// ---------- sectors on the map: five classes of forecast risk per area. The lowest is left as the base map
-// shows it, green where there is forest; the others take the hazard's four steps, up to red for clearing. ----------
+// ---------- sectors on the map: five classes of forecast risk per area. The lowest is filled with the
+// scale's green, like its swatch in the legend; the others take the hazard's four steps, up to red for clearing. ----------
 let shown = null, outline = null, cls = new Map();
 const classOf = it => cls.get(it) ?? 0;
 function styleOf(it) {
   const c = classOf(it), close = map.getZoom() >= SAT_ZOOM, thin = shown === "mun";
-  return { fillColor: `rgb(${steps()[Math.max(0, c - 1)]})`, fillOpacity: c ? (close ? 0.5 : 1) : 0, color: INK, opacity: thin ? 0.3 : 0.6, weight: thin ? 0.5 : 0.8 };
+  return { fillColor: `rgb(${c ? steps()[c - 1] : FOREST})`, fillOpacity: close ? 0.5 : 1, color: INK, opacity: thin ? 0.3 : 0.6, weight: thin ? 0.5 : 0.8 };
 }
 function tipOf(it, K) {
   const L_ = t(), v = { exp: approx(expOf(it)), act: km(actOf(it)), rank: ordinal(rankOf(it, K)), n: K.items.length };
@@ -848,7 +882,9 @@ async function people() {
     + (head ? `<h2 dir="auto">${esc(p.name)}</h2><p dir="auto">${esc(own(p.text))}</p>` : `<details><summary dir="auto">${esc(p.name)}</summary><p dir="auto">${esc(own(p.text))}</p></details>`);  // (dir=auto: a text that falls back to English reads left to right on a right-to-left page)
   $("people").innerHTML = list.length ? `<button id="people-x" class="x" aria-label="${esc(t().close)}" title="${esc(t().close)}"></button>` + one(list[0], true) + (list.length > 1 ? `<h3>${esc(L_.also)}</h3>` + list.slice(1).map(p => one(p, false)).join("") : "") : "";
   $("people").hidden = !list.length;
+  const had = "people" in root.dataset;
   if (list.length) root.dataset.people = ""; else delete root.dataset.people;
+  if (had !== !!list.length) fitRows();  // (with the people in the dock the kinds are a row: its type is fitted again)
   if (was !== peopleOf) { $("chartin").scrollTop = 0; $("chartin").classList.remove("in"); void $("chartin").offsetWidth; $("chartin").classList.add("in"); chart(); }  // one leaves the dock and the other comes in, as on the stage
 }
 // The selection is one thing in one place: its outline is on the map only while a sector is selected, and goes
@@ -1364,6 +1400,19 @@ BOX.chart.addEventListener("click", e => {
 });
 
 // ---------- controls ----------
+// a row of words that is too long for its place in some language steps its type down until it fits
+function fitRows() {
+  for (const el of [$("hazard"), $("modes"), $("scale"), $("kinds")]) {
+    for (const b of el.children) b.style.fontSize = b.style.letterSpacing = "";
+    el.style.gap = "";
+    for (const [size, gap] of [[14, "0 12px"], [13, "0 9px"], [12, "0 7px"], [11, "0 5px"]]) {
+      if (!el.offsetParent || el.scrollWidth <= el.clientWidth + 1 && el.getBoundingClientRect().right <= (el.parentElement.closest("#mappanel, #chartin") || el.parentElement).getBoundingClientRect().right + 1) break;
+      for (const b of el.children) { b.style.fontSize = size + "px"; b.style.letterSpacing = "0.02em"; }
+      if (el !== $("modes")) el.style.gap = gap;
+    }
+  }
+  for (const k of ["fontSize", "letterSpacing"]) $("rank-btn").style[k] = $("kinds").firstElementChild?.style[k] || "";  // Ranking keeps the kinds' size, whatever it is
+}
 function chrome() {
   const L_ = t(), btn = (k, label, on) => `<button data-k="${k}" aria-pressed="${on}">${label}</button>`;
   document.documentElement.lang = lang;
@@ -1376,14 +1425,15 @@ function chrome() {
   $("hazard").innerHTML = hazards().map(k => btn(k, glyph(k) + L_.hazard[k], k === S.hazard)).join("");
   $("scale").innerHTML = ["years", "months", ...(S.hazard === "clear" && ACT ? ["actions"] : [])].map(k => btn(k, L_.scale[k], k === S.scale)).join("");
   $("modes").innerHTML = ["sectors", "cells", ...(M.years[M.forecast.year]?.flags500 ? ["prio"] : [])].map(k => btn(k, L_.modes[k], k === S.mode)).join("");
-  $("rank-btn").textContent = L_.ranking;
+  $("rank-btn").innerHTML = `<svg viewBox="0 0 14 11" aria-hidden="true"><path d="M0 1.5h2M4.5 1.5H14M0 5.5h2M4.5 5.5H14M0 9.5h2M4.5 9.5H14"/></svg>` + esc(L_.ranking);  // a small list before the word: it opens the ranked list of the kind, it is not a kind
   $("rank-btn").setAttribute("aria-pressed", S.rank);
+  $("rank-btn").setAttribute("aria-label", L_.ranking); $("rank-btn").title = L_.ranking;
   $("rank-btn").hidden = S.mode !== "sectors";
   document.documentElement.dataset.list = listOn();
   // bars or a line: two small glyphs, no words
   $("shape").innerHTML = [["bars", "M1 12V6h3v6zM6 12V2h3v6zM11 12V8h3v4z"], ["line", "M1 11L5 5l4 3 5-6"]].map(([k, d]) => `<button data-k="${k}" aria-pressed="${(k === "line") === S.line}" aria-label="${L_[k]}" title="${L_[k]}"><svg viewBox="0 0 15 13" aria-hidden="true"><path d="${d}"/></svg></button>`).join("");
   $("kinds").innerHTML = ["uf", "mun", "ti", "uc"].map(k => btn(k, L_.kinds[k], k === S.kind)).join("");
-  $("kinds").hidden = S.mode !== "sectors";
+  $("kinds").hidden = $("kindrow").hidden = S.mode !== "sectors";
   // the window ahead as buttons (on a phone; on a wide screen it is chosen on the chart itself), and a stepper
   // for the years, which also stands on the docked timeline
   const hs = S.hazard === "clear" && S.scale === "months" ? horizons() : [];
@@ -1398,16 +1448,7 @@ function chrome() {
   for (const [id, label] of [["chart-front", front === "chart" ? L_.close : L_.front.chart], ["map-front", L_.front.map]]) { $(id).setAttribute("aria-label", label); $(id).title = label; }
   for (const [id, label] of [["list-close", L_.closeList], ["about-close", L_.close], ["api-close", L_.close], ["menu-btn", L_.menu]]) { $(id).setAttribute("aria-label", label); $(id).title = label; }
   homeBtn.setAttribute("aria-label", L_.home); homeBtn.title = L_.home;
-  // a row of words that is too long for its place in some language steps its type down until it fits
-  for (const el of [$("hazard"), $("modes"), $("scale"), $("kinds")]) {
-    for (const b of el.children) b.style.fontSize = b.style.letterSpacing = "";
-    el.style.gap = "";
-    for (const [size, gap] of [[14, "0 12px"], [13, "0 9px"], [12, "0 7px"], [11, "0 5px"]]) {
-      if (!el.offsetParent || el.scrollWidth <= el.clientWidth + 1 && el.getBoundingClientRect().right <= (el.parentElement.closest("#mappanel, #chartin") || el.parentElement).getBoundingClientRect().right + 1) break;
-      for (const b of el.children) { b.style.fontSize = size + "px"; b.style.letterSpacing = "0.02em"; }
-      if (el !== $("modes")) el.style.gap = gap;
-    }
-  }
+  fitRows();
   $("list-title").textContent = S.mode === "sectors" ? L_.ranking : L_.modes.prio;
   $("story-btn").textContent = L_.story;
   $("skip-btn").textContent = L_.skip;
@@ -2016,6 +2057,7 @@ document.addEventListener("keydown", e => {
   else if (e.key === "Escape") storyEnd();
 }, true);
 
+document.fonts?.ready.then(fitRows);  // (the rows were fitted in the fallback face if the page was quicker than its type)
 if (storyOn) storyBegin();
 else if (S.sel != null) select(S.sel); else refresh();
 if (H.has("about")) about();

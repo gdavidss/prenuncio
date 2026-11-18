@@ -135,3 +135,9 @@ The actions view shows what measured enforcement accounts for. It has no level a
 - A control that sits away from what it changes.
 - A second thing moving by itself on a screen. The story's red, the swap, the one glide when the list opens and the particles of the model figure are the motion there is.
 - Paragraphs on the first screen. Depth is one click away.
+
+## Kinds, Ranking and zoom
+
+The kinds of sector stand under the modes. When the window has the height they are a list, one to a line; in a short window, or while the people of a land hold the dock, they are one row that never wraps, its type stepping down to fit. Ranking is not a mode and is never on the modes' row. It goes with the kinds, after the last one, in their size and colour, with a small list glyph before the word; on a phone it is the glyph alone at the end of the row. The people's dock stops 16 px or more under the panel, wherever the panel ends, and the photograph gets smaller, whole, before anything meets.
+
+The wheel, the + and − and the double click zoom through one easing. A notch of a mouse wheel is half a level, a pixel of trackpad scroll 0.005 of a level, a trackpad pinch four times that. The zoom follows its target with a time constant of 75 ms about the point under the pointer; the layers are scaled during the gesture and drawn once when it settles. Nothing the wheel says is dropped.

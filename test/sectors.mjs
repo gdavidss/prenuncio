@@ -427,12 +427,32 @@ try {
   await until(`document.querySelector(".leaflet-control-zoom a.home").classList.contains("off")`, "the whole map again");
   await sleep(400);
   await js(`window.__w = []; window.__rec = true; (function f() { window.__w.push(document.querySelector("canvas.base").getBoundingClientRect().width); if (window.__rec) requestAnimationFrame(f); })()`);
-  for (let k = 0; k < 14; k++) { await send("Input.dispatchMouseEvent", { type: "mouseWheel", x: mid[0], y: mid[1], deltaX: 0, deltaY: -50 }); await sleep(30); }
+  for (let k = 0; k < 14; k++) { await send("Input.dispatchMouseEvent", { type: "mouseWheel", x: mid[0], y: mid[1], deltaX: 0, deltaY: -20 }); await sleep(30); }
   await sleep(900);
   const widths = (await js(`(window.__rec = false, window.__w)`)).filter((x, i, a) => !i || Math.abs(x - a[i - 1]) > 0.01);
   assert.ok(widths.length >= 12 && widths.at(-1) / widths[0] > 1.25, `the wheel zooms through many frames: ${widths.length} sizes, from ${Math.round(widths[0])} to ${Math.round(widths.at(-1))} px`);
   assert.ok(widths.every((x, i) => !i || (x >= widths[i - 1] * 0.995 && x <= widths[i - 1] * 1.12)), "and the Amazon only grows, never by more than an eighth from one frame to the next: " + widths.map(Math.round));
   assert.ok(Math.abs(await zoomNow() * 4 - Math.round(await zoomNow() * 4)) > 0.01 || true, "(the zoom rests where the gesture left it, not on a step)");
+  // Nothing the wheel says is dropped. A burst as a trackpad sends it (30 events of 4 px, 8 ms apart) and one notch of a
+  // mouse wheel (100 px): the zoom gained is what the gain says (0.005 of a level a pixel), it only grows, by small steps
+  // from one frame to the next, and it has settled 400 ms after the last event.
+  const turn = async (n, dy, gap) => {
+    await clickOn(".leaflet-control-zoom a.home");
+    await until(`document.querySelector(".leaflet-control-zoom a.home").classList.contains("off") && !prenuncio.zooming`, "the whole map, before a turn of the wheel");
+    await sleep(500);
+    await js(`window.__z = []; window.__rec = true; (function f() { window.__z.push([performance.now(), prenuncio.zoom]); if (window.__rec) requestAnimationFrame(f); })()`);
+    for (let k = 0; k < n; k++) { send("Input.dispatchMouseEvent", { type: "mouseWheel", x: mid[0], y: mid[1], deltaX: 0, deltaY: dy }); await sleep(gap); }
+    const last = await js(`performance.now()`);
+    await sleep(1200);
+    return js(`(() => { window.__rec = false; const z = window.__z, end = z.at(-1)[1]; let step = 0, back = 0, settle = z[0][0]; for (let i = 1; i < z.length; i++) { const d = z[i][1] - z[i - 1][1]; step = Math.max(step, d); if (d < -1e-6) back++; if (Math.abs(z[i][1] - end) > 0.005) settle = z[i][0]; } return { gained: end - z[0][1], step, back, settle: settle - ${last} }; })()`);
+  };
+  const pad = await turn(30, -4, 8);
+  assert.ok(Math.abs(pad.gained - 0.6) <= 0.06 && pad.back === 0 && pad.step <= 0.08 && pad.settle <= 400, "a trackpad's burst of 120 px gives 0.6 of a level, smoothly, settled in 400 ms: " + JSON.stringify(pad));
+  const notch = await turn(1, -100, 0);
+  assert.ok(Math.abs(notch.gained - 0.5) <= 0.05 && notch.back === 0 && notch.step <= 0.12 && notch.settle <= 400, "one notch of a mouse wheel gives half a level: " + JSON.stringify(notch));
+  // the + of the control and a double click go through the same easing: many frames, no jump
+  const plus = await (async () => { await sleep(100); await js(`window.__q = []; window.__recq = true; (function f() { window.__q.push(prenuncio.zoom); if (window.__recq) requestAnimationFrame(f); })()`); await clickOn(".leaflet-control-zoom-in"); await sleep(900); return js(`(window.__recq = false, [...new Set(window.__q.map(x => x.toFixed(3)))].map(Number))`); })();
+  assert.ok(plus.length >= 8 && Math.abs(plus.at(-1) - plus[0] - 0.75) < 0.01 && plus.every((x, i) => !i || (x > plus[i - 1] && x - plus[i - 1] < 0.2)), "the + eases through many frames to three quarters of a level: " + plus);
   // however wildly it is dragged, a good part of the Amazon stays in the part of the stage that nothing covers
   for (const [dx, dy] of [[900, 700], [900, 700], [-1300, -800], [-1300, -800], [-1300, -800]]) {
     await send("Input.dispatchMouseEvent", { type: "mousePressed", x: mid[0], y: mid[1], button: "left", clickCount: 1 });
@@ -1210,7 +1230,7 @@ try {
       await until(`document.documentElement.lang === "${l}" && !document.getElementById("people").hidden && !!document.querySelector("#people img") && !document.getElementById("scope").hidden`, `${l}: the people of land ${withPhoto}`);
       await until(`document.querySelector("#people img").complete && document.querySelector("#people img").naturalWidth > 0`, "the photograph");
       await sleep(900);
-      const got = await js(`(() => { const a = document.getElementById("people"), box = document.getElementById("chartbox"), r = box.getBoundingClientRect(), im = a.querySelector("img"), ir = im.getBoundingClientRect(), c = a.querySelector("figcaption a"); return { kids: [...a.children].map(e => e.tagName).slice(0, 4).join(), inDock: box.contains(a) && box.dataset.as === "dock", src: im.getAttribute("src"), alt: im.alt, lazy: im.loading, whole: Math.abs(ir.width / ir.height - im.naturalWidth / im.naturalHeight) < 0.02 && ir.width > 300 && ir.height > 150, credit: c.textContent, href: c.getAttribute("href"), blank: c.target, name: a.querySelector("h2").textContent, text: a.querySelector("h2 + p").textContent, others: [...a.querySelectorAll("details summary")].map(e => e.textContent), left: r.left < innerWidth * 0.05 && r.right < innerWidth * 0.4 && Math.round(r.bottom) >= innerHeight - 40, taller: r.height, noChart: ["hazrow", "body", "chart"].every(id => !document.getElementById(id).offsetParent), headline: !!document.getElementById("say").offsetParent, noColumn: !document.querySelector("aside#people") && document.getElementById("list").hidden }; })()`);
+      const got = await js(`(() => { const a = document.getElementById("people"), box = document.getElementById("chartbox"), r = box.getBoundingClientRect(), im = a.querySelector("img"), ir = im.getBoundingClientRect(), c = a.querySelector("figcaption a"); return { kids: [...a.children].map(e => e.tagName).slice(0, 4).join(), inDock: box.contains(a) && box.dataset.as === "dock", src: im.getAttribute("src"), alt: im.alt, lazy: im.loading, whole: Math.abs(ir.width / ir.height - im.naturalWidth / im.naturalHeight) < 0.02 && ir.width > 120 && ir.height > 150, credit: c.textContent, href: c.getAttribute("href"), blank: c.target, name: a.querySelector("h2").textContent, text: a.querySelector("h2 + p").textContent, others: [...a.querySelectorAll("details summary")].map(e => e.textContent), left: r.left < innerWidth * 0.05 && r.right < innerWidth * 0.4 && Math.round(r.bottom) >= innerHeight - 40, taller: r.height, noChart: ["hazrow", "body", "chart"].every(id => !document.getElementById(id).offsetParent), headline: !!document.getElementById("say").offsetParent, noColumn: !document.querySelector("aside#people") && document.getElementById("list").hidden }; })()`);
       assert.ok(got.taller > dockBefore[3] - dockBefore[1] + 100 && got.taller <= vh - 100, `${l}: the dock is taller for the people, and still under the map's panel: ${got.taller}`);
       delete got.taller;
       assert.deepEqual(got, { kids: "BUTTON,FIGURE,H2,P", inDock: true, src: p0.photo.file, alt: p0.photo.caption[l], lazy: "lazy", whole: true, credit: (l === "pt" ? "Foto: " : "Photo: ") + `${p0.photo.author}, ${p0.photo.license}`, href: p0.photo.source_url, blank: "_blank", name: p0.name, text: p0.text[l], others: P.slice(1).map(x => x.name), left: true, noChart: true, headline: true, noColumn: true }, `${l}: the people take the timeline's place in its dock: the photograph whole with its credit linked to the source, the name, the lines, the others as names, then the headline; no plot, and no column on the right`);
@@ -1339,6 +1359,58 @@ try {
   await until(`document.documentElement.lang === "pt" && document.getElementById("lang-menu").hidden && /l=pt/.test(location.hash) && /km² de desmatamento/.test(document.getElementById("say").textContent)`, "Portuguese, from the menu");
   assert.equal(await js(`localStorage.getItem("lang") + "/" + document.getElementById("lang-btn").textContent`), "pt/PT");
   await js(`localStorage.setItem("lang", "en")`);
+
+  // ---------- the kinds of sector and Ranking, and the people's dock under them. With the height for it the kinds are a
+  // list, one to a line, and Ranking closes it; in a short window, or with the people in the dock, they are one row
+  // that never wraps, Ranking at its end. Ranking is never on the modes' row. The dock stops under the panel, the
+  // photograph giving way (whole) before anything meets, and its X can be reached.
+  if (peoples) {
+    const tiK = (await fetch(`${SITE}data/sectors_ti.json`).then(r => r.json())).items.map(it => String(it.id)).filter(id => peoples[id]?.[0]?.photo).slice(0, 40);
+    const shapes = await jsA(`Promise.all(${JSON.stringify(tiK.map(id => [id, peoples[id][0].photo.file]))}.map(([id, f]) => new Promise(r => { const i = new Image(); i.onload = () => r([id, i.naturalWidth / i.naturalHeight]); i.onerror = () => r([id, 0]); i.src = f; })))`);
+    const LANDS = [shapes.find(x => x[1] > 1.2)?.[0], shapes.find(x => x[1] > 0 && x[1] < 0.83)?.[0]];
+    assert.ok(LANDS[0] && LANDS[1], "a land with a landscape photograph and one with a portrait: " + LANDS);
+    const KIND = () => js(`(() => { const R = e => e.getBoundingClientRect(), k = [...document.querySelectorAll("#kinds button")], kr = k.map(R), rk = document.getElementById("rank-btn"), r = R(rk), p = R(document.getElementById("mappanel")), m = R(document.getElementById("modes")), tops = [...new Set(kr.map(q => Math.round(q.top)))];
+      return { state: tops.length === 4 && kr.every(q => Math.abs(q.left - kr[0].left) < 1) ? "list" : tops.length === 1 ? "row" : "wrapped", inside: [...kr, r].every(q => q.left >= p.left - 1 && q.right <= p.right + 1 && q.width > 10), apart: kr.every((q, i) => !i || q.left >= kr[i - 1].right || q.top >= kr[i - 1].bottom), offModes: r.top >= m.bottom - 1 && !document.getElementById("modes").contains(rk),
+        rank: tops.length === 4 ? r.top >= kr[3].bottom - 1 && Math.abs(r.left - kr[0].left) < 1 : r.left >= kr[3].right && Math.abs((r.top + r.bottom) / 2 - (kr[3].top + kr[3].bottom) / 2) <= 3, same: getComputedStyle(rk).fontSize === getComputedStyle(k[0]).fontSize && getComputedStyle(rk).color === getComputedStyle(k[0].getAttribute("aria-pressed") === "true" ? k[1] : k[0]).color, glyph: !!rk.querySelector("svg"), bottom: Math.round(p.bottom) }; })()`);
+    const OK = st => ({ state: st, inside: true, apart: true, offModes: true, rank: true, same: true, glyph: true });
+    for (const [w, h] of [[1440, 900], [1280, 720], [1100, 700]]) for (const l of ["pt", "de"]) {
+      await send("Emulation.setDeviceMetricsOverride", { width: w, height: h, deviceScaleFactor: 1, mobile: false });
+      await send("Page.navigate", { url: SITE + `?story=0&kd=${w}${l}#l=${l}&m=sectors&s=ti&t=months` });
+      await until(`innerWidth === ${w} && document.documentElement.lang === "${l}" && document.querySelectorAll("#kinds button").length === 4 && !!document.getElementById("rank-btn").offsetParent && document.querySelectorAll("#chart .bar").length > 0`, `${l} ${w}x${h}: the Indigenous lands`, 600);
+      await sleep(500);
+      const k0 = await KIND(), tall = h > 780, b0 = k0.bottom; delete k0.bottom;
+      assert.deepEqual(k0, OK(tall ? "list" : "row"), `${l} ${w}x${h}: the kinds are a ${tall ? "list" : "row"}, never half wrapped, and Ranking goes with them: ` + JSON.stringify(k0));
+      for (const id of LANDS) {
+        await js(`prenuncio.pick(${JSON.stringify(id)})`);
+        await until(`!document.getElementById("people").hidden && !!document.querySelector("#people img") && document.querySelector("#people img").complete && document.querySelector("#people img").naturalWidth > 0`, `${l} ${w}x${h}: the people of ${id}`, 600);
+        await sleep(700);
+        const k1 = await KIND(), b1 = k1.bottom; delete k1.bottom;
+        assert.deepEqual(k1, OK("row"), `${l} ${w}x${h}: with the people in the dock the kinds are a row: ` + JSON.stringify(k1));
+        const d = await js(`(() => { const R = id => document.getElementById(id).getBoundingClientRect(), c = R("chartbox"), p = R("mappanel"), x = R("people-x"), im = document.querySelector("#people img"), ir = im.getBoundingClientRect(); return { gap: Math.round(c.top - p.bottom), x: !!document.elementFromPoint(x.left + x.width / 2, x.top + x.height / 2)?.closest("#people-x") && x.top >= c.top - 1, whole: Math.abs(ir.width / ir.height - im.naturalWidth / im.naturalHeight) < 0.02 && ir.height >= 100, photoIn: ir.top >= c.top - 1 && ir.bottom <= c.bottom + 1 && ir.top >= p.bottom, pb: getComputedStyle(document.documentElement).getPropertyValue("--panel-bottom").trim() }; })()`);
+        assert.ok(d.gap >= 12 && d.x && d.whole && d.photoIn && d.pb === b1 + "px", `${l} ${w}x${h}, land ${id}: the dock is under the panel with a clear gap, its X in reach, the photograph whole and in sight: ` + JSON.stringify(d));
+      }
+      // let go, the kinds are as they were
+      await js(`prenuncio.pick(null)`);
+      await until(`document.getElementById("people").hidden`, "the people let go");
+      await sleep(400);
+      const k2 = await KIND(); assert.ok(Math.abs(k2.bottom - b0) <= 2, `${l} ${w}x${h}: and the panel is as tall as before: ${k2.bottom}, ${b0}`); delete k2.bottom;
+      assert.deepEqual(k2, k0, `${l} ${w}x${h}: the kinds return to the ${tall ? "list" : "row"}`);
+    }
+    // the switch between the two with the window's height alone, and outside Sectors neither is there
+    await send("Emulation.setDeviceMetricsOverride", { width: 1440, height: 900, deviceScaleFactor: 1, mobile: false });
+    await until(`innerHeight === 900`, "a tall window"); await sleep(400);
+    assert.equal((await KIND()).state, "list");
+    await send("Emulation.setDeviceMetricsOverride", { width: 1440, height: 740, deviceScaleFactor: 1, mobile: false });
+    await until(`innerHeight === 740`, "a short window"); await sleep(400);
+    assert.equal((await KIND()).state, "row", "a short window: the list becomes the row");
+    await send("Emulation.setDeviceMetricsOverride", { width: 1440, height: 900, deviceScaleFactor: 1, mobile: false });
+    await until(`innerHeight === 900`, "tall again"); await sleep(400);
+    assert.equal((await KIND()).state, "list", "and the list again");
+    await clickOn("#rank-btn");
+    await until(`document.getElementById("rank-btn").getAttribute("aria-pressed") === "true" && !!document.getElementById("list").offsetParent`, "Ranking opens the ranked list");
+    await clickOn('#modes button[data-k="cells"]');
+    await until(`document.getElementById("kindrow").hidden && !document.getElementById("rank-btn").offsetParent && !document.getElementById("kinds").offsetParent`, "outside Sectors there are no kinds and no Ranking");
+  }
 
   // ---------- a phone, 390 by 844, in Portuguese. The map is the screen; the story's caption is at the bottom, at
   // the thumb, with the way on as a large arrow; one sheet shows at a time, the bulletin or the list, and their
@@ -1518,8 +1590,14 @@ try {
   await until(`!document.getElementById("about").open`, "About closed");
   if (peoples) {
     const tiP = (await fetch(`${SITE}data/sectors_ti.json`).then(r => r.json())).items.map(it => String(it.id)).find(id => peoples[id]?.[0]?.photo);
-    await send("Page.navigate", { url: SITE + `?story=0&pp=phone#l=pt&m=sectors&s=ti&r=${tiP}&t=months` });
-    await until(`innerWidth === 390 && !document.getElementById("people").hidden && !!document.querySelector("#people img") && document.querySelector("#people img").complete`, "the people on a phone");
+    // (the local server now and then leaves one picture unanswered: the page is asked for once more before the wait gives up)
+    const seen = `innerWidth === 390 && !document.getElementById("people").hidden && !!document.querySelector("#people img") && document.querySelector("#people img").complete`;
+    for (let go = 0; go < 3; go++) {
+      await send("Page.navigate", { url: SITE + `?story=0&pp=phone${go}#l=pt&m=sectors&s=ti&r=${tiP}&t=months` });
+      let ok = false; for (let i = 0; i < 100 && !(ok = await js(seen)); i++) await sleep(200);
+      if (ok) break;
+    }
+    await until(seen, "the people on a phone");
     await sleep(600);
     const pm = await js(`(() => { const im = document.querySelector("#people img").getBoundingClientRect(), c = document.getElementById("chartbox").getBoundingClientRect(); return [Math.round(im.left), Math.round(im.width), Math.round(im.top - c.top) < 30, !document.getElementById("chart").offsetParent, !!document.getElementById("say").offsetParent && document.getElementById("say").getBoundingClientRect().bottom <= innerHeight]; })()`);
     assert.deepEqual(pm, [0, 390, true, true, true], "on a phone the photograph is across the screen at the top of the sheet, the headline under it, no plot: " + pm);
