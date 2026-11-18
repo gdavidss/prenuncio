@@ -3,12 +3,12 @@
  "aboutText": {
   "benchmark": "Benchmark",
   "by": "Fatto da {name} ({site}).",
-  "line1": "Prenúncio mostra dove l'Amazzonia sarà probabilmente disboscata entro luglio {year}.",
-  "line2": "Lo abbiamo costruito perché chi fa rispettare la legge arrivi prima.",
+  "line1": "Prenúncio prevede dove l'Amazzonia sarà disboscata entro luglio {year}.",
+  "line2": "Lo abbiamo costruito perché i controlli arrivino prima del disboscamento.",
   "metric": "Il punteggio è la media dal {b0} al {b1}.",
-  "model": "Il modello, {name}, ha imparato da {span} anni di dati pubblici. Per ogni quadrato di foresta di {m} metri di lato dà la probabilità di disboscamento nell'anno successivo.",
-  "open": "Il codice, i dati e il benchmark sono aperti. Chi fa un modello migliore passa davanti al nostro.",
-  "tested": "Lo abbiamo provato su anni che non aveva mai visto. Nel {y}, su {of} luoghi che ha indicato, {hit} sono stati disboscati."
+  "model": "Il modello si chiama {name} e ha imparato da {span} anni di dati pubblici. Divide la foresta in quadrati di {m} metri, le celle, e calcola per ciascuna la probabilità di disboscamento nell'anno successivo.",
+  "open": "Il codice, i dati e il benchmark sono aperti. Chi fa un modello migliore sostituisce il nostro.",
+  "tested": "Per provarlo abbiamo nascosto un anno al modello e chiesto la sua previsione. Nel {y}, su {of} luoghi che ha indicato, {hit} sono stati disboscati."
  },
  "about_": "circa {x} km²",
  "act": {
@@ -474,28 +474,28 @@
  "skip": "Salta",
  "st": {
   "ahead": {
-   "flat": "Il modello prevede altri {km} km² di disboscamento entro {month}.",
-   "rise": "{pct}% di disboscamento in più in tre mesi, e il modello prevede altri {km} km² entro {month}."
+   "flat": "Entro {month} il modello prevede {km} km² di disboscamento.",
+   "rise": "Il disboscamento è salito del {pct}% in tre mesi. Il modello prevede {km} km² entro {month}."
   },
   "back": "Indietro",
   "done": "Fine",
-  "first": "Per chi fa i controlli, questi {n} luoghi vengono prima.",
+  "first": "Questi {n} luoghi vanno controllati per primi. È dove il modello prevede più disboscamento.",
   "forestA": "Questa è l'Amazzonia.",
   "forestB": {
-   "one": "{cells} milione di quadrati di foresta, {m} metri ciascuno.",
-   "other": "{cells} milioni di quadrati di foresta, {m} metri ciascuno."
+   "one": "Abbiamo diviso la foresta in quadrati di {m} metri di lato. Fa {cells} milione di celle.",
+   "other": "Abbiamo diviso la foresta in quadrati di {m} metri di lato. Fanno {cells} milioni di celle."
   },
-  "lossA": "Ogni anno ne cade un pezzo.",
-  "lossB": "Dal {y}, {k} mila km².",
-  "lossBMore": "Dal {y}, {k} mila km². Più della Grecia.",
-  "model": "Abbiamo addestrato un modello per prevedere il prossimo.",
+  "lossA": "Ogni anno un pezzo di foresta viene disboscato.",
+  "lossB": "Dal {y} l'Amazzonia ha perso {k} mila km² di foresta.",
+  "lossBMore": "Dal {y} l'Amazzonia ha perso {k} mila km² di foresta, un'area più grande della Grecia.",
+  "model": "Abbiamo addestrato un modello per calcolare la probabilità che ogni cella venga disboscata nell'anno successivo.",
   "moreKm": 131957,
   "next": "Avanti",
-  "open": "Il codice e il benchmark sono aperti. Chi fa un modello migliore passa davanti al nostro.",
-  "proof": "Lo abbiamo provato sul passato. Nel {y}, su {of} luoghi indicati, {hit} sono stati disboscati.",
+  "open": "Il codice e il benchmark sono aperti. Chi fa un modello migliore sostituisce il nostro.",
+  "proof": "Abbiamo nascosto il {y} al modello e chiesto la sua previsione. Su {of} luoghi indicati, {hit} sono stati disboscati.",
   "sources": {
-   "one": "Impara da {n} fonte pubblica, dalle immagini satellitari ai permessi di disboscamento.",
-   "other": "Impara da {n} fonti pubbliche, dalle immagini satellitari ai permessi di disboscamento."
+   "one": "Il modello impara da {n} fonte pubblica, dalle immagini satellitari ai permessi di disboscamento.",
+   "other": "Il modello impara da {n} fonti pubbliche, dalle immagini satellitari ai permessi di disboscamento."
   }
  },
  "stepHi": "oltre {c}",

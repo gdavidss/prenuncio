@@ -3,12 +3,12 @@
  "aboutText": {
   "benchmark": "Benchmark",
   "by": "Made by {name} ({site}).",
-  "line1": "Prenúncio shows where the Amazon is likely to be cleared by July {year}.",
-  "line2": "We built it so the people who enforce the law can get there first.",
+  "line1": "Prenúncio forecasts where the Amazon will be cleared by July {year}.",
+  "line2": "We built it so enforcement can arrive before the clearing does.",
   "metric": "The score is the mean of {b0} to {b1}.",
-  "model": "The model, {name}, learned from {span} years of public data. For every {m} metre square of forest it gives the chance of clearing in the year ahead.",
-  "open": "The code, the data and the benchmark are open. Build a better model and it goes ahead of ours.",
-  "tested": "We tested it on years it had never seen. In {y}, {hit} of every {of} places it pointed to were cleared."
+  "model": "The model is called {name} and learned from {span} years of public data. It divides the forest into {m} metre squares, the cells, and calculates for each one the chance of clearing in the year ahead.",
+  "open": "The code, the data and the benchmark are open. Build a better model and it replaces ours.",
+  "tested": "To test it, we hid a year from the model and asked for its forecast. In {y}, {hit} of every {of} places it pointed to were cleared."
  },
  "about_": "about {x} km²",
  "act": {
@@ -211,136 +211,136 @@
  ],
  "like": [
   {
+   "half": "Half of Manhattan.",
    "km": 59,
    "same": "The size of Manhattan.",
+   "third": "A third of Manhattan.",
+   "x10": "Ten times Manhattan.",
    "x2": "Twice Manhattan.",
    "x3": "Three times Manhattan.",
    "x4": "Four times Manhattan.",
-   "x5": "Five times Manhattan.",
-   "x10": "Ten times Manhattan.",
-   "half": "Half of Manhattan.",
-   "third": "A third of Manhattan."
+   "x5": "Five times Manhattan."
   },
   {
+   "half": "Half of Paris.",
    "km": 105,
    "same": "The size of Paris.",
+   "third": "A third of Paris.",
+   "x10": "Ten times Paris.",
    "x2": "Twice Paris.",
    "x3": "Three times Paris.",
    "x4": "Four times Paris.",
-   "x5": "Five times Paris.",
-   "x10": "Ten times Paris.",
-   "half": "Half of Paris.",
-   "third": "A third of Paris."
+   "x5": "Five times Paris."
   },
   {
+   "half": "Half of Washington, D.C.",
    "km": 177,
    "same": "The size of Washington, D.C.",
+   "third": "A third of Washington, D.C.",
+   "x10": "Ten times Washington, D.C.",
    "x2": "Twice Washington, D.C.",
    "x3": "Three times Washington, D.C.",
    "x4": "Four times Washington, D.C.",
-   "x5": "Five times Washington, D.C.",
-   "x10": "Ten times Washington, D.C.",
-   "half": "Half of Washington, D.C.",
-   "third": "A third of Washington, D.C."
+   "x5": "Five times Washington, D.C."
   },
   {
+   "half": "Half of Singapore.",
    "km": 735,
    "same": "The size of Singapore.",
+   "third": "A third of Singapore.",
+   "x10": "Ten times Singapore.",
    "x2": "Twice Singapore.",
    "x3": "Three times Singapore.",
    "x4": "Four times Singapore.",
-   "x5": "Five times Singapore.",
-   "x10": "Ten times Singapore.",
-   "half": "Half of Singapore.",
-   "third": "A third of Singapore."
+   "x5": "Five times Singapore."
   },
   {
+   "half": "Half of the city of Los Angeles.",
    "km": 1214,
    "same": "The size of the city of Los Angeles.",
+   "third": "A third of the city of Los Angeles.",
+   "x10": "Ten times the city of Los Angeles.",
    "x2": "Twice the city of Los Angeles.",
    "x3": "Three times the city of Los Angeles.",
    "x4": "Four times the city of Los Angeles.",
-   "x5": "Five times the city of Los Angeles.",
-   "x10": "Ten times the city of Los Angeles.",
-   "half": "Half of the city of Los Angeles.",
-   "third": "A third of the city of Los Angeles."
+   "x5": "Five times the city of Los Angeles."
   },
   {
+   "half": "Half of Greater London.",
    "km": 1572,
    "same": "The size of Greater London.",
+   "third": "A third of Greater London.",
+   "x10": "Ten times Greater London.",
    "x2": "Twice Greater London.",
    "x3": "Three times Greater London.",
    "x4": "Four times Greater London.",
-   "x5": "Five times Greater London.",
-   "x10": "Ten times Greater London.",
-   "half": "Half of Greater London.",
-   "third": "A third of Greater London."
+   "x5": "Five times Greater London."
   },
   {
+   "half": "Half of Luxembourg.",
    "km": 2586,
    "same": "The size of Luxembourg.",
+   "third": "A third of Luxembourg.",
+   "x10": "Ten times Luxembourg.",
    "x2": "Twice Luxembourg.",
    "x3": "Three times Luxembourg.",
    "x4": "Four times Luxembourg.",
-   "x5": "Five times Luxembourg.",
-   "x10": "Ten times Luxembourg.",
-   "half": "Half of Luxembourg.",
-   "third": "A third of Luxembourg."
+   "x5": "Five times Luxembourg."
   },
   {
+   "half": "Half of Delaware.",
    "km": 6446,
    "same": "The size of Delaware.",
+   "third": "A third of Delaware.",
+   "x10": "Ten times Delaware.",
    "x2": "Twice Delaware.",
    "x3": "Three times Delaware.",
    "x4": "Four times Delaware.",
-   "x5": "Five times Delaware.",
-   "x10": "Ten times Delaware.",
-   "half": "Half of Delaware.",
-   "third": "A third of Delaware."
+   "x5": "Five times Delaware."
   },
   {
+   "half": "Half of Lebanon.",
    "km": 10452,
    "same": "The size of Lebanon.",
+   "third": "A third of Lebanon.",
+   "x10": "Ten times Lebanon.",
    "x2": "Twice Lebanon.",
    "x3": "Three times Lebanon.",
    "x4": "Four times Lebanon.",
-   "x5": "Five times Lebanon.",
-   "x10": "Ten times Lebanon.",
-   "half": "Half of Lebanon.",
-   "third": "A third of Lebanon."
+   "x5": "Five times Lebanon."
   },
   {
+   "half": "Half of Belgium.",
    "km": 30528,
    "same": "The size of Belgium.",
+   "third": "A third of Belgium.",
+   "x10": "Ten times Belgium.",
    "x2": "Twice Belgium.",
    "x3": "Three times Belgium.",
    "x4": "Four times Belgium.",
-   "x5": "Five times Belgium.",
-   "x10": "Ten times Belgium.",
-   "half": "Half of Belgium.",
-   "third": "A third of Belgium."
+   "x5": "Five times Belgium."
   },
   {
+   "half": "Half of Switzerland.",
    "km": 41285,
    "same": "The size of Switzerland.",
+   "third": "A third of Switzerland.",
+   "x10": "Ten times Switzerland.",
    "x2": "Twice Switzerland.",
    "x3": "Three times Switzerland.",
    "x4": "Four times Switzerland.",
-   "x5": "Five times Switzerland.",
-   "x10": "Ten times Switzerland.",
-   "half": "Half of Switzerland.",
-   "third": "A third of Switzerland."
+   "x5": "Five times Switzerland."
   },
   {
+   "half": "Half of England.",
    "km": 130279,
    "same": "The size of England.",
+   "third": "A third of England.",
+   "x10": "Ten times England.",
    "x2": "Twice England.",
    "x3": "Three times England.",
    "x4": "Four times England.",
-   "x5": "Five times England.",
-   "x10": "Ten times England.",
-   "half": "Half of England.",
-   "third": "A third of England."
+   "x5": "Five times England."
   }
  ],
  "line": "Line",
@@ -419,8 +419,8 @@
  "pastHereNone": "In {y} no clearing was mapped here",
  "pastP": "In {y}, {exp} cells were expected to lose a hectare and {act} did",
  "people": {
-  "credit": "Photo: {author}, {license}",
-  "also": "Also on this land"
+  "also": "Also on this land",
+  "credit": "Photo: {author}, {license}"
  },
  "prevYear": "Previous year",
  "range": "likely {lo} to {hi}",
@@ -460,23 +460,23 @@
  "skip": "Skip",
  "st": {
   "ahead": {
-   "flat": "The model expects another {km} km² of clearing by {month}.",
-   "rise": "In the last three months clearing rose {pct}%, and the model expects another {km} km² by {month}."
+   "flat": "By {month}, the model expects {km} km² of clearing.",
+   "rise": "Clearing rose {pct}% in the last three months. The model expects {km} km² by {month}."
   },
   "back": "Back",
   "done": "Done",
-  "first": "For those who enforce, these {n} places come first.",
+  "first": "These {n} places should be inspected first. The model expects the most clearing there.",
   "forestA": "This is the Amazon.",
-  "forestB": "{cells} million squares of forest, {m} metres each.",
-  "lossA": "Every year a piece of it falls.",
-  "lossB": "Since {y}, {k} thousand km².",
-  "lossBMore": "Since {y}, {k} thousand km². More than England.",
-  "model": "We trained a model to predict the next one.",
+  "forestB": "We divided the forest into squares {m} metres across. That makes {cells} million cells.",
+  "lossA": "Every year, a piece of the forest is cleared.",
+  "lossB": "Since {y}, the Amazon has lost {k} thousand km² of forest.",
+  "lossBMore": "Since {y}, the Amazon has lost {k} thousand km² of forest, an area larger than England.",
+  "model": "We trained a model to calculate each cell's chance of being cleared in the year ahead.",
   "moreKm": 130279,
   "next": "Next",
-  "open": "The code and the benchmark are open. Build a better model and it goes ahead of ours.",
-  "proof": "We tested it on the past. In {y}, {hit} of every {of} places it pointed to were cleared.",
-  "sources": "It learns from {n} public sources, from satellite images to clearing permits."
+  "open": "The code and the benchmark are open. Build a better model and it replaces ours.",
+  "proof": "We hid {y} from the model and asked for its forecast. Of every {of} places it pointed to, {hit} were cleared.",
+  "sources": "The model learns from {n} public sources, from satellite images to clearing permits."
  },
  "stepHi": "over {c}",
  "stepLo": "under {c}",

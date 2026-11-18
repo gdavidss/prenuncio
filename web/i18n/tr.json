@@ -3,12 +3,12 @@
  "aboutText": {
   "benchmark": "Benchmark",
   "by": "{name} tarafından yapıldı ({site}).",
-  "line1": "Prenúncio, Amazon'da Temmuz {year} sonuna kadar ormansızlaşması muhtemel yerleri gösterir.",
-  "line2": "Denetim yapanlar oraya önce varabilsin diye yaptık.",
+  "line1": "Prenúncio, Amazon'un Temmuz {year} sonuna kadar nerede ormansızlaşacağını tahmin eder.",
+  "line2": "Denetim ormansızlaşmadan önce varsın diye yaptık.",
   "metric": "Puan, {b0} ile {b1} arasındaki yılların ortalamasıdır.",
-  "model": "{name} adlı model {span} yıllık kamuya açık veriden öğrendi. Kenarı {m} metre olan her orman karesi için gelecek yıl içinde ormansızlaşma olasılığını verir.",
-  "open": "Kod, veri ve benchmark açık. Daha iyi bir model yapan bizimkinin önüne geçer.",
-  "tested": "Modeli hiç görmediği yıllarda sınadık. {y} yılında işaret ettiği her {of} yerden {hit} tanesi ormansızlaştı."
+  "model": "Modelin adı {name}; {span} yıllık kamuya açık veriden öğrendi. Ormanı {m} metrelik karelere, yani hücrelere böler ve her biri için gelecek yıl ormansızlaşma olasılığını hesaplar.",
+  "open": "Kod, veri ve benchmark açık. Daha iyi bir model yapan bizimkinin yerini alır.",
+  "tested": "Sınamak için bir yılı modelden sakladık ve tahminini istedik. {y} yılında işaret ettiği her {of} yerden {hit} tanesi ormansızlaştı."
  },
  "about_": "yaklaşık {x} km²",
  "act": {
@@ -468,23 +468,23 @@
  "skip": "Geç",
  "st": {
   "ahead": {
-   "flat": "Model, {month} sonuna kadar {km} km² daha ormansızlaşma bekliyor.",
-   "rise": "Son üç ayda ormansızlaşma %{pct} arttı. Model {month} sonuna kadar {km} km² daha bekliyor."
+   "flat": "Model, {month} sonuna kadar {km} km² ormansızlaşma bekliyor.",
+   "rise": "Son üç ayda ormansızlaşma %{pct} arttı. Model {month} sonuna kadar {km} km² bekliyor."
   },
   "back": "Geri",
   "done": "Bitti",
-  "first": "Denetim yapanlar için önce bu {n} yer gelir.",
+  "first": "Önce bu {n} yer denetlenmeli. Model en çok ormansızlaşmayı orada bekliyor.",
   "forestA": "Burası Amazon.",
-  "forestB": "Her biri {m} metre olan {cells} milyon orman karesi.",
-  "lossA": "Her yıl bir parçası yok oluyor.",
-  "lossB": "{y} yılından beri {k} bin km².",
-  "lossBMore": "{y} yılından beri {k} bin km². Yunanistan'dan büyük.",
-  "model": "Bir sonrakini tahmin etmesi için bir model eğittik.",
+  "forestB": "Ormanı kenarı {m} metre olan karelere böldük. Bu {cells} milyon hücre eder.",
+  "lossA": "Her yıl ormanın bir parçası yok ediliyor.",
+  "lossB": "{y} yılından beri Amazon {k} bin km² orman kaybetti.",
+  "lossBMore": "{y} yılından beri Amazon {k} bin km² orman kaybetti; Yunanistan'dan büyük bir alan.",
+  "model": "Her hücrenin gelecek yıl ormansızlaşma olasılığını hesaplaması için bir model eğittik.",
   "moreKm": 131957,
   "next": "İleri",
-  "open": "Kod ve benchmark açık. Daha iyi bir model yapan bizimkinin önüne geçer.",
-  "proof": "Modeli geçmişte sınadık. {y} yılında işaret ettiği her {of} yerden {hit} tanesi ormansızlaştı.",
-  "sources": "Uydu görüntülerinden kesim izinlerine, kamuya açık {n} kaynaktan öğreniyor."
+  "open": "Kod ve benchmark açık. Daha iyi bir model yapan bizimkinin yerini alır.",
+  "proof": "{y} yılını modelden sakladık ve tahminini istedik. İşaret ettiği her {of} yerden {hit} tanesi ormansızlaştı.",
+  "sources": "Model, uydu görüntülerinden kesim izinlerine, kamuya açık {n} kaynaktan öğreniyor."
  },
  "stepHi": "{c} üstü",
  "stepLo": "{c} altı",

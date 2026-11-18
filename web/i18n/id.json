@@ -3,12 +3,12 @@
  "aboutText": {
   "benchmark": "Benchmark",
   "by": "Dibuat oleh {name} ({site}).",
-  "line1": "Prenúncio menunjukkan bagian Amazon yang kemungkinan besar dibuka sampai Juli {year}.",
-  "line2": "Kami membuatnya agar para penegak hukum bisa tiba lebih dulu.",
+  "line1": "Prenúncio memprakirakan bagian Amazon yang akan dibuka sampai Juli {year}.",
+  "line2": "Kami membuatnya agar penegakan hukum tiba sebelum hutan dibuka.",
   "metric": "Skor adalah rata-rata {b0} sampai {b1}.",
-  "model": "Model ini, {name}, belajar dari {span} tahun data publik. Untuk setiap petak hutan bersisi {m} meter, model memberikan peluang deforestasi pada tahun berikutnya.",
-  "open": "Kode, data, dan benchmark terbuka. Buat model yang lebih baik, dan model itu naik di atas model kami.",
-  "tested": "Kami mengujinya pada tahun-tahun yang belum pernah dilihatnya. Pada {y}, {hit} dari setiap {of} tempat yang ditunjuknya benar-benar dibuka."
+  "model": "Model ini bernama {name} dan belajar dari {span} tahun data publik. Model membagi hutan menjadi petak {m} meter, yaitu sel, dan menghitung untuk tiap sel peluang deforestasi pada tahun berikutnya.",
+  "open": "Kode, data, dan benchmark terbuka. Buat model yang lebih baik, dan model itu menggantikan model kami.",
+  "tested": "Untuk mengujinya, kami menyembunyikan satu tahun dari model dan meminta prakiraannya. Pada {y}, {hit} dari setiap {of} tempat yang ditunjuknya benar-benar dibuka."
  },
  "about_": "sekitar {x} km²",
  "act": {
@@ -446,22 +446,22 @@
  "skip": "Lewati",
  "st": {
   "ahead": {
-   "flat": "Model memperkirakan {km} km² lagi dibuka sampai {month}.",
-   "rise": "Tiga bulan terakhir deforestasi naik {pct}%. Model memperkirakan {km} km² lagi sampai {month}."
+   "flat": "Sampai {month}, model memperkirakan {km} km² hutan dibuka.",
+   "rise": "Deforestasi naik {pct}% dalam tiga bulan terakhir. Model memperkirakan {km} km² sampai {month}."
   },
   "back": "Kembali",
   "done": "Selesai",
-  "first": "Bagi para penegak hukum, {n} tempat ini didahulukan.",
+  "first": "{n} tempat ini perlu diperiksa lebih dulu. Di sanalah model memperkirakan pembukaan terbanyak.",
   "forestA": "Inilah Amazon.",
-  "forestB": "{cells} juta petak hutan, masing-masing {m} meter.",
-  "lossA": "Setiap tahun sebagian darinya tumbang.",
-  "lossB": "Sejak {y}, {k} ribu km².",
-  "lossBMore": "Sejak {y}, {k} ribu km². Lebih luas dari Pulau Jawa.",
-  "model": "Kami melatih sebuah model untuk memprakirakan bagian berikutnya.",
+  "forestB": "Kami membagi hutan menjadi petak bersisi {m} meter. Jumlahnya {cells} juta sel.",
+  "lossA": "Setiap tahun, sebagian hutan dibuka.",
+  "lossB": "Sejak {y}, Amazon kehilangan {k} ribu km² hutan.",
+  "lossBMore": "Sejak {y}, Amazon kehilangan {k} ribu km² hutan, area yang lebih luas dari Pulau Jawa.",
+  "model": "Kami melatih sebuah model untuk menghitung peluang tiap sel dibuka pada tahun berikutnya.",
   "moreKm": 128297,
   "next": "Lanjut",
-  "open": "Kode dan benchmark terbuka. Buat model yang lebih baik, dan model itu naik di atas model kami.",
-  "proof": "Kami mengujinya pada masa lalu. Pada {y}, {hit} dari tiap {of} tempat yang ditunjuknya dibuka.",
+  "open": "Kode dan benchmark terbuka. Buat model yang lebih baik, dan model itu menggantikan model kami.",
+  "proof": "Kami menyembunyikan {y} dari model dan meminta prakiraannya. Dari tiap {of} tempat yang ditunjuknya, {hit} dibuka.",
   "sources": "Model belajar dari {n} sumber publik, dari citra satelit sampai izin pembukaan hutan."
  },
  "stepHi": "di atas {c}",

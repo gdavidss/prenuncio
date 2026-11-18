@@ -412,6 +412,7 @@ canvas.cells { position: absolute; left: 0; top: 0; transition: opacity 0.25s; }
 :root[data-story] :is(#mapbox, #mappanel, #chartbox, #list-rows) { pointer-events: none; }
 :root[data-story]:not([data-has~="legend"]) :is(#mappanel, .leaflet-control-zoom), :root[data-story]:not([data-has~="chart"]) #chartbox { opacity: 0; visibility: hidden; }
 :root[data-story]:not([data-has~="list"]) .state-name { display: none; }
+:root[data-story] #mapctl { visibility: hidden; }  /* modes, kinds and Ranking come in when the story ends */
 
 /* ---------- what takes the stage in the map's place: About (what this is, the model's figure, the benchmark)
    and the API's instructions. Each fills the page under the header, its content a column in the middle; the map

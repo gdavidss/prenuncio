@@ -3,12 +3,12 @@
  "aboutText": {
   "benchmark": "Benchmark",
   "by": "Erstellt von {name} ({site}).",
-  "line1": "Prenúncio zeigt, wo in Amazonien bis Juli {year} wahrscheinlich gerodet wird.",
-  "line2": "Wir haben es gebaut, damit alle, die das Recht durchsetzen, früher dort sind.",
+  "line1": "Prenúncio sagt vorher, wo in Amazonien bis Juli {year} gerodet wird.",
+  "line2": "Wir haben es gebaut, damit die Kontrolle vor der Rodung da ist.",
   "metric": "Der Score ist der Mittelwert von {b0} bis {b1}.",
-  "model": "Das Modell, {name}, hat aus {span} Jahren öffentlicher Daten gelernt. Für jedes Waldquadrat von {m} Metern gibt es die Wahrscheinlichkeit einer Rodung im Folgejahr an.",
-  "open": "Code, Daten und Benchmark sind offen. Wer ein besseres Modell baut, steht vor unserem.",
-  "tested": "Wir haben es an Jahren getestet, die es nie gesehen hatte. {y} wurden von {of} Orten, auf die es zeigte, {hit} gerodet."
+  "model": "Das Modell heißt {name} und hat aus {span} Jahren öffentlicher Daten gelernt. Es teilt den Wald in Quadrate von {m} Metern, die Zellen, und berechnet für jede die Wahrscheinlichkeit einer Rodung im Folgejahr.",
+  "open": "Code, Daten und Benchmark sind offen. Wer ein besseres Modell baut, ersetzt unseres.",
+  "tested": "Zum Test haben wir dem Modell ein Jahr vorenthalten und nach seiner Prognose gefragt. {y} wurden von {of} Orten, auf die es zeigte, {hit} gerodet."
  },
  "about_": "etwa {x} km²",
  "act": {
@@ -474,28 +474,28 @@
  "skip": "Überspringen",
  "st": {
   "ahead": {
-   "flat": "Das Modell erwartet bis {month} weitere {km} km² Rodung.",
-   "rise": "In drei Monaten stieg die Rodung um {pct} %, und das Modell erwartet bis {month} weitere {km} km²."
+   "flat": "Bis {month} erwartet das Modell {km} km² Rodung.",
+   "rise": "Die Rodung stieg in drei Monaten um {pct} %. Das Modell erwartet bis {month} {km} km²."
   },
   "back": "Zurück",
   "done": "Fertig",
-  "first": "Für alle, die kontrollieren, kommen diese {n} Orte zuerst.",
+  "first": "Diese {n} Orte sollten zuerst kontrolliert werden. Dort erwartet das Modell die meiste Rodung.",
   "forestA": "Das ist Amazonien.",
   "forestB": {
-   "one": "{cells} Million Waldquadrate, je {m} Meter.",
-   "other": "{cells} Millionen Waldquadrate, je {m} Meter."
+   "one": "Wir haben den Wald in Quadrate von {m} Metern Seitenlänge geteilt. Das ergibt {cells} Million Zellen.",
+   "other": "Wir haben den Wald in Quadrate von {m} Metern Seitenlänge geteilt. Das ergibt {cells} Millionen Zellen."
   },
-  "lossA": "Jedes Jahr fällt ein Stück davon.",
-  "lossB": "Seit {y} sind es {k} Tausend km².",
-  "lossBMore": "Seit {y} sind es {k} Tausend km². Mehr als England.",
-  "model": "Wir haben ein Modell trainiert, das das nächste vorhersagt.",
+  "lossA": "Jedes Jahr wird ein Stück des Waldes gerodet.",
+  "lossB": "Seit {y} hat Amazonien {k} Tausend km² Wald verloren.",
+  "lossBMore": "Seit {y} hat Amazonien {k} Tausend km² Wald verloren, eine Fläche größer als England.",
+  "model": "Wir haben ein Modell trainiert, das für jede Zelle die Wahrscheinlichkeit einer Rodung im Folgejahr berechnet.",
   "moreKm": 130279,
   "next": "Weiter",
-  "open": "Code und Benchmark sind offen. Wer ein besseres Modell baut, steht vor unserem.",
-  "proof": "Wir haben es an der Vergangenheit getestet. {y} wurden {hit} von {of} gezeigten Orten gerodet.",
+  "open": "Code und Benchmark sind offen. Wer ein besseres Modell baut, ersetzt unseres.",
+  "proof": "Wir haben dem Modell {y} vorenthalten und nach seiner Prognose gefragt. Von {of} gezeigten Orten wurden {hit} gerodet.",
   "sources": {
-   "one": "Es lernt aus {n} öffentlichen Quelle, von Satellitenbildern bis zu Rodungsgenehmigungen.",
-   "other": "Es lernt aus {n} öffentlichen Quellen, von Satellitenbildern bis zu Rodungsgenehmigungen."
+   "one": "Das Modell lernt aus {n} öffentlichen Quelle, von Satellitenbildern bis zu Rodungsgenehmigungen.",
+   "other": "Das Modell lernt aus {n} öffentlichen Quellen, von Satellitenbildern bis zu Rodungsgenehmigungen."
   }
  },
  "stepHi": "über {c}",

@@ -3,12 +3,12 @@
  "aboutText": {
   "benchmark": "Benchmark",
   "by": "Hecho por {name} ({site}).",
-  "line1": "Prenúncio muestra dónde es probable que se deforeste la Amazonía hasta julio de {year}.",
-  "line2": "Lo hicimos para que quienes hacen cumplir la ley lleguen primero.",
+  "line1": "Prenúncio prevé dónde se deforestará la Amazonía hasta julio de {year}.",
+  "line2": "Lo hicimos para que la fiscalización llegue antes que la deforestación.",
   "metric": "La puntuación es la media de {b0} a {b1}.",
-  "model": "El modelo, {name}, aprendió de {span} años de datos públicos. Para cada cuadrado de bosque de {m} metros da la probabilidad de deforestación en el año siguiente.",
-  "open": "El código, los datos y el benchmark son abiertos. Quien haga un modelo mejor pasa delante del nuestro.",
-  "tested": "Lo probamos en años que nunca había visto. En {y}, de cada {of} lugares que señaló, {hit} fueron deforestados."
+  "model": "El modelo se llama {name} y aprendió de {span} años de datos públicos. Divide el bosque en cuadrados de {m} metros, las celdas, y calcula para cada una la probabilidad de deforestación en el año siguiente.",
+  "open": "El código, los datos y el benchmark son abiertos. Quien haga un modelo mejor reemplaza al nuestro.",
+  "tested": "Para probarlo, le ocultamos un año al modelo y le pedimos su previsión. En {y}, de cada {of} lugares que señaló, {hit} fueron deforestados."
  },
  "about_": "unos {x} km²",
  "act": {
@@ -474,28 +474,28 @@
  "skip": "Saltar",
  "st": {
   "ahead": {
-   "flat": "El modelo prevé otros {km} km² de deforestación para {month}.",
-   "rise": "En tres meses la deforestación subió {pct}%, y el modelo prevé otros {km} km² para {month}."
+   "flat": "Para {month}, el modelo prevé {km} km² de deforestación.",
+   "rise": "La deforestación subió {pct}% en los últimos tres meses. El modelo prevé {km} km² para {month}."
   },
   "back": "Atrás",
   "done": "Listo",
-  "first": "Para quien fiscaliza, estos {n} lugares van primero.",
+  "first": "Estos {n} lugares deben fiscalizarse primero. Es donde el modelo espera más deforestación.",
   "forestA": "Esto es la Amazonía.",
   "forestB": {
-   "one": "{cells} millón de cuadrados de bosque, de {m} metros cada uno.",
-   "other": "{cells} millones de cuadrados de bosque, de {m} metros cada uno."
+   "one": "Dividimos el bosque en cuadrados de {m} metros de lado. Es {cells} millón de celdas.",
+   "other": "Dividimos el bosque en cuadrados de {m} metros de lado. Son {cells} millones de celdas."
   },
-  "lossA": "Cada año cae una parte.",
-  "lossB": "Desde {y}, {k} mil km².",
-  "lossBMore": "Desde {y}, {k} mil km². Más que Nicaragua.",
-  "model": "Entrenamos un modelo para predecir la siguiente.",
+  "lossA": "Cada año se deforesta un pedazo del bosque.",
+  "lossB": "Desde {y}, la Amazonía perdió {k} mil km² de bosque.",
+  "lossBMore": "Desde {y}, la Amazonía perdió {k} mil km² de bosque, un área mayor que Nicaragua.",
+  "model": "Entrenamos un modelo para calcular la probabilidad de que cada celda sea deforestada el año siguiente.",
   "moreKm": 130373,
   "next": "Siguiente",
-  "open": "El código y el benchmark son abiertos. Quien haga un modelo mejor pasa delante del nuestro.",
-  "proof": "Lo probamos con el pasado. En {y}, de cada {of} lugares que señaló, {hit} fueron deforestados.",
+  "open": "El código y el benchmark son abiertos. Quien haga un modelo mejor reemplaza al nuestro.",
+  "proof": "Le ocultamos {y} al modelo y le pedimos su previsión. De cada {of} lugares que señaló, {hit} fueron deforestados.",
   "sources": {
-   "one": "Aprende de {n} fuente pública, de imágenes de satélite a permisos de desmonte.",
-   "other": "Aprende de {n} fuentes públicas, de imágenes de satélite a permisos de desmonte."
+   "one": "El modelo aprende de {n} fuente pública, de imágenes de satélite a permisos de desmonte.",
+   "other": "El modelo aprende de {n} fuentes públicas, de imágenes de satélite a permisos de desmonte."
   }
  },
  "stepHi": "más de {c}",

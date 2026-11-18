@@ -34,7 +34,14 @@
    "https://pib.socioambiental.org/pt/Povo:Kawaiwete_(Kaiabi)",
    "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos"
   ],
-  "photo": null,
+  "photo": {
+   "file": "img/peoples/kawaiwete.jpg",
+   "author": "Jefferson Rudy / Agência Senado",
+   "license": "CC BY-SA 4.0",
+   "source_url": "https://commons.wikimedia.org/wiki/File:GTMTI_-_Grupo_de_trabalho_sobre_regulamenta%C3%A7%C3%A3o_da_minera%C3%A7%C3%A3o_em_terras_ind%C3%ADgenas_-_55139680372.jpg",
+   "caption_pt": "A liderança Luciene Kayabi fala em audiência do Senado sobre mineração em terras indígenas, em Brasília, março de 2026.",
+   "caption_en": "The leader Luciene Kayabi speaking at a Senate hearing on mining in Indigenous lands, in Brasília, March 2026."
+  },
   "confidence": "checked"
  },
  "yudja": {
@@ -54,9 +61,9 @@
    "file": "img/peoples/yudja.jpg",
    "author": "Cícero Pedrosa Neto / Amazônia Real",
    "license": "CC BY 2.0",
-   "source_url": "https://commons.wikimedia.org/wiki/File:AMAZONIA_REAL_ALDEIA_SAO_FRANCISCO_SOUZEL_PEDROSA_NETO-167_(49594691882).jpg",
-   "caption_pt": "Francisco Juruna com a esposa, Socorro, e a filha, Márcia, na varanda de casa, na aldeia São Francisco, 2020.",
-   "caption_en": "Francisco Juruna with his wife, Socorro, and daughter, Márcia, on the porch of their house in the village of São Francisco, 2020."
+   "source_url": "https://commons.wikimedia.org/wiki/File:AMAZONIA_REAL_ALDEIA_SAO_FRANCISCO_SOUZEL_PEDROSA_NETO-92_(49593947028).jpg",
+   "caption_pt": "Jardel Juruna, liderança da aldeia São Francisco, olha o rio Xingu, 2020.",
+   "caption_en": "Jardel Juruna, leader of the village of São Francisco, looking out over the Xingu river, 2020."
   },
   "confidence": "checked"
  },
@@ -115,7 +122,14 @@
    "https://pib.socioambiental.org/pt/Povo:Yawalapiti",
    "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos"
   ],
-  "photo": null,
+  "photo": {
+   "file": "img/peoples/yawalapiti.jpg",
+   "author": "Matheus Alves",
+   "license": "CC BY-SA 4.0",
+   "source_url": "https://commons.wikimedia.org/wiki/File:O_Sil%C3%AAncio_da_Terra.jpg",
+   "caption_pt": "Anna Terra Yawalapiti, liderança do Xingu, diante da polícia durante o Acampamento Terra Livre, em Brasília, 2019.",
+   "caption_en": "Anna Terra Yawalapiti, a leader from the Xingu, facing police during the Acampamento Terra Livre gathering in Brasília, 2019."
+  },
   "confidence": "checked"
  },
  "mehinako": {
@@ -221,7 +235,14 @@
    "https://pib.socioambiental.org/pt/Povo:Kajkwakratxi_(Tapayuna)",
    "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos"
   ],
-  "photo": null,
+  "photo": {
+   "file": "img/peoples/tapayuna.jpg",
+   "author": "DPU - Defensoria Pública da União",
+   "license": "CC0",
+   "source_url": "https://commons.wikimedia.org/wiki/File:12_11_2025_-_DPU_realiza_atendimentos_in_loco_com_os_ind%C3%ADgenas_Tapayuna_das_Terras_Ind%C3%ADgenas_Capoto_Jarina_e_Wawi_para_escuta_de_demandas_e_necessidades_espec%C3%ADficas_da_comunidade_(54919792444).jpg",
+   "caption_pt": "Tapayuna das Terras Indígenas Capoto/Jarina e Wawi em atendimento da Defensoria Pública da União durante a COP30, em Belém, novembro de 2025.",
+   "caption_en": "Tapayuna from the Capoto/Jarina and Wawi Indigenous Lands meeting public defenders during COP30 in Belém, November 2025."
+  },
   "confidence": "checked"
  },
  "kamaiura": {
@@ -255,7 +276,14 @@
    "https://pib.socioambiental.org/pt/Povo:Kalapalo",
    "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos"
   ],
-  "photo": null,
+  "photo": {
+   "file": "img/peoples/kalapalo.jpg",
+   "author": "Eduardo Giacomazzi",
+   "license": "CC BY 2.5",
+   "source_url": "https://commons.wikimedia.org/wiki/File:Kalapalo_men_canoeing.jpg",
+   "caption_pt": "Dois homens Kalapalo em uma canoa, 2008.",
+   "caption_en": "Two Kalapalo men in a canoe, 2008."
+  },
   "confidence": "checked"
  },
  "nambikwara": {
@@ -305,7 +333,14 @@
    "https://pib.socioambiental.org/pt/Povo:Xikrin_Mebengôkre",
    "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos"
   ],
-  "photo": null,
+  "photo": {
+   "file": "img/peoples/xikrin.jpg",
+   "author": "Nelson Jr. / SCO / STF",
+   "license": "Public domain",
+   "source_url": "https://www.flickr.com/photos/supremotribunalfederal/52851571126/",
+   "caption_pt": "Representantes do povo Xikrin em audiência com a presidente do Supremo Tribunal Federal, em Brasília, abril de 2023.",
+   "caption_en": "Representatives of the Xikrin people at a meeting with the president of the Supreme Federal Court in Brasília, April 2023."
+  },
   "confidence": "checked"
  },
  "tembe": {
@@ -320,7 +355,14 @@
    "https://pib.socioambiental.org/pt/Povo:Tembé",
    "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos"
   ],
-  "photo": null,
+  "photo": {
+   "file": "img/peoples/tembe.jpg",
+   "author": "Douglas Freitas / Apib Comunicação",
+   "license": "CC BY-SA 2.0",
+   "source_url": "https://commons.wikimedia.org/wiki/File:MarchaDasMulheresIndigenas_MarchaDasMulheresIndigenas_Puyr_Temb%C3%A9_-_Ocupa%C3%A7%C3%A3o_da_Sesai_-_Marcha_das_Mulheres_Ind%C3%ADgenas_-_12_08_2019_-_Bras%C3%ADlia_(DF)_%C2%A9_Douglas_Freitas_@alassderivas_(48554538732).jpg",
+   "caption_pt": "Puyr Tembé entre mulheres indígenas durante a ocupação da Secretaria Especial de Saúde Indígena, na 1ª Marcha das Mulheres Indígenas, em Brasília, agosto de 2019.",
+   "caption_en": "Puyr Tembé among Indigenous women during the occupation of the Indigenous health secretariat, at the 1st Indigenous Women's March in Brasília, August 2019."
+  },
   "confidence": "checked"
  },
  "timbira": {
@@ -398,7 +440,6 @@
    "https://pib.socioambiental.org/pt/Povo:Apiaká",
    "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos"
   ],
-  "photo": null,
   "confidence": "checked"
  },
  "parakana": {
@@ -495,7 +536,14 @@
    "https://pib.socioambiental.org/pt/Povo:Surui_Paiter",
    "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos"
   ],
-  "photo": null,
+  "photo": {
+   "file": "img/peoples/paiter-surui.jpg",
+   "author": "Stephen McCarthy / Web Summit Rio via Sportsfile",
+   "license": "CC BY 2.0",
+   "source_url": "https://commons.wikimedia.org/wiki/File:Web_Summit_Rio_2023_-_1770_(52864743546).jpg",
+   "caption_pt": "Txai Suruí, ativista Paiter Suruí, fala no Web Summit Rio, no Rio de Janeiro, maio de 2023.",
+   "caption_en": "Txai Suruí, a Paiter Suruí activist, speaking at Web Summit Rio in Rio de Janeiro, May 2023."
+  },
   "confidence": "checked"
  },
  "satere-mawe": {
@@ -509,7 +557,14 @@
    "https://pib.socioambiental.org/pt/Povo:Sateré_Mawé",
    "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos"
   ],
-  "photo": null,
+  "photo": {
+   "file": "img/peoples/satere-mawe.jpg",
+   "author": "Katie Maehler / Apib Comunicação",
+   "license": "CC BY-SA 2.0",
+   "source_url": "https://commons.wikimedia.org/wiki/File:MarchaDasMulheresIndigenas_MarchaDasMulheresIndigenas_27_@katie_Maehler.MarchaDasMulheresIndigenas_11082019_JoeniaWapichana%2BMulheres_SatereMawe_(48516436726).jpg",
+   "caption_pt": "Mulheres Sateré-Mawé com Joenia Wapichana na 1ª Marcha das Mulheres Indígenas, em Brasília, agosto de 2019.",
+   "caption_en": "Sateré-Mawé women with Joenia Wapichana at the 1st Indigenous Women's March in Brasília, August 2019."
+  },
   "confidence": "checked"
  },
  "uru-eu-wau-wau": {
@@ -560,7 +615,14 @@
    "https://pib.socioambiental.org/pt/Povo:Araweté",
    "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos"
   ],
-  "photo": null,
+  "photo": {
+   "file": "img/peoples/arawete.jpg",
+   "author": "avidd",
+   "license": "Public domain",
+   "source_url": "https://commons.wikimedia.org/wiki/File:Arawete_houses_(56712373).jpg",
+   "caption_pt": "Casas e moradores de uma aldeia Araweté, 2005.",
+   "caption_en": "Houses and residents of an Araweté village, 2005."
+  },
   "confidence": "checked"
  },
  "asurini-do-xingu": {
@@ -617,7 +679,14 @@
    "https://pib.socioambiental.org/pt/Povo:Baré",
    "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos"
   ],
-  "photo": null,
+  "photo": {
+   "file": "img/peoples/bare.jpg",
+   "author": "Defensoria Pública da União - DPU",
+   "license": "CC0",
+   "source_url": "https://commons.wikimedia.org/wiki/File:2026-06-18_DPGF_recebe_Mariazinha_Bar%C3%A9,_002.jpg",
+   "caption_pt": "Mariazinha Baré, presidenta de uma articulação de organizações indígenas do Amazonas, em reunião na Defensoria Pública da União, em Brasília, junho de 2026.",
+   "caption_en": "Mariazinha Baré, president of a network of Indigenous organisations of Amazonas, at a meeting at the federal public defender's office in Brasília, June 2026."
+  },
   "confidence": "checked"
  },
  "arapaso": {
@@ -644,7 +713,14 @@
    "https://pib.socioambiental.org/pt/Povo:Karapanã",
    "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos"
   ],
-  "photo": null,
+  "photo": {
+   "file": "img/peoples/karapana.jpg",
+   "author": "Tânia Rêgo / Agência Brasil",
+   "license": "CC BY 3.0 BR",
+   "source_url": "https://commons.wikimedia.org/wiki/File:Arqueiro_carapan%C3%A3.jpg",
+   "caption_pt": "Gustavo Santos, arqueiro Karapanã, treina para as seletivas olímpicas de tiro com arco, 2016.",
+   "caption_en": "Gustavo Santos, a Karapanã archer, training for the Olympic archery trials, 2016."
+  },
   "confidence": "checked"
  },
  "barasana": {
@@ -675,7 +751,14 @@
    "https://pib.socioambiental.org/pt/Povo:Kotiria",
    "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos"
   ],
-  "photo": null,
+  "photo": {
+   "file": "img/peoples/kotiria.jpg",
+   "author": "Juliano Portela",
+   "license": "CC BY-SA 4.0",
+   "source_url": "https://commons.wikimedia.org/wiki/File:Flauta_Kotiria.jpg",
+   "caption_pt": "Homens Kotiria tocam flautas tradicionais em sua aldeia, 2022.",
+   "caption_en": "Kotiria men playing traditional flutes in their village, 2022."
+  },
   "confidence": "checked"
  },
  "apurina": {
@@ -706,7 +789,14 @@
    "https://pib.socioambiental.org/pt/Povo:Ticuna",
    "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos"
   ],
-  "photo": null,
+  "photo": {
+   "file": "img/peoples/ticuna.jpg",
+   "author": "Diego Janatã / Djuena Tikuna",
+   "license": "CC BY-SA 4.0",
+   "source_url": "https://commons.wikimedia.org/wiki/File:DJUENA_TIKUNA_2021_DIEGO_JANAT%C3%83_002.jpg",
+   "caption_pt": "A cantora Djuena Tikuna, 2021.",
+   "caption_en": "The singer Djuena Tikuna, 2021."
+  },
   "confidence": "checked"
  },
  "mura": {
@@ -757,7 +847,14 @@
    "https://pib.socioambiental.org/pt/Povo:Makurap",
    "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos"
   ],
-  "photo": null,
+  "photo": {
+   "file": "img/peoples/makurap.jpg",
+   "author": "Jeffeson Tupari Makurap",
+   "license": "CC BY-SA 4.0",
+   "source_url": "https://commons.wikimedia.org/wiki/File:Povos_ind%C3%ADgenas_Makurap_e_cujubim_do_TI_Rio_Guapor%C3%A9.jpg",
+   "caption_pt": "Moradores Makurap e Kujubim da aldeia Ricardo Franco, na Terra Indígena Rio Guaporé, limpam peixes, 2023.",
+   "caption_en": "Makurap and Kujubim residents of Ricardo Franco village, in the Rio Guaporé Indigenous Land, cleaning fish, 2023."
+  },
   "confidence": "checked"
  },
  "matses": {
@@ -821,7 +918,14 @@
    "https://pib.socioambiental.org/pt/Povo:Amanayé",
    "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos"
   ],
-  "photo": null,
+  "photo": {
+   "file": "img/peoples/amanaye.jpg",
+   "author": "Xuthoria",
+   "license": "CC BY-SA 4.0",
+   "source_url": "https://commons.wikimedia.org/wiki/File:COP30_-_Ronaldo_Amanay%C3%A9_02.jpg",
+   "caption_pt": "Ronaldo Amanayé na COP30, em Belém, novembro de 2025.",
+   "caption_en": "Ronaldo Amanayé at COP30 in Belém, November 2025."
+  },
   "confidence": "checked"
  },
  "enawene-nawe": {
@@ -836,7 +940,14 @@
    "https://pib.socioambiental.org/pt/Povo:Enawenê-nawê",
    "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos"
   ],
-  "photo": null,
+  "photo": {
+   "file": "img/peoples/enawene-nawe.jpg",
+   "author": "Rita Salgado - Projeto Nuclam/UCB",
+   "license": "CC BY-SA 2.5",
+   "source_url": "https://commons.wikimedia.org/wiki/File:EnaweneNawe_Saluma.jpg",
+   "caption_pt": "Enawenê-Nawê dançam e cantam o ritual Salumã nos 6º Jogos dos Povos Indígenas, em Palmas, Tocantins, 2003.",
+   "caption_en": "Enawenê-Nawê dancing and singing the Salumã ritual at the 6th Indigenous Peoples' Games in Palmas, Tocantins, 2003."
+  },
   "confidence": "checked"
  },
  "tenharim": {
@@ -920,7 +1031,14 @@
    "https://pib.socioambiental.org/pt/Povo:Karajá_do_Norte",
    "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos"
   ],
-  "photo": null,
+  "photo": {
+   "file": "img/peoples/karaja-do-norte.jpg",
+   "author": "Marcelo Camargo / Agência Brasil",
+   "license": "CC BY 3.0 BR",
+   "source_url": "https://commons.wikimedia.org/wiki/File:Xambioas.jpg",
+   "caption_pt": "Mulher Xambioá com colares e adorno de penas, outubro de 2015.",
+   "caption_en": "A Xambioá woman wearing necklaces and a feather headpiece, October 2015."
+  },
   "confidence": "checked"
  },
  "javae": {
@@ -934,7 +1052,14 @@
    "https://pib.socioambiental.org/pt/Povo:Javaé",
    "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos"
   ],
-  "photo": null,
+  "photo": {
+   "file": "img/peoples/javae.jpg",
+   "author": "Marcelo Camargo / Agência Brasil",
+   "license": "CC BY 3.0 BR",
+   "source_url": "https://commons.wikimedia.org/wiki/File:Java%C3%A9.jpg",
+   "caption_pt": "Homem Javaé com cocar e pintura facial, outubro de 2015.",
+   "caption_en": "A Javaé man in a feather headdress and face paint, October 2015."
+  },
   "confidence": "checked"
  },
  "panara": {
@@ -982,7 +1107,14 @@
    "https://pib.socioambiental.org/pt/Povo:Iranxe_Manoki",
    "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos"
   ],
-  "photo": null,
+  "photo": {
+   "file": "img/peoples/manoki.jpg",
+   "author": "Marcelo Camargo / Agência Brasil",
+   "license": "CC BY 3.0 BR",
+   "source_url": "https://commons.wikimedia.org/wiki/File:Manoki.jpg",
+   "caption_pt": "Jovem Manoki com cocar de penas azuis, outubro de 2015.",
+   "caption_en": "A young Manoki man in a blue feather headdress, October 2015."
+  },
   "confidence": "checked"
  },
  "wapichana": {
@@ -1019,7 +1151,14 @@
    "https://pib.socioambiental.org/pt/Povo:Macuxi",
    "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos"
   ],
-  "photo": null,
+  "photo": {
+   "file": "img/peoples/macuxi.jpg",
+   "author": "Juliana Cunha Oliv",
+   "license": "CC BY-SA 4.0",
+   "source_url": "https://commons.wikimedia.org/wiki/File:Trudru%C3%A1_Dorrico.jpg",
+   "caption_pt": "A escritora Macuxi Trudruá Dorrico, 2024.",
+   "caption_en": "The Macuxi writer Trudruá Dorrico, 2024."
+  },
   "confidence": "checked"
  },
  "taurepang": {
@@ -1692,14 +1831,7 @@
    "https://pib.socioambiental.org/pt/Povo:Kokama",
    "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos"
   ],
-  "photo": {
-   "file": "img/peoples/kokama.jpg",
-   "author": "Fábio Pontes / Amazônia Real",
-   "license": "CC BY 2.0",
-   "source_url": "https://commons.wikimedia.org/wiki/File:CACIQUE_KOKAMA_JACINTO_MORAES_PANURO_FOTO_FABIO_PONTES_(36956801383).jpg",
-   "caption_pt": "O cacique kokama Jacinto Moraes Panuro em São Paulo de Olivença, Amazonas, 2017.",
-   "caption_en": "The Kokama leader Jacinto Moraes Panuro in São Paulo de Olivença, Amazonas, 2017."
-  },
+  "photo": null,
   "confidence": "checked"
  },
  "rikbaktsa": {
@@ -1736,7 +1868,6 @@
    "https://pib.socioambiental.org/pt/Povo:Kanamari",
    "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos"
   ],
-  "photo": null,
   "confidence": "checked"
  },
  "noke-koi": {
@@ -1797,7 +1928,14 @@
    "https://pib.socioambiental.org/pt/Povo:Yawanawá",
    "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos"
   ],
-  "photo": null,
+  "photo": {
+   "file": "img/peoples/yawanawa.jpg",
+   "author": "SeCom / Agência de Notícias do Acre",
+   "license": "CC BY 2.5 BR",
+   "source_url": "https://commons.wikimedia.org/wiki/File:%C3%8Dndios_Iauanau%C3%A1s.jpg",
+   "caption_pt": "Homens Yawanawá com lanças, cocares e saias de palha, no Acre.",
+   "caption_en": "Yawanawá men with spears, headdresses and straw skirts, in Acre."
+  },
   "confidence": "checked"
  },
  "umutina": {
@@ -1811,14 +1949,7 @@
    "https://pib.socioambiental.org/pt/Povo:Balatiponé_(Umutina)",
    "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos"
   ],
-  "photo": {
-   "file": "img/peoples/umutina.jpg",
-   "author": "Valter Campanato / Agência Brasil",
-   "license": "CC BY 3.0 BR",
-   "source_url": "https://commons.wikimedia.org/wiki/File:Umutina.jpg",
-   "caption_pt": "Creusa Soipa, cacique Umutina, 2007.",
-   "caption_en": "Creusa Soipa, Umutina leader, 2007."
-  },
+  "photo": null,
   "confidence": "checked"
  },
  "suruwaha": {
@@ -1968,7 +2099,14 @@
    "https://pib.socioambiental.org/pt/Povo:Juma",
    "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos"
   ],
-  "photo": null,
+  "photo": {
+   "file": "img/peoples/juma.jpg",
+   "author": "Maria Fernanda Ribeiro / Amazônia Real",
+   "license": "CC BY 2.0",
+   "source_url": "https://commons.wikimedia.org/wiki/File:MARCHA_MULHERES_IND%C3%8DGENAS-MARIA_FERNANDA_RIBEIRO_(29)_(48532000392).jpg",
+   "caption_pt": "A cacique Mandeí Juma na Marcha das Mulheres Indígenas, em Brasília, agosto de 2019.",
+   "caption_en": "The leader Mandeí Juma at the Indigenous Women's March in Brasília, August 2019."
+  },
   "confidence": "checked"
  },
  "arara-da-volta-grande": {
@@ -2087,7 +2225,14 @@
    "https://pib.socioambiental.org/pt/Povo:Chiquitano",
    "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos"
   ],
-  "photo": null,
+  "photo": {
+   "file": "img/peoples/chiquitano.jpg",
+   "author": "Rayane Mara",
+   "license": "CC BY-SA 4.0",
+   "source_url": "https://commons.wikimedia.org/wiki/File:Chiquitanos_5.jpg",
+   "caption_pt": "Apresentação cultural do povo Chiquitano em Vila Bela da Santíssima Trindade, Mato Grosso, março de 2023.",
+   "caption_en": "A cultural presentation by the Chiquitano people in Vila Bela da Santíssima Trindade, Mato Grosso, March 2023."
+  },
   "confidence": "checked"
  },
  "karitiana": {
@@ -2174,7 +2319,14 @@
    "https://pib.socioambiental.org/pt/Povo:Guarani",
    "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos"
   ],
-  "photo": null,
+  "photo": {
+   "file": "img/peoples/guarani.jpg",
+   "author": "Jorge Machado",
+   "license": "CC BY-SA 4.0",
+   "source_url": "https://commons.wikimedia.org/wiki/File:Ind%C3%ADgenas_guarani_jogando_futebol_na_Aldeia_Rio_Silveiras.jpg",
+   "caption_pt": "Guarani jogam futebol na aldeia Rio Silveiras, em Bertioga, São Paulo, 2018.",
+   "caption_en": "Guarani playing football in the village of Rio Silveiras, in Bertioga, São Paulo, 2018."
+  },
   "confidence": "checked"
  },
  "arapium": {
@@ -2303,7 +2455,14 @@
    "https://pib.socioambiental.org/pt/Povo:Tuyuka",
    "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos"
   ],
-  "photo": null,
+  "photo": {
+   "file": "img/peoples/tuyuka.jpg",
+   "author": "Ajmcbarreto",
+   "license": "CC BY-SA 4.0",
+   "source_url": "https://commons.wikimedia.org/wiki/File:Etnia_Tuyuka_(Tui%C3%BAcas)_-_3.jpg",
+   "caption_pt": "Tuyuka em apresentação na maloca de sua aldeia, perto de Paricatuba, em Iranduba, Amazonas, fevereiro de 2023.",
+   "caption_en": "A Tuyuka man performing in the longhouse of his village near Paricatuba, in Iranduba, Amazonas, February 2023."
+  },
   "confidence": "checked"
  },
  "kaixana": {
@@ -2452,7 +2611,14 @@
    "https://pib.socioambiental.org/pt/Povo:Bakairi",
    "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos"
   ],
-  "photo": null,
+  "photo": {
+   "file": "img/peoples/bakairi.jpg",
+   "author": "Apib Comunicação",
+   "license": "CC BY-SA 2.0",
+   "source_url": "https://commons.wikimedia.org/wiki/File:Delega%C3%A7%C3%A3o_Bakairi,_Terra_Ind%C3%ADgena_Bakairi_de_Paranatinga-MT_(34257707371).jpg",
+   "caption_pt": "Delegação Bakairi da Terra Indígena Bakairi, de Paranatinga, Mato Grosso, 2017.",
+   "caption_en": "The Bakairi delegation from the Bakairi Indigenous Land, in Paranatinga, Mato Grosso, 2017."
+  },
   "confidence": "checked"
  },
  "xerente": {
@@ -2468,7 +2634,14 @@
    "https://pib.socioambiental.org/pt/Povo:Xerente",
    "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos"
   ],
-  "photo": null,
+  "photo": {
+   "file": "img/peoples/xerente.jpg",
+   "author": "Ministério do Desenvolvimento Social",
+   "license": "CC BY-SA 2.0",
+   "source_url": "https://commons.wikimedia.org/wiki/File:Visita_do_Programa_Crian%C3%A7a_Feliz_em_aldeia_ind%C3%ADgena_Xerente_no_munic%C3%ADpio_de_Tocant%C3%ADnia-TO_(16-10-2017)_(37757158641).jpg",
+   "caption_pt": "Xerente recebem uma comitiva do governo federal na aldeia Brejo Comprido, em Tocantínia, Tocantins, outubro de 2017.",
+   "caption_en": "Xerente welcoming a federal government delegation to the village of Brejo Comprido, in Tocantínia, Tocantins, October 2017."
+  },
   "confidence": "checked"
  },
  "galibi-kalina": {
@@ -2499,7 +2672,14 @@
    "https://pib.socioambiental.org/pt/Povo:Krenak",
    "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos"
   ],
-  "photo": null,
+  "photo": {
+   "file": "img/peoples/krenak.jpg",
+   "author": "Garapa - Coletivo Multimídia / Produção Cultural no Brasil",
+   "license": "CC BY-SA 2.0",
+   "source_url": "https://commons.wikimedia.org/wiki/File:Ailton_Krenak_(5269420188).jpg",
+   "caption_pt": "Ailton Krenak, escritor e liderança do povo Krenak, em 2010.",
+   "caption_en": "Ailton Krenak, writer and leader of the Krenak people, in 2010."
+  },
   "confidence": "checked"
  },
  "kraho": {

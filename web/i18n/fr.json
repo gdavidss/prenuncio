@@ -3,12 +3,12 @@
  "aboutText": {
   "benchmark": "Benchmark",
   "by": "Fait par {name} ({site}).",
-  "line1": "Prenúncio montre où l'Amazonie risque d'être déboisée d'ici juillet {year}.",
-  "line2": "Nous l'avons conçu pour que ceux qui font respecter la loi arrivent les premiers.",
+  "line1": "Prenúncio prévoit où l'Amazonie sera déboisée d'ici juillet {year}.",
+  "line2": "Nous l'avons conçu pour que les contrôles arrivent avant le déboisement.",
   "metric": "Le score est la moyenne de {b0} à {b1}.",
-  "model": "Le modèle, {name}, a appris sur {span} ans de données publiques. Pour chaque carré de forêt de {m} mètres de côté, il donne la probabilité de déforestation dans l'année qui suit.",
-  "open": "Le code, les données et le benchmark sont ouverts. Faites un meilleur modèle et il passera devant le nôtre.",
-  "tested": "Nous l'avons testé sur des années qu'il n'avait jamais vues. En {y}, sur {of} lieux qu'il a désignés, {hit} ont été déboisés."
+  "model": "Le modèle s'appelle {name} et a appris sur {span} ans de données publiques. Il divise la forêt en carrés de {m} mètres, les cellules, et calcule pour chacune la probabilité de déforestation dans l'année qui suit.",
+  "open": "Le code, les données et le benchmark sont ouverts. Faites un meilleur modèle et il remplacera le nôtre.",
+  "tested": "Pour le tester, nous avons caché une année au modèle et demandé sa prévision. En {y}, sur {of} lieux qu'il a désignés, {hit} ont été déboisés."
  },
  "about_": "environ {x} km²",
  "act": {
@@ -483,28 +483,28 @@
  "skip": "Passer",
  "st": {
   "ahead": {
-   "flat": "Le modèle prévoit encore {km} km² de déforestation d'ici {month}.",
-   "rise": "En trois mois, la déforestation a crû de {pct} % et le modèle prévoit encore {km} km² d'ici {month}."
+   "flat": "D'ici {month}, le modèle prévoit {km} km² de déforestation.",
+   "rise": "La déforestation a augmenté de {pct} % en trois mois. Le modèle prévoit {km} km² d'ici {month}."
   },
   "back": "Retour",
   "done": "Terminé",
-  "first": "Pour ceux qui contrôlent, ces {n} lieux passent en premier.",
+  "first": "Ces {n} lieux doivent être contrôlés en premier. C'est là que le modèle attend le plus de déboisement.",
   "forestA": "Voici l'Amazonie.",
   "forestB": {
-   "one": "{cells} million de carrés de forêt, de {m} mètres chacun.",
-   "other": "{cells} millions de carrés de forêt, de {m} mètres chacun."
+   "one": "Nous avons divisé la forêt en carrés de {m} mètres de côté. Cela fait {cells} million de cellules.",
+   "other": "Nous avons divisé la forêt en carrés de {m} mètres de côté. Cela fait {cells} millions de cellules."
   },
-  "lossA": "Chaque année, un morceau tombe.",
-  "lossB": "Depuis {y}, {k} mille km².",
-  "lossBMore": "Depuis {y}, {k} mille km². Plus que l'Angleterre.",
-  "model": "Nous avons entraîné un modèle pour prédire le prochain.",
+  "lossA": "Chaque année, un morceau de la forêt est déboisé.",
+  "lossB": "Depuis {y}, l'Amazonie a perdu {k} mille km² de forêt.",
+  "lossBMore": "Depuis {y}, l'Amazonie a perdu {k} mille km² de forêt, une surface plus grande que l'Angleterre.",
+  "model": "Nous avons entraîné un modèle pour calculer la probabilité que chaque cellule soit déboisée dans l'année qui suit.",
   "moreKm": 130279,
   "next": "Suivant",
-  "open": "Le code et le benchmark sont ouverts. Faites un meilleur modèle et il passera devant le nôtre.",
-  "proof": "Nous l'avons testé sur le passé. En {y}, sur {of} lieux qu'il a désignés, {hit} ont été déboisés.",
+  "open": "Le code et le benchmark sont ouverts. Faites un meilleur modèle et il remplacera le nôtre.",
+  "proof": "Nous avons caché {y} au modèle et demandé sa prévision. Sur {of} lieux qu'il a désignés, {hit} ont été déboisés.",
   "sources": {
-   "one": "Il apprend d'{n} source publique, des images satellite aux autorisations de déboisement.",
-   "other": "Il apprend de {n} sources publiques, des images satellite aux autorisations de déboisement."
+   "one": "Le modèle apprend d'{n} source publique, des images satellite aux autorisations de déboisement.",
+   "other": "Le modèle apprend de {n} sources publiques, des images satellite aux autorisations de déboisement."
   }
  },
  "stepHi": "plus de {c}",

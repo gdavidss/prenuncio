@@ -144,27 +144,27 @@ try {
   const WORDS = {
     en: {
       forestA: "This is the Amazon.",
-      forestB: `${n0(story.forest.cells / 1e6)} million squares of forest, ${story.forest.cell_m} metres each.`,
-      lossA: "Every year a piece of it falls.",
-      lossB: `Since ${hist.years[0]}, ${n0(sum / 1000)} thousand km².${sum > 130279 ? " More than England." : ""}`,
-      model: "We trained a model to predict the next one.",
-      proof: `We tested it on the past. In ${story.check.year}, ${hit5} of every ${of5} places it pointed to were cleared.`,
-      sources: `It learns from ${NUM.en[nIn]} public sources, from satellite images to clearing permits.`,
-      open: "The code and the benchmark are open. Build a better model and it goes ahead of ours.",
-      first: `For those who enforce, these ${story.priority.blocks} places come first.`,
-      ahead: rise > 0 ? `In the last three months clearing rose ${rise}%, and the model expects another ${twoFig(mc.sums[3].p50).toLocaleString("en-US")} km² by ${by3.toLocaleDateString("en-US", { month: "long" })}.` : `The model expects another ${twoFig(mc.sums[3].p50).toLocaleString("en-US")} km² of clearing by ${by3.toLocaleDateString("en-US", { month: "long" })}.`,
+      forestB: `We divided the forest into squares ${story.forest.cell_m} metres across. That makes ${n0(story.forest.cells / 1e6)} million cells.`,
+      lossA: "Every year, a piece of the forest is cleared.",
+      lossB: `Since ${hist.years[0]}, the Amazon has lost ${n0(sum / 1000)} thousand km² of forest${sum > 130279 ? ", an area larger than England" : ""}.`,
+      model: "We trained a model to calculate each cell's chance of being cleared in the year ahead.",
+      proof: `We hid ${story.check.year} from the model and asked for its forecast. Of every ${of5} places it pointed to, ${hit5} were cleared.`,
+      sources: `The model learns from ${NUM.en[nIn]} public sources, from satellite images to clearing permits.`,
+      open: "The code and the benchmark are open. Build a better model and it replaces ours.",
+      first: `These ${story.priority.blocks} places should be inspected first. The model expects the most clearing there.`,
+      ahead: rise > 0 ? `Clearing rose ${rise}% in the last three months. The model expects ${twoFig(mc.sums[3].p50).toLocaleString("en-US")} km² by ${by3.toLocaleDateString("en-US", { month: "long" })}.` : `By ${by3.toLocaleDateString("en-US", { month: "long" })}, the model expects ${twoFig(mc.sums[3].p50).toLocaleString("en-US")} km² of clearing.`,
     },
     pt: {
-      forestA: "Isto é a Amazônia.",
-      forestB: `${Math.round(story.forest.cells / 1e6)} milhões de quadrados de floresta, ${story.forest.cell_m} metros cada.`,
-      lossA: "Todo ano uma parte cai.",
-      lossB: `Desde ${hist.years[0]}, ${Math.round(sum / 1000).toLocaleString("pt-BR")} mil km².${sum > 130279 ? " Mais que a Inglaterra." : ""}`,
-      model: "Treinamos um modelo para prever a próxima.",
-      proof: `Testamos no passado. Em ${story.check.year}, de cada ${of5} lugares que ele apontou, ${hit5} foram desmatados.`,
-      sources: `Ele aprende com ${NUM.pt[nIn]} fontes públicas, de imagem de satélite a licença de desmate.`,
-      open: "O código e o benchmark são abertos. Quem fizer um modelo melhor passa na frente do nosso.",
-      first: `Para quem fiscaliza, estes ${story.priority.blocks} lugares vêm primeiro.`,
-      ahead: rise > 0 ? `Nos últimos três meses o desmate subiu ${rise}%, e o modelo espera mais ${twoFig(mc.sums[3].p50).toLocaleString("pt-BR")} km² até ${by3.toLocaleDateString("pt-BR", { month: "long" })}.` : `O modelo espera mais ${twoFig(mc.sums[3].p50).toLocaleString("pt-BR")} km² de desmate até ${by3.toLocaleDateString("pt-BR", { month: "long" })}.`,
+      forestA: "Esta é a Amazônia.",
+      forestB: `Dividimos a floresta em quadrados de ${story.forest.cell_m} metros de lado. São ${Math.round(story.forest.cells / 1e6)} milhões de células.`,
+      lossA: "Todo ano, um pedaço da floresta é desmatado.",
+      lossB: `Desde ${hist.years[0]}, a Amazônia perdeu ${Math.round(sum / 1000).toLocaleString("pt-BR")} mil km² de floresta${sum > 130279 ? ", uma área maior que a Inglaterra" : ""}.`,
+      model: "Treinamos um modelo para calcular a chance de cada célula ser desmatada no ano seguinte.",
+      proof: `Escondemos ${story.check.year} do modelo e pedimos a previsão. De cada ${of5} lugares que ele apontou, ${hit5} foram desmatados.`,
+      sources: `O modelo aprende com ${NUM.pt[nIn]} fontes públicas, de imagens de satélite a licenças de desmate.`,
+      open: "O código e o benchmark são abertos. Quem fizer um modelo melhor substitui o nosso.",
+      first: `Estes ${story.priority.blocks} lugares devem ser fiscalizados primeiro. É onde o modelo espera mais desmate.`,
+      ahead: rise > 0 ? `O desmate subiu ${rise}% nos últimos três meses. O modelo espera ${twoFig(mc.sums[3].p50).toLocaleString("pt-BR")} km² até ${by3.toLocaleDateString("pt-BR", { month: "long" })}.` : `Até ${by3.toLocaleDateString("pt-BR", { month: "long" })}, o modelo espera ${twoFig(mc.sums[3].p50).toLocaleString("pt-BR")} km² de desmate.`,
     },
   };
   const WANT = WORDS.en, IDS = Object.keys(WANT), said = [];
@@ -203,6 +203,8 @@ try {
     if (i) { await forward[i % forward.length](); await until(`document.documentElement.dataset.step === "${id}"`, `step ${i + 1}, ${id}, reached by way ${i % forward.length}`); }
     assert.equal(await line(), WANT[id], `the line of ${id}`);
     said.push(await line());
+    // the mode tabs, the kinds and Ranking are not in the story: nothing of them is seen, and nothing of them takes the focus
+    assert.deepEqual(await js(`[...document.querySelectorAll("#modes button, #kinds button, #rank-btn")].filter(e => { e.focus(); const on = document.activeElement === e; e.blur(); return on || getComputedStyle(e).visibility !== "hidden"; }).length`), 0, `no mode tab at ${id}`);
     assert.equal(await js(`[...document.querySelectorAll("#story-marks li")].findIndex(e => e.classList.contains("now"))`), i, `the mark of step ${id}`);
     // nothing is said under the line, except the small bars of the years while they run
     assert.equal((await js(`document.getElementById("story-text").innerText.replaceAll("\\u00a0", " ").replace(/\\s+/g, " ").trim()`)).startsWith(WANT[id]), true);
@@ -283,7 +285,7 @@ try {
     }
   }
   assert.doesNotMatch(said.join(" "), /flagged|\bflag\b|—|Legal Amazon|black box|[Tt]wo models|put to the test|Where to start|\bboard\b|leaderboard|month by month/i, "the story's own words");
-  assert.ok(said.every(x => x.length > 8 && x.length <= 100), "every line is one sentence or two: " + Math.max(...said.map(x => x.length)));
+  assert.ok(said.every(x => x.length > 8 && x.length <= 112), "every line is one sentence or two: " + Math.max(...said.map(x => x.length)));
   // Back goes back, by the key and by the button, and forward again: the list gives its place back to the panel
   await key("ArrowLeft");
   await until(`document.documentElement.dataset.step === "first" && !document.getElementById("about").open && !document.getElementById("list").hidden`, "back one step");
@@ -303,6 +305,7 @@ try {
   const after = { has: await onPage(), amazon: await amazon(), zoom: await js(`!!document.querySelector(".leaflet-control-zoom").offsetParent`), names: await count(".state-name") };
   for (const p of PIECES) after[p] = await place(p);
   assert.deepEqual(after, before, "the page after the story is the page of its last step");
+  assert.equal(await js(`(() => { const b = [...document.querySelectorAll("#modes button")]; return b.length === 3 && b.every(e => getComputedStyle(e).visibility === "visible" && !!e.offsetParent && (e.focus(), document.activeElement === e)) && getComputedStyle(document.getElementById("mapctl")).visibility === "visible"; })()`), true, "and the mode tabs have come in with the end");
   const VER = await js(`document.documentElement.dataset.storyVersion`);
   assert.equal(await js(`localStorage.story`), VER, "finishing is remembered, with the story's version");
   assert.equal(await js(`[...document.querySelectorAll("#top button")].filter(b => b.offsetParent).map(b => b.textContent).join()`), "Story,About,API,EN");
@@ -1055,16 +1058,16 @@ try {
   // under it, that it is open with the way in as a button, that it gets things wrong, and whose data it is.
   const span = +story.forecast.made_on.slice(0, 4) - story.history.years[0];
   const ABOUT = {
-    en: [`Prenúncio shows where the Amazon is likely to be cleared by July ${story.forecast.year}.`, "We built it so the people who enforce the law can get there first.",
-      `The model, ${story.model.name}, learned from ${span} years of public data. For every ${story.forest.cell_m} metre square of forest it gives the chance of clearing in the year ahead.`,
-      `We tested it on years it had never seen. In ${story.check.year}, ${hit5} of every ${of5} places it pointed to were cleared.`,
+    en: [`Prenúncio forecasts where the Amazon will be cleared by July ${story.forecast.year}.`, "We built it so enforcement can arrive before the clearing does.",
+      `The model is called ${story.model.name} and learned from ${span} years of public data. It divides the forest into ${story.forest.cell_m} metre squares, the cells, and calculates for each one the chance of clearing in the year ahead.`,
+      `To test it, we hid a year from the model and asked for its forecast. In ${story.check.year}, ${hit5} of every ${of5} places it pointed to were cleared.`,
       "Benchmark", `The score is the mean of ${story.benchmark.years[0]} to ${story.benchmark.years.at(-1)}.`,
-      "The code, the data and the benchmark are open. Build a better model and it goes ahead of ours.", "Submit a modelGitHub", "Made by Gui Dávid (guidavid.com)."],
-    pt: [`Prenúncio mostra onde a Amazônia deve ser desmatada até julho de ${story.forecast.year}.`, "Fizemos para quem fiscaliza conseguir chegar antes.",
-      `O modelo, ${story.model.name}, aprendeu com ${span} anos de dados públicos. Para cada quadrado de ${story.forest.cell_m} metros de floresta ele dá a chance de desmate no ano seguinte.`,
-      `Testamos em anos que ele nunca viu. Em ${story.check.year}, de cada ${of5} lugares que apontou, ${hit5} foram desmatados.`,
+      "The code, the data and the benchmark are open. Build a better model and it replaces ours.", "Submit a modelGitHub", "Made by Gui Dávid (guidavid.com)."],
+    pt: [`O Prenúncio prevê onde a Amazônia será desmatada até julho de ${story.forecast.year}.`, "Fizemos para que a fiscalização chegue antes do desmate.",
+      `O modelo se chama ${story.model.name} e aprendeu com ${span} anos de dados públicos. Ele divide a floresta em quadrados de ${story.forest.cell_m} metros, as células, e calcula para cada uma a chance de desmate no ano seguinte.`,
+      `Para testar, escondemos um ano do modelo e pedimos a previsão. Em ${story.check.year}, de cada ${of5} lugares que ele apontou, ${hit5} foram desmatados.`,
       "Benchmark", `A nota é a média de ${story.benchmark.years[0]} a ${story.benchmark.years.at(-1)}.`,
-      "O código, os dados e o benchmark são abertos. Quem fizer um modelo melhor passa na frente do nosso.", "Enviar um modeloGitHub", "Feito por Gui Dávid (guidavid.com)."],
+      "O código, os dados e o benchmark são abertos. Quem fizer um modelo melhor substitui o nosso.", "Enviar um modeloGitHub", "Feito por Gui Dávid (guidavid.com)."],
   };
   assert.equal(span, 18, "the years of public data, from the first year of the record to the day the forecast was made");
   for (const l of ["en", "pt"]) {
@@ -1200,6 +1203,8 @@ try {
       assert.match(await text("#say"), /km²|\d/, "the forecast for the land is under them");
     }
     // a name among the others opens without bringing the dock forward; the photograph brings it to the stage; its X there sends it back
+    await js(`document.querySelector("#people details summary").scrollIntoView({ block: "center" })`);  // (a tall photograph leaves the names under the fold of the dock)
+    await sleep(200);
     await clickOn("#people details summary");
     await sleep(400);
     assert.equal(await js(`document.querySelector("#people details").open && document.getElementById("chartbox").dataset.as`), "dock", "a name opens where it is");

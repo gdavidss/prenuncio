@@ -3,12 +3,12 @@
  "aboutText": {
   "benchmark": "Benchmark",
   "by": "Feito por {name} ({site}).",
-  "line1": "Prenúncio mostra onde a Amazônia deve ser desmatada até julho de {year}.",
-  "line2": "Fizemos para quem fiscaliza conseguir chegar antes.",
+  "line1": "O Prenúncio prevê onde a Amazônia será desmatada até julho de {year}.",
+  "line2": "Fizemos para que a fiscalização chegue antes do desmate.",
   "metric": "A nota é a média de {b0} a {b1}.",
-  "model": "O modelo, {name}, aprendeu com {span} anos de dados públicos. Para cada quadrado de {m} metros de floresta ele dá a chance de desmate no ano seguinte.",
-  "open": "O código, os dados e o benchmark são abertos. Quem fizer um modelo melhor passa na frente do nosso.",
-  "tested": "Testamos em anos que ele nunca viu. Em {y}, de cada {of} lugares que apontou, {hit} foram desmatados."
+  "model": "O modelo se chama {name} e aprendeu com {span} anos de dados públicos. Ele divide a floresta em quadrados de {m} metros, as células, e calcula para cada uma a chance de desmate no ano seguinte.",
+  "open": "O código, os dados e o benchmark são abertos. Quem fizer um modelo melhor substitui o nosso.",
+  "tested": "Para testar, escondemos um ano do modelo e pedimos a previsão. Em {y}, de cada {of} lugares que ele apontou, {hit} foram desmatados."
  },
  "about_": "cerca de {x} km²",
  "act": {
@@ -211,158 +211,158 @@
  ],
  "like": [
   {
+   "half": "Metade de Fernando de Noronha.",
    "km": 26,
    "same": "Do tamanho de Fernando de Noronha.",
+   "third": "Um terço de Fernando de Noronha.",
+   "x10": "Dez vezes Fernando de Noronha.",
    "x2": "Duas vezes Fernando de Noronha.",
    "x3": "Três vezes Fernando de Noronha.",
    "x4": "Quatro vezes Fernando de Noronha.",
-   "x5": "Cinco vezes Fernando de Noronha.",
-   "x10": "Dez vezes Fernando de Noronha.",
-   "half": "Metade de Fernando de Noronha.",
-   "third": "Um terço de Fernando de Noronha."
+   "x5": "Cinco vezes Fernando de Noronha."
   },
   {
+   "half": "Metade de Manhattan.",
    "km": 59,
    "same": "Do tamanho de Manhattan.",
+   "third": "Um terço de Manhattan.",
+   "x10": "Dez vezes Manhattan.",
    "x2": "Duas vezes Manhattan.",
    "x3": "Três vezes Manhattan.",
    "x4": "Quatro vezes Manhattan.",
-   "x5": "Cinco vezes Manhattan.",
-   "x10": "Dez vezes Manhattan.",
-   "half": "Metade de Manhattan.",
-   "third": "Um terço de Manhattan."
+   "x5": "Cinco vezes Manhattan."
   },
   {
+   "half": "Metade do Recife.",
    "km": 218,
    "same": "Do tamanho do Recife.",
+   "third": "Um terço do Recife.",
+   "x10": "Dez vezes o Recife.",
    "x2": "Duas vezes o Recife.",
    "x3": "Três vezes o Recife.",
    "x4": "Quatro vezes o Recife.",
-   "x5": "Cinco vezes o Recife.",
-   "x10": "Dez vezes o Recife.",
-   "half": "Metade do Recife.",
-   "third": "Um terço do Recife."
+   "x5": "Cinco vezes o Recife."
   },
   {
+   "half": "Metade de Belo Horizonte.",
    "km": 331,
    "same": "Do tamanho de Belo Horizonte.",
+   "third": "Um terço de Belo Horizonte.",
+   "x10": "Dez vezes Belo Horizonte.",
    "x2": "Duas vezes Belo Horizonte.",
    "x3": "Três vezes Belo Horizonte.",
    "x4": "Quatro vezes Belo Horizonte.",
-   "x5": "Cinco vezes Belo Horizonte.",
-   "x10": "Dez vezes Belo Horizonte.",
-   "half": "Metade de Belo Horizonte.",
-   "third": "Um terço de Belo Horizonte."
+   "x5": "Cinco vezes Belo Horizonte."
   },
   {
+   "half": "Metade de Florianópolis.",
    "km": 675,
    "same": "Do tamanho de Florianópolis.",
+   "third": "Um terço de Florianópolis.",
+   "x10": "Dez vezes Florianópolis.",
    "x2": "Duas vezes Florianópolis.",
    "x3": "Três vezes Florianópolis.",
    "x4": "Quatro vezes Florianópolis.",
-   "x5": "Cinco vezes Florianópolis.",
-   "x10": "Dez vezes Florianópolis.",
-   "half": "Metade de Florianópolis.",
-   "third": "Um terço de Florianópolis."
+   "x5": "Cinco vezes Florianópolis."
   },
   {
+   "half": "Metade da cidade do Rio de Janeiro.",
    "km": 1200,
    "same": "Do tamanho da cidade do Rio de Janeiro.",
+   "third": "Um terço da cidade do Rio de Janeiro.",
+   "x10": "Dez vezes a cidade do Rio de Janeiro.",
    "x2": "Duas vezes a cidade do Rio de Janeiro.",
    "x3": "Três vezes a cidade do Rio de Janeiro.",
    "x4": "Quatro vezes a cidade do Rio de Janeiro.",
-   "x5": "Cinco vezes a cidade do Rio de Janeiro.",
-   "x10": "Dez vezes a cidade do Rio de Janeiro.",
-   "half": "Metade da cidade do Rio de Janeiro.",
-   "third": "Um terço da cidade do Rio de Janeiro."
+   "x5": "Cinco vezes a cidade do Rio de Janeiro."
   },
   {
+   "half": "Metade da cidade de São Paulo.",
    "km": 1521,
    "same": "Do tamanho da cidade de São Paulo.",
+   "third": "Um terço da cidade de São Paulo.",
+   "x10": "Dez vezes a cidade de São Paulo.",
    "x2": "Duas vezes a cidade de São Paulo.",
    "x3": "Três vezes a cidade de São Paulo.",
    "x4": "Quatro vezes a cidade de São Paulo.",
-   "x5": "Cinco vezes a cidade de São Paulo.",
-   "x10": "Dez vezes a cidade de São Paulo.",
-   "half": "Metade da cidade de São Paulo.",
-   "third": "Um terço da cidade de São Paulo."
+   "x5": "Cinco vezes a cidade de São Paulo."
   },
   {
+   "half": "Metade de Luxemburgo.",
    "km": 2586,
    "same": "Do tamanho de Luxemburgo.",
+   "third": "Um terço de Luxemburgo.",
+   "x10": "Dez vezes Luxemburgo.",
    "x2": "Duas vezes Luxemburgo.",
    "x3": "Três vezes Luxemburgo.",
    "x4": "Quatro vezes Luxemburgo.",
-   "x5": "Cinco vezes Luxemburgo.",
-   "x10": "Dez vezes Luxemburgo.",
-   "half": "Metade de Luxemburgo.",
-   "third": "Um terço de Luxemburgo."
+   "x5": "Cinco vezes Luxemburgo."
   },
   {
+   "half": "Metade do Distrito Federal.",
    "km": 5761,
    "same": "Do tamanho do Distrito Federal.",
+   "third": "Um terço do Distrito Federal.",
+   "x10": "Dez vezes o Distrito Federal.",
    "x2": "Duas vezes o Distrito Federal.",
    "x3": "Três vezes o Distrito Federal.",
    "x4": "Quatro vezes o Distrito Federal.",
-   "x5": "Cinco vezes o Distrito Federal.",
-   "x10": "Dez vezes o Distrito Federal.",
-   "half": "Metade do Distrito Federal.",
-   "third": "Um terço do Distrito Federal."
+   "x5": "Cinco vezes o Distrito Federal."
   },
   {
+   "half": "Metade do Líbano.",
    "km": 10452,
    "same": "Do tamanho do Líbano.",
+   "third": "Um terço do Líbano.",
+   "x10": "Dez vezes o Líbano.",
    "x2": "Duas vezes o Líbano.",
    "x3": "Três vezes o Líbano.",
    "x4": "Quatro vezes o Líbano.",
-   "x5": "Cinco vezes o Líbano.",
-   "x10": "Dez vezes o Líbano.",
-   "half": "Metade do Líbano.",
-   "third": "Um terço do Líbano."
+   "x5": "Cinco vezes o Líbano."
   },
   {
+   "half": "Metade de Sergipe.",
    "km": 21938,
    "same": "Do tamanho de Sergipe.",
+   "third": "Um terço de Sergipe.",
+   "x10": "Dez vezes Sergipe.",
    "x2": "Duas vezes Sergipe.",
    "x3": "Três vezes Sergipe.",
    "x4": "Quatro vezes Sergipe.",
-   "x5": "Cinco vezes Sergipe.",
-   "x10": "Dez vezes Sergipe.",
-   "half": "Metade de Sergipe.",
-   "third": "Um terço de Sergipe."
+   "x5": "Cinco vezes Sergipe."
   },
   {
+   "half": "Metade da Bélgica.",
    "km": 30528,
    "same": "Do tamanho da Bélgica.",
+   "third": "Um terço da Bélgica.",
+   "x10": "Dez vezes a Bélgica.",
    "x2": "Duas vezes a Bélgica.",
    "x3": "Três vezes a Bélgica.",
    "x4": "Quatro vezes a Bélgica.",
-   "x5": "Cinco vezes a Bélgica.",
-   "x10": "Dez vezes a Bélgica.",
-   "half": "Metade da Bélgica.",
-   "third": "Um terço da Bélgica."
+   "x5": "Cinco vezes a Bélgica."
   },
   {
+   "half": "Metade da Suíça.",
    "km": 41285,
    "same": "Do tamanho da Suíça.",
+   "third": "Um terço da Suíça.",
+   "x10": "Dez vezes a Suíça.",
    "x2": "Duas vezes a Suíça.",
    "x3": "Três vezes a Suíça.",
    "x4": "Quatro vezes a Suíça.",
-   "x5": "Cinco vezes a Suíça.",
-   "x10": "Dez vezes a Suíça.",
-   "half": "Metade da Suíça.",
-   "third": "Um terço da Suíça."
+   "x5": "Cinco vezes a Suíça."
   },
   {
+   "half": "Metade da Inglaterra.",
    "km": 130279,
    "same": "Do tamanho da Inglaterra.",
+   "third": "Um terço da Inglaterra.",
+   "x10": "Dez vezes a Inglaterra.",
    "x2": "Duas vezes a Inglaterra.",
    "x3": "Três vezes a Inglaterra.",
    "x4": "Quatro vezes a Inglaterra.",
-   "x5": "Cinco vezes a Inglaterra.",
-   "x10": "Dez vezes a Inglaterra.",
-   "half": "Metade da Inglaterra.",
-   "third": "Um terço da Inglaterra."
+   "x5": "Cinco vezes a Inglaterra."
   }
  ],
  "line": "Linha",
@@ -441,8 +441,8 @@
  "pastHereNone": "Em {y}, nenhum desmatamento mapeado aqui",
  "pastP": "Em {y}, esperava-se que {exp} células perdessem um hectare e {act} perderam",
  "people": {
-  "credit": "Foto: {author}, {license}",
-  "also": "Também nesta terra"
+  "also": "Também nesta terra",
+  "credit": "Foto: {author}, {license}"
  },
  "prevYear": "Ano anterior",
  "range": "provável de {lo} a {hi}",
@@ -479,23 +479,23 @@
  "skip": "Pular",
  "st": {
   "ahead": {
-   "flat": "O modelo espera mais {km} km² de desmate até {month}.",
-   "rise": "Nos últimos três meses o desmate subiu {pct}%, e o modelo espera mais {km} km² até {month}."
+   "flat": "Até {month}, o modelo espera {km} km² de desmate.",
+   "rise": "O desmate subiu {pct}% nos últimos três meses. O modelo espera {km} km² até {month}."
   },
   "back": "Voltar",
   "done": "Pronto",
-  "first": "Para quem fiscaliza, estes {n} lugares vêm primeiro.",
-  "forestA": "Isto é a Amazônia.",
-  "forestB": "{cells} milhões de quadrados de floresta, {m} metros cada.",
-  "lossA": "Todo ano uma parte cai.",
-  "lossB": "Desde {y}, {k} mil km².",
-  "lossBMore": "Desde {y}, {k} mil km². Mais que a Inglaterra.",
-  "model": "Treinamos um modelo para prever a próxima.",
+  "first": "Estes {n} lugares devem ser fiscalizados primeiro. É onde o modelo espera mais desmate.",
+  "forestA": "Esta é a Amazônia.",
+  "forestB": "Dividimos a floresta em quadrados de {m} metros de lado. São {cells} milhões de células.",
+  "lossA": "Todo ano, um pedaço da floresta é desmatado.",
+  "lossB": "Desde {y}, a Amazônia perdeu {k} mil km² de floresta.",
+  "lossBMore": "Desde {y}, a Amazônia perdeu {k} mil km² de floresta, uma área maior que a Inglaterra.",
+  "model": "Treinamos um modelo para calcular a chance de cada célula ser desmatada no ano seguinte.",
   "moreKm": 130279,
   "next": "Seguir",
-  "open": "O código e o benchmark são abertos. Quem fizer um modelo melhor passa na frente do nosso.",
-  "proof": "Testamos no passado. Em {y}, de cada {of} lugares que ele apontou, {hit} foram desmatados.",
-  "sources": "Ele aprende com {n} fontes públicas, de imagem de satélite a licença de desmate."
+  "open": "O código e o benchmark são abertos. Quem fizer um modelo melhor substitui o nosso.",
+  "proof": "Escondemos {y} do modelo e pedimos a previsão. De cada {of} lugares que ele apontou, {hit} foram desmatados.",
+  "sources": "O modelo aprende com {n} fontes públicas, de imagens de satélite a licenças de desmate."
  },
  "stepHi": "acima de {c}",
  "stepLo": "abaixo de {c}",
