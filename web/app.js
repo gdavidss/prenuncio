@@ -266,7 +266,7 @@ function sheetAt(at) {
   if (at) SHEET.list = at;
   $("list").dataset.at = SHEET.list;
   // the list's half-way place: under the Amazon, which on a phone sits right under the map's band
-  if (narrow()) { const H = innerHeight, y = lengthOf("--top") + lengthOf("--panel-h") + 8 + (innerWidth - 20) / 1.27 - 26; root.style.setProperty("--list-top", Math.round(Math.max(H * 0.44, Math.min(y, H - 300))) + "px"); }  // (its top may stand on the Amazon's southern tip)
+  if (narrow()) { const H = innerHeight, y = lengthOf("--top") + lengthOf("--panel-h") + 8 + (innerWidth - 20) / 1.27 - 26; root.style.setProperty("--list-top", Math.round(Math.max(H * 0.5, Math.min(y, H - 300))) + "px"); }  // (its top may stand on the Amazon's southern tip)
 }
 function grip(handle, sheet, done) {  // done(dy): where the sheet goes when it is let go, dy being how far it was pulled (0: a tap)
   let y0 = null, top0 = 0;
@@ -294,11 +294,18 @@ const sideOn = listOn;  // the ranked list stands on the right of the page
 // the list is open, the left column is kept whole: the story's caption stands in it.
 // On a phone the panel is a band under the header and the Amazon sits right under it, above the sheets.
 const lengthOf = name => parseFloat(css(name)) || 0;
+const CAP_FIT = 164, KEY_FIT = 98;  // on a phone, in the story: the room kept for the caption and for the key, the same at every step so the map stays put
+let restPeek = 0;
 const pagePad = () => parseFloat(getComputedStyle($("top")).paddingLeft) || 0;
 function room() {
   const m = map.getSize(), top = lengthOf("--top");
   if (mapSmall()) return { top: 6, right: 6, bottom: 6, left: 6 };
-  if (narrow()) { const y = top + lengthOf("--panel-h") + 8; return { top: y, right: 10, left: 10, bottom: Math.max(10, m.y - y - (m.x - 20) / 1.27) }; }
+  if (narrow()) {  // a phone: the Amazon in the middle of what is free between the map's band and what stands at the bottom (the caption, the sheet at rest, the list)
+    const cap = storyOn ? CAP_FIT : 0, panel = $("mappanel"), y0 = storyOn ? top + KEY_FIT : panel.offsetParent ? rectOf(panel).bottom : top, lt = lengthOf("--list-top");
+    if (!root.dataset.people) restPeek = lengthOf("--peek");  // (the people's taller sheet does not move the map: selecting never does)
+    const y1 = root.dataset.list === "true" || (storyOn && restPeek > 0) ? (lt > 100 ? lt : m.y * 0.56) : m.y - restPeek - cap;  // (in the story the timeline takes the list's place: the map stays where the list left it)
+    return { top: y0 + 6, right: 10, left: 10, bottom: Math.max(10, m.y - y1 + 6) };
+  }
   const left = pagePad() + lengthOf("--rail") + lengthOf("--in");  // the right edge of the left column's surfaces
   if (RTL.has(lang)) return { top, left: sideOn() ? lengthOf("--list-w") : 0, right: left + 16, bottom: 0 };  // mirrored: the column is on the right, the list on the left
   return { top, right: sideOn() ? lengthOf("--list-w") : 0, bottom: 0, left, panel: Math.max(top + lengthOf("--panel-h"), $("mappanel").offsetParent ? rectOf($("mappanel")).bottom : 0), dock: Math.min(m.y - pagePad() - lengthOf("--dock-h"), docked("chart") && BOX.chart.offsetParent && !peopleOf ? rectOf(BOX.chart).top : 1e9), column: sideOn() || storyOn };
@@ -443,6 +450,8 @@ async function pixels(name) {
 // the base map and the state lines, fetched when the map is first on screen (on a phone that is after the timeline)
 let base, baseCv, started = false;
 const names = L.layerGroup();
+let baseIn; const baseReady = new Promise(r => (baseIn = r));  // the base map has arrived (or failed): what the story needs later is fetched after it
+setTimeout(() => baseIn(), 15000);
 function startMap() {
   if (started) return;
   started = true;
@@ -460,7 +469,7 @@ function startMap() {
     base = B.layer; baseCv = B.cx.canvas;
     zoomed();
     if ($("about").open) figure();
-  });
+  }).finally(baseIn);
   // state lines and names are always there, to say where you are
   sectors("uf").then(U => {
     for (const it of U.items) {
@@ -693,6 +702,7 @@ async function paint() {
   const y = key(), I = info(), F = I.flags500 && ras(I.flags500);
   if (!cellsOn() || grid?.key === y) return zoomed();
   if (storyOn && y !== FY) return zoomed();  // the story brings its own, lighter copy of the year it replays
+  if (storyOn) await baseReady;  // (the story opens on the base map alone, so it has the line to itself; the tool needs both, and fetches both at once)
   if (storyOn && LITE && LOSS.busy) await LOSS.busy;  // (on a phone one picture is decoded at a time: the masks of the loss first, then the chances)
   if (grid && grid.key !== y && !storyOn) grid = null;  // the year that was on screen is let go before the next is decoded
   const g = S.hazard === "clear" && typeof y === "number" && await hasProb(y)
@@ -1426,6 +1436,12 @@ async function refresh() {
   startMap(); paint(); drawSectors();
   list();
   people();
+  // a phone: when what stands around the map has changed enough, the Amazon glides to the middle of what is free
+  if (narrow() && pristine && map._loaded) requestAnimationFrame(() => {
+    if (!pristine || !narrow() || swapping) return;
+    const v = fitNow(), d = map.latLngToContainerPoint(v.c).distanceTo(map.latLngToContainerPoint(map.getCenter()));
+    if (d > 12 || Math.abs(v.z - map.getZoom()) > 0.05) view(v, !calm());
+  });
 }
 
 // ---------- the ranked list, on the map's frame: where to look first ----------
@@ -1731,7 +1747,7 @@ function figure() {
   }
   const W = el.clientWidth, slim = W < 440, src = ST.model.inputs.map(x => x[lang] || x.en).map(x => { const q = x.match(/^(.*?)\s*[(（]([^)）]*)[)）]$/); return q ? [q[1], q[2]] : [x, ""]; });  // the layer, and who makes it
   const n = src.length, S = slim ? W * 0.47 : Math.min(W * 0.42, Math.max(200, (innerHeight - lengthOf("--top") - 160) / 2.3)), asp = (M.cols * M.cell) / (M.rows * M.cell) * Math.cos(6.4 * Math.PI / 180);  // the grid's shape on the ground
-  const E = [0.8 * S, 0.24 * S], So = [-0.5 * S / asp, 0.36 * S / asp], gap = slim ? 31 : Math.max(36, Math.round(S * 0.157)), ph = E[1] + So[1], x0 = (slim ? 2 : 6) - So[0], y0 = 10;
+  const E = [0.8 * S, 0.24 * S], So = [-0.5 * S / asp, 0.36 * S / asp], ph = E[1] + So[1], gap = slim ? (storyOn ? Math.max(31, Math.min(52, Math.floor(($("about-body").clientHeight - 24 - 10 - 2 * ph - 76) / (n - 1)))) : 31) : Math.max(36, Math.round(S * 0.157)), x0 = (slim ? 2 : 6) - So[0], y0 = 10;
   const yM = y0 + (n - 1) * gap + ph + (slim ? 34 : 42), yO = yM + (slim ? 30 : 38), H = Math.ceil(yO + ph + 12), mid = [x0 + (E[0] + So[0]) / 2, 0];
   const at = (i, u, v) => [x0 + u * E[0] + v * So[0], (i < n ? y0 + i * gap : yO) + u * E[1] + v * So[1]];  // a point of plane i: u east, v south
   // the outline, on a plane
@@ -1839,7 +1855,8 @@ function lossLoad() {
     LOSS.worker = new Worker(URL.createObjectURL(new Blob([`onmessage = async e => { for (const [y, url] of e.data.urls) { let a = null; try { a = await (${decodeLoss})(url, ...e.data.dim); } catch (err) {} postMessage({ y, a }, a ? [a.buffer] : []); } };`], { type: "text/javascript" })));
     LOSS.worker.onmessage = e => { if (e.data.a) { LOSS.got[e.data.y] = e.data.a; if (storyOn && SCENES[sAt].loss && LOSS.shown >= LOSS.years.indexOf(e.data.y) + 1) lossShow(LOSS.shown, true); } if (LOSS.years.every(y => y in LOSS.got || e.data.y === y) && e.data.y === LOSS.years.at(-1)) { LOSS.worker.terminate(); free(); } };
     LOSS.worker.onerror = free;
-    LOSS.worker.postMessage({ urls: LOSS.years.map(y => [y, new URL(`data/f${y}${F.suf}.png`, location.href).href]), dim: [F.cols, F.rows, LOSS.f] });
+    const w = LOSS.worker;
+    baseReady.then(() => { if (LOSS.worker === w) w.postMessage({ urls: LOSS.years.map(y => [y, new URL(`data/f${y}${F.suf}.png`, location.href).href]), dim: [F.cols, F.rows, LOSS.f] }); });  // (after the base map, which the first lines need)
   } catch (err) { free(); /* no worker: the bars run without the map */ }
 }
 function lossShow(n, again) {

@@ -1354,11 +1354,11 @@ try {
   const px = (sel, prop = "fontSize") => js(`parseFloat(getComputedStyle(document.querySelector(${JSON.stringify(sel)}))[${JSON.stringify(prop)}])`);
   assert.deepEqual(await place("mapbox"), [0, 0, 390, 844], "the map is the screen");
   const cap = await js(`(() => { const s = document.getElementById("story").getBoundingClientRect(), b = document.getElementById("story-next").getBoundingClientRect(), k = document.getElementById("skip-btn").getBoundingClientRect(); return [s.top / innerHeight, s.bottom / innerHeight, b.width, b.height, b.bottom / innerHeight, k.height, k.top, b.right > innerWidth * 0.8]; })()`);
-  assert.ok(cap[0] > 0.82 && cap[1] > 0.99 && cap[2] >= 96 && cap[3] >= 48 && cap[4] > 0.9 && cap[5] >= 44 && cap[6] < 10 && cap[7], "the caption is at the bottom and no taller than its one line needs, the way on is a large arrow at the thumb, and Skip is in the header: " + cap);
+  assert.ok(cap[0] > 0.8 && cap[1] > 0.99 && cap[2] >= 48 && cap[2] <= 72 && cap[3] === 48 && cap[4] > 0.9 && cap[5] >= 44 && cap[6] < 10 && cap[7], "the caption is at the bottom and no taller than its one line needs, the way on is a 48 px arrow at the thumb, and Skip is in the header: " + cap);
   assert.equal(await js(`[...document.querySelectorAll("#top button")].filter(b => b.offsetParent).map(b => b.textContent).join()`), "PT,Pular");
   const lineSize = await px("#story-line");
-  assert.ok(lineSize >= 26 && lineSize <= 28, "the story's line is set at 26 to 28 px on a phone: " + lineSize);
-  const whereP = await amazon(), ptSaid = [], budget = [];
+  assert.ok(lineSize >= 22 && lineSize <= 24, "the story's line is set at 22 to 24 px on a phone: " + lineSize);
+  const whereP = await amazon(), ptSaid = [], budget = []; let whereL = null;
   assert.equal(await js(`prenuncio.lite`), true, "a phone takes the half-resolution pictures, decided before anything is fetched");
   assert.equal(await js(`performance.getEntriesByType("resource").some(e => /data\\/[pf]\\d{4}\\.png/.test(e.name))`), false, "and never fetches a full one");
   assert.ok(whereP[0] >= 0 && whereP[0] + whereP[2] <= 390 && whereP[1] + whereP[3] < cap[0] * 844, "the Amazon is whole on the screen, above the caption: " + whereP);
@@ -1368,13 +1368,16 @@ try {
     await fits(IDS[i]);
     await sleep(IDS[i] === "lossA" || IDS[i] === "model" || IDS[i] === "proof" ? 2500 : 300);
     budget.push([IDS[i], await js(`(m => [m.decodeMP, m.canvasMP, Math.round(performance.memory.usedJSHeapSize / 1048576)])(prenuncio.mem())`)]);
-    assert.deepEqual(await amazon(), whereP, "the Amazon has not moved at " + IDS[i]);
+    // the Amazon stands in the middle of the stage and moves once: up, to stand above the list when that comes in
+    if (IDS[i] === "first") { await sleep(1200); whereL = await amazon(); assert.ok(whereL[1] < whereP[1] - 20 && whereL[1] + whereL[3] <= (await sheets())[0][0] + 1, "the Amazon has gone up to stand above the list: " + JSON.stringify([whereP, whereL, await sheets()])); }
+    else assert.deepEqual(await amazon(), whereL || whereP, "the Amazon has not moved at " + IDS[i]);
+    if (["forestA", "lossB", "model", "proof"].includes(IDS[i])) { const g = await js(`(() => { const a = document.querySelector("canvas.base").getBoundingClientRect(), k = document.getElementById("mappanel"), key = getComputedStyle(k).visibility === "hidden" ? 48 : k.getBoundingClientRect().bottom, s = document.getElementById("story").getBoundingClientRect().top; return [Math.round(a.top - key), Math.round(s - a.bottom), Math.round(s - 48), Math.round((a.top + a.bottom) / 2)]; })()`); assert.ok(g[0] >= 0 && g[1] >= 0 && Math.abs(g[3] - (48 + 98 + 844 - 164) / 2) <= 16 && g[2] >= 630, `the Amazon is in the middle of the stage, which has 630 px or more between the header and the caption, at ${IDS[i]}: ${g}`); }
     assert.equal(await js(`(() => { const s = document.getElementById("story").getBoundingClientRect(), n = document.getElementById("story-next").getBoundingClientRect(), t = document.getElementById("story-text").getBoundingClientRect(); return t.bottom <= n.top + 1 && Math.round(s.bottom) === innerHeight && Math.round(n.bottom) >= innerHeight - 16 && t.top >= s.top; })()`), true, "the caption holds its line above the way on, which stays at the foot of the screen, at " + IDS[i]);
     assert.equal(await js(`document.getElementById("about").open && !document.getElementById("list").hidden`), false, "the panel and the list are not open together at " + IDS[i]);
     if (IDS[i] === "sources" || IDS[i] === "open") {  // the panel stands between the header and the caption: the line, the way on and Skip stay in reach
       await until(`document.getElementById("about").open`, "About, on a phone"); await sleep(500);
-      const ab = await js(`(() => { const a = document.getElementById("about").getBoundingClientRect(), s = document.getElementById("story").getBoundingClientRect(), n = document.getElementById("story-next").getBoundingClientRect(), k = document.getElementById("skip-btn").getBoundingClientRect(), x = document.getElementById("about-close").getBoundingClientRect(), on = (r, id) => !!document.elementFromPoint(r.x + r.width / 2, r.y + r.height / 2)?.closest("#" + id); return [Math.round(a.bottom - s.top), a.top >= k.bottom - 1, on(n, "story-next"), on(k, "skip-btn"), on(x, "about-close"), x.width >= 44 && x.height >= 44]; })()`);
-      assert.deepEqual(ab, [0, true, true, true, true, true], "About on a phone, in the story: on the caption, under the header, with the way on, Skip and its X in reach: " + ab);
+      const ab = await js(`(() => { const a = document.getElementById("about").getBoundingClientRect(), s = document.getElementById("story").getBoundingClientRect(), n = document.getElementById("story-next").getBoundingClientRect(), k = document.getElementById("skip-btn").getBoundingClientRect(), x = document.getElementById("about-close").getBoundingClientRect(), on = (r, id) => !!document.elementFromPoint(r.x + r.width / 2, r.y + r.height / 2)?.closest("#" + id); return [Math.round(a.bottom - s.top), a.top >= k.bottom - 1, on(n, "story-next"), on(k, "skip-btn"), x.width === 0]; })()`);
+      assert.deepEqual(ab, [0, true, true, true, true], "About on a phone, in the story: on the caption, under the header, with the way on and Skip in reach, and no X row taking the stage: " + ab);
     }
     if (IDS[i] === "sources") assert.deepEqual(await ONLY(), { shown: ["DIV#model-fig"], scroll: false, inside: true }, "on a phone too: the figure alone, nothing scrolls");
     if (IDS[i] === "open") assert.deepEqual(await ONLY(), { shown: ["H3#about-benchmark", "TABLE", "P"], scroll: false, inside: true }, "on a phone too: the benchmark alone, nothing scrolls");
@@ -1403,7 +1406,6 @@ try {
   await clickOn("#story-next");
   await until(`!(${onStory}) && /m=cells/.test(location.hash) && document.getElementById("list").hidden`, "the tool on a phone, after the story: the map on its cells, the bulletin at rest");
   await sleep(600);
-  assert.deepEqual(await amazon(), whereP, "and the Amazon is where it was");
   // the tool. The header is the mark and one menu.
   assert.equal(await js(`[...document.querySelectorAll("#top button")].filter(b => b.offsetParent).map(b => b.id).join()`), "menu-btn", "the header: the mark and one menu");
   await clickOn("#menu-btn");
@@ -1421,6 +1423,15 @@ try {
   const type = { say: await px("#say"), ticks: await px("#legend .ticks"), what: await px("#legend .what"), axis: await px("#chart .bar text") };
   assert.ok(type.say >= 20 && type.say <= 22 && [type.ticks, type.axis].every(x => x >= 12 && x <= 13.5) && type.what >= 13 && type.what <= 14, "the phone's type scale on the resting screen: " + JSON.stringify(type));
   assert.equal(await js(`[...document.querySelectorAll("#modes button, #hazard button, #menu-btn, #sheet-grab")].filter(e => e.offsetParent).every(e => { const r = e.getBoundingClientRect(), a = getComputedStyle(e, "::after"); return r.height >= 44 || (a.content !== "none" && r.height - parseFloat(a.top) - parseFloat(a.bottom) >= 44); })`), true, "what is tapped is 44 px tall, or has a target that is");
+  // the stage on a phone: the sheet at rest leaves the map at least half of the screen, the Amazon stands in the middle of what is free between the key and the sheet, and no edge is a fade
+  const STAGE = async what => {
+    await sleep(900);
+    const g = await js(`(() => { const H = innerHeight, list = document.documentElement.dataset.list === "true", bottom = (list ? document.getElementById("list") : document.getElementById("chartbox")).getBoundingClientRect().top, key = document.getElementById("mappanel").getBoundingClientRect().bottom, a = document.querySelector("canvas.base").getBoundingClientRect(); return { H, bottom: Math.round(bottom), up: Math.round(a.top - key), down: Math.round(bottom - a.bottom) }; })()`);
+    assert.ok(g.bottom >= g.H / 2, `${what}: the map keeps half of the screen above the sheet at rest: ${JSON.stringify(g)}`);
+    assert.ok(g.up >= 0 && g.down >= 0 && Math.abs(g.up - g.down) <= 30, `${what}: the Amazon is in the middle of the free stage: ${JSON.stringify(g)}`);
+    assert.deepEqual(await js(`["story", "chartbox", "list", "nav", "top", "mappanel", "about", "api"].filter(id => { const s = getComputedStyle(document.getElementById(id)); return s.boxShadow !== "none" || s.backgroundImage !== "none" || (s.maskImage || "none") !== "none" || (s.webkitMaskImage || "none") !== "none"; })`), [], `${what}: flat edges, no shadow and no gradient`);
+  };
+  await STAGE("the default phone screen");
   assert.equal(await js(`document.getElementById("hazard").scrollWidth <= document.getElementById("hazard").clientWidth`), true, "the four hazards fit the sheet's width");
   // the bulletin: its top is tapped or pulled up to the header, where it is whole, and pushed back
   const pull = async (sel, dy) => { const [x, y] = await js(`(() => { const r = document.querySelector("${sel}").getBoundingClientRect(); return [r.x + r.width / 2, r.y + r.height / 2]; })()`); await send("Input.dispatchMouseEvent", { type: "mousePressed", x, y, button: "left", clickCount: 1 }); for (let k = 1; k <= 6; k++) await send("Input.dispatchMouseEvent", { type: "mouseMoved", x, y: y + dy * k / 6, button: "left" }); await send("Input.dispatchMouseEvent", { type: "mouseReleased", x, y: y + dy, button: "left", clickCount: 1 }); await sleep(500); };
@@ -1452,6 +1463,7 @@ try {
   await until(`!!document.getElementById("list").offsetParent && document.getElementById("list").dataset.at === "half" && document.querySelectorAll("#list-rows li").length > 100`, "the list's sheet, from the mode");
   await sleep(500);
   [ls, cs] = await apart("with the list open");
+  await STAGE("priorities on a phone");
   assert.ok(ls[0] > 0.4 * 844 && ls[0] < 0.7 * 844 && ls[1] === cs[0] && cs[1] === 844 && cs[1] - cs[0] <= 40, "the list has the lower half, and the bulletin is a small handle under it: " + JSON.stringify([ls, cs]));
   assert.equal(await js(`["hazard", "level", "say", "chart"].some(id => getComputedStyle(document.getElementById(id)).visibility === "visible" && !!document.getElementById(id).offsetParent)`), false, "nothing of the bulletin shows behind the handle");
   assert.equal(await js(`[...document.querySelectorAll("#list-close, #list-csv, #list-grab, #list-rows li:nth-child(-n+4) button")].every(e => e.getBoundingClientRect().height >= 44)`), true, "the list's controls and rows are 44 px tall");

@@ -510,7 +510,7 @@ canvas.cells { position: absolute; left: 0; top: 0; transition: opacity 0.25s; }
   #menu-btn { display: grid; place-items: center; width: 48px; height: 48px; }
   #menu-btn svg { width: 20px; height: 15px; }
   #menu-btn svg path { fill: none; stroke: currentColor; stroke-width: 2; }
-  #nav { display: none; position: fixed; z-index: 60; top: var(--top); right: 0; flex-direction: column; gap: 0; min-width: 210px; padding: 4px 0 8px; background: var(--ground); box-shadow: 0 18px 40px rgba(16, 32, 26, 0.18); }
+  #nav { display: none; position: fixed; z-index: 60; top: var(--top); right: 0; flex-direction: column; gap: 0; min-width: 210px; padding: 4px 0 8px; background: var(--soft); }
   :root[data-menu] #nav { display: flex; }
   #nav button { min-height: 50px; padding: 0 22px; border: 0; text-align: left; font-size: 17px; }
   /* in the story the header keeps the language and the way out, side by side */
@@ -548,7 +548,7 @@ canvas.cells { position: absolute; left: 0; top: 0; transition: opacity 0.25s; }
   #mapbox[data-as="dock"] #map-front { display: none; }
   :root[data-front="chart"] #mappanel { display: flex; }
   /* the bulletin: a sheet. At rest its top shows: the hazards, the level, the headline and the plot. */
-  #chartbox[data-as] { left: 0; right: 0; bottom: var(--cap); width: auto; height: auto; z-index: 20; background: var(--ground); box-shadow: 0 -10px 30px rgba(16, 32, 26, 0.12); transition: top 0.34s cubic-bezier(0.2, 0.7, 0.2, 1), bottom 0.34s cubic-bezier(0.2, 0.7, 0.2, 1), opacity 0.5s, visibility 0s; }
+  #chartbox[data-as] { left: 0; right: 0; bottom: var(--cap); width: auto; height: auto; z-index: 20; background: var(--ground); transition: top 0.34s cubic-bezier(0.2, 0.7, 0.2, 1), bottom 0.34s cubic-bezier(0.2, 0.7, 0.2, 1), opacity 0.5s, visibility 0s; }
   #chartbox[data-as="dock"] { top: calc(100dvh - var(--peek) - var(--cap)); --cpad: 16px; }
   #chartbox[data-as="stage"] { top: var(--top); --cpad: 16px; }
   #chartbox.dragging, #list.dragging { transition: none; }
@@ -557,7 +557,6 @@ canvas.cells { position: absolute; left: 0; top: 0; transition: opacity 0.25s; }
   #sheet-grab::before, #list-grab::before { content: ""; display: block; width: 40px; height: 4px; margin: 0 auto; background: var(--line); }
   #sheet-grab::after { content: ""; position: absolute; inset: -12px 0; }  /* a 44 px target */
   /* behind its handle: only the grip shows, and a tap or a pull on it brings the bulletin up */
-  :root[data-list="true"] #chartbox[data-as="dock"] { box-shadow: none; }
   :root[data-list="true"] #chartbox[data-as="dock"] #chartin > :not(#sheet-grab) { visibility: hidden; }
   :root[data-list="true"] #chartbox[data-as="dock"] #sheet-grab { height: var(--handle); margin: 0; }
   #hazrow { height: 44px; }
@@ -613,7 +612,7 @@ canvas.cells { position: absolute; left: 0; top: 0; transition: opacity 0.25s; }
   #signs.acts > div { flex-basis: 40%; }
   /* the ranked list: a sheet over the lower half, standing on the bulletin's handle. Its bar has the name of
      the list, which pulls it up to the header and back, the file and the way out. */
-  #list { left: 0; right: 0; top: var(--list-top); bottom: calc(var(--cap) + var(--peek)); width: auto; z-index: 25; background: var(--ground); box-shadow: 0 -10px 30px rgba(16, 32, 26, 0.12); transition: top 0.34s cubic-bezier(0.2, 0.7, 0.2, 1), bottom 0.34s cubic-bezier(0.2, 0.7, 0.2, 1); }
+  #list { left: 0; right: 0; top: var(--list-top); bottom: calc(var(--cap) + var(--peek)); width: auto; z-index: 25; background: var(--ground); transition: top 0.34s cubic-bezier(0.2, 0.7, 0.2, 1), bottom 0.34s cubic-bezier(0.2, 0.7, 0.2, 1); }
   #list[data-at="full"] { top: var(--top); }
   #list-bar { position: static; display: flex; align-items: center; gap: 0; flex: none; height: 50px; padding: 0 4px 0 16px; }
   #list-grab { display: block; flex: 1; align-self: stretch; padding-top: 7px; text-align: left; font: 700 16px/1 var(--cond); letter-spacing: 0.07em; text-transform: uppercase; }
@@ -631,16 +630,24 @@ canvas.cells { position: absolute; left: 0; top: 0; transition: opacity 0.25s; }
   #list-rows .why { padding: 6px 16px 12px 58px; }
   #list-rows .why p { font-size: 15.5px; }
   /* the story's caption: at the bottom, as tall as its line, the way on large under the thumb */
-  #story { left: 0; right: 0; top: auto; bottom: 0; width: auto; display: flex; flex-direction: column; padding: 14px 16px calc(12px + env(safe-area-inset-bottom)); background: var(--ground); box-shadow: 0 -10px 30px rgba(16, 32, 26, 0.12); pointer-events: auto; }
-  #story-line { font-size: clamp(25px, 7vw, 28px); line-height: 1.05; }
+  #story { left: 0; right: 0; top: auto; bottom: 0; width: auto; display: flex; flex-direction: column; padding: 10px 16px calc(8px + env(safe-area-inset-bottom)); background: var(--ground); pointer-events: auto; }
+  #story-line { font-size: 24px; line-height: 1.08; }
   #story-extra { display: none; }
-  #story-nav { margin-top: 12px; }
-  #story-next { width: 112px; height: 52px; }
-  #story-back { width: 52px; height: 52px; }
+  #story-nav { margin-top: 6px; }
+  #story-next { width: 64px; height: 48px; }
+  #story-back { width: 48px; height: 48px; }
+  :root[data-story] #mapctl { display: none; }  /* (the key right under the header: the stage has the rest) */
+  /* a panel on the stage has the whole height: its X stands in the header's row, beside the menu; in the story the arrows are the way on and there is no X */
+  .pbar { position: fixed; z-index: 61; top: 0; right: 48px; height: var(--top); padding: 0; background: none; align-items: center; }
+  .pbar .x { margin: 0; }
+  :root[data-story] .pbar { display: none; }
+  #about, #api { padding-top: 10px; z-index: 41; }
+  #about[open], #api[open] { animation-fill-mode: backwards; }  /* (so the X can be fixed to the screen, in the header's row, once the panel is in) */
+  :root[data-story] #mappanel { padding-top: 6px; }
+  #about[data-only] { padding-top: 0; }
+  #about[data-only="bench"] #about-body { justify-content: flex-start; padding-top: 14px; }
   /* About fills the screen; in the story it stands between the header and the caption, so the line, the way on and Skip stay in reach */
   #about, #api { --apad: var(--pad); }
-  .pbar { padding: 2px 0; }
-  .pbar .x { margin-right: -15px; }
   :root[data-story] #about { inset: var(--top) 0 var(--cap) 0; height: auto; z-index: 45; }
   #about p { font-size: 15.5px; }
   #about .lede p { font-size: 21px; }
@@ -693,6 +700,7 @@ canvas.cells { position: absolute; left: 0; top: 0; transition: opacity 0.25s; }
 [dir="rtl"] #rank-btn { margin-left: 0; margin-right: 16px; }
 [dir="rtl"] #list-rows button, [dir="rtl"] #signs > div, [dir="rtl"] #signs > button { text-align: right; }
 [dir="rtl"] .pbar .x { margin-right: 0; margin-left: -10px; }
+@media (max-width: 860px) { [dir="rtl"] .pbar { right: auto; left: 48px; } [dir="rtl"] .pbar .x { margin: 0; } }
 @media (min-width: 861px) {
   [dir="rtl"] #mappanel { left: auto; right: calc(var(--pad) - var(--in)); }
   [dir="rtl"] #chartbox[data-as="dock"] { left: auto; right: calc(var(--pad) - var(--in)); }
@@ -733,7 +741,7 @@ canvas.cells { position: absolute; left: 0; top: 0; transition: opacity 0.25s; }
 :root:is([lang="ar"], [lang="hi"], [lang="bn"], [lang="zh"], [lang="ja"], [lang="ko"]) :is(.seg button, .pick button, #nav button) { font-size: 14.5px; font-weight: 600; }
 .brand { font-family: "Barlow Condensed", "Arial Narrow", sans-serif; }  /* the wordmark is Latin in every language */
 @media (max-width: 860px) {
-  :root:is([lang="ar"], [lang="hi"], [lang="bn"], [lang="zh"], [lang="ja"], [lang="ko"]) #story-line { font-size: 23px; }
+  :root:is([lang="ar"], [lang="hi"], [lang="bn"], [lang="zh"], [lang="ja"], [lang="ko"]) #story-line { font-size: 21px; line-height: 1.2; }
   :root:is([lang="ar"], [lang="hi"], [lang="bn"], [lang="zh"], [lang="ja"], [lang="ko"]) :is(#say, #chartbox[data-as="dock"] #say) { font-size: 19px; }
   [dir="rtl"] #top { padding: 0 16px 0 4px; }
   [dir="rtl"] #list-bar { padding: 0 16px 0 4px; }
