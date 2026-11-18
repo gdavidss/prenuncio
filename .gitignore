@@ -22,5 +22,5 @@ __pycache__/
 .DS_Store
 *.local.md
 .vercel/
-/web/api/
+/web/api/v1/
 .vercel

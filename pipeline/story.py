@@ -58,6 +58,11 @@ out = {
               "leaderboard": "https://github.com/gdavidss/prenuncio/blob/main/benchmark/LEADERBOARD.md", "inputs": "https://github.com/gdavidss/prenuncio/blob/main/docs/INPUTS.md",
               "results": "https://github.com/gdavidss/prenuncio/blob/main/docs/LAB.md", "policy": "https://github.com/gdavidss/prenuncio/blob/main/docs/POLICY.md", "api": "https://prenuncio.com/llms.txt"},
 }
+for f in sorted((ROOT / "content/inputs").glob("*.json")):  # the diagram's labels in the other languages, in the same order
+    labels = json.load(open(f))
+    assert len(labels) == len(out["model"]["inputs"]), f.name
+    for row, text in zip(out["model"]["inputs"], labels):
+        row[f.stem] = text
 json.dump(out, open(W / "story.json", "w"), ensure_ascii=False)
 b = out["benchmark"]
 print({k: b[k] for k in ("today", "naive", "first_version", "unseen_2026", "models_tried", "inputs_tested", "submissions")}); print(out["history"]["km2"][-6:], out["forest"], out["check"]["expected_cells"], out["check"]["actual_cells"])
