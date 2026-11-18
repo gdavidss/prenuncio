@@ -384,7 +384,6 @@ canvas.cells { position: absolute; left: 0; top: 0; transition: opacity 0.25s; }
 #story-line.in { animation: line-in 0.5s cubic-bezier(0.2, 0.7, 0.2, 1) both; }
 @keyframes line-in { from { opacity: 0; transform: translateY(10px); } }
 #story-extra:empty { display: none; }
-:root[data-step="lossA"] #story-line { color: var(--red); }  /* what falls is said in the red it is drawn in */
 #story-extra { margin-top: 18px; }
 #story-extra .years svg { display: block; overflow: visible; }
 #story-extra .years rect { fill: var(--ink); opacity: 0.22; }

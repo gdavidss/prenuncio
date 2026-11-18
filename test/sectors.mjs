@@ -210,7 +210,7 @@ try {
     assert.equal((await js(`document.getElementById("story-text").innerText.replaceAll("\\u00a0", " ").replace(/\\s+/g, " ").trim()`)).startsWith(WANT[id]), true);
     assert.equal(await js(`document.getElementById("story-text").children.length === 2 && (!!document.getElementById("story-extra").textContent) === ${id === "lossA" || id === "lossB"}`), true, `no small line under the caption at ${id}`);
     // the line about what falls is set in the red it is drawn in, and no other line is
-    assert.equal(await style("#story-line", "color") === RED, id === "lossA", `only the line about the loss is red: ${id}`);
+    assert.notEqual(await style("#story-line", "color"), RED, `no caption is red: ${id}`);
     // the map does not move, except once: the Amazon glides to make room when the priority list comes in
     if (id === "first") {
       await until(`(() => { const r = document.querySelector("canvas.base").getBoundingClientRect(), l = document.getElementById("list"); return !l.hidden && r.right <= l.getBoundingClientRect().left && !document.querySelector(".leaflet-zoom-anim") && !("swap" in document.documentElement.dataset) && !document.querySelector(".shot") && document.getElementById("mapbox").dataset.as === "stage"; })()`, "the map back on the stage, beside the list");
