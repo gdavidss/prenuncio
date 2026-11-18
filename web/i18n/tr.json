@@ -2,6 +2,7 @@
  "about": "Hakkında",
  "aboutText": {
   "benchmark": "Benchmark",
+  "by": "{name} tarafından yapıldı ({site}).",
   "line1": "Prenúncio, Amazon'da Temmuz {year} sonuna kadar ormansızlaşması muhtemel yerleri gösterir.",
   "line2": "Denetim yapanlar oraya önce varabilsin diye yaptık.",
   "metric": "Puan, {b0} ile {b1} arasındaki yılların ortalamasıdır.",

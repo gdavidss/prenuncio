@@ -69,7 +69,7 @@ The benchmark is the one table on the site: rank, model, score, the year kept ap
 
 ### The map in the reader's hands
 
-The wheel and a pinch zoom, about the pointer. The furthest out is the fit of the moment, the whole Amazon on the stage, never smaller. However the map is dragged, a good part of the Amazon stays in the part of the stage nothing covers. Above the zoom controls a third one goes back to the whole map, dimmed while that is the view. A cell answers the pointer in every layer: what the layer holds for it, in hectares or as a chance (for fire, the band of the forest it stands in, never an amount), then its municipality and state and the protected land it lies in; a click pins it, Escape lets it go. Sectors are painted by the km² expected in each, the figure the hover and the ranking give, so the order of the colours is the order of the ranking.
+The wheel and a pinch zoom, about the pointer, continuously: no steps between levels. The furthest out is the fit of the moment, the whole Amazon on the stage, never smaller. However the map is dragged, a good part of the Amazon stays in the part of the stage nothing covers. Above the zoom controls a third one goes back to the whole map, dimmed while that is the view. A cell answers the pointer in every layer: what the layer holds for it, in hectares or as a chance (for fire, the band of the forest it stands in, never an amount), then its municipality and state and the protected land it lies in; a click pins it, Escape lets it go. Sectors are painted by the km² expected in each, the figure the hover and the ranking give, so the order of the colours is the order of the ranking.
 
 ## The story
 
@@ -97,7 +97,9 @@ Arabic runs right to left and the page is mirrored: the column of type on the ri
 
 ### The people of an Indigenous land
 
-When an Indigenous land is selected and there is an entry for it, its people come first: a photograph, whole and never cropped to a face, with its author and licence under it as a link to the source (the one small line that is owed, a condition of the licence); then the people's name and two or three lines about them; then the forecast for the land. Other peoples of the same land follow as names that open. No photograph, no placeholder. On a phone the photograph leads the bulletin's sheet.
+When an Indigenous land is selected and there is an entry for it, its people take the timeline's place, in its dock (on a phone, in its sheet): a photograph, whole and never cropped to a face, with its author and licence under it as a link to the source (the one small line that is owed, a condition of the licence); then the people's name and two or three lines about them; other peoples of the same land as names that open; then the forecast for the land. The plot is away until the land is let go, by the X at the top or any other way. The dock is as tall as that needs and scrolls; it can be brought to the stage like the timeline. No photograph, no placeholder. There is no column for it beside the map.
+
+Selecting a sector outlines it where it is; the map is never moved or zoomed to it (only a row of the priority list takes the map to its place). The outline lasts exactly as long as the selection: its X, Escape, a click on the empty map, another sector, another kind, another mode or a panel taking the stage all let it go.
 
 ## How urgency scales
 

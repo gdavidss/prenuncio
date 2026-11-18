@@ -2,6 +2,7 @@
  "about": "Info",
  "aboutText": {
   "benchmark": "Benchmark",
+  "by": "Erstellt von {name} ({site}).",
   "line1": "Prenúncio zeigt, wo in Amazonien bis Juli {year} wahrscheinlich gerodet wird.",
   "line2": "Wir haben es gebaut, damit alle, die das Recht durchsetzen, früher dort sind.",
   "metric": "Der Score ist der Mittelwert von {b0} bis {b1}.",

@@ -2,6 +2,7 @@
  "about": "Tentang",
  "aboutText": {
   "benchmark": "Benchmark",
+  "by": "Dibuat oleh {name} ({site}).",
   "line1": "Prenúncio menunjukkan bagian Amazon yang kemungkinan besar dibuka sampai Juli {year}.",
   "line2": "Kami membuatnya agar para penegak hukum bisa tiba lebih dulu.",
   "metric": "Skor adalah rata-rata {b0} sampai {b1}.",

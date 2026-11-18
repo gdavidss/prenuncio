@@ -2,6 +2,7 @@
  "about": "About",
  "aboutText": {
   "benchmark": "Benchmark",
+  "by": "Made by {name} ({site}).",
   "line1": "Prenúncio shows where the Amazon is likely to be cleared by July {year}.",
   "line2": "We built it so the people who enforce the law can get there first.",
   "metric": "The score is the mean of {b0} to {b1}.",

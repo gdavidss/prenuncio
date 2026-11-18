@@ -2,6 +2,7 @@
  "about": "Informazioni",
  "aboutText": {
   "benchmark": "Benchmark",
+  "by": "Fatto da {name} ({site}).",
   "line1": "Prenúncio mostra dove l'Amazzonia sarà probabilmente disboscata entro luglio {year}.",
   "line2": "Lo abbiamo costruito perché chi fa rispettare la legge arrivi prima.",
   "metric": "Il punteggio è la media dal {b0} al {b1}.",

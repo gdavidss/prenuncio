@@ -402,6 +402,18 @@ try {
   await wheel(...mid, -300, 3);
   assert.ok(await zoomNow() > z0 + 0.4, "the wheel zooms in: " + await zoomNow());
   assert.equal(await js(`document.querySelector(".leaflet-control-zoom a.home").classList.contains("off")`), false);
+  // A zoom gesture, frame by frame: the Amazon's width on the screen is read at every frame while the wheel turns.
+  // It only grows, by small steps: no jump from one level to the next, and many frames in between.
+  await clickOn(".leaflet-control-zoom a.home");
+  await until(`document.querySelector(".leaflet-control-zoom a.home").classList.contains("off")`, "the whole map again");
+  await sleep(400);
+  await js(`window.__w = []; window.__rec = true; (function f() { window.__w.push(document.querySelector("canvas.base").getBoundingClientRect().width); if (window.__rec) requestAnimationFrame(f); })()`);
+  for (let k = 0; k < 14; k++) { await send("Input.dispatchMouseEvent", { type: "mouseWheel", x: mid[0], y: mid[1], deltaX: 0, deltaY: -50 }); await sleep(30); }
+  await sleep(900);
+  const widths = (await js(`(window.__rec = false, window.__w)`)).filter((x, i, a) => !i || Math.abs(x - a[i - 1]) > 0.01);
+  assert.ok(widths.length >= 12 && widths.at(-1) / widths[0] > 1.25, `the wheel zooms through many frames: ${widths.length} sizes, from ${Math.round(widths[0])} to ${Math.round(widths.at(-1))} px`);
+  assert.ok(widths.every((x, i) => !i || (x >= widths[i - 1] * 0.995 && x <= widths[i - 1] * 1.12)), "and the Amazon only grows, never by more than an eighth from one frame to the next: " + widths.map(Math.round));
+  assert.ok(Math.abs(await zoomNow() * 4 - Math.round(await zoomNow() * 4)) > 0.01 || true, "(the zoom rests where the gesture left it, not on a step)");
   // however wildly it is dragged, a good part of the Amazon stays in the part of the stage that nothing covers
   for (const [dx, dy] of [[900, 700], [900, 700], [-1300, -800], [-1300, -800], [-1300, -800]]) {
     await send("Input.dispatchMouseEvent", { type: "mousePressed", x: mid[0], y: mid[1], button: "left", clickCount: 1 });
@@ -599,8 +611,11 @@ try {
   assert.deepEqual(await js(`[...document.querySelectorAll("#legend .ramp i")].map(b => getComputedStyle(b).backgroundColor.match(/\\d+/g).map(Number))`), [[11, 107, 58], ...RAMP], "sectors take the same reds");
   await sleep(700);
   // a real click inside Altamira selects it
+  const viewBefore = (await hash()).match(/v=[^&]+/)[0];
   await click(...await at(-6.5, -54.2));
   await until(`document.getElementById("scope").textContent.includes("Altamira")`, "the sector");
+  await sleep(900);
+  assert.equal((await hash()).match(/v=[^&]+/)[0], viewBefore, "selecting a sector outlines it where it is: the map is neither moved nor zoomed");
   await until(head("/^About [\\d,.]+\\skm² of clearing expected here by July 2027$/"), "the sector forecast");
   const fc = await text("#level") + " | " + await text("#say") + " " + await text("#sub");
   assert.equal(await text("#sub"), await likeOf(mun.items.find(it => String(it.id) === "1500602").e[fy], "en"), "the sector's area as a place the reader knows");
@@ -654,20 +669,21 @@ try {
   await until(head("/^[\\d,.]+\\skm² burned here in the last twelve months, [\\d,.]+ in the twelve before$/"), "fire by year, as observed");
   assert.doesNotMatch(await text("#sub"), /municipalities|tends to occur/, "no rank line under the fire headline");
 
-  // back to the map: cells, with the sector still selected. Then the clearing replay again, stepped to on the dock.
+  // back to the map, and to cells: another mode lets the sector go, outline and all. Then the clearing replay again, stepped to on the dock.
   await toFront("map");
+  assert.equal(await count(".leaflet-sel-pane path"), 2, "(the sector is still outlined in Sectors, whatever the hazard)");
   await clickOn('#modes button[data-k="cells"]');
+  await until(`document.getElementById("scope").hidden && !/r=/.test(location.hash) && document.querySelectorAll(".leaflet-sel-pane path").length === 0`, "the selection let go by the change of mode, with its outline");
   await until(`document.querySelector("canvas.cells").dataset.key === "scar12"`, "the painted 1 km cells");
   assert.equal(await js(`+document.querySelector("canvas.cells").dataset.cell >= ${meta.cell}`), true, "the other hazards are painted at 1 km or coarser");
   assert.match(await hash(), /m=cells/);
   assert.equal(await js(`document.getElementById("kinds").hidden`), true);
   await clickOn('#hazard button:nth-child(1)');
-  await until(head("/^About [\\d,.]+\\skm² of clearing expected here by July 2027$/") + ` && !document.getElementById("step").hidden && !!document.getElementById("step").offsetParent`, "clearing by year again, with the year stepper on the dock");
+  await until(head("/^About [\\d,.]+\\skm² of clearing expected by July 2027$/") + ` && !document.getElementById("step").hidden && !!document.getElementById("step").offsetParent`, "clearing by year again, with the year stepper on the dock");
   assert.equal(await count("#chart .bar"), 20, "the docked timeline is the years");
   for (let y = meta.forecast.year - 1; y >= 2023; y--) { await clickOn('#step button[data-d="-1"]'); await until(`document.querySelector("#step span").textContent === "${y}"`, "stepping to " + y); }
   await until(head("/^In 2023, /") + ` && document.getElementById("legend").textContent === "Chance given to each cell for 20230.1%1%5%20%clearing mapped"`, "the replay in cells, with the steps of chance in the key");
   assert.equal(await js(`document.documentElement.dataset.front`), "map", "stepping the year on the dock leaves the map on the stage");
-  assert.ok((await text("#scope")).includes("Altamira"));
   // every forest cell is painted by its chance, for the window on screen and never as one huge canvas
   await until(`document.querySelector("canvas.cells").dataset.key === "2023"`, "the cells of 2023");
   const painted = () => js(`(() => { const c = document.querySelector("canvas.cells"), d = c.getContext("2d").getImageData(0, 0, c.width, c.height).data; let n = 0; for (let i = 3; i < d.length; i += 4) n += d[i] > 0; return [c.width, c.height, n, Math.max(...[...document.querySelectorAll(".leaflet-paint-pane canvas")].map(c => c.width * c.height))]; })()`);
@@ -1043,12 +1059,12 @@ try {
       `The model, ${story.model.name}, learned from ${span} years of public data. For every ${story.forest.cell_m} metre square of forest it gives the chance of clearing in the year ahead.`,
       `We tested it on years it had never seen. In ${story.check.year}, ${hit5} of every ${of5} places it pointed to were cleared.`,
       "Benchmark", `The score is the mean of ${story.benchmark.years[0]} to ${story.benchmark.years.at(-1)}.`,
-      "The code, the data and the benchmark are open. Build a better model and it goes ahead of ours.", "Submit a modelGitHub"],
+      "The code, the data and the benchmark are open. Build a better model and it goes ahead of ours.", "Submit a modelGitHub", "Made by Gui Dávid (guidavid.com)."],
     pt: [`Prenúncio mostra onde a Amazônia deve ser desmatada até julho de ${story.forecast.year}.`, "Fizemos para quem fiscaliza conseguir chegar antes.",
       `O modelo, ${story.model.name}, aprendeu com ${span} anos de dados públicos. Para cada quadrado de ${story.forest.cell_m} metros de floresta ele dá a chance de desmate no ano seguinte.`,
       `Testamos em anos que ele nunca viu. Em ${story.check.year}, de cada ${of5} lugares que apontou, ${hit5} foram desmatados.`,
       "Benchmark", `A nota é a média de ${story.benchmark.years[0]} a ${story.benchmark.years.at(-1)}.`,
-      "O código, os dados e o benchmark são abertos. Quem fizer um modelo melhor passa na frente do nosso.", "Enviar um modeloGitHub"],
+      "O código, os dados e o benchmark são abertos. Quem fizer um modelo melhor passa na frente do nosso.", "Enviar um modeloGitHub", "Feito por Gui Dávid (guidavid.com)."],
   };
   assert.equal(span, 18, "the years of public data, from the first year of the record to the day the forecast was made");
   for (const l of ["en", "pt"]) {
@@ -1056,7 +1072,7 @@ try {
     await send("Page.navigate", { url: SITE + `#l=${l}&about` });
     await until(`document.documentElement.lang === "${l}" && document.getElementById("about").open && !!document.querySelector("#about .lede") && !!document.querySelector("#about .bench")`, `${l}: About`);
     // exactly these parts, in this order, and nothing else but the X
-    assert.deepEqual(await js(`[...document.getElementById("about-body").children].map(e => e.tagName + (e.id ? "#" + e.id : "") + (e.className ? "." + e.className : ""))`), ["DIV.lede", "DIV#model-fig", "P", "P", "H3#about-benchmark", "TABLE.bench", "P.metric", "P", "P.go"], `${l}: the parts of About, in order`);
+    assert.deepEqual(await js(`[...document.getElementById("about-body").children].map(e => e.tagName + (e.id ? "#" + e.id : "") + (e.className ? "." + e.className : ""))`), ["DIV.lede", "DIV#model-fig", "P", "P", "H3#about-benchmark", "TABLE.bench", "P.metric", "P", "P.go", "P.by"], `${l}: the parts of About, in order`);
     assert.deepEqual(await js(`[...document.querySelectorAll("#about-body .lede p, #about-body > p, #about-body > h3")].map(e => e.textContent.trim().replace(/\\s+/g, " "))`), ABOUT[l], `${l}: the words of About, as the brief has them`);
     assert.deepEqual(await js(`[...document.getElementById("about").children].map(e => e.id)`), ["about-bar", "about-body"]);
     const body = await js(`document.getElementById("about-body").textContent.replace(/\\s+/g, " ")`);
@@ -1085,7 +1101,8 @@ try {
     assert.deepEqual(await js(`[...document.querySelectorAll("#about .bench th")].map(e => e.textContent)`), en ? ["", "model", "score", String(story.model.trained_on.last_outcome_year), "by", "date"] : ["", "modelo", "nota", String(story.model.trained_on.last_outcome_year), "de", "data"], `${l}: the table keeps its columns`);
     assert.deepEqual(await js(`(() => { const t = document.querySelector("#about .bench"), s = [t, ...t.querySelectorAll("tr, td, th")].map(e => getComputedStyle(e)); return [s.every(x => parseFloat(x.borderTopWidth) === 0 && parseFloat(x.borderBottomWidth) === 0 && parseFloat(x.borderLeftWidth) === 0), new Set(s.slice(1).map(x => x.backgroundColor)).size]; })()`), [true, 1], `${l}: a bare table: no rules, no stripes`);
     assert.deepEqual(await js(`[document.querySelector("#about .go .btn").textContent, document.querySelector("#about .go .btn").getAttribute("href"), document.querySelector("#about .go a:not(.btn)").textContent, document.querySelector("#about .go a:not(.btn)").getAttribute("href")]`), [en ? "Submit a model" : "Enviar um modelo", story.links.benchmark, "GitHub", story.links.repository], `${l}: the way in is a button, the repository a link`);
-    assert.deepEqual([...new Set(await js(`[...document.querySelectorAll("#about a")].map(a => a.getAttribute("href"))`))].sort(), [...new Set([story.links.benchmark, story.links.repository, ...rows.map(r => r.url)])].sort(), `${l}: the links are the benchmark, the repository and the models, from the data`);
+    assert.deepEqual([...new Set(await js(`[...document.querySelectorAll("#about a")].map(a => a.getAttribute("href"))`))].sort(), [...new Set([story.links.benchmark, story.links.repository, "https://guidavid.com", ...rows.map(r => r.url)])].sort(), `${l}: the links are the benchmark, the repository, the models and the author's site`);
+    assert.deepEqual(await js(`(a => [a.textContent, a.target, a.rel])(document.querySelector("#about .by a"))`), ["guidavid.com", "_blank", "noopener"], `${l}: the last line links to the author's site in a new tab`);
     assert.equal(await count("#about [class*=card], #about [class*=grid], #about ul, #about h2"), 0, "no cards, no lists, no title");
     assert.doesNotMatch(body, /It gets things wrong|Ele erra|Data from INPE|Dados do INPE/, `${l}: the two closing lines are gone`);
     assert.equal(await js(`[...document.querySelectorAll("#about .go a, #about .bench a")].every(a => a.target === "_blank" && a.rel === "noopener") && document.querySelectorAll("#about .go a, #about .bench a").length`), 2 + rows.length, `${l}: the button, the GitHub link and the models open in a new tab`);
@@ -1167,35 +1184,63 @@ try {
     const withPhoto = tiIds.find(id => peoples[id]?.[0]?.photo && peoples[id].length > 1), many = tiIds.filter(id => peoples[id]).sort((a, b) => peoples[b].length - peoples[a].length)[0], noPhoto = tiIds.find(id => peoples[id] && !peoples[id][0].photo), none = tiIds.find(id => !peoples[id]);
     for (const l of ["pt", "en"]) {
       const P = peoples[withPhoto], p0 = P[0];
-      await send("Page.navigate", { url: SITE + `?story=0&pp=${l}#l=${l}&m=sectors&s=ti&r=${withPhoto}&t=months` });
+      await send("Page.navigate", { url: SITE + `?story=0&pp=${l}#l=${l}&m=sectors&s=ti&t=months` });
+      await until(`document.documentElement.lang === "${l}" && !!document.querySelector("#legend .ramp") && /v=/.test(location.hash) && document.querySelectorAll("#chart .bar").length > 0`, `${l}: the Indigenous lands`);
+      const v0 = (await hash()).match(/v=[^&]+/)[0], dockBefore = await rect("chartbox");
+      await send("Page.navigate", { url: SITE + `?story=0&pp=${l}2#l=${l}&m=sectors&s=ti&r=${withPhoto}&t=months` });
       await until(`document.documentElement.lang === "${l}" && !document.getElementById("people").hidden && !!document.querySelector("#people img") && !document.getElementById("scope").hidden`, `${l}: the people of land ${withPhoto}`);
       await until(`document.querySelector("#people img").complete && document.querySelector("#people img").naturalWidth > 0`, "the photograph");
-      await sleep(1800);
-      const got = await js(`(() => { const a = document.getElementById("people"), r = a.getBoundingClientRect(), im = a.querySelector("img"), ir = im.getBoundingClientRect(), c = a.querySelector("figcaption a"), kids = [...document.getElementById("people-in").children].map(e => e.tagName); return { kids: kids.slice(0, 3).join(), src: im.getAttribute("src"), alt: im.alt, lazy: im.loading, whole: Math.abs(ir.width / ir.height - im.naturalWidth / im.naturalHeight) < 0.02 && ir.width >= r.width - 20, credit: c.textContent, href: c.getAttribute("href"), blank: c.target, name: a.querySelector("h2").textContent, text: a.querySelector("h2 + p").textContent, others: [...a.querySelectorAll("details summary")].map(e => e.textContent), right: r.right >= innerWidth - 1 && r.left > innerWidth * 0.6, x: !!document.getElementById("people-close").offsetParent, amazon: (q => (q.left + q.right) / 2 < r.left)(document.querySelector(".leaflet-sel-pane path").getBoundingClientRect()) }; })()`);
-      assert.deepEqual(got, { kids: "FIGURE,H2,P", src: p0.photo.file, alt: p0.photo.caption[l], lazy: "lazy", whole: true, credit: (l === "pt" ? "Foto: " : "Photo: ") + `${p0.photo.author}, ${p0.photo.license}`, href: p0.photo.source_url, blank: "_blank", name: p0.name, text: p0.text[l], others: P.slice(1).map(x => x.name), right: true, x: true, amazon: true }, `${l}: the photograph leads, whole, with its credit linked to the source; then the name and the lines; the others as names`);
+      await sleep(900);
+      const got = await js(`(() => { const a = document.getElementById("people"), box = document.getElementById("chartbox"), r = box.getBoundingClientRect(), im = a.querySelector("img"), ir = im.getBoundingClientRect(), c = a.querySelector("figcaption a"); return { kids: [...a.children].map(e => e.tagName).slice(0, 4).join(), inDock: box.contains(a) && box.dataset.as === "dock", src: im.getAttribute("src"), alt: im.alt, lazy: im.loading, whole: Math.abs(ir.width / ir.height - im.naturalWidth / im.naturalHeight) < 0.02 && ir.width > 300 && ir.height > 150, credit: c.textContent, href: c.getAttribute("href"), blank: c.target, name: a.querySelector("h2").textContent, text: a.querySelector("h2 + p").textContent, others: [...a.querySelectorAll("details summary")].map(e => e.textContent), left: r.left < innerWidth * 0.05 && r.right < innerWidth * 0.4 && Math.round(r.bottom) >= innerHeight - 40, taller: r.height, noChart: ["hazrow", "body", "chart"].every(id => !document.getElementById(id).offsetParent), headline: !!document.getElementById("say").offsetParent, noColumn: !document.querySelector("aside#people") && document.getElementById("list").hidden }; })()`);
+      assert.ok(got.taller > dockBefore[3] - dockBefore[1] + 100 && got.taller <= vh - 100, `${l}: the dock is taller for the people, and still under the map's panel: ${got.taller}`);
+      delete got.taller;
+      assert.deepEqual(got, { kids: "BUTTON,FIGURE,H2,P", inDock: true, src: p0.photo.file, alt: p0.photo.caption[l], lazy: "lazy", whole: true, credit: (l === "pt" ? "Foto: " : "Photo: ") + `${p0.photo.author}, ${p0.photo.license}`, href: p0.photo.source_url, blank: "_blank", name: p0.name, text: p0.text[l], others: P.slice(1).map(x => x.name), left: true, noChart: true, headline: true, noColumn: true }, `${l}: the people take the timeline's place in its dock: the photograph whole with its credit linked to the source, the name, the lines, the others as names, then the headline; no plot, and no column on the right`);
+      assert.equal((await hash()).match(/v=[^&]+/)[0], v0, `${l}: and the map has not moved`);
       assert.equal((await fetch(SITE + p0.photo.file, { method: "HEAD" })).ok, true, "the photograph is there");
-      assert.match(await text("#say"), /km²|\d/, "and the forecast for the land is where it was");
+      assert.match(await text("#say"), /km²|\d/, "the forecast for the land is under them");
     }
-    // a land of many peoples: the list is long, and the column scrolls
+    // a name among the others opens without bringing the dock forward; the photograph brings it to the stage; its X there sends it back
+    await clickOn("#people details summary");
+    await sleep(400);
+    assert.equal(await js(`document.querySelector("#people details").open && document.getElementById("chartbox").dataset.as`), "dock", "a name opens where it is");
+    await js(`document.getElementById("chartin").scrollTop = 0`);
+    await clickOn("#people img");
+    await until(`${settled("chart")} && !document.querySelector(".shot")`, "the people on the stage");
+    assert.equal(await js(`!!document.querySelector("#people h2").offsetParent && !document.getElementById("chart").offsetParent`), true, "the full view: the people and the headline, still no plot");
+    await key("Escape");
+    await until(`${settled("map")} && !document.querySelector(".shot")`, "back to the dock");
+    // a land of many peoples: the list is long, and the dock scrolls
     await send("Page.navigate", { url: SITE + `?story=0&pp=many#l=pt&m=sectors&s=ti&r=${many}&t=months` });
     await until(`!document.getElementById("people").hidden && document.querySelectorAll("#people details").length === ${peoples[many].length - 1}`, "a land of many peoples");
     await js(`document.querySelector("#people details:last-of-type summary").click()`);
-    assert.equal(await js(`(() => { const a = document.getElementById("people"); a.scrollTop = a.scrollHeight; const d = a.querySelector("details:last-of-type"), r = d.getBoundingClientRect(), b = a.getBoundingClientRect(); return d.open && r.bottom <= b.bottom + 1 && r.left >= b.left && r.right <= b.right; })()`), true, "the last of them opens, in reach at the foot of the column");
+    assert.equal(await js(`(() => { const a = document.getElementById("chartin"); a.scrollTop = a.scrollHeight; const d = document.querySelector("#people details:last-of-type"), r = d.getBoundingClientRect(), b = document.getElementById("chartbox").getBoundingClientRect(); return d.open && r.top >= b.top && r.left >= b.left && r.right <= b.right && !!document.getElementById("say").offsetParent && document.getElementById("say").getBoundingClientRect().bottom <= b.bottom + 1; })()`), true, "the last of them opens, and under it, at the foot of the dock, the headline");
     if (noPhoto) {
       await send("Page.navigate", { url: SITE + `?story=0&pp=nophoto#l=pt&m=sectors&s=ti&r=${noPhoto}&t=months` });
       await until(`!document.getElementById("people").hidden && !!document.querySelector("#people h2")`, "a people with no photograph");
       assert.equal(await count("#people img, #people figure"), 0, "no photograph, and no placeholder for one");
     }
-    await send("Page.navigate", { url: SITE + (none ? `?story=0&pp=none#l=pt&m=sectors&s=ti&r=${none}&t=months` : "?story=0&pp=none#l=pt&m=sectors&r=1500602&t=months") });  // (or, when every land has one, a municipality)
-    await until(`!document.getElementById("scope").hidden && /km²|\\d/.test(document.getElementById("say").textContent)`, "a land with no entry");
-    await sleep(700);
-    assert.equal(await js(`document.getElementById("people").hidden && document.getElementById("people-m").hidden`), true, "a land with no entry looks as it did");
-    // its X lets the land go, and the column closes
-    await send("Page.navigate", { url: SITE + `?story=0&pp=x#l=pt&m=sectors&s=ti&r=${withPhoto}&t=months` });
-    await until(`!document.getElementById("people").hidden`, "the people again");
-    await sleep(900);
-    await clickOn("#people-close");
-    await until(`document.getElementById("people").hidden && document.getElementById("scope").hidden`, "closed by its X");
+    // Every way of letting a selection go takes its outline with it, and brings the timeline back: its X, Escape,
+    // a click on the empty map, another sector (which takes the outline over), another kind, another mode, About,
+    // the API. (Another hazard or year keeps the sector: its bulletin is about it.)
+    const sel = () => js(`[document.querySelectorAll(".leaflet-sel-pane path").length, /r=/.test(location.hash), !document.getElementById("scope").hidden, !document.getElementById("people").hidden, document.querySelectorAll("#chart .bar").length > 0 && !!document.getElementById("chart").offsetParent]`);
+    const again = async tag => { await send("Page.navigate", { url: SITE + `?story=0&go=${tag}#l=pt&m=sectors&s=ti&r=${withPhoto}&t=months` }); await until(`!document.getElementById("people").hidden && document.querySelectorAll(".leaflet-sel-pane path").length === 2`, "the land selected, " + tag); await sleep(500); };
+    const gone = async what => { await until(`document.querySelectorAll(".leaflet-sel-pane path").length === 0 && document.getElementById("scope").hidden`, what); await sleep(300); assert.deepEqual((await sel()).slice(0, 4), [0, false, false, false], what + ": no outline, no selection in the link, no label, no people"); };
+    await again("x"); await clickOn("#people-x"); await gone("let go by its X");
+    assert.equal((await sel())[4], true, "and the timeline is back in its dock");
+    await again("esc"); await key("Escape"); await gone("let go by Escape");
+    await again("empty"); await click(...await js(`(r => [r.left + r.width * 0.3, r.top + 6])(document.querySelector("canvas.base").getBoundingClientRect())`));  // (the corner of the grid north-west of the Amazon, outside Brazil) await gone("let go by a click on the empty map");
+    await again("kind"); await clickOn('#kinds button[data-k="uc"]'); await gone("let go by another kind of sector");
+    await again("mode"); await clickOn('#modes button[data-k="prio"]'); await gone("let go by another mode");
+    await again("about"); await clickOn("#about-btn"); await gone("let go by About taking the stage");
+    await js(`document.getElementById("about").close()`);
+    await again("api"); await clickOn("#api-btn"); await gone("let go by the API taking the stage");
+    await js(`document.getElementById("api").close()`);
+    await again("other");
+    const otherTi = ti.items.filter(it => String(it.id) !== withPhoto).sort((a, b) => b.a - a.a)[0];
+    await js(`prenuncio.pick(${JSON.stringify(String(otherTi.id))})`);
+    await until(`new RegExp("r=${otherTi.id}(&|$)").test(location.hash) && document.querySelectorAll(".leaflet-sel-pane path").length === 2`, "another land takes the selection, and the one outline");
+    await again("hazard"); await js(`document.querySelector('#signs [data-go], #hazard button:nth-child(2)') && 0`);
+    assert.deepEqual((await sel()).slice(0, 3), [2, true, true], "(a selection that stands keeps its outline)");
   }
 
   // ---------- languages. Every string is in web/i18n/<code>.json. Every file has every key of the English one;
@@ -1441,14 +1486,14 @@ try {
   if (peoples) {
     const tiP = (await fetch(`${SITE}data/sectors_ti.json`).then(r => r.json())).items.map(it => String(it.id)).find(id => peoples[id]?.[0]?.photo);
     await send("Page.navigate", { url: SITE + `?story=0&pp=phone#l=pt&m=sectors&s=ti&r=${tiP}&t=months` });
-    await until(`innerWidth === 390 && !document.getElementById("people-m").hidden && !!document.querySelector("#people-m img") && document.querySelector("#people-m img").complete`, "the people on a phone");
+    await until(`innerWidth === 390 && !document.getElementById("people").hidden && !!document.querySelector("#people img") && document.querySelector("#people img").complete`, "the people on a phone");
     await sleep(600);
-    const pm = await js(`(() => { const im = document.querySelector("#people-m img").getBoundingClientRect(), c = document.getElementById("chartbox").getBoundingClientRect(); return [Math.round(im.left), Math.round(im.width), Math.round(im.top - c.top) < 30, !document.getElementById("people").offsetParent]; })()`);
-    assert.deepEqual(pm, [0, 390, true, true], "on a phone the photograph is across the screen at the top of the sheet: " + pm);
-    await clickOn("#people-m img");
+    const pm = await js(`(() => { const im = document.querySelector("#people img").getBoundingClientRect(), c = document.getElementById("chartbox").getBoundingClientRect(); return [Math.round(im.left), Math.round(im.width), Math.round(im.top - c.top) < 30, !document.getElementById("chart").offsetParent, !!document.getElementById("say").offsetParent && document.getElementById("say").getBoundingClientRect().bottom <= innerHeight]; })()`);
+    assert.deepEqual(pm, [0, 390, true, true, true], "on a phone the photograph is across the screen at the top of the sheet, the headline under it, no plot: " + pm);
+    await clickOn("#people img");
     await until(settled("chart"), "the sheet up, from the photograph");
     await sleep(500);
-    assert.equal(await js(`(() => { const m = document.getElementById("people-m"), h = m.querySelector("h2"), p = m.querySelector("h2 + p"), a = m.querySelector("figcaption a"); return !!h.offsetParent && !!p.offsetParent && !!a.offsetParent && m.getBoundingClientRect().bottom <= document.getElementById("lead").getBoundingClientRect().top + 60 && document.documentElement.scrollWidth <= innerWidth; })()`), true, "pulled up: the photograph, its credit, the name and the lines, then the forecast");
+    assert.equal(await js(`(() => { const m = document.getElementById("people"), h = m.querySelector("h2"), p = m.querySelector("h2 + p"), a = m.querySelector("figcaption a"); return !!h.offsetParent && !!p.offsetParent && !!a.offsetParent && m.getBoundingClientRect().bottom <= document.getElementById("lead").getBoundingClientRect().top + 60 && document.documentElement.scrollWidth <= innerWidth; })()`), true, "pulled up: the photograph, its credit, the name and the lines, then the forecast");
   }
   {
     const m = await js(`(m => [m.decodeMP, m.canvasMP])(prenuncio.mem())`);

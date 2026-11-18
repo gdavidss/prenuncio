@@ -2,6 +2,7 @@
  "about": "Acerca de",
  "aboutText": {
   "benchmark": "Benchmark",
+  "by": "Hecho por {name} ({site}).",
   "line1": "Prenúncio muestra dónde es probable que se deforeste la Amazonía hasta julio de {year}.",
   "line2": "Lo hicimos para que quienes hacen cumplir la ley lleguen primero.",
   "metric": "La puntuación es la media de {b0} a {b1}.",

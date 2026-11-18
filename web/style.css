@@ -123,8 +123,8 @@ canvas.cells { position: absolute; left: 0; top: 0; transition: opacity 0.25s; }
 .leaflet-control-zoom a.home svg circle { fill: currentColor; }
 .leaflet-control-zoom a.home.off { opacity: 0.35; pointer-events: none; }
 .leaflet-control-zoom a:hover { background: var(--ink) !important; color: var(--ground) !important; }
-:root[data-side="true"] .leaflet-control-zoom { margin-right: calc(var(--list-w) + 14px) !important; }
-:root[data-side="true"] #credit { right: calc(var(--list-w) + 60px); }
+:root[data-list="true"] .leaflet-control-zoom { margin-right: calc(var(--list-w) + 14px) !important; }
+:root[data-list="true"] #credit { right: calc(var(--list-w) + 60px); }
 /* docked, the map is a picture of itself: no controls, and the whole of it is the way back to the stage */
 #map-front { display: none; position: absolute; inset: 0; z-index: 1100; width: auto; height: auto; }
 #map-front svg { display: none; }  /* the timeline's own way out is right beside it */
@@ -194,22 +194,33 @@ canvas.cells { position: absolute; left: 0; top: 0; transition: opacity 0.25s; }
 /* why the chosen place ranks high: a sentence or two under its row, set under the name */
 #list-rows .why { padding: 9px var(--pad) 14px 60px; }
 #list-rows .why p { margin: 0 0 4px; font-size: 15px; line-height: 1.35; font-weight: 500; text-wrap: pretty; }
-/* the people of the Indigenous land that is selected: in the list's column, over it. The photograph leads, whole. */
-#people { position: absolute; z-index: 12; right: 0; top: var(--top); bottom: 0; width: var(--list-w); overflow-y: auto; overscroll-behavior: contain; background: var(--soft); animation: arrive 0.5s both; }
-#people-close { position: absolute; z-index: 1; top: 6px; right: 6px; background: var(--soft); }
-.people figure { margin: 0 0 14px; }
+/* The people of the Indigenous land that is selected take the timeline's place. In the dock: the photograph
+   whole, its credit, the name, the lines, the other peoples as names that open, then the land's headline with its
+   way out; the dock is as tall as that needs, up to the map's panel, and scrolls. The hazards and the plot are
+   away until the selection is let go. */
+.people figure { margin: 0 0 12px; }
 .people img { display: block; width: 100%; height: auto; }
-.people figcaption { padding: 5px var(--pad) 0 18px; font-size: 12px; line-height: 1.3; color: var(--grey); }
+.people figcaption { padding: 5px 0 0; font-size: 12px; line-height: 1.3; color: var(--grey); }
 .people figcaption a { color: inherit; text-underline-offset: 2px; }
-.people h2 { margin: 0 var(--pad) 6px 18px; font: 800 28px/1.05 var(--cond); }
-.people h3 { margin: 18px var(--pad) 4px 18px; font: 600 13.5px/1.2 var(--cond); letter-spacing: 0.07em; text-transform: uppercase; color: var(--grey); }
-.people p { margin: 0 var(--pad) 10px 18px; font-size: 15.5px; line-height: 1.42; text-wrap: pretty; }
-.people details { margin: 0 var(--pad) 0 18px; }
-.people summary { padding: 6px 0; font-size: 15.5px; font-weight: 600; cursor: pointer; }
-.people details p { margin: 0 0 10px; }
-#people-in:not(:has(figure)) { padding-top: 46px; }
-#people-m { display: none; }
-:root:not([data-front="map"]) #people, :root[data-swap] #people { display: none; }
+.people h2 { margin: 0 0 6px; font: 800 26px/1.05 var(--cond); }
+.people h3 { margin: 14px 0 2px; font: 600 13.5px/1.2 var(--cond); letter-spacing: 0.07em; text-transform: uppercase; color: var(--grey); }
+.people p { margin: 0 0 10px; font-size: 15px; line-height: 1.4; text-wrap: pretty; }
+.people summary { padding: 5px 0; font-size: 15px; font-weight: 600; cursor: pointer; }
+#people { flex: none; margin-bottom: 12px; cursor: default; }
+#people-x { position: sticky; top: 0; z-index: 2; float: right; margin-bottom: -34px; background: var(--soft); }
+[dir="rtl"] #people-x { float: left; }
+:root[data-people] :is(#hazrow, #body) { display: none; }
+:root[data-people] #chartbox[data-as="stage"] #hazrow { display: flex; }  /* (on the stage its way out stays, without the hazards) */
+:root[data-people] #chartbox[data-as="stage"] #hazard { visibility: hidden; }
+:root[data-people] #chartbox[data-as="dock"] { height: auto; max-height: calc(100dvh - var(--top) - 150px); }
+:root[data-people] #chartbox[data-as="dock"] #chartin { height: auto; max-height: calc(100dvh - var(--top) - 150px); overflow-y: auto; overscroll-behavior: contain; padding-top: var(--in); padding-bottom: var(--in); }
+:root[data-people] #chartbox[data-as="dock"] #sub { display: block; }
+#chartin.in { animation: arrive 0.45s both; }
+@media (min-width: 861px) {
+  :root[data-people] #chartbox[data-as="stage"] #chartin { display: block; overflow-y: auto; padding-top: 18px; }
+  :root[data-people] #chartbox[data-as="stage"] #people { max-width: 560px; }
+  :root[data-people] #chartbox[data-as="stage"] #lead { margin-right: 0; }
+}
 /* the place that is chosen, marked from far, where its block is smaller than a dot */
 .here { border: 2.5px solid var(--ink); border-radius: 50%; box-shadow: 0 0 0 2.5px var(--ground), inset 0 0 0 2.5px var(--ground); }
 
@@ -444,6 +455,7 @@ canvas.cells { position: absolute; left: 0; top: 0; transition: opacity 0.25s; }
 #about .go { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 20px; margin: 14px 0 22px; }
 #about .go .btn { display: inline-flex; align-items: center; height: 46px; padding: 0 22px; background: var(--green); color: #fff; font: 700 17px/1 var(--cond); letter-spacing: 0.08em; text-transform: uppercase; text-decoration: none; }
 #about .go .btn:hover { background: var(--ink); }
+#about .by { margin-top: 26px; font-size: 14px; color: var(--grey); }
 
 /* the API's instructions for agents as the file has them, and nothing else. One line above the block, the base
    address and a way to copy the text. The block scrolls inside the panel. */
@@ -639,15 +651,22 @@ canvas.cells { position: absolute; left: 0; top: 0; transition: opacity 0.25s; }
   #about #model-fig li.o { font-size: 14.5px; }
   #about .bench :is(th, td):nth-child(n+5) { display: none; }  /* who and when give way on a narrow screen: the model's link has both */
   #about .go .btn { height: 50px; }
-  /* a phone: the people lead the bulletin's sheet, the photograph across the screen */
-  #people { display: none; }
-  #people-m { display: block; flex: none; margin: 0 calc(-1 * var(--cpad)) 8px; }
-  #people-m[hidden] { display: none; }
-  .people figcaption, .people h2, .people h3, .people p, .people details { margin-left: 16px; margin-right: 16px; padding-left: 0; padding-right: 0; }
+  /* a phone: the people lead the bulletin's sheet, the photograph across the screen; at rest the sheet shows the photograph and the name, pulled up the rest */
+  #people { margin: 0 calc(-1 * var(--cpad)) 10px; }
+  .people figcaption, .people h2, .people h3, .people p, .people details { margin-left: 16px; margin-right: 16px; }
   .people h2 { font-size: 21px; }
+  .people p, .people summary { font-size: 15.5px; }
   .people summary { min-height: 44px; display: flex; align-items: center; }
-  #chartbox[data-as="dock"] #people-m :not(figure, img) { display: none; }
-  #chartbox[data-as="dock"] #people-m figure { margin: 0; max-height: 150px; overflow: hidden; }
+  :root[data-people]:not([data-list="true"]) { --peek: 356px; }  /* (the photograph, the name and the headline, at rest) */
+  :root[data-people] #chartbox[data-as="dock"] { height: auto; max-height: none; }
+  :root[data-people] #chartbox[data-as="dock"] #chartin { height: 100%; max-height: none; overflow: hidden; padding-top: 0; padding-bottom: 0; }
+  :root[data-people] #chartbox[data-as="dock"] #people :is(p, h3, details) { display: none; }
+  #people-x { margin-bottom: -44px; }
+  #chartbox[data-as="stage"] #people-x { display: none; }  /* (pulled up, the sheet's own X is right there; the land is let go by the X beside its name) */
+  :root[data-people] #chartbox[data-as="dock"] #people figure { max-height: 190px; overflow: hidden; margin-bottom: 8px; }
+  :root[data-people] #chartbox[data-as="dock"] #people figcaption { display: none; }
+  :root[data-people] #chartbox[data-as="dock"] :is(#level, #sub) { display: none; }
+  :root[data-people] #chartbox[data-as="stage"] #chartin { padding-bottom: 30px; }
   #api-top a, #api-copy { min-height: 44px; display: inline-flex; align-items: center; }
   #api-text { font-size: 12px; padding-bottom: 24px; }
 }
@@ -673,7 +692,7 @@ canvas.cells { position: absolute; left: 0; top: 0; transition: opacity 0.25s; }
 @media (min-width: 861px) {
   [dir="rtl"] #mappanel { left: auto; right: calc(var(--pad) - var(--in)); }
   [dir="rtl"] #chartbox[data-as="dock"] { left: auto; right: calc(var(--pad) - var(--in)); }
-  [dir="rtl"] #list, [dir="rtl"] #people { right: auto; left: 0; }
+  [dir="rtl"] #list { right: auto; left: 0; }
   [dir="rtl"] #list-bar { right: auto; left: calc(var(--pad) - 10px); }
   [dir="rtl"] #list-in { padding: 10px 18px 0 var(--pad); }
   [dir="rtl"] #list-rows { margin: 0 -18px 0 calc(-1 * var(--pad)); }
@@ -685,7 +704,7 @@ canvas.cells { position: absolute; left: 0; top: 0; transition: opacity 0.25s; }
   [dir="rtl"] #mapbox[data-as="dock"] { right: auto; left: var(--pad); }
   [dir="rtl"] .leaflet-right { right: auto; left: 0; }
   [dir="rtl"] .leaflet-control-zoom { margin: 0 0 var(--pad) var(--pad) !important; float: left; }
-  [dir="rtl"]:root[data-side="true"] .leaflet-control-zoom { margin-left: calc(var(--list-w) + 14px) !important; margin-right: 0 !important; }
+  [dir="rtl"]:root[data-list="true"] .leaflet-control-zoom { margin-left: calc(var(--list-w) + 14px) !important; margin-right: 0 !important; }
   [dir="rtl"] #credit { right: auto; left: calc(var(--pad) + 46px); }
   [dir="rtl"] #about, [dir="rtl"] #api { padding-right: var(--apad); padding-left: max(var(--apad), calc(var(--mdock-w) + var(--pad) + 28px)); }
   [dir="rtl"]:root[data-story] #about { padding-right: calc(var(--pad) + var(--rail) + 48px); padding-left: var(--pad); }

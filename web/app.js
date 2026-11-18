@@ -80,7 +80,7 @@ const ras = F => (LITE ? { cols: Math.ceil(F.cols / 2), rows: Math.ceil(F.rows /
 const MEM = { decode: 0 };  // the largest picture decoded so far, in pixels (for the test's budget)
 const t = () => T[lang];
 const loc = () => LANGS[lang][1];
-window.prenuncio = { get zoom() { return map.getZoom(); }, lite: LITE, mem: () => ({ decodeMP: MEM.decode / 1e6, canvasMP: [...document.querySelectorAll("canvas")].reduce((x, c) => x + c.width * c.height, 0) / 1e6 }), like: async (a, l) => likeArea(a, (await loadLang(l))?.like), country: c => COUNTRY[c] ?? null, langs: Object.keys(LANGS), step: async id => classOf((await sectors(S.kind)).byId.get(String(id))) };  // (for the test)
+window.prenuncio = { get zoom() { return map.getZoom(); }, lite: LITE, mem: () => ({ decodeMP: MEM.decode / 1e6, canvasMP: [...document.querySelectorAll("canvas")].reduce((x, c) => x + c.width * c.height, 0) / 1e6 }), like: async (a, l) => likeArea(a, (await loadLang(l))?.like), country: c => COUNTRY[c] ?? null, pick: id => select(id), langs: Object.keys(LANGS), step: async id => classOf((await sectors(S.kind)).byId.get(String(id))) };  // (for the test)
 const fmt = (x, d = 0) => x.toLocaleString(loc(), { maximumFractionDigits: d, minimumFractionDigits: d });
 const km = x => fmt(x, x < 9.95 ? 1 : 0);
 const round = (x, n) => { const p = 10 ** (Math.floor(Math.log10(x)) - n + 1); return Math.round(x / p) * p; };
@@ -284,9 +284,9 @@ const menu = on => { if (on) root.dataset.menu = ""; else delete root.dataset.me
 $("menu-btn").onclick = e => { e.stopPropagation(); menu(root.dataset.menu == null); };
 document.addEventListener("click", () => menu(false));
 const listOn = () => S.mode === "prio" || (S.mode === "sectors" && S.rank);
-// the people of the Indigenous land that is selected stand in the same column, over the list (on a phone, at the top of the bulletin's sheet)
+// the people of the Indigenous land that is selected take the timeline's place, in its dock (on a phone, in its sheet)
 let peopleOf = null;
-const sideOn = () => listOn() || (!!peopleOf && !narrow());  // the ranked list stands on the right of the page
+const sideOn = listOn;  // the ranked list stands on the right of the page
 // The room the page's own pieces take from the map, in pixels of its pane. The map is the whole page, and the
 // Amazon is fitted beside what stands on it: under the header; right of the left column, which holds the map's
 // panel at the top and the timeline's dock at the bottom; left of the ranked list when that is open. When the
@@ -301,13 +301,13 @@ function room() {
   if (narrow()) { const y = top + lengthOf("--panel-h") + 8; return { top: y, right: 10, left: 10, bottom: Math.max(10, m.y - y - (m.x - 20) / 1.27) }; }
   const left = pagePad() + lengthOf("--rail") + lengthOf("--in");  // the right edge of the left column's surfaces
   if (RTL.has(lang)) return { top, left: sideOn() ? lengthOf("--list-w") : 0, right: left + 16, bottom: 0 };  // mirrored: the column is on the right, the list on the left
-  return { top, right: sideOn() ? lengthOf("--list-w") : 0, bottom: 0, left, panel: Math.max(top + lengthOf("--panel-h"), $("mappanel").offsetParent ? rectOf($("mappanel")).bottom : 0), dock: Math.min(m.y - pagePad() - lengthOf("--dock-h"), docked("chart") && BOX.chart.offsetParent ? rectOf(BOX.chart).top : 1e9), column: sideOn() || storyOn };
+  return { top, right: sideOn() ? lengthOf("--list-w") : 0, bottom: 0, left, panel: Math.max(top + lengthOf("--panel-h"), $("mappanel").offsetParent ? rectOf($("mappanel")).bottom : 0), dock: Math.min(m.y - pagePad() - lengthOf("--dock-h"), docked("chart") && BOX.chart.offsetParent && !peopleOf ? rectOf(BOX.chart).top : 1e9), column: sideOn() || storyOn };
 }
 // the same room as the padding of a view that is sent somewhere: a sector or a block is brought to the middle of what is free
 const FIT = () => { const r = room(), g = mapSmall() || narrow() ? 0 : 14; return { paddingTopLeft: [r.left + g, r.top + g], paddingBottomRight: [r.right + g, r.bottom + g] }; };
 const BOUNDS = [[M.north - M.rows * M.cell, M.west], [M.north, M.west + M.cols * M.cell]];
 const FLOOR = 2;  // the furthest out the page itself ever sends the map (the docked picture); the reader's own limit is the fit, set in limit()
-const map = L.map("map", { zoomControl: false, attributionControl: false, minZoom: FLOOR, maxZoom: 14, zoomSnap: 0.25, wheelPxPerZoomLevel: 90, inertiaMaxSpeed: 900 });  // (no maxBounds: hold() keeps the Amazon in sight)
+const map = L.map("map", { zoomControl: false, attributionControl: false, minZoom: FLOOR, maxZoom: 14, zoomSnap: 0, zoomDelta: 0.75, wheelPxPerZoomLevel: 110, wheelDebounceTime: 16, inertiaMaxSpeed: 900 });  // (no maxBounds: hold() keeps the Amazon in sight)
 L.control.zoom({ position: "bottomright" }).addTo(map);
 // above the two: back to the whole Amazon, as on load for the layout of the moment. Dimmed when that is the view.
 const homeBtn = L.DomUtil.create("a", "home");
@@ -337,9 +337,7 @@ function fitView(size, fit) {
 function view(v, animate) {
   if (v.z < map.getMinZoom()) map.setMinZoom(v.z);
   animate ? map.once("moveend", limit) : setTimeout(limit);
-  map.options.zoomSnap = 0;
-  animate ? map.flyTo(v.c, v.z, { duration: 0.6 }) : map.setView(v.c, v.z, { animate: false });
-  map.options.zoomSnap = 0.25;  // the reader's own zooming, by the wheel or a pinch, goes in quarter steps
+  animate ? map.flyTo(v.c, v.z, { duration: 0.6 }) : map.setView(v.c, v.z, { animate: false });  // (zoom is continuous: nothing snaps, for the page or for the reader's wheel and pinch)
 }
 // The whole Amazon on the page, as large as the room allows. The fit knows the Amazon's outline: its western
 // side may reach into the room between the map's panel and the timeline's dock, while its north-west and its
@@ -380,7 +378,12 @@ function limit() {
 // nothing covers. (Leaflet's own maxBounds will not do: the fitted view puts the Amazon to one side of the pane,
 // beside the left column, which bounds on the view would forbid.)
 let keeping = false;
+let holdT = 0;
 function hold() {
+  clearTimeout(holdT);
+  holdT = setTimeout(held, 260);  // only once the hand has stopped: nothing is refitted or pulled back in the middle of a zoom or a drag
+}
+function held() {
   limit();
   if (keeping || swapping || mapSmall() || map._animatingZoom) return;
   const b = L.latLngBounds(AMAZON), nw = map.latLngToContainerPoint(b.getNorthWest()), se = map.latLngToContainerPoint(b.getSouthEast()), r = room(), s = map.getSize();
@@ -828,24 +831,23 @@ async function people() {
   const id = S.mode === "sectors" && S.kind === "ti" ? S.sel : null;
   const all = id ? await (PEOPLES ||= fetch("data/peoples.json").then(r => (r.ok ? r.json() : {})).catch(() => ({}))) : {};
   if (id !== (S.mode === "sectors" && S.kind === "ti" ? S.sel : null)) return;
-  const list = all[id] || [], was = !!peopleOf, own = x => x?.[lang] || x?.en || "", L_ = t().people;
+  const list = all[id] || [], own = x => x?.[lang] || x?.en || "", L_ = t().people, was = peopleOf;
   peopleOf = list.length ? id : null;
   const one = (p, head) => `${p.photo && head ? `<figure><img src="${esc(p.photo.file)}" alt="${esc(own(p.photo.caption))}" loading="lazy"><figcaption><a href="${esc(p.photo.source_url)}" target="_blank" rel="noopener">${esc(L_.credit({ author: p.photo.author, license: p.photo.license }))}</a></figcaption></figure>` : ""}`
-    + (head ? `<h2>${esc(p.name)}</h2><p>${esc(own(p.text))}</p>` : `<details><summary>${esc(p.name)}</summary><p>${esc(own(p.text))}</p></details>`);
-  const html = list.length ? one(list[0], true) + (list.length > 1 ? `<h3>${esc(L_.also)}</h3>` + list.slice(1).map(p => one(p, false)).join("") : "") : "";
-  $("people-in").innerHTML = $("people-m").innerHTML = html;
-  $("people").hidden = $("people-m").hidden = !list.length;
-  if (was !== !!peopleOf) refresh();  // the column opens or closes: the Amazon makes room, as for the list
-  beside();
+    + (head ? `<h2 dir="auto">${esc(p.name)}</h2><p dir="auto">${esc(own(p.text))}</p>` : `<details><summary dir="auto">${esc(p.name)}</summary><p dir="auto">${esc(own(p.text))}</p></details>`);  // (dir=auto: a text that falls back to English reads left to right on a right-to-left page)
+  $("people").innerHTML = list.length ? `<button id="people-x" class="x" aria-label="${esc(t().close)}" title="${esc(t().close)}"></button>` + one(list[0], true) + (list.length > 1 ? `<h3>${esc(L_.also)}</h3>` + list.slice(1).map(p => one(p, false)).join("") : "") : "";
+  $("people").hidden = !list.length;
+  if (list.length) root.dataset.people = ""; else delete root.dataset.people;
+  if (was !== peopleOf) { $("chartin").scrollTop = 0; $("chartin").classList.remove("in"); void $("chartin").offsetWidth; $("chartin").classList.add("in"); chart(); }  // one leaves the dock and the other comes in, as on the stage
 }
-// the land that is selected is never left under the people's column
-function beside() {
-  if (!peopleOf || !outline || narrow() || mapSmall()) return;
-  const b = outline.getBounds();
-  if (map.latLngToContainerPoint(b.getNorthEast()).x > map.getSize().x - lengthOf("--list-w") - 10 && !RTL.has(lang) || RTL.has(lang) && map.latLngToContainerPoint(b.getSouthWest()).x < lengthOf("--list-w") + 10) { pristine = false; map.flyToBounds(b, { ...FIT(), maxZoom: 8, duration: calm() ? 0 : 0.6 }); }
+// The selection is one thing in one place: its outline is on the map only while a sector is selected, and goes
+// with it by whatever way it is let go.
+$("people").onclick = e => { if (e.target.closest("#people-x")) { e.stopPropagation(); select(null); } };  // its way out, always in reach at the top
+function unselect() {
+  S.sel = null;
+  if (outline) { outline.remove(); outline = null; }
 }
-$("people-close").onclick = () => select(null);
-async function select(id, fit = true) {
+async function select(id) {  // (the sector is outlined where it is: the map is never moved to it)
   S.sel = id == null ? null : String(id);
   if (outline) { outline.remove(); outline = null; }
   refresh();
@@ -853,10 +855,6 @@ async function select(id, fit = true) {
   const it = (await sectors(S.kind)).byId.get(S.sel);
   if (!it || S.sel !== String(id)) return;
   outline = L.featureGroup([L.polygon(it.ll, { renderer: svgSel, fill: false, color: GROUND, weight: 6, interactive: false }), L.polygon(it.ll, { renderer: svgSel, fill: false, color: INK, weight: 2.5, interactive: false })]).addTo(map);
-  // move only if the sector is partly off screen or too small to read
-  const b = outline.getBounds(), size = map.latLngToContainerPoint(b.getNorthEast()).distanceTo(map.latLngToContainerPoint(b.getSouthWest()));
-  if (fit && (size < 110 || !map.getBounds().contains(b))) { pristine = false; map.flyToBounds(b, { ...FIT(), maxZoom: 8, duration: calm() ? 0 : 0.6 }); }
-  else beside();
 }
 
 // ---------- the bulletin: the level, then what is happening or what to expect, in one sentence ----------
@@ -1337,6 +1335,7 @@ async function stageSync() {
 }
 // a panel takes the stage, and gives it back when it is closed
 function stageOn(id) {
+  if (S.sel != null) { unselect(); refresh(); }
   for (const o of ["about", "api"]) if (o !== id && $(o).open) $(o).close();
   if (!$(id).open) $(id).show();
   panel = id;
@@ -1350,7 +1349,7 @@ $("map-front").onclick = () => (panel ? $(panel).close() : swap("map"));  // the
 // may have redrawn itself, and its old button is no longer in the page.)
 BOX.chart.addEventListener("click", e => {
   const path = e.composedPath(), on = id => path.includes($(id));
-  if (docked("chart") && !on("hazard") && !on("step") && !(on("scope") && path.some(n => n.tagName === "BUTTON"))) swap("chart");
+  if (docked("chart") && !on("hazard") && !on("step") && !(on("scope") && path.some(n => n.tagName === "BUTTON")) && !path.some(n => n.tagName === "A" || n.tagName === "SUMMARY")) swap("chart");
 });
 
 // ---------- controls ----------
@@ -1370,7 +1369,6 @@ function chrome() {
   $("rank-btn").setAttribute("aria-pressed", S.rank);
   $("rank-btn").hidden = S.mode !== "sectors";
   document.documentElement.dataset.list = listOn();
-  document.documentElement.dataset.side = sideOn();
   // bars or a line: two small glyphs, no words
   $("shape").innerHTML = [["bars", "M1 12V6h3v6zM6 12V2h3v6zM11 12V8h3v4z"], ["line", "M1 11L5 5l4 3 5-6"]].map(([k, d]) => `<button data-k="${k}" aria-pressed="${(k === "line") === S.line}" aria-label="${L_[k]}" title="${L_[k]}"><svg viewBox="0 0 15 13" aria-hidden="true"><path d="${d}"/></svg></button>`).join("");
   $("kinds").innerHTML = ["uf", "mun", "ti", "uc"].map(k => btn(k, L_.kinds[k], k === S.kind)).join("");
@@ -1387,7 +1385,7 @@ function chrome() {
   prev.setAttribute("aria-label", L_.prevYear); next.setAttribute("aria-label", L_.nextYear);
   // each box says how it comes forward; the timeline on the stage says how to send it back
   for (const [id, label] of [["chart-front", front === "chart" ? L_.close : L_.front.chart], ["map-front", L_.front.map]]) { $(id).setAttribute("aria-label", label); $(id).title = label; }
-  for (const [id, label] of [["list-close", L_.closeList], ["about-close", L_.close], ["api-close", L_.close], ["people-close", L_.close], ["menu-btn", L_.menu]]) { $(id).setAttribute("aria-label", label); $(id).title = label; }
+  for (const [id, label] of [["list-close", L_.closeList], ["about-close", L_.close], ["api-close", L_.close], ["menu-btn", L_.menu]]) { $(id).setAttribute("aria-label", label); $(id).title = label; }
   homeBtn.setAttribute("aria-label", L_.home); homeBtn.title = L_.home;
   // a row of words that is too long for its place in some language steps its type down until it fits
   for (const el of [$("hazard"), $("modes"), $("scale"), $("kinds")]) {
@@ -1413,6 +1411,7 @@ function chrome() {
 // only the yearly clearing timeline replays a past year: its bars and its stepper are the year control
 const replays = () => S.hazard === "clear" && S.scale === "years";
 async function refresh() {
+  if (S.sel == null && outline) unselect();  // (no outline without a selection, whatever let it go)
   $("mapin").inert = mapSmall();  // docked, the map is a picture of itself: one click on it brings it back
   if (!hazards().includes(S.hazard)) S.hazard = "clear";
   if (S.mode === "prio") { S.hazard = "clear"; S.year = FY; S.h = 0; }  // the priority list is the yearly clearing forecast
@@ -1515,7 +1514,7 @@ const pressed = (id, fn) => ($(id).onclick = e => { const b = e.target.closest("
 const leavePrio = () => { if (S.mode === "prio") S.mode = "cells"; };  // the priority list is only the yearly clearing forecast
 pressed("hazard", k => { if (k !== "clear") leavePrio(); S.hazard = k; refresh(); });
 pressed("scale", k => { S.scale = k; refresh(); });
-pressed("modes", k => { S.mode = k; pristine = pristine || !S.block; refresh(); });
+pressed("modes", k => { if (k !== S.mode) unselect(); S.mode = k; pristine = pristine || !S.block; refresh(); });
 pressed("shape", k => { S.line = k === "line"; refresh(); });
 $("rank-btn").onclick = () => { S.rank = !S.rank; refresh(); };
 pressed("kinds", k => { if (k !== S.kind) { S.kind = k; select(null); } });
@@ -1531,8 +1530,8 @@ document.addEventListener("keydown", e => {
   if (e.key === "Escape" && panel) return $(panel).close();
   if (panel) return;
   if (e.key === "Escape" && root.dataset.menu != null) return menu(false);
-  if (e.key === "Escape" && S.sel != null) return select(null);
   if (e.key === "Escape" && front === "chart") return swap("map");
+  if (e.key === "Escape" && S.sel != null) return select(null);
   if (e.key === "Escape" && listOn()) return $("list-close").click();
   if (!replays() || !["ArrowLeft", "ArrowRight"].includes(e.key)) return;
   const ys = Object.keys(M.years).map(Number).sort(), i = ys.indexOf(S.year) + (e.key === "ArrowLeft" ? -1 : 1);
@@ -1571,7 +1570,8 @@ function about(at) {
   $("about-body").innerHTML = `<div class="lede">${p(esc(A.line1({ year: ST.forecast.year })))}${p(esc(A.line2))}</div><div id="model-fig"></div>`
     + p(esc(A.model({ name: "\u0001", span: +ST.forecast.made_on.slice(0, 4) - ST.history.years[0], m: ST.forest.cell_m })).replace("\u0001", `<b>${esc(MODEL)}</b>`)) + p(esc(A.tested({ y: ST.check.year, hit, of })))
     + `<h3 id="about-benchmark">${esc(A.benchmark)}</h3>${bench()}<p class="metric">${esc(A.metric({ b0: ST.benchmark.years[0], b1: ST.benchmark.years.at(-1) }))}</p>` + p(esc(A.open))
-    + `<p class="go"><a class="btn" href="${esc(ST.links.benchmark)}" target="_blank" rel="noopener">${esc(B.submit)}</a><a href="${esc(ST.links.repository)}" target="_blank" rel="noopener">${esc(B.repo)}</a></p>`;
+    + `<p class="go"><a class="btn" href="${esc(ST.links.benchmark)}" target="_blank" rel="noopener">${esc(B.submit)}</a><a href="${esc(ST.links.repository)}" target="_blank" rel="noopener">${esc(B.repo)}</a></p>`
+    + `<p class="by">${esc(A.by({ name: "Gui Dávid", site: "\u0001" })).replace("\u0001", `<a href="https://guidavid.com" target="_blank" rel="noopener">guidavid.com</a>`)}</p>`;
 
   // in the story it is put together a piece at a time: the figure alone, then the benchmark alone, each entering as the other leaves
   const only = storyOn ? (at === "about-benchmark" ? "bench" : "fig") : "";
@@ -1964,7 +1964,8 @@ function storyEnd() {
   if (grid?.key !== FY && keep) grid = keep;
   keep = lite = null;
   if ($("about").open) $("about").close();
-  S.hazard = "clear"; S.sel = null; S.min = 0; S.h = 0; S.rank = false; S.scale = "months"; S.year = FY;
+  unselect();
+  S.hazard = "clear"; S.min = 0; S.h = 0; S.rank = false; S.scale = "months"; S.year = FY;
   const shut = storyShut || narrow();  // (a phone shows one sheet at a time, and the last step's is the timeline)
   S.mode = shut ? "cells" : "prio"; S.block = shut ? null : 1;
   flown = true;  // the first place is marked from far, as on the story's last step: the map is not sent to it
@@ -1989,6 +1990,6 @@ document.addEventListener("keydown", e => {
 }, true);
 
 if (storyOn) storyBegin();
-else if (S.sel != null) select(S.sel, !H.get("v")); else refresh();
+else if (S.sel != null) select(S.sel); else refresh();
 if (H.has("about")) about();
 if (H.has("api")) $("api-btn").click();
