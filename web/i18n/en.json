@@ -8,6 +8,7 @@
   "metric": "The score is the mean of {b0} to {b1}.",
   "model": "The model is called {name} and learned from {span} years of public data. It divides the forest into {m} metre squares, the cells, and calculates for each one the chance of clearing in the year ahead.",
   "open": "The code, the data and the benchmark are open. Build a better model and it replaces ours.",
+  "org": "An initiative of {org}.",
   "tested": "To test it, we hid a year from the model and asked for its forecast. In {y}, {hit} of every {of} places it pointed to were cleared."
  },
  "about_": "about {x} km²",

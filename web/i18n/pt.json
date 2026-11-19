@@ -8,6 +8,7 @@
   "metric": "A nota é a média de {b0} a {b1}.",
   "model": "O modelo se chama {name} e aprendeu com {span} anos de dados públicos. Ele divide a floresta em quadrados de {m} metros, as células, e calcula para cada uma a chance de desmate no ano seguinte.",
   "open": "O código, os dados e o benchmark são abertos. Quem fizer um modelo melhor substitui o nosso.",
+  "org": "Uma iniciativa do {org}.",
   "tested": "Para testar, escondemos um ano do modelo e pedimos a previsão. Em {y}, de cada {of} lugares que ele apontou, {hit} foram desmatados."
  },
  "about_": "cerca de {x} km²",

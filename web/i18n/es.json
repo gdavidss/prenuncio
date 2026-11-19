@@ -8,6 +8,7 @@
   "metric": "La puntuación es la media de {b0} a {b1}.",
   "model": "El modelo se llama {name} y aprendió de {span} años de datos públicos. Divide el bosque en cuadrados de {m} metros, las celdas, y calcula para cada una la probabilidad de deforestación en el año siguiente.",
   "open": "El código, los datos y el benchmark son abiertos. Quien haga un modelo mejor reemplaza al nuestro.",
+  "org": "Una iniciativa del {org}.",
   "tested": "Para probarlo, le ocultamos un año al modelo y le pedimos su previsión. En {y}, de cada {of} lugares que señaló, {hit} fueron deforestados."
  },
  "about_": "unos {x} km²",
@@ -217,147 +218,147 @@
  ],
  "like": [
   {
+   "half": "La mitad de la isla de San Andrés.",
    "km": 26,
    "same": "Del tamaño de la isla de San Andrés.",
+   "third": "Un tercio de la isla de San Andrés.",
+   "x10": "Diez veces la isla de San Andrés.",
    "x2": "El doble de la isla de San Andrés.",
    "x3": "Tres veces la isla de San Andrés.",
    "x4": "Cuatro veces la isla de San Andrés.",
-   "x5": "Cinco veces la isla de San Andrés.",
-   "x10": "Diez veces la isla de San Andrés.",
-   "half": "La mitad de la isla de San Andrés.",
-   "third": "Un tercio de la isla de San Andrés."
+   "x5": "Cinco veces la isla de San Andrés."
   },
   {
+   "half": "La mitad de Manhattan.",
    "km": 59,
    "same": "Del tamaño de Manhattan.",
+   "third": "Un tercio de Manhattan.",
+   "x10": "Diez veces Manhattan.",
    "x2": "El doble de Manhattan.",
    "x3": "Tres veces Manhattan.",
    "x4": "Cuatro veces Manhattan.",
-   "x5": "Cinco veces Manhattan.",
-   "x10": "Diez veces Manhattan.",
-   "half": "La mitad de Manhattan.",
-   "third": "Un tercio de Manhattan."
+   "x5": "Cinco veces Manhattan."
   },
   {
+   "half": "La mitad de la isla de Pascua.",
    "km": 164,
    "same": "Del tamaño de la isla de Pascua.",
+   "third": "Un tercio de la isla de Pascua.",
+   "x10": "Diez veces la isla de Pascua.",
    "x2": "El doble de la isla de Pascua.",
    "x3": "Tres veces la isla de Pascua.",
    "x4": "Cuatro veces la isla de Pascua.",
-   "x5": "Cinco veces la isla de Pascua.",
-   "x10": "Diez veces la isla de Pascua.",
-   "half": "La mitad de la isla de Pascua.",
-   "third": "Un tercio de la isla de Pascua."
+   "x5": "Cinco veces la isla de Pascua."
   },
   {
+   "half": "La mitad de la ciudad de Buenos Aires.",
    "km": 203,
    "same": "Del tamaño de la ciudad de Buenos Aires.",
+   "third": "Un tercio de la ciudad de Buenos Aires.",
+   "x10": "Diez veces la ciudad de Buenos Aires.",
    "x2": "El doble de la ciudad de Buenos Aires.",
    "x3": "Tres veces la ciudad de Buenos Aires.",
    "x4": "Cuatro veces la ciudad de Buenos Aires.",
-   "x5": "Cinco veces la ciudad de Buenos Aires.",
-   "x10": "Diez veces la ciudad de Buenos Aires.",
-   "half": "La mitad de la ciudad de Buenos Aires.",
-   "third": "Un tercio de la ciudad de Buenos Aires."
+   "x5": "Cinco veces la ciudad de Buenos Aires."
   },
   {
+   "half": "La mitad de Singapur.",
    "km": 735,
    "same": "Del tamaño de Singapur.",
+   "third": "Un tercio de Singapur.",
+   "x10": "Diez veces Singapur.",
    "x2": "El doble de Singapur.",
    "x3": "Tres veces Singapur.",
    "x4": "Cuatro veces Singapur.",
-   "x5": "Cinco veces Singapur.",
-   "x10": "Diez veces Singapur.",
-   "half": "La mitad de Singapur.",
-   "third": "Un tercio de Singapur."
+   "x5": "Cinco veces Singapur."
   },
   {
+   "half": "La mitad de la Ciudad de México.",
    "km": 1485,
    "same": "Del tamaño de la Ciudad de México.",
+   "third": "Un tercio de la Ciudad de México.",
+   "x10": "Diez veces la Ciudad de México.",
    "x2": "El doble de la Ciudad de México.",
    "x3": "Tres veces la Ciudad de México.",
    "x4": "Cuatro veces la Ciudad de México.",
-   "x5": "Cinco veces la Ciudad de México.",
-   "x10": "Diez veces la Ciudad de México.",
-   "half": "La mitad de la Ciudad de México.",
-   "third": "Un tercio de la Ciudad de México."
+   "x5": "Cinco veces la Ciudad de México."
   },
   {
+   "half": "La mitad de la provincia de Lima.",
    "km": 2672,
    "same": "Del tamaño de la provincia de Lima.",
+   "third": "Un tercio de la provincia de Lima.",
+   "x10": "Diez veces la provincia de Lima.",
    "x2": "El doble de la provincia de Lima.",
    "x3": "Tres veces la provincia de Lima.",
    "x4": "Cuatro veces la provincia de Lima.",
-   "x5": "Cinco veces la provincia de Lima.",
-   "x10": "Diez veces la provincia de Lima.",
-   "half": "La mitad de la provincia de Lima.",
-   "third": "Un tercio de la provincia de Lima."
+   "x5": "Cinco veces la provincia de Lima."
   },
   {
+   "half": "La mitad de Trinidad y Tobago.",
    "km": 5128,
    "same": "Del tamaño de Trinidad y Tobago.",
+   "third": "Un tercio de Trinidad y Tobago.",
+   "x10": "Diez veces Trinidad y Tobago.",
    "x2": "El doble de Trinidad y Tobago.",
    "x3": "Tres veces Trinidad y Tobago.",
    "x4": "Cuatro veces Trinidad y Tobago.",
-   "x5": "Cinco veces Trinidad y Tobago.",
-   "x10": "Diez veces Trinidad y Tobago.",
-   "half": "La mitad de Trinidad y Tobago.",
-   "third": "Un tercio de Trinidad y Tobago."
+   "x5": "Cinco veces Trinidad y Tobago."
   },
   {
+   "half": "La mitad de Puerto Rico.",
    "km": 9104,
    "same": "Del tamaño de Puerto Rico.",
+   "third": "Un tercio de Puerto Rico.",
+   "x10": "Diez veces Puerto Rico.",
    "x2": "El doble de Puerto Rico.",
    "x3": "Tres veces Puerto Rico.",
    "x4": "Cuatro veces Puerto Rico.",
-   "x5": "Cinco veces Puerto Rico.",
-   "x10": "Diez veces Puerto Rico.",
-   "half": "La mitad de Puerto Rico.",
-   "third": "Un tercio de Puerto Rico."
+   "x5": "Cinco veces Puerto Rico."
   },
   {
+   "half": "La mitad de El Salvador.",
    "km": 21041,
    "same": "Del tamaño de El Salvador.",
+   "third": "Un tercio de El Salvador.",
+   "x10": "Diez veces El Salvador.",
    "x2": "El doble de El Salvador.",
    "x3": "Tres veces El Salvador.",
    "x4": "Cuatro veces El Salvador.",
-   "x5": "Cinco veces El Salvador.",
-   "x10": "Diez veces El Salvador.",
-   "half": "La mitad de El Salvador.",
-   "third": "Un tercio de El Salvador."
+   "x5": "Cinco veces El Salvador."
   },
   {
+   "half": "La mitad de Costa Rica.",
    "km": 51100,
    "same": "Del tamaño de Costa Rica.",
+   "third": "Un tercio de Costa Rica.",
+   "x10": "Diez veces Costa Rica.",
    "x2": "El doble de Costa Rica.",
    "x3": "Tres veces Costa Rica.",
    "x4": "Cuatro veces Costa Rica.",
-   "x5": "Cinco veces Costa Rica.",
-   "x10": "Diez veces Costa Rica.",
-   "half": "La mitad de Costa Rica.",
-   "third": "Un tercio de Costa Rica."
+   "x5": "Cinco veces Costa Rica."
   },
   {
+   "half": "La mitad de Panamá.",
    "km": 75417,
    "same": "Del tamaño de Panamá.",
+   "third": "Un tercio de Panamá.",
+   "x10": "Diez veces Panamá.",
    "x2": "El doble de Panamá.",
    "x3": "Tres veces Panamá.",
    "x4": "Cuatro veces Panamá.",
-   "x5": "Cinco veces Panamá.",
-   "x10": "Diez veces Panamá.",
-   "half": "La mitad de Panamá.",
-   "third": "Un tercio de Panamá."
+   "x5": "Cinco veces Panamá."
   },
   {
+   "half": "La mitad de Nicaragua.",
    "km": 130373,
    "same": "Del tamaño de Nicaragua.",
+   "third": "Un tercio de Nicaragua.",
+   "x10": "Diez veces Nicaragua.",
    "x2": "El doble de Nicaragua.",
    "x3": "Tres veces Nicaragua.",
    "x4": "Cuatro veces Nicaragua.",
-   "x5": "Cinco veces Nicaragua.",
-   "x10": "Diez veces Nicaragua.",
-   "half": "La mitad de Nicaragua.",
-   "third": "Un tercio de Nicaragua."
+   "x5": "Cinco veces Nicaragua."
   }
  ],
  "line": "Línea",
@@ -436,8 +437,8 @@
  "pastHereNone": "En {y} no se mapeó deforestación aquí",
  "pastP": "En {y} se esperaban {exp} celdas con una hectárea perdida y fueron {act}",
  "people": {
-  "credit": "Foto: {author}, {license}",
-  "also": "También en esta tierra"
+  "also": "También en esta tierra",
+  "credit": "Foto: {author}, {license}"
  },
  "prevYear": "Año anterior",
  "range": "probable de {lo} a {hi}",

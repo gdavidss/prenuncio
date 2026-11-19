@@ -8,6 +8,7 @@
   "metric": "Puan, {b0} ile {b1} arasındaki yılların ortalamasıdır.",
   "model": "Modelin adı {name}; {span} yıllık kamuya açık veriden öğrendi. Ormanı {m} metrelik karelere, yani hücrelere böler ve her biri için gelecek yıl ormansızlaşma olasılığını hesaplar.",
   "open": "Kod, veri ve benchmark açık. Daha iyi bir model yapan bizimkinin yerini alır.",
+  "org": "{org} girişimidir.",
   "tested": "Sınamak için bir yılı modelden sakladık ve tahminini istedik. {y} yılında işaret ettiği her {of} yerden {hit} tanesi ormansızlaştı."
  },
  "about_": "yaklaşık {x} km²",
@@ -211,147 +212,147 @@
  ],
  "like": [
   {
+   "half": "Kadıköy'ün yarısı.",
    "km": 25,
    "same": "Kadıköy büyüklüğünde.",
+   "third": "Kadıköy'ün üçte biri.",
+   "x10": "Kadıköy'ün on katı.",
    "x2": "Kadıköy'ün iki katı.",
    "x3": "Kadıköy'ün üç katı.",
    "x4": "Kadıköy'ün dört katı.",
-   "x5": "Kadıköy'ün beş katı.",
-   "x10": "Kadıköy'ün on katı.",
-   "half": "Kadıköy'ün yarısı.",
-   "third": "Kadıköy'ün üçte biri."
+   "x5": "Kadıköy'ün beş katı."
   },
   {
+   "half": "Manhattan'ın yarısı.",
    "km": 59,
    "same": "Manhattan büyüklüğünde.",
+   "third": "Manhattan'ın üçte biri.",
+   "x10": "Manhattan'ın on katı.",
    "x2": "Manhattan'ın iki katı.",
    "x3": "Manhattan'ın üç katı.",
    "x4": "Manhattan'ın dört katı.",
-   "x5": "Manhattan'ın beş katı.",
-   "x10": "Manhattan'ın on katı.",
-   "half": "Manhattan'ın yarısı.",
-   "third": "Manhattan'ın üçte biri."
+   "x5": "Manhattan'ın beş katı."
   },
   {
+   "half": "Paris'in yarısı.",
    "km": 105,
    "same": "Paris büyüklüğünde.",
+   "third": "Paris'in üçte biri.",
+   "x10": "Paris'in on katı.",
    "x2": "Paris'in iki katı.",
    "x3": "Paris'in üç katı.",
    "x4": "Paris'in dört katı.",
-   "x5": "Paris'in beş katı.",
-   "x10": "Paris'in on katı.",
-   "half": "Paris'in yarısı.",
-   "third": "Paris'in üçte biri."
+   "x5": "Paris'in beş katı."
   },
   {
+   "half": "Gökçeada'nın yarısı.",
    "km": 279,
    "same": "Gökçeada büyüklüğünde.",
+   "third": "Gökçeada'nın üçte biri.",
+   "x10": "Gökçeada'nın on katı.",
    "x2": "Gökçeada'nın iki katı.",
    "x3": "Gökçeada'nın üç katı.",
    "x4": "Gökçeada'nın dört katı.",
-   "x5": "Gökçeada'nın beş katı.",
-   "x10": "Gökçeada'nın on katı.",
-   "half": "Gökçeada'nın yarısı.",
-   "third": "Gökçeada'nın üçte biri."
+   "x5": "Gökçeada'nın beş katı."
   },
   {
+   "half": "Singapur'un yarısı.",
    "km": 735,
    "same": "Singapur büyüklüğünde.",
+   "third": "Singapur'un üçte biri.",
+   "x10": "Singapur'un on katı.",
    "x2": "Singapur'un iki katı.",
    "x3": "Singapur'un üç katı.",
    "x4": "Singapur'un dört katı.",
-   "x5": "Singapur'un beş katı.",
-   "x10": "Singapur'un on katı.",
-   "half": "Singapur'un yarısı.",
-   "third": "Singapur'un üçte biri."
+   "x5": "Singapur'un beş katı."
   },
   {
+   "half": "Büyük Londra'nın yarısı.",
    "km": 1572,
    "same": "Büyük Londra büyüklüğünde.",
+   "third": "Büyük Londra'nın üçte biri.",
+   "x10": "Büyük Londra'nın on katı.",
    "x2": "Büyük Londra'nın iki katı.",
    "x3": "Büyük Londra'nın üç katı.",
    "x4": "Büyük Londra'nın dört katı.",
-   "x5": "Büyük Londra'nın beş katı.",
-   "x10": "Büyük Londra'nın on katı.",
-   "half": "Büyük Londra'nın yarısı.",
-   "third": "Büyük Londra'nın üçte biri."
+   "x5": "Büyük Londra'nın beş katı."
   },
   {
+   "half": "Van Gölü'nün yarısı.",
    "km": 3713,
    "same": "Van Gölü büyüklüğünde.",
+   "third": "Van Gölü'nün üçte biri.",
+   "x10": "Van Gölü'nün on katı.",
    "x2": "Van Gölü'nün iki katı.",
    "x3": "Van Gölü'nün üç katı.",
    "x4": "Van Gölü'nün dört katı.",
-   "x5": "Van Gölü'nün beş katı.",
-   "x10": "Van Gölü'nün on katı.",
-   "half": "Van Gölü'nün yarısı.",
-   "third": "Van Gölü'nün üçte biri."
+   "x5": "Van Gölü'nün beş katı."
   },
   {
+   "half": "İstanbul'un yarısı.",
    "km": 5461,
    "same": "İstanbul büyüklüğünde.",
+   "third": "İstanbul'un üçte biri.",
+   "x10": "İstanbul'un on katı.",
    "x2": "İstanbul'un iki katı.",
    "x3": "İstanbul'un üç katı.",
    "x4": "İstanbul'un dört katı.",
-   "x5": "İstanbul'un beş katı.",
-   "x10": "İstanbul'un on katı.",
-   "half": "İstanbul'un yarısı.",
-   "third": "İstanbul'un üçte biri."
+   "x5": "İstanbul'un beş katı."
   },
   {
+   "half": "Kıbrıs'ın yarısı.",
    "km": 9251,
    "same": "Kıbrıs büyüklüğünde.",
+   "third": "Kıbrıs'ın üçte biri.",
+   "x10": "Kıbrıs'ın on katı.",
    "x2": "Kıbrıs'ın iki katı.",
    "x3": "Kıbrıs'ın üç katı.",
    "x4": "Kıbrıs'ın dört katı.",
-   "x5": "Kıbrıs'ın beş katı.",
-   "x10": "Kıbrıs'ın on katı.",
-   "half": "Kıbrıs'ın yarısı.",
-   "third": "Kıbrıs'ın üçte biri."
+   "x5": "Kıbrıs'ın beş katı."
   },
   {
+   "half": "Trakya'nın yarısı.",
    "km": 23764,
    "same": "Trakya büyüklüğünde.",
+   "third": "Trakya'nın üçte biri.",
+   "x10": "Trakya'nın on katı.",
    "x2": "Trakya'nın iki katı.",
    "x3": "Trakya'nın üç katı.",
    "x4": "Trakya'nın dört katı.",
-   "x5": "Trakya'nın beş katı.",
-   "x10": "Trakya'nın on katı.",
-   "half": "Trakya'nın yarısı.",
-   "third": "Trakya'nın üçte biri."
+   "x5": "Trakya'nın beş katı."
   },
   {
+   "half": "İsviçre'nin yarısı.",
    "km": 41285,
    "same": "İsviçre büyüklüğünde.",
+   "third": "İsviçre'nin üçte biri.",
+   "x10": "İsviçre'nin on katı.",
    "x2": "İsviçre'nin iki katı.",
    "x3": "İsviçre'nin üç katı.",
    "x4": "İsviçre'nin dört katı.",
-   "x5": "İsviçre'nin beş katı.",
-   "x10": "İsviçre'nin on katı.",
-   "half": "İsviçre'nin yarısı.",
-   "third": "İsviçre'nin üçte biri."
+   "x5": "İsviçre'nin beş katı."
   },
   {
+   "half": "Azerbaycan'ın yarısı.",
    "km": 86600,
    "same": "Azerbaycan büyüklüğünde.",
+   "third": "Azerbaycan'ın üçte biri.",
+   "x10": "Azerbaycan'ın on katı.",
    "x2": "Azerbaycan'ın iki katı.",
    "x3": "Azerbaycan'ın üç katı.",
    "x4": "Azerbaycan'ın dört katı.",
-   "x5": "Azerbaycan'ın beş katı.",
-   "x10": "Azerbaycan'ın on katı.",
-   "half": "Azerbaycan'ın yarısı.",
-   "third": "Azerbaycan'ın üçte biri."
+   "x5": "Azerbaycan'ın beş katı."
   },
   {
+   "half": "Yunanistan'ın yarısı.",
    "km": 131957,
    "same": "Yunanistan büyüklüğünde.",
+   "third": "Yunanistan'ın üçte biri.",
+   "x10": "Yunanistan'ın on katı.",
    "x2": "Yunanistan'ın iki katı.",
    "x3": "Yunanistan'ın üç katı.",
    "x4": "Yunanistan'ın dört katı.",
-   "x5": "Yunanistan'ın beş katı.",
-   "x10": "Yunanistan'ın on katı.",
-   "half": "Yunanistan'ın yarısı.",
-   "third": "Yunanistan'ın üçte biri."
+   "x5": "Yunanistan'ın beş katı."
   }
  ],
  "line": "Çizgi",
@@ -430,8 +431,8 @@
  "pastHereNone": "{y} yılında burada ormansızlaşma haritalanmadı",
  "pastP": "{y} yılında {exp} hücrede bir hektar kayıp bekleniyordu, {act} hücrede oldu",
  "people": {
-  "credit": "Fotoğraf: {author}, {license}",
-  "also": "Bu toprakta ayrıca"
+  "also": "Bu toprakta ayrıca",
+  "credit": "Fotoğraf: {author}, {license}"
  },
  "prevYear": "Önceki yıl",
  "range": "muhtemelen {lo} – {hi}",

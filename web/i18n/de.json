@@ -8,6 +8,7 @@
   "metric": "Der Score ist der Mittelwert von {b0} bis {b1}.",
   "model": "Das Modell heißt {name} und hat aus {span} Jahren öffentlicher Daten gelernt. Es teilt den Wald in Quadrate von {m} Metern, die Zellen, und berechnet für jede die Wahrscheinlichkeit einer Rodung im Folgejahr.",
   "open": "Code, Daten und Benchmark sind offen. Wer ein besseres Modell baut, ersetzt unseres.",
+  "org": "Eine Initiative des {org}.",
   "tested": "Zum Test haben wir dem Modell ein Jahr vorenthalten und nach seiner Prognose gefragt. {y} wurden von {of} Orten, auf die es zeigte, {hit} gerodet."
  },
  "about_": "etwa {x} km²",
@@ -217,147 +218,147 @@
  ],
  "like": [
   {
+   "half": "Halb so groß wie Norderney.",
    "km": 26,
    "same": "So groß wie Norderney.",
+   "third": "Ein Drittel so groß wie Norderney.",
+   "x10": "Zehnmal so groß wie Norderney.",
    "x2": "Doppelt so groß wie Norderney.",
    "x3": "Dreimal so groß wie Norderney.",
    "x4": "Viermal so groß wie Norderney.",
-   "x5": "Fünfmal so groß wie Norderney.",
-   "x10": "Zehnmal so groß wie Norderney.",
-   "half": "Halb so groß wie Norderney.",
-   "third": "Ein Drittel so groß wie Norderney."
+   "x5": "Fünfmal so groß wie Norderney."
   },
   {
+   "half": "Halb so groß wie Sylt.",
    "km": 99,
    "same": "So groß wie Sylt.",
+   "third": "Ein Drittel so groß wie Sylt.",
+   "x10": "Zehnmal so groß wie Sylt.",
    "x2": "Doppelt so groß wie Sylt.",
    "x3": "Dreimal so groß wie Sylt.",
    "x4": "Viermal so groß wie Sylt.",
-   "x5": "Fünfmal so groß wie Sylt.",
-   "x10": "Zehnmal so groß wie Sylt.",
-   "half": "Halb so groß wie Sylt.",
-   "third": "Ein Drittel so groß wie Sylt."
+   "x5": "Fünfmal so groß wie Sylt."
   },
   {
+   "half": "Halb so groß wie München.",
    "km": 311,
    "same": "So groß wie München.",
+   "third": "Ein Drittel so groß wie München.",
+   "x10": "Zehnmal so groß wie München.",
    "x2": "Doppelt so groß wie München.",
    "x3": "Dreimal so groß wie München.",
    "x4": "Viermal so groß wie München.",
-   "x5": "Fünfmal so groß wie München.",
-   "x10": "Zehnmal so groß wie München.",
-   "half": "Halb so groß wie München.",
-   "third": "Ein Drittel so groß wie München."
+   "x5": "Fünfmal so groß wie München."
   },
   {
+   "half": "Halb so groß wie der Bodensee.",
    "km": 536,
    "same": "So groß wie der Bodensee.",
+   "third": "Ein Drittel so groß wie der Bodensee.",
+   "x10": "Zehnmal so groß wie der Bodensee.",
    "x2": "Doppelt so groß wie der Bodensee.",
    "x3": "Dreimal so groß wie der Bodensee.",
    "x4": "Viermal so groß wie der Bodensee.",
-   "x5": "Fünfmal so groß wie der Bodensee.",
-   "x10": "Zehnmal so groß wie der Bodensee.",
-   "half": "Halb so groß wie der Bodensee.",
-   "third": "Ein Drittel so groß wie der Bodensee."
+   "x5": "Fünfmal so groß wie der Bodensee."
   },
   {
+   "half": "Halb so groß wie Berlin.",
    "km": 892,
    "same": "So groß wie Berlin.",
+   "third": "Ein Drittel so groß wie Berlin.",
+   "x10": "Zehnmal so groß wie Berlin.",
    "x2": "Doppelt so groß wie Berlin.",
    "x3": "Dreimal so groß wie Berlin.",
    "x4": "Viermal so groß wie Berlin.",
-   "x5": "Fünfmal so groß wie Berlin.",
-   "x10": "Zehnmal so groß wie Berlin.",
-   "half": "Halb so groß wie Berlin.",
-   "third": "Ein Drittel so groß wie Berlin."
+   "x5": "Fünfmal so groß wie Berlin."
   },
   {
+   "half": "Halb so groß wie das Saarland.",
    "km": 2570,
    "same": "So groß wie das Saarland.",
+   "third": "Ein Drittel so groß wie das Saarland.",
+   "x10": "Zehnmal so groß wie das Saarland.",
    "x2": "Doppelt so groß wie das Saarland.",
    "x3": "Dreimal so groß wie das Saarland.",
    "x4": "Viermal so groß wie das Saarland.",
-   "x5": "Fünfmal so groß wie das Saarland.",
-   "x10": "Zehnmal so groß wie das Saarland.",
-   "half": "Halb so groß wie das Saarland.",
-   "third": "Ein Drittel so groß wie das Saarland."
+   "x5": "Fünfmal so groß wie das Saarland."
   },
   {
+   "half": "Halb so groß wie Mallorca.",
    "km": 3640,
    "same": "So groß wie Mallorca.",
+   "third": "Ein Drittel so groß wie Mallorca.",
+   "x10": "Zehnmal so groß wie Mallorca.",
    "x2": "Doppelt so groß wie Mallorca.",
    "x3": "Dreimal so groß wie Mallorca.",
    "x4": "Viermal so groß wie Mallorca.",
-   "x5": "Fünfmal so groß wie Mallorca.",
-   "x10": "Zehnmal so groß wie Mallorca.",
-   "half": "Halb so groß wie Mallorca.",
-   "third": "Ein Drittel so groß wie Mallorca."
+   "x5": "Fünfmal so groß wie Mallorca."
   },
   {
+   "half": "Halb so groß wie Schleswig-Holstein.",
    "km": 15804,
    "same": "So groß wie Schleswig-Holstein.",
+   "third": "Ein Drittel so groß wie Schleswig-Holstein.",
+   "x10": "Zehnmal so groß wie Schleswig-Holstein.",
    "x2": "Doppelt so groß wie Schleswig-Holstein.",
    "x3": "Dreimal so groß wie Schleswig-Holstein.",
    "x4": "Viermal so groß wie Schleswig-Holstein.",
-   "x5": "Fünfmal so groß wie Schleswig-Holstein.",
-   "x10": "Zehnmal so groß wie Schleswig-Holstein.",
-   "half": "Halb so groß wie Schleswig-Holstein.",
-   "third": "Ein Drittel so groß wie Schleswig-Holstein."
+   "x5": "Fünfmal so groß wie Schleswig-Holstein."
   },
   {
+   "half": "Halb so groß wie Hessen.",
    "km": 21115,
    "same": "So groß wie Hessen.",
+   "third": "Ein Drittel so groß wie Hessen.",
+   "x10": "Zehnmal so groß wie Hessen.",
    "x2": "Doppelt so groß wie Hessen.",
    "x3": "Dreimal so groß wie Hessen.",
    "x4": "Viermal so groß wie Hessen.",
-   "x5": "Fünfmal so groß wie Hessen.",
-   "x10": "Zehnmal so groß wie Hessen.",
-   "half": "Halb so groß wie Hessen.",
-   "third": "Ein Drittel so groß wie Hessen."
+   "x5": "Fünfmal so groß wie Hessen."
   },
   {
+   "half": "Halb so groß wie die Schweiz.",
    "km": 41285,
    "same": "So groß wie die Schweiz.",
+   "third": "Ein Drittel so groß wie die Schweiz.",
+   "x10": "Zehnmal so groß wie die Schweiz.",
    "x2": "Doppelt so groß wie die Schweiz.",
    "x3": "Dreimal so groß wie die Schweiz.",
    "x4": "Viermal so groß wie die Schweiz.",
-   "x5": "Fünfmal so groß wie die Schweiz.",
-   "x10": "Zehnmal so groß wie die Schweiz.",
-   "half": "Halb so groß wie die Schweiz.",
-   "third": "Ein Drittel so groß wie die Schweiz."
+   "x5": "Fünfmal so groß wie die Schweiz."
   },
   {
+   "half": "Halb so groß wie Bayern.",
    "km": 70550,
    "same": "So groß wie Bayern.",
+   "third": "Ein Drittel so groß wie Bayern.",
+   "x10": "Zehnmal so groß wie Bayern.",
    "x2": "Doppelt so groß wie Bayern.",
    "x3": "Dreimal so groß wie Bayern.",
    "x4": "Viermal so groß wie Bayern.",
-   "x5": "Fünfmal so groß wie Bayern.",
-   "x10": "Zehnmal so groß wie Bayern.",
-   "half": "Halb so groß wie Bayern.",
-   "third": "Ein Drittel so groß wie Bayern."
+   "x5": "Fünfmal so groß wie Bayern."
   },
   {
+   "half": "Halb so groß wie Österreich.",
    "km": 83879,
    "same": "So groß wie Österreich.",
+   "third": "Ein Drittel so groß wie Österreich.",
+   "x10": "Zehnmal so groß wie Österreich.",
    "x2": "Doppelt so groß wie Österreich.",
    "x3": "Dreimal so groß wie Österreich.",
    "x4": "Viermal so groß wie Österreich.",
-   "x5": "Fünfmal so groß wie Österreich.",
-   "x10": "Zehnmal so groß wie Österreich.",
-   "half": "Halb so groß wie Österreich.",
-   "third": "Ein Drittel so groß wie Österreich."
+   "x5": "Fünfmal so groß wie Österreich."
   },
   {
+   "half": "Halb so groß wie England.",
    "km": 130279,
    "same": "So groß wie England.",
+   "third": "Ein Drittel so groß wie England.",
+   "x10": "Zehnmal so groß wie England.",
    "x2": "Doppelt so groß wie England.",
    "x3": "Dreimal so groß wie England.",
    "x4": "Viermal so groß wie England.",
-   "x5": "Fünfmal so groß wie England.",
-   "x10": "Zehnmal so groß wie England.",
-   "half": "Halb so groß wie England.",
-   "third": "Ein Drittel so groß wie England."
+   "x5": "Fünfmal so groß wie England."
   }
  ],
  "line": "Linie",
@@ -436,8 +437,8 @@
  "pastHereNone": "{y} wurde hier keine Rodung kartiert",
  "pastP": "{y} sollten {exp} Zellen einen Hektar verlieren, {act} verloren ihn",
  "people": {
-  "credit": "Foto: {author}, {license}",
-  "also": "Auch auf diesem Land"
+  "also": "Auch auf diesem Land",
+  "credit": "Foto: {author}, {license}"
  },
  "prevYear": "Vorheriges Jahr",
  "range": "wahrscheinlich {lo} bis {hi}",

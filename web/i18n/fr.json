@@ -8,6 +8,7 @@
   "metric": "Le score est la moyenne de {b0} à {b1}.",
   "model": "Le modèle s'appelle {name} et a appris sur {span} ans de données publiques. Il divise la forêt en carrés de {m} mètres, les cellules, et calcule pour chacune la probabilité de déforestation dans l'année qui suit.",
   "open": "Le code, les données et le benchmark sont ouverts. Faites un meilleur modèle et il remplacera le nôtre.",
+  "org": "Une initiative du {org}.",
   "tested": "Pour le tester, nous avons caché une année au modèle et demandé sa prévision. En {y}, sur {of} lieux qu'il a désignés, {hit} ont été déboisés."
  },
  "about_": "environ {x} km²",
@@ -214,158 +215,158 @@
  ],
  "like": [
   {
+   "half": "La moitié de l'île d'Yeu.",
    "km": 23,
    "same": "La taille de l'île d'Yeu.",
+   "third": "Un tiers de l'île d'Yeu.",
+   "x10": "Dix fois l'île d'Yeu.",
    "x2": "Deux fois l'île d'Yeu.",
    "x3": "Trois fois l'île d'Yeu.",
    "x4": "Quatre fois l'île d'Yeu.",
-   "x5": "Cinq fois l'île d'Yeu.",
-   "x10": "Dix fois l'île d'Yeu.",
-   "half": "La moitié de l'île d'Yeu.",
-   "third": "Un tiers de l'île d'Yeu."
+   "x5": "Cinq fois l'île d'Yeu."
   },
   {
+   "half": "La moitié de Lyon.",
    "km": 48,
    "same": "La taille de Lyon.",
+   "third": "Un tiers de Lyon.",
+   "x10": "Dix fois Lyon.",
    "x2": "Deux fois Lyon.",
    "x3": "Trois fois Lyon.",
    "x4": "Quatre fois Lyon.",
-   "x5": "Cinq fois Lyon.",
-   "x10": "Dix fois Lyon.",
-   "half": "La moitié de Lyon.",
-   "third": "Un tiers de Lyon."
+   "x5": "Cinq fois Lyon."
   },
   {
+   "half": "La moitié de Paris.",
    "km": 105,
    "same": "La taille de Paris.",
+   "third": "Un tiers de Paris.",
+   "x10": "Dix fois Paris.",
    "x2": "Deux fois Paris.",
    "x3": "Trois fois Paris.",
    "x4": "Quatre fois Paris.",
-   "x5": "Cinq fois Paris.",
-   "x10": "Dix fois Paris.",
-   "half": "La moitié de Paris.",
-   "third": "Un tiers de Paris."
+   "x5": "Cinq fois Paris."
   },
   {
+   "half": "La moitié de Marseille.",
    "km": 241,
    "same": "La taille de Marseille.",
+   "third": "Un tiers de Marseille.",
+   "x10": "Dix fois Marseille.",
    "x2": "Deux fois Marseille.",
    "x3": "Trois fois Marseille.",
    "x4": "Quatre fois Marseille.",
-   "x5": "Cinq fois Marseille.",
-   "x10": "Dix fois Marseille.",
-   "half": "La moitié de Marseille.",
-   "third": "Un tiers de Marseille."
+   "x5": "Cinq fois Marseille."
   },
   {
+   "half": "La moitié de Mayotte.",
    "km": 374,
    "same": "La taille de Mayotte.",
+   "third": "Un tiers de Mayotte.",
+   "x10": "Dix fois Mayotte.",
    "x2": "Deux fois Mayotte.",
    "x3": "Trois fois Mayotte.",
    "x4": "Quatre fois Mayotte.",
-   "x5": "Cinq fois Mayotte.",
-   "x10": "Dix fois Mayotte.",
-   "half": "La moitié de Mayotte.",
-   "third": "Un tiers de Mayotte."
+   "x5": "Cinq fois Mayotte."
   },
   {
+   "half": "La moitié de la Martinique.",
    "km": 1128,
    "same": "La taille de la Martinique.",
+   "third": "Un tiers de la Martinique.",
+   "x10": "Dix fois la Martinique.",
    "x2": "Deux fois la Martinique.",
    "x3": "Trois fois la Martinique.",
    "x4": "Quatre fois la Martinique.",
-   "x5": "Cinq fois la Martinique.",
-   "x10": "Dix fois la Martinique.",
-   "half": "La moitié de la Martinique.",
-   "third": "Un tiers de la Martinique."
+   "x5": "Cinq fois la Martinique."
   },
   {
+   "half": "La moitié de La Réunion.",
    "km": 2512,
    "same": "La taille de La Réunion.",
+   "third": "Un tiers de La Réunion.",
+   "x10": "Dix fois La Réunion.",
    "x2": "Deux fois La Réunion.",
    "x3": "Trois fois La Réunion.",
    "x4": "Quatre fois La Réunion.",
-   "x5": "Cinq fois La Réunion.",
-   "x10": "Dix fois La Réunion.",
-   "half": "La moitié de La Réunion.",
-   "third": "Un tiers de La Réunion."
+   "x5": "Cinq fois La Réunion."
   },
   {
+   "half": "La moitié de la Haute-Savoie.",
    "km": 4388,
    "same": "La taille de la Haute-Savoie.",
+   "third": "Un tiers de la Haute-Savoie.",
+   "x10": "Dix fois la Haute-Savoie.",
    "x2": "Deux fois la Haute-Savoie.",
    "x3": "Trois fois la Haute-Savoie.",
    "x4": "Quatre fois la Haute-Savoie.",
-   "x5": "Cinq fois la Haute-Savoie.",
-   "x10": "Dix fois la Haute-Savoie.",
-   "half": "La moitié de la Haute-Savoie.",
-   "third": "Un tiers de la Haute-Savoie."
+   "x5": "Cinq fois la Haute-Savoie."
   },
   {
+   "half": "La moitié de la Corse.",
    "km": 8680,
    "same": "La taille de la Corse.",
+   "third": "Un tiers de la Corse.",
+   "x10": "Dix fois la Corse.",
    "x2": "Deux fois la Corse.",
    "x3": "Trois fois la Corse.",
    "x4": "Quatre fois la Corse.",
-   "x5": "Cinq fois la Corse.",
-   "x10": "Dix fois la Corse.",
-   "half": "La moitié de la Corse.",
-   "third": "Un tiers de la Corse."
+   "x5": "Cinq fois la Corse."
   },
   {
+   "half": "La moitié de l'Île-de-France.",
    "km": 12012,
    "same": "La taille de l'Île-de-France.",
+   "third": "Un tiers de l'Île-de-France.",
+   "x10": "Dix fois l'Île-de-France.",
    "x2": "Deux fois l'Île-de-France.",
    "x3": "Trois fois l'Île-de-France.",
    "x4": "Quatre fois l'Île-de-France.",
-   "x5": "Cinq fois l'Île-de-France.",
-   "x10": "Dix fois l'Île-de-France.",
-   "half": "La moitié de l'Île-de-France.",
-   "third": "Un tiers de l'Île-de-France."
+   "x5": "Cinq fois l'Île-de-France."
   },
   {
+   "half": "La moitié de la Bretagne.",
    "km": 27208,
    "same": "La taille de la Bretagne.",
+   "third": "Un tiers de la Bretagne.",
+   "x10": "Dix fois la Bretagne.",
    "x2": "Deux fois la Bretagne.",
    "x3": "Trois fois la Bretagne.",
    "x4": "Quatre fois la Bretagne.",
-   "x5": "Cinq fois la Bretagne.",
-   "x10": "Dix fois la Bretagne.",
-   "half": "La moitié de la Bretagne.",
-   "third": "Un tiers de la Bretagne."
+   "x5": "Cinq fois la Bretagne."
   },
   {
+   "half": "La moitié de la Suisse.",
    "km": 41285,
    "same": "La taille de la Suisse.",
+   "third": "Un tiers de la Suisse.",
+   "x10": "Dix fois la Suisse.",
    "x2": "Deux fois la Suisse.",
    "x3": "Trois fois la Suisse.",
    "x4": "Quatre fois la Suisse.",
-   "x5": "Cinq fois la Suisse.",
-   "x10": "Dix fois la Suisse.",
-   "half": "La moitié de la Suisse.",
-   "third": "Un tiers de la Suisse."
+   "x5": "Cinq fois la Suisse."
   },
   {
+   "half": "La moitié de la Guyane.",
    "km": 83534,
    "same": "La taille de la Guyane.",
+   "third": "Un tiers de la Guyane.",
+   "x10": "Dix fois la Guyane.",
    "x2": "Deux fois la Guyane.",
    "x3": "Trois fois la Guyane.",
    "x4": "Quatre fois la Guyane.",
-   "x5": "Cinq fois la Guyane.",
-   "x10": "Dix fois la Guyane.",
-   "half": "La moitié de la Guyane.",
-   "third": "Un tiers de la Guyane."
+   "x5": "Cinq fois la Guyane."
   },
   {
+   "half": "La moitié de l'Angleterre.",
    "km": 130279,
    "same": "La taille de l'Angleterre.",
+   "third": "Un tiers de l'Angleterre.",
+   "x10": "Dix fois l'Angleterre.",
    "x2": "Deux fois l'Angleterre.",
    "x3": "Trois fois l'Angleterre.",
    "x4": "Quatre fois l'Angleterre.",
-   "x5": "Cinq fois l'Angleterre.",
-   "x10": "Dix fois l'Angleterre.",
-   "half": "La moitié de l'Angleterre.",
-   "third": "Un tiers de l'Angleterre."
+   "x5": "Cinq fois l'Angleterre."
   }
  ],
  "line": "Ligne",
@@ -444,8 +445,8 @@
  "pastHereNone": "En {y}, aucune déforestation n'a été cartographiée ici",
  "pastP": "En {y}, {exp} cellules devaient perdre un hectare et {act} l'ont perdu",
  "people": {
-  "credit": "Photo : {author}, {license}",
-  "also": "Aussi sur cette terre"
+  "also": "Aussi sur cette terre",
+  "credit": "Photo : {author}, {license}"
  },
  "prevYear": "Année précédente",
  "range": "probablement entre {lo} et {hi}",

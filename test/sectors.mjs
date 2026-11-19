@@ -1185,12 +1185,12 @@ try {
       `The model is called ${story.model.name} and learned from ${span} years of public data. It divides the forest into ${story.forest.cell_m} metre squares, the cells, and calculates for each one the chance of clearing in the year ahead.`,
       `To test it, we hid a year from the model and asked for its forecast. In ${story.check.year}, ${hit5} of every ${of5} places it pointed to were cleared.`,
       "Benchmark", `The score is the mean of ${story.benchmark.years[0]} to ${story.benchmark.years.at(-1)}.`,
-      "The code, the data and the benchmark are open. Build a better model and it replaces ours.", "Submit a modelGitHub", "Made by Gui Dávid (guidavid.com)."],
+      "The code, the data and the benchmark are open. Build a better model and it replaces ours.", "Submit a modelGitHub", "Made by Gui Dávid (guidavid.com). An initiative of Movimento Cibernético Brasileiro."],
     pt: [`O Prenúncio prevê onde a Amazônia será desmatada até julho de ${story.forecast.year}.`, "Fizemos para que a fiscalização chegue antes do desmate.",
       `O modelo se chama ${story.model.name} e aprendeu com ${span} anos de dados públicos. Ele divide a floresta em quadrados de ${story.forest.cell_m} metros, as células, e calcula para cada uma a chance de desmate no ano seguinte.`,
       `Para testar, escondemos um ano do modelo e pedimos a previsão. Em ${story.check.year}, de cada ${of5} lugares que ele apontou, ${hit5} foram desmatados.`,
       "Benchmark", `A nota é a média de ${story.benchmark.years[0]} a ${story.benchmark.years.at(-1)}.`,
-      "O código, os dados e o benchmark são abertos. Quem fizer um modelo melhor substitui o nosso.", "Enviar um modeloGitHub", "Feito por Gui Dávid (guidavid.com)."],
+      "O código, os dados e o benchmark são abertos. Quem fizer um modelo melhor substitui o nosso.", "Enviar um modeloGitHub", "Feito por Gui Dávid (guidavid.com). Uma iniciativa do Movimento Cibernético Brasileiro."],
   };
   assert.equal(span, 18, "the years of public data, from the first year of the record to the day the forecast was made");
   for (const l of ["en", "pt"]) {

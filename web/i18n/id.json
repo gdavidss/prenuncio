@@ -8,6 +8,7 @@
   "metric": "Skor adalah rata-rata {b0} sampai {b1}.",
   "model": "Model ini bernama {name} dan belajar dari {span} tahun data publik. Model membagi hutan menjadi petak {m} meter, yaitu sel, dan menghitung untuk tiap sel peluang deforestasi pada tahun berikutnya.",
   "open": "Kode, data, dan benchmark terbuka. Buat model yang lebih baik, dan model itu menggantikan model kami.",
+  "org": "Sebuah inisiatif {org}.",
   "tested": "Untuk mengujinya, kami menyembunyikan satu tahun dari model dan meminta prakiraannya. Pada {y}, {hit} dari setiap {of} tempat yang ditunjuknya benar-benar dibuka."
  },
  "about_": "sekitar {x} km²",
@@ -211,125 +212,125 @@
  ],
  "like": [
   {
+   "half": "Setengah luas Kota Yogyakarta.",
    "km": 32.5,
    "same": "Seluas Kota Yogyakarta.",
+   "third": "Sepertiga luas Kota Yogyakarta.",
+   "x10": "Sepuluh kali luas Kota Yogyakarta.",
    "x2": "Dua kali luas Kota Yogyakarta.",
    "x3": "Tiga kali luas Kota Yogyakarta.",
    "x4": "Empat kali luas Kota Yogyakarta.",
-   "x5": "Lima kali luas Kota Yogyakarta.",
-   "x10": "Sepuluh kali luas Kota Yogyakarta.",
-   "half": "Setengah luas Kota Yogyakarta.",
-   "third": "Sepertiga luas Kota Yogyakarta."
+   "x5": "Lima kali luas Kota Yogyakarta."
   },
   {
+   "half": "Setengah luas Kota Bogor.",
    "km": 118.5,
    "same": "Seluas Kota Bogor.",
+   "third": "Sepertiga luas Kota Bogor.",
+   "x10": "Sepuluh kali luas Kota Bogor.",
    "x2": "Dua kali luas Kota Bogor.",
    "x3": "Tiga kali luas Kota Bogor.",
    "x4": "Empat kali luas Kota Bogor.",
-   "x5": "Lima kali luas Kota Bogor.",
-   "x10": "Sepuluh kali luas Kota Bogor.",
-   "half": "Setengah luas Kota Bogor.",
-   "third": "Sepertiga luas Kota Bogor."
+   "x5": "Lima kali luas Kota Bogor."
   },
   {
+   "half": "Setengah luas Kota Bandung.",
    "km": 167,
    "same": "Seluas Kota Bandung.",
+   "third": "Sepertiga luas Kota Bandung.",
+   "x10": "Sepuluh kali luas Kota Bandung.",
    "x2": "Dua kali luas Kota Bandung.",
    "x3": "Tiga kali luas Kota Bandung.",
    "x4": "Empat kali luas Kota Bandung.",
-   "x5": "Lima kali luas Kota Bandung.",
-   "x10": "Sepuluh kali luas Kota Bandung.",
-   "half": "Setengah luas Kota Bandung.",
-   "third": "Sepertiga luas Kota Bandung."
+   "x5": "Lima kali luas Kota Bandung."
   },
   {
+   "half": "Setengah luas Kota Semarang.",
    "km": 374,
    "same": "Seluas Kota Semarang.",
+   "third": "Sepertiga luas Kota Semarang.",
+   "x10": "Sepuluh kali luas Kota Semarang.",
    "x2": "Dua kali luas Kota Semarang.",
    "x3": "Tiga kali luas Kota Semarang.",
    "x4": "Empat kali luas Kota Semarang.",
-   "x5": "Lima kali luas Kota Semarang.",
-   "x10": "Sepuluh kali luas Kota Semarang.",
-   "half": "Setengah luas Kota Semarang.",
-   "third": "Sepertiga luas Kota Semarang."
+   "x5": "Lima kali luas Kota Semarang."
   },
   {
+   "half": "Setengah luas Jakarta.",
    "km": 662,
    "same": "Seluas Jakarta.",
+   "third": "Sepertiga luas Jakarta.",
+   "x10": "Sepuluh kali luas Jakarta.",
    "x2": "Dua kali luas Jakarta.",
    "x3": "Tiga kali luas Jakarta.",
    "x4": "Empat kali luas Jakarta.",
-   "x5": "Lima kali luas Jakarta.",
-   "x10": "Sepuluh kali luas Jakarta.",
-   "half": "Setengah luas Jakarta.",
-   "third": "Sepertiga luas Jakarta."
+   "x5": "Lima kali luas Jakarta."
   },
   {
+   "half": "Setengah luas Daerah Istimewa Yogyakarta.",
    "km": 3186,
    "same": "Seluas Daerah Istimewa Yogyakarta.",
+   "third": "Sepertiga luas Daerah Istimewa Yogyakarta.",
+   "x10": "Sepuluh kali luas Daerah Istimewa Yogyakarta.",
    "x2": "Dua kali luas Daerah Istimewa Yogyakarta.",
    "x3": "Tiga kali luas Daerah Istimewa Yogyakarta.",
    "x4": "Empat kali luas Daerah Istimewa Yogyakarta.",
-   "x5": "Lima kali luas Daerah Istimewa Yogyakarta.",
-   "x10": "Sepuluh kali luas Daerah Istimewa Yogyakarta.",
-   "half": "Setengah luas Daerah Istimewa Yogyakarta.",
-   "third": "Sepertiga luas Daerah Istimewa Yogyakarta."
+   "x5": "Lima kali luas Daerah Istimewa Yogyakarta."
   },
   {
+   "half": "Setengah luas Bali.",
    "km": 5780,
    "same": "Seluas Bali.",
+   "third": "Sepertiga luas Bali.",
+   "x10": "Sepuluh kali luas Bali.",
    "x2": "Dua kali luas Bali.",
    "x3": "Tiga kali luas Bali.",
    "x4": "Empat kali luas Bali.",
-   "x5": "Lima kali luas Bali.",
-   "x10": "Sepuluh kali luas Bali.",
-   "half": "Setengah luas Bali.",
-   "third": "Sepertiga luas Bali."
+   "x5": "Lima kali luas Bali."
   },
   {
+   "half": "Setengah luas Banten.",
    "km": 9663,
    "same": "Seluas Banten.",
+   "third": "Sepertiga luas Banten.",
+   "x10": "Sepuluh kali luas Banten.",
    "x2": "Dua kali luas Banten.",
    "x3": "Tiga kali luas Banten.",
    "x4": "Empat kali luas Banten.",
-   "x5": "Lima kali luas Banten.",
-   "x10": "Sepuluh kali luas Banten.",
-   "half": "Setengah luas Banten.",
-   "third": "Sepertiga luas Banten."
+   "x5": "Lima kali luas Banten."
   },
   {
+   "half": "Setengah luas Jawa Tengah.",
    "km": 32801,
    "same": "Seluas Jawa Tengah.",
+   "third": "Sepertiga luas Jawa Tengah.",
+   "x10": "Sepuluh kali luas Jawa Tengah.",
    "x2": "Dua kali luas Jawa Tengah.",
    "x3": "Tiga kali luas Jawa Tengah.",
    "x4": "Empat kali luas Jawa Tengah.",
-   "x5": "Lima kali luas Jawa Tengah.",
-   "x10": "Sepuluh kali luas Jawa Tengah.",
-   "half": "Setengah luas Jawa Tengah.",
-   "third": "Sepertiga luas Jawa Tengah."
+   "x5": "Lima kali luas Jawa Tengah."
   },
   {
+   "half": "Setengah luas Sumatera Utara.",
    "km": 72981,
    "same": "Seluas Sumatera Utara.",
+   "third": "Sepertiga luas Sumatera Utara.",
+   "x10": "Sepuluh kali luas Sumatera Utara.",
    "x2": "Dua kali luas Sumatera Utara.",
    "x3": "Tiga kali luas Sumatera Utara.",
    "x4": "Empat kali luas Sumatera Utara.",
-   "x5": "Lima kali luas Sumatera Utara.",
-   "x10": "Sepuluh kali luas Sumatera Utara.",
-   "half": "Setengah luas Sumatera Utara.",
-   "third": "Sepertiga luas Sumatera Utara."
+   "x5": "Lima kali luas Sumatera Utara."
   },
   {
+   "half": "Setengah luas Pulau Jawa.",
    "km": 128297,
    "same": "Seluas Pulau Jawa.",
+   "third": "Sepertiga luas Pulau Jawa.",
+   "x10": "Sepuluh kali luas Pulau Jawa.",
    "x2": "Dua kali luas Pulau Jawa.",
    "x3": "Tiga kali luas Pulau Jawa.",
    "x4": "Empat kali luas Pulau Jawa.",
-   "x5": "Lima kali luas Pulau Jawa.",
-   "x10": "Sepuluh kali luas Pulau Jawa.",
-   "half": "Setengah luas Pulau Jawa.",
-   "third": "Sepertiga luas Pulau Jawa."
+   "x5": "Lima kali luas Pulau Jawa."
   }
  ],
  "line": "Garis",
@@ -408,8 +409,8 @@
  "pastHereNone": "Pada {y} tidak ada deforestasi yang terpetakan di sini",
  "pastP": "Pada {y}, diperkirakan {exp} sel kehilangan satu hektare, nyatanya {act}",
  "people": {
-  "credit": "Foto: {author}, {license}",
-  "also": "Juga di tanah ini"
+  "also": "Juga di tanah ini",
+  "credit": "Foto: {author}, {license}"
  },
  "prevYear": "Tahun sebelumnya",
  "range": "kemungkinan {lo} sampai {hi}",

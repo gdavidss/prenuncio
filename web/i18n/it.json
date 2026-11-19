@@ -8,6 +8,7 @@
   "metric": "Il punteggio è la media dal {b0} al {b1}.",
   "model": "Il modello si chiama {name} e ha imparato da {span} anni di dati pubblici. Divide la foresta in quadrati di {m} metri, le celle, e calcola per ciascuna la probabilità di disboscamento nell'anno successivo.",
   "open": "Il codice, i dati e il benchmark sono aperti. Chi fa un modello migliore sostituisce il nostro.",
+  "org": "Un'iniziativa del {org}.",
   "tested": "Per provarlo abbiamo nascosto un anno al modello e chiesto la sua previsione. Nel {y}, su {of} luoghi che ha indicato, {hit} sono stati disboscati."
  },
  "about_": "circa {x} km²",
@@ -217,147 +218,147 @@
  ],
  "like": [
   {
+   "half": "Metà di Lampedusa.",
    "km": 20,
    "same": "Grande come Lampedusa.",
+   "third": "Un terzo di Lampedusa.",
+   "x10": "Dieci volte Lampedusa.",
    "x2": "Due volte Lampedusa.",
    "x3": "Tre volte Lampedusa.",
    "x4": "Quattro volte Lampedusa.",
-   "x5": "Cinque volte Lampedusa.",
-   "x10": "Dieci volte Lampedusa.",
-   "half": "Metà di Lampedusa.",
-   "third": "Un terzo di Lampedusa."
+   "x5": "Cinque volte Lampedusa."
   },
   {
+   "half": "Metà di Ischia.",
    "km": 46,
    "same": "Grande come Ischia.",
+   "third": "Un terzo di Ischia.",
+   "x10": "Dieci volte Ischia.",
    "x2": "Due volte Ischia.",
    "x3": "Tre volte Ischia.",
    "x4": "Quattro volte Ischia.",
-   "x5": "Cinque volte Ischia.",
-   "x10": "Dieci volte Ischia.",
-   "half": "Metà di Ischia.",
-   "third": "Un terzo di Ischia."
+   "x5": "Cinque volte Ischia."
   },
   {
+   "half": "Metà di San Marino.",
    "km": 61,
    "same": "Grande come San Marino.",
+   "third": "Un terzo di San Marino.",
+   "x10": "Dieci volte San Marino.",
    "x2": "Due volte San Marino.",
    "x3": "Tre volte San Marino.",
    "x4": "Quattro volte San Marino.",
-   "x5": "Cinque volte San Marino.",
-   "x10": "Dieci volte San Marino.",
-   "half": "Metà di San Marino.",
-   "third": "Un terzo di San Marino."
+   "x5": "Cinque volte San Marino."
   },
   {
+   "half": "Metà di Napoli.",
    "km": 117,
    "same": "Grande come Napoli.",
+   "third": "Un terzo di Napoli.",
+   "x10": "Dieci volte Napoli.",
    "x2": "Due volte Napoli.",
    "x3": "Tre volte Napoli.",
    "x4": "Quattro volte Napoli.",
-   "x5": "Cinque volte Napoli.",
-   "x10": "Dieci volte Napoli.",
-   "half": "Metà di Napoli.",
-   "third": "Un terzo di Napoli."
+   "x5": "Cinque volte Napoli."
   },
   {
+   "half": "Metà di Milano.",
    "km": 182,
    "same": "Grande come Milano.",
+   "third": "Un terzo di Milano.",
+   "x10": "Dieci volte Milano.",
    "x2": "Due volte Milano.",
    "x3": "Tre volte Milano.",
    "x4": "Quattro volte Milano.",
-   "x5": "Cinque volte Milano.",
-   "x10": "Dieci volte Milano.",
-   "half": "Metà di Milano.",
-   "third": "Un terzo di Milano."
+   "x5": "Cinque volte Milano."
   },
   {
+   "half": "Metà del lago di Garda.",
    "km": 370,
    "same": "Grande come il lago di Garda.",
+   "third": "Un terzo del lago di Garda.",
+   "x10": "Dieci volte il lago di Garda.",
    "x2": "Due volte il lago di Garda.",
    "x3": "Tre volte il lago di Garda.",
    "x4": "Quattro volte il lago di Garda.",
-   "x5": "Cinque volte il lago di Garda.",
-   "x10": "Dieci volte il lago di Garda.",
-   "half": "Metà del lago di Garda.",
-   "third": "Un terzo del lago di Garda."
+   "x5": "Cinque volte il lago di Garda."
   },
   {
+   "half": "Metà di Roma.",
    "km": 1287,
    "same": "Grande come Roma.",
+   "third": "Un terzo di Roma.",
+   "x10": "Dieci volte Roma.",
    "x2": "Due volte Roma.",
    "x3": "Tre volte Roma.",
    "x4": "Quattro volte Roma.",
-   "x5": "Cinque volte Roma.",
-   "x10": "Dieci volte Roma.",
-   "half": "Metà di Roma.",
-   "third": "Un terzo di Roma."
+   "x5": "Cinque volte Roma."
   },
   {
+   "half": "Metà della Valle d'Aosta.",
    "km": 3261,
    "same": "Grande come la Valle d'Aosta.",
+   "third": "Un terzo della Valle d'Aosta.",
+   "x10": "Dieci volte la Valle d'Aosta.",
    "x2": "Due volte la Valle d'Aosta.",
    "x3": "Tre volte la Valle d'Aosta.",
    "x4": "Quattro volte la Valle d'Aosta.",
-   "x5": "Cinque volte la Valle d'Aosta.",
-   "x10": "Dieci volte la Valle d'Aosta.",
-   "half": "Metà della Valle d'Aosta.",
-   "third": "Un terzo della Valle d'Aosta."
+   "x5": "Cinque volte la Valle d'Aosta."
   },
   {
+   "half": "Metà dell'Umbria.",
    "km": 8464,
    "same": "Grande come l'Umbria.",
+   "third": "Un terzo dell'Umbria.",
+   "x10": "Dieci volte l'Umbria.",
    "x2": "Due volte l'Umbria.",
    "x3": "Tre volte l'Umbria.",
    "x4": "Quattro volte l'Umbria.",
-   "x5": "Cinque volte l'Umbria.",
-   "x10": "Dieci volte l'Umbria.",
-   "half": "Metà dell'Umbria.",
-   "third": "Un terzo dell'Umbria."
+   "x5": "Cinque volte l'Umbria."
   },
   {
+   "half": "Metà della Sardegna.",
    "km": 24090,
    "same": "Grande come la Sardegna.",
+   "third": "Un terzo della Sardegna.",
+   "x10": "Dieci volte la Sardegna.",
    "x2": "Due volte la Sardegna.",
    "x3": "Tre volte la Sardegna.",
    "x4": "Quattro volte la Sardegna.",
-   "x5": "Cinque volte la Sardegna.",
-   "x10": "Dieci volte la Sardegna.",
-   "half": "Metà della Sardegna.",
-   "third": "Un terzo della Sardegna."
+   "x5": "Cinque volte la Sardegna."
   },
   {
+   "half": "Metà della Svizzera.",
    "km": 41285,
    "same": "Grande come la Svizzera.",
+   "third": "Un terzo della Svizzera.",
+   "x10": "Dieci volte la Svizzera.",
    "x2": "Due volte la Svizzera.",
    "x3": "Tre volte la Svizzera.",
    "x4": "Quattro volte la Svizzera.",
-   "x5": "Cinque volte la Svizzera.",
-   "x10": "Dieci volte la Svizzera.",
-   "half": "Metà della Svizzera.",
-   "third": "Un terzo della Svizzera."
+   "x5": "Cinque volte la Svizzera."
   },
   {
+   "half": "Metà dell'Austria.",
    "km": 83879,
    "same": "Grande come l'Austria.",
+   "third": "Un terzo dell'Austria.",
+   "x10": "Dieci volte l'Austria.",
    "x2": "Due volte l'Austria.",
    "x3": "Tre volte l'Austria.",
    "x4": "Quattro volte l'Austria.",
-   "x5": "Cinque volte l'Austria.",
-   "x10": "Dieci volte l'Austria.",
-   "half": "Metà dell'Austria.",
-   "third": "Un terzo dell'Austria."
+   "x5": "Cinque volte l'Austria."
   },
   {
+   "half": "Metà della Grecia.",
    "km": 131957,
    "same": "Grande come la Grecia.",
+   "third": "Un terzo della Grecia.",
+   "x10": "Dieci volte la Grecia.",
    "x2": "Due volte la Grecia.",
    "x3": "Tre volte la Grecia.",
    "x4": "Quattro volte la Grecia.",
-   "x5": "Cinque volte la Grecia.",
-   "x10": "Dieci volte la Grecia.",
-   "half": "Metà della Grecia.",
-   "third": "Un terzo della Grecia."
+   "x5": "Cinque volte la Grecia."
   }
  ],
  "line": "Linea",
@@ -436,8 +437,8 @@
  "pastHereNone": "Nel {y} qui non è stato mappato alcun disboscamento",
  "pastP": "Nel {y} erano attese {exp} celle con un ettaro perso e sono state {act}",
  "people": {
-  "credit": "Foto: {author}, {license}",
-  "also": "Anche su questa terra"
+  "also": "Anche su questa terra",
+  "credit": "Foto: {author}, {license}"
  },
  "prevYear": "Anno precedente",
  "range": "probabilmente tra {lo} e {hi}",
