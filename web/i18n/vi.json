@@ -1,0 +1,530 @@
+{
+ "about": "Giới thiệu",
+ "aboutText": {
+  "benchmark": "Benchmark",
+  "by": "Thực hiện bởi {name} ({site}).",
+  "line1": "Prenúncio dự báo nơi rừng Amazon sẽ bị phá từ nay đến tháng 7 năm {year}.",
+  "line2": "Chúng tôi làm ra nó để lực lượng kiểm tra đến trước khi rừng bị phá.",
+  "metric": "Điểm là trung bình các năm từ {b0} đến {b1}.",
+  "model": "Mô hình có tên {name} và đã học từ {span} năm dữ liệu công khai. Nó chia rừng thành các ô vuông cạnh {m} mét, gọi là ô, và tính cho từng ô khả năng bị phá trong năm tới.",
+  "open": "Mã nguồn, dữ liệu và benchmark đều mở. Ai làm được mô hình tốt hơn, mô hình đó sẽ thay mô hình của chúng tôi.",
+  "org": "Một sáng kiến của {org}.",
+  "tested": "Để kiểm tra, chúng tôi giấu một năm khỏi mô hình và yêu cầu nó dự báo. Năm {y}, cứ {of} nơi nó chỉ ra thì {hit} nơi đã bị phá."
+ },
+ "about_": "khoảng {x} km²",
+ "act": {
+  "against": "so với {x}",
+  "axis": "km² bị phá mỗi sáu tháng",
+  "band": "Kiểm tra, xử phạt",
+  "bandSub": "Biên bản và lệnh đình chỉ của IBAMA",
+  "bandSubN": "Biên bản và lệnh đình chỉ của IBAMA, {n} đô thị",
+  "held": "nhiều hơn, nếu mức kiểm tra giữ như {ref}",
+  "honest": "Đây là mức tối thiểu và một mối tương quan, không phải bằng chứng về nguyên nhân.",
+  "measured": "đo được",
+  "none": "Việc kiểm tra không giúp tránh được diện tích phá rừng nào ở đây từ {since}",
+  "parts": [
+   "một phần tư",
+   "một phần ba",
+   "một nửa",
+   "hai phần ba",
+   "ba phần tư"
+  ],
+  "ref": "trung bình từ {from} đến {to}",
+  "say": {
+   "all": "Việc kiểm tra giúp tránh {km} km² rừng bị phá từ {since}",
+   "here": "Việc kiểm tra giúp tránh {km} km² rừng bị phá ở đây từ {since}"
+  },
+  "sign": {
+   "collective": "Đình chỉ tập thể",
+   "field": "Đình chỉ tại hiện trường",
+   "notices": "Biên bản trên 100 km²",
+   "remote": "Đình chỉ từ xa"
+  },
+  "signTitle": {
+   "collective": "Cả vùng đất bản địa và các khu đất công khác bị đình chỉ cùng lúc",
+   "field": "Diện tích bị đình chỉ trong một chuyến kiểm tra hiện trường",
+   "notices": "Số biên bản vi phạm trên 100 km² rừng bị phá",
+   "remote": "Diện tích bị đình chỉ qua vệ tinh, không cần đến nơi"
+  },
+  "signs": "Hoạt động của IBAMA, một năm tính đến {now} so với một năm tính đến {ref}",
+  "sub": "Khoảng {part} mức giảm từ đó đến nay. Phần còn lại giảm đồng loạt ở mọi nơi.",
+  "subHere": "Bằng {pct}% so với diện tích đã bị phá ở đây.",
+  "tipHeld": "{held} nếu mức kiểm tra giữ nguyên",
+  "tipHeldRange": "{held} nếu mức kiểm tra giữ nguyên, nhiều khả năng từ {lo} đến {hi}",
+  "tipObs": "{span}, {obs} km² bị phá"
+ },
+ "ahead": "{n} tháng",
+ "amazon": "Amazon",
+ "areaFc": {
+  "every": "Mọi ô ở đây có {p} khả năng mất một hecta trước tháng 7 năm {y}",
+  "upto": "Một ô ở đây có tới {p} khả năng mất một hecta trước tháng 7 năm {y}"
+ },
+ "areaPast": {
+  "everyNo": "Năm {y} các ô ở đây được cho {p}. Không ghi nhận phá rừng.",
+  "everyYes": "Năm {y} các ô ở đây được cho {p}. Ghi nhận phá rừng ở {clr} trên {n} ô.",
+  "uptoNo": "Năm {y} các ô ở đây được cho tới {p}. Không ghi nhận phá rừng.",
+  "uptoYes": "Năm {y} các ô ở đây được cho tới {p}. Ghi nhận phá rừng ở {clr} trên {n} ô."
+ },
+ "axisM": {
+  "clear": "km² bị phá mỗi tháng",
+  "degr": "km² suy thoái mỗi tháng",
+  "fire": "km² bị cháy mỗi tháng",
+  "mine": "km² bị khai mỏ mỗi tháng"
+ },
+ "axisW": {
+  "degr": "km² suy thoái mỗi 12 tháng",
+  "fire": "km² bị cháy mỗi 12 tháng",
+  "mine": "km² bị khai mỏ mỗi 12 tháng"
+ },
+ "axisY": "km² bị phá mỗi năm, từ tháng 8 đến tháng 7",
+ "bars": "Cột",
+ "bench": {
+  "head": [
+   "",
+   "mô hình",
+   "điểm",
+   "",
+   "tác giả",
+   "ngày"
+  ],
+  "ref": "không mô hình",
+  "refName": "năm trước, vùng lân cận",
+  "repo": "GitHub",
+  "submit": "Gửi mô hình"
+ },
+ "burned": {
+  "months": {
+   "all": "{km} km² bị cháy trong ba tháng qua, {prev} cùng kỳ năm trước",
+   "here": "{km} km² bị cháy ở đây trong ba tháng qua, {prev} cùng kỳ năm trước"
+  },
+  "years": {
+   "all": "{km} km² bị cháy trong mười hai tháng qua, {prev} trong mười hai tháng trước đó",
+   "here": "{km} km² bị cháy ở đây trong mười hai tháng qua, {prev} trong mười hai tháng trước đó"
+  }
+ },
+ "byJuly": "đến tháng 7 năm {y}",
+ "cellFc": "{p} khả năng ô này mất một hecta trước tháng 7 năm {y}",
+ "cellFire": "Thuộc {p}% diện tích rừng dễ cháy nhất",
+ "cellFireRest": "Nằm ngoài 5% diện tích rừng dễ cháy nhất",
+ "cellHa": {
+  "clear": "Dự kiến khoảng {ha} hecta rừng bị phá ở đây trong {n} tháng",
+  "degr": "Dự kiến khoảng {ha} hecta rừng suy thoái ở đây trong {n} tháng",
+  "mine": "Dự kiến khoảng {ha} hecta bị khai mỏ ở đây trong {n} tháng"
+ },
+ "cellHaLow": {
+  "clear": "Dự kiến dưới 1 hecta rừng bị phá ở đây trong {n} tháng",
+  "degr": "Dự kiến dưới 1 hecta rừng suy thoái ở đây trong {n} tháng",
+  "mine": "Dự kiến dưới 1 hecta bị khai mỏ ở đây trong {n} tháng"
+ },
+ "cellPast": {
+  "no": "Năm {y} ô này được cho {p}. Không ghi nhận phá rừng ở đó.",
+  "yes": "Năm {y} ô này được cho {p}. Đã ghi nhận phá rừng ở đó."
+ },
+ "cellPlace": "{mun}, {uf}",
+ "cellPlaceIn": "{mun}, {uf}. {land}",
+ "chance": "khả năng",
+ "chanceBy": "Khả năng mỗi ô mất một hecta trước tháng 7 năm {y}",
+ "chanceFor": "Khả năng được cho mỗi ô trong năm {y}",
+ "chanceOut": "khả năng, cho từng ô",
+ "close": "Đóng",
+ "closeList": "Đóng danh sách",
+ "copied": "Đã sao chép",
+ "copy": "Sao chép",
+ "credit": "Ảnh vệ tinh: Esri, Maxar, Earthstar Geographics",
+ "csv": "CSV",
+ "description": "Nơi rừng Amazon sắp bị phá, bị cháy, suy thoái hoặc bị khai mỏ, và sức ép hiện nay lớn đến đâu. Mọi dự báo trước đây đều có thể đối chiếu với điều đã xảy ra.",
+ "enso": [
+  "El Niño",
+  "La Niña",
+  "Thái Bình Dương"
+ ],
+ "ensoLevel": [
+  [
+   "rất mạnh",
+   "mạnh",
+   "vừa",
+   "yếu"
+  ],
+  [
+   "rất mạnh",
+   "mạnh",
+   "vừa",
+   "yếu"
+  ],
+  "trung tính"
+ ],
+ "fc": {
+  "all": "Dự kiến khoảng {km} km² rừng bị phá trước tháng 7 năm {y}",
+  "here": "Dự kiến khoảng {km} km² rừng bị phá ở đây trước tháng 7 năm {y}"
+ },
+ "fcNone": "Hầu như không có rừng bị phá ở đây trước tháng 7 năm {y}",
+ "front": {
+  "back": "Về bản đồ",
+  "chart": "Đưa biểu đồ thời gian ra trước",
+  "map": "Đưa bản đồ ra trước"
+ },
+ "hazard": {
+  "clear": "Phá rừng",
+  "degr": "Suy thoái",
+  "fire": "Cháy",
+  "mine": "Khai mỏ"
+ },
+ "higher": "cao hơn",
+ "home": "Về toàn bộ bản đồ",
+ "kinds": {
+  "mun": "Đô thị",
+  "ti": "Đất bản địa",
+  "uc": "Khu bảo tồn",
+  "uf": "Bang"
+ },
+ "km2": "{x} km²",
+ "land": {
+  "ti": "Đất bản địa",
+  "uc": "khu bảo tồn"
+ },
+ "language": "Ngôn ngữ",
+ "lastSub": {
+  "degr": {
+   "all": "{km} km² rừng suy thoái hoặc bị khai thác gỗ trong mười hai tháng qua.",
+   "here": "{km} km² rừng suy thoái hoặc bị khai thác gỗ ở đây trong mười hai tháng qua."
+  },
+  "mine": {
+   "all": "{km} km² bị khai mỏ trong mười hai tháng qua.",
+   "here": "{km} km² bị khai mỏ ở đây trong mười hai tháng qua."
+  }
+ },
+ "legend": {
+  "clear": "Nguy cơ phá rừng",
+  "degr": "Nguy cơ suy thoái",
+  "fire": "Nơi thường xảy ra cháy",
+  "mine": "Nguy cơ khai mỏ"
+ },
+ "legendNext": {
+  "clear": "Nguy cơ phá rừng, {n} tháng tới",
+  "degr": "Nguy cơ suy thoái, {n} tháng tới",
+  "mine": "Nguy cơ khai mỏ, {n} tháng tới"
+ },
+ "less": "ít km² hơn",
+ "level": [
+  "Yên",
+  "Theo dõi",
+  "Cảnh báo",
+  "Báo động"
+ ],
+ "like": [
+  {
+   "half": "Bằng một nửa Manhattan.",
+   "km": 59,
+   "same": "Bằng diện tích Manhattan.",
+   "third": "Bằng một phần ba Manhattan.",
+   "x10": "Gấp mười lần Manhattan.",
+   "x2": "Gấp đôi Manhattan.",
+   "x3": "Gấp ba lần Manhattan.",
+   "x4": "Gấp bốn lần Manhattan.",
+   "x5": "Gấp năm lần Manhattan."
+  },
+  {
+   "half": "Bằng một nửa Paris.",
+   "km": 105,
+   "same": "Bằng diện tích Paris.",
+   "third": "Bằng một phần ba Paris.",
+   "x10": "Gấp mười lần Paris.",
+   "x2": "Gấp đôi Paris.",
+   "x3": "Gấp ba lần Paris.",
+   "x4": "Gấp bốn lần Paris.",
+   "x5": "Gấp năm lần Paris."
+  },
+  {
+   "half": "Bằng một nửa Vườn quốc gia Cúc Phương.",
+   "km": 222,
+   "same": "Bằng diện tích Vườn quốc gia Cúc Phương.",
+   "third": "Bằng một phần ba Vườn quốc gia Cúc Phương.",
+   "x10": "Gấp mười lần Vườn quốc gia Cúc Phương.",
+   "x2": "Gấp đôi Vườn quốc gia Cúc Phương.",
+   "x3": "Gấp ba lần Vườn quốc gia Cúc Phương.",
+   "x4": "Gấp bốn lần Vườn quốc gia Cúc Phương.",
+   "x5": "Gấp năm lần Vườn quốc gia Cúc Phương."
+  },
+  {
+   "half": "Bằng một nửa đảo Phú Quốc.",
+   "km": 574,
+   "same": "Bằng diện tích đảo Phú Quốc.",
+   "third": "Bằng một phần ba đảo Phú Quốc.",
+   "x10": "Gấp mười lần đảo Phú Quốc.",
+   "x2": "Gấp đôi đảo Phú Quốc.",
+   "x3": "Gấp ba lần đảo Phú Quốc.",
+   "x4": "Gấp bốn lần đảo Phú Quốc.",
+   "x5": "Gấp năm lần đảo Phú Quốc."
+  },
+  {
+   "half": "Bằng một nửa Vườn quốc gia Cát Tiên.",
+   "km": 720,
+   "same": "Bằng diện tích Vườn quốc gia Cát Tiên.",
+   "third": "Bằng một phần ba Vườn quốc gia Cát Tiên.",
+   "x10": "Gấp mười lần Vườn quốc gia Cát Tiên.",
+   "x2": "Gấp đôi Vườn quốc gia Cát Tiên.",
+   "x3": "Gấp ba lần Vườn quốc gia Cát Tiên.",
+   "x4": "Gấp bốn lần Vườn quốc gia Cát Tiên.",
+   "x5": "Gấp năm lần Vườn quốc gia Cát Tiên."
+  },
+  {
+   "half": "Bằng một nửa vịnh Hạ Long.",
+   "km": 1553,
+   "same": "Bằng diện tích vịnh Hạ Long.",
+   "third": "Bằng một phần ba vịnh Hạ Long.",
+   "x10": "Gấp mười lần vịnh Hạ Long.",
+   "x2": "Gấp đôi vịnh Hạ Long.",
+   "x3": "Gấp ba lần vịnh Hạ Long.",
+   "x4": "Gấp bốn lần vịnh Hạ Long.",
+   "x5": "Gấp năm lần vịnh Hạ Long."
+  },
+  {
+   "half": "Bằng một nửa Hà Nội.",
+   "km": 3360,
+   "same": "Bằng diện tích Hà Nội.",
+   "third": "Bằng một phần ba Hà Nội.",
+   "x10": "Gấp mười lần Hà Nội.",
+   "x2": "Gấp đôi Hà Nội.",
+   "x3": "Gấp ba lần Hà Nội.",
+   "x4": "Gấp bốn lần Hà Nội.",
+   "x5": "Gấp năm lần Hà Nội."
+  },
+  {
+   "half": "Bằng một nửa tỉnh Thanh Hóa.",
+   "km": 11115,
+   "same": "Bằng diện tích tỉnh Thanh Hóa.",
+   "third": "Bằng một phần ba tỉnh Thanh Hóa.",
+   "x10": "Gấp mười lần tỉnh Thanh Hóa.",
+   "x2": "Gấp đôi tỉnh Thanh Hóa.",
+   "x3": "Gấp ba lần tỉnh Thanh Hóa.",
+   "x4": "Gấp bốn lần tỉnh Thanh Hóa.",
+   "x5": "Gấp năm lần tỉnh Thanh Hóa."
+  },
+  {
+   "half": "Bằng một nửa tỉnh Nghệ An.",
+   "km": 16487,
+   "same": "Bằng diện tích tỉnh Nghệ An.",
+   "third": "Bằng một phần ba tỉnh Nghệ An.",
+   "x10": "Gấp mười lần tỉnh Nghệ An.",
+   "x2": "Gấp đôi tỉnh Nghệ An.",
+   "x3": "Gấp ba lần tỉnh Nghệ An.",
+   "x4": "Gấp bốn lần tỉnh Nghệ An.",
+   "x5": "Gấp năm lần tỉnh Nghệ An."
+  },
+  {
+   "half": "Bằng một nửa Đài Loan.",
+   "km": 36197,
+   "same": "Bằng diện tích Đài Loan.",
+   "third": "Bằng một phần ba Đài Loan.",
+   "x10": "Gấp mười lần Đài Loan.",
+   "x2": "Gấp đôi Đài Loan.",
+   "x3": "Gấp ba lần Đài Loan.",
+   "x4": "Gấp bốn lần Đài Loan.",
+   "x5": "Gấp năm lần Đài Loan."
+  },
+  {
+   "half": "Bằng một nửa Đồng bằng sông Cửu Long.",
+   "km": 40548,
+   "same": "Bằng diện tích Đồng bằng sông Cửu Long.",
+   "third": "Bằng một phần ba Đồng bằng sông Cửu Long.",
+   "x10": "Gấp mười lần Đồng bằng sông Cửu Long.",
+   "x2": "Gấp đôi Đồng bằng sông Cửu Long.",
+   "x3": "Gấp ba lần Đồng bằng sông Cửu Long.",
+   "x4": "Gấp bốn lần Đồng bằng sông Cửu Long.",
+   "x5": "Gấp năm lần Đồng bằng sông Cửu Long."
+  },
+  {
+   "half": "Bằng một nửa Tây Nguyên.",
+   "km": 54475,
+   "same": "Bằng diện tích Tây Nguyên.",
+   "third": "Bằng một phần ba Tây Nguyên.",
+   "x10": "Gấp mười lần Tây Nguyên.",
+   "x2": "Gấp đôi Tây Nguyên.",
+   "x3": "Gấp ba lần Tây Nguyên.",
+   "x4": "Gấp bốn lần Tây Nguyên.",
+   "x5": "Gấp năm lần Tây Nguyên."
+  },
+  {
+   "half": "Bằng một nửa Hàn Quốc.",
+   "km": 100400,
+   "same": "Bằng diện tích Hàn Quốc.",
+   "third": "Bằng một phần ba Hàn Quốc.",
+   "x10": "Gấp mười lần Hàn Quốc.",
+   "x2": "Gấp đôi Hàn Quốc.",
+   "x3": "Gấp ba lần Hàn Quốc.",
+   "x4": "Gấp bốn lần Hàn Quốc.",
+   "x5": "Gấp năm lần Hàn Quốc."
+  }
+ ],
+ "line": "Đường",
+ "lower": "thấp hơn",
+ "made": "lập ngày {date}",
+ "many": {
+  "mun": "đô thị",
+  "ti": "vùng đất bản địa",
+  "uc": "khu bảo tồn",
+  "uf": "bang"
+ },
+ "mapped": "phá rừng đã ghi nhận",
+ "menu": "Trình đơn",
+ "mfc": {
+  "clear": {
+   "all": "Dự kiến khoảng {km} km² rừng bị phá trong {h} tháng tới",
+   "here": "Dự kiến khoảng {km} km² rừng bị phá ở đây trong {h} tháng tới"
+  },
+  "degr": {
+   "all": "Dự kiến khoảng {km} km² rừng suy thoái trong {h} tháng tới",
+   "here": "Dự kiến khoảng {km} km² rừng suy thoái ở đây trong {h} tháng tới"
+  },
+  "mine": {
+   "all": "Dự kiến khoảng {km} km² bị khai mỏ trong {h} tháng tới",
+   "here": "Dự kiến khoảng {km} km² bị khai mỏ ở đây trong {h} tháng tới"
+  }
+ },
+ "mobs": {
+  "clear": {
+   "all": "{km} km² bị phá trong ba tháng qua",
+   "here": "{km} km² bị phá ở đây trong ba tháng qua"
+  },
+  "degr": {
+   "all": "{km} km² suy thoái trong ba tháng qua",
+   "here": "{km} km² suy thoái ở đây trong ba tháng qua"
+  },
+  "fire": {
+   "all": "{km} km² bị cháy trong ba tháng qua",
+   "here": "{km} km² bị cháy ở đây trong ba tháng qua"
+  },
+  "mine": {
+   "all": "{km} km² bị khai mỏ trong ba tháng qua",
+   "here": "{km} km² bị khai mỏ ở đây trong ba tháng qua"
+  }
+ },
+ "modes": {
+  "cells": "Ô lưới",
+  "prio": "Ưu tiên",
+  "sectors": "Khu vực"
+ },
+ "more": "nhiều km² hơn",
+ "next": "{n} tháng tới",
+ "nextYear": "Năm sau",
+ "now": "hiện nay",
+ "numSources": [
+  "không",
+  "một",
+  "hai",
+  "ba",
+  "bốn",
+  "năm",
+  "sáu",
+  "bảy",
+  "tám",
+  "chín",
+  "mười",
+  "mười một",
+  "mười hai"
+ ],
+ "onlyFrom": "Chọn một bậc để chỉ hiện các ô có khả năng từ mức đó trở lên",
+ "pShareMin": "<b>{n}</b> ô từ {cut} trở lên, chiếm {share}% mức mất rừng dự kiến",
+ "pSharePastMin": "<b>{n}</b> ô từ {cut} trở lên, chiếm {share}% số ô đã ghi nhận phá rừng",
+ "partial": " Hiện mới chỉ có các cảnh ưu tiên.",
+ "past": "Năm {y}, {act} km² đã bị phá",
+ "pastHere": "Năm {y}, {act} km² đã bị phá ở đây",
+ "pastHereNone": "Năm {y} không ghi nhận phá rừng ở đây",
+ "pastP": "Năm {y}, {exp} ô được dự báo sẽ mất một hecta và {act} ô đã mất",
+ "people": {
+  "also": "Cũng sống trên vùng đất này",
+  "credit": "Ảnh: {author}, {license}"
+ },
+ "prevYear": "Năm trước",
+ "range": "nhiều khả năng từ {lo} đến {hi}",
+ "rank": {
+  "one": "thứ {n}",
+  "other": "thứ {n}"
+ },
+ "rankSay": "{kind} theo {what}",
+ "rankWhat": {
+  "fc": "diện tích phá rừng dự kiến đến tháng 7 năm {y}",
+  "fire": "tỷ lệ nơi thường xảy ra cháy",
+  "past": "diện tích phá rừng dự kiến cho năm {y}",
+  "risk": "tỷ lệ trên bản đồ nguy cơ"
+ },
+ "ranking": "Xếp hạng",
+ "replay": "Dự báo cũ",
+ "risk": {
+  "degr": "nguy cơ suy thoái",
+  "mine": "nguy cơ khai mỏ"
+ },
+ "scale": {
+  "actions": "Hành động",
+  "months": "Tháng",
+  "years": "Năm"
+ },
+ "sign": {
+  "autos": "Phạt của IBAMA",
+  "clear": "Phá rừng",
+  "degr": "Suy thoái",
+  "mine": "Khai mỏ",
+  "scar": "Cháy"
+ },
+ "signTitle": "{now} trong ba tháng qua, {prev} cùng kỳ năm trước",
+ "signs": "Tín hiệu, ba tháng so với năm trước",
+ "skip": "Bỏ qua",
+ "st": {
+  "ahead": {
+   "flat": "Đến {month}, mô hình dự kiến {km} km² rừng bị phá.",
+   "rise": "Phá rừng tăng {pct}% trong ba tháng qua. Mô hình dự kiến {km} km² đến {month}."
+  },
+  "back": "Quay lại",
+  "done": "Xong",
+  "first": "{n} nơi này cần được kiểm tra trước. Mô hình dự kiến phá rừng nhiều nhất ở đó.",
+  "forestA": "Đây là rừng Amazon.",
+  "forestB": "Chúng tôi chia rừng thành các ô vuông cạnh {m} mét. Tổng cộng {cells} triệu ô.",
+  "lossA": "Mỗi năm, một phần rừng bị phá.",
+  "lossB": "Từ năm {y}, Amazon đã mất {k} nghìn km² rừng.",
+  "lossBMore": "Từ năm {y}, Amazon đã mất {k} nghìn km² rừng, lớn hơn diện tích Hàn Quốc.",
+  "model": "Chúng tôi huấn luyện một mô hình để tính khả năng mỗi ô bị phá trong năm tới.",
+  "moreKm": 100400,
+  "next": "Tiếp",
+  "open": "Mã nguồn và benchmark đều mở. Ai làm được mô hình tốt hơn, nó sẽ thay mô hình của chúng tôi.",
+  "proof": "Chúng tôi giấu năm {y} khỏi mô hình và yêu cầu dự báo. Cứ {of} nơi nó chỉ ra thì {hit} nơi đã bị phá.",
+  "sectors": "Trong Khu vực, dự báo được cộng theo bang, đô thị, đất bản địa hoặc khu bảo tồn.",
+  "sources": "Mô hình học từ {n} nguồn công khai, từ ảnh vệ tinh đến giấy phép phá rừng.",
+  "use": "Di con trỏ trên bản đồ để xem khả năng của từng ô. Nhấp để phóng to.",
+  "useTouch": "Chạm vào bản đồ để xem khả năng của từng ô."
+ },
+ "stepHi": "trên {c}",
+ "stepLo": "dưới {c}",
+ "stepMid": "{a} đến {b}",
+ "story": "Câu chuyện",
+ "tag": {
+  "ti": "TI",
+  "uc": "UC"
+ },
+ "tiny": "dưới 0,1",
+ "tipFc": "dự kiến khoảng {exp} km²",
+ "tipPast": "dự kiến {exp} km², đã phá {act}",
+ "tipRank": "{rank} trên {n}",
+ "title": "Prenúncio, cảnh báo sớm cho rừng Amazon",
+ "to": "{a} đến {b}",
+ "under": "dưới {c}",
+ "where": {
+  "degr": "Nơi rừng dễ suy thoái hoặc bị khai thác gỗ nhất từ nay đến {end}",
+  "mine": "Nơi khai mỏ dễ lan rộng nhất từ nay đến {end}"
+ },
+ "whereHere": "Xếp {rank} trên {n} {many} về {risk} đến {end}",
+ "whole": "Toàn bộ Amazon",
+ "why": {
+  "around": "{km} km² bị phá quanh đó trong ba năm qua.",
+  "degr": "{km} km² rừng suy thoái trong năm qua.",
+  "fire": "{km} km² rừng bị cháy trong năm qua.",
+  "land": {
+   "ti": "Nằm trong một vùng đất bản địa.",
+   "uc": "Nằm trong một khu bảo tồn."
+  },
+  "near": "Gần nơi mới bị phá rừng.",
+  "permit": "Có giấy phép phá {ha} hecta."
+ },
+ "window": "dự báo",
+ "zoomIn": "Phóng to",
+ "zoomOut": "Thu nhỏ"
+}

@@ -1,6 +1,6 @@
 # Translating Prenúncio
 
-One file per language, `<code>.json`. `en.json` is the reference: every other file has exactly its keys. A key a file lacks is shown in English, and the test fails on it.
+One file per language, `<code>.json`, sixteen of them: en, pt, es, zh, hi, ar, fr, ru, de, ja, id, bn, tr, ko, it and vi. `en.json` is the reference: every other file has exactly its keys. A key a file lacks is shown in English, and the test fails on it.
 
 ## Tone
 
@@ -30,3 +30,7 @@ Plain and short. One sentence per idea, present tense, no adjectives, no exclama
 - `sign.*`, `signs`, `signTitle`, `enso*`: the small traces under the timeline.
 - `people.*`: the credit under a photograph of an Indigenous people (author and licence are a licence condition) and the heading of the other peoples of the same land.
 - `front.*`, `menu`, `home`, `closeList`, `language`, `prevYear`, `nextYear`, `onlyFrom`, `bars`, `line`: labels read by screen readers and shown on hover.
+
+## What is not in these files
+
+Every word a reader sees is in the language's file here, or in content written for that language: the diagram's labels in `content/inputs/<code>.json` and the peoples' lines and captions in `content/peoples_i18n/<code>.json` (the pipeline writes `web/data/peoples/<code>.json`, with English standing in, marked, where a translation is missing). `title` and `description` are the tab's name and the page's description. Names are not translated: Prenúncio, the model's name, GitHub, people, organisations, agencies, data sets, licence codes, places and peoples. The test opens the page in Japanese and fails on any other run of four Latin letters. The one exception is the API's instructions (`api/v1/llms.txt`), a file written for agents and shown as it is.

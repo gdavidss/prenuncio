@@ -138,6 +138,7 @@
  "copy": "Copia",
  "credit": "Immagini: Esri, Maxar, Earthstar Geographics",
  "csv": "CSV",
+ "description": "Dove la foresta amazzonica sarà disboscata, bruciata, degradata o scavata dalle miniere, e quanto è forte la pressione adesso. Ogni previsione passata si può confrontare con ciò che è accaduto.",
  "enso": [
   "El Niño",
   "La Niña",
@@ -514,6 +515,7 @@
  "tipFc": "circa {exp} km² attesi",
  "tipPast": "{exp} km² attesi, {act} disboscati",
  "tipRank": "{rank} su {n}",
+ "title": "Prenúncio, un allarme precoce per l'Amazzonia",
  "to": "{a}-{b}",
  "under": "meno di {c}",
  "where": {
@@ -533,5 +535,7 @@
   "near": "Vicino a disboscamento recente.",
   "permit": "Ha un permesso per disboscare {ha} ettari."
  },
- "window": "previsione"
+ "window": "previsione",
+ "zoomIn": "Ingrandisci",
+ "zoomOut": "Riduci"
 }

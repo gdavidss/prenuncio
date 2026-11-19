@@ -1,0 +1,595 @@
+{
+ "mebengokre": {
+  "text": "Les Mẽbêngôkre, plus connus sous le nom de Kayapó, vivent dans des villages le long des rivières Iriri, Bacajá et Fresco, affluents du Xingu, au Pará et au Mato Grosso. Ils sont 9 762 personnes (Siasi/Sesai, 2014) et parlent une langue de la famille jê. Leur territoire est presque aussi grand que l'Autriche, et la forêt en couvre la plus grande partie.",
+  "caption": "Femmes Kayapó lors d'une rencontre nationale de peuples autochtones, 2021."
+ },
+ "kawaiwete": {
+  "text": "Les Kawaiwete, aussi appelés Kaiabi, sont 2 734 personnes (Siasi/Sesai, 2020) au Mato Grosso et parlent une langue tupi-guarani. À partir des années 1950, leurs terres sur les rivières Arinos, dos Peixes et Teles Pires sont devenues des fermes, et la plupart d'entre eux ont été transférés vers le Xingu. Ce sont des agriculteurs qui cultivent une très grande diversité de plantes et tressent des tamis en arumã aux motifs complexes.",
+  "caption": "La leader Luciene Kayabi prend la parole lors d'une audience du Sénat sur l'exploitation minière en terres autochtones, à Brasilia, mars 2026."
+ },
+ "yudja": {
+  "text": "Les Yudja, aussi connus sous le nom de Juruna, sont un peuple du fleuve Xingu qui chasse et voyage en pirogue. Une partie vit dans le nord du Territoire Indigène du Xingu, au Mato Grosso, où ils sont 950 personnes (Siasi/Sesai, 2020), et une partie sur le moyen Xingu, près d'Altamira, au Pará. Ils parlent une langue de la famille juruna et disent qu'ils portent ce nom parce qu'ils ont été créés sur ce fleuve.",
+  "caption": "Jardel Juruna, leader du village São Francisco, regarde le fleuve Xingu, 2020."
+ },
+ "wauja": {
+  "text": "Les Wauja vivent dans le Territoire Indigène du Xingu, au Mato Grosso. Ils sont 672 personnes (Siasi/Sesai, 2020) et parlent une langue arawak. Ils sont connus pour leur céramique, pour les motifs de leurs paniers et pour leurs masques rituels.",
+  "caption": "Tombée du jour sur le fleuve Xingu, dans le Parc Indigène du Xingu, Mato Grosso, 2016."
+ },
+ "kisedje": {
+  "text": "Les Kĩsêdjê sont le seul peuple de langue jê du Territoire Indigène du Xingu, au Mato Grosso, et comptent 536 personnes (Siasi/Sesai, 2020). Ils ont adopté de nombreuses coutumes de leurs voisins du Haut Xingu sans renoncer à ce qui les distingue. Leur emblème est un style de chant rituel qui leur est propre, et chanter et écouter sont au centre de leur vie.",
+  "caption": "Réunion dans un village Kĩsêdjê, dans le Xingu, Mato Grosso, mars 2025."
+ },
+ "trumai": {
+  "text": "Les Trumai vivent dans la partie centrale du Territoire Indigène du Xingu, au Mato Grosso, et sont 260 personnes (Siasi/Sesai, 2020). Ils ont été le dernier peuple à arriver dans la région des sources du Xingu, dans la première moitié du XIXe siècle. Leur langue, le trumai, forme une famille à elle seule.",
+  "caption": "Tombée du jour sur le fleuve Xingu, dans le Parc Indigène du Xingu, Mato Grosso, 2016."
+ },
+ "yawalapiti": {
+  "text": "Les Yawalapiti vivent dans le sud du Territoire Indigène du Xingu, le Haut Xingu, au Mato Grosso. Ils sont 309 personnes (Siasi/Sesai, 2020) et parlent une langue arawak. Avec des voisins qui parlent d'autres langues, ils partagent un mode de vie lié par des échanges, des mariages et des cérémonies entre villages.",
+  "caption": "Anna Terra Yawalapiti, leader du Xingu, face à la police pendant l'Acampamento Terra Livre, à Brasilia, 2019."
+ },
+ "mehinako": {
+  "text": "Les Mehinako vivent dans le Haut Xingu, à l'intérieur du Territoire Indigène du Xingu, au Mato Grosso. Ils sont 341 personnes (Siasi/Sesai, 2020) et parlent une langue arawak. Ils participent aux échanges, aux rituels et aux mariages entre les peuples de la région, mais se considèrent avant tout comme Mehinako.",
+  "caption": "Alawero Mehinako à la 2e Marche des femmes autochtones, à Brasilia, septembre 2021."
+ },
+ "aweti": {
+  "text": "Les Aweti vivent au centre du Haut Xingu, au Mato Grosso, et parlent une langue tupi. Ils sont 221 personnes (Siasi/Sesai, 2020). Dans les premières décennies du XXe siècle, ils ont presque disparu en tant que peuple, et avec le rétablissement de leur population ils ont repris une grande partie de leur vie culturelle.",
+  "caption": "Tombée du jour sur le fleuve Xingu, dans le Parc Indigène du Xingu, Mato Grosso, 2016."
+ },
+ "ikpeng": {
+  "text": "Les Ikpeng vivent dans le Territoire Indigène du Xingu, au Mato Grosso. Ils sont 584 personnes (Siasi/Sesai, 2020) et parlent une langue caribe. Le contact avec les non-autochtones, au début des années 1960, a réduit leur population à moins de la moitié, par les maladies et les armes à feu, et ils ont ensuite été transférés vers le Xingu.",
+  "caption": "Tombée du jour sur le fleuve Xingu, dans le Parc Indigène du Xingu, Mato Grosso, 2016."
+ },
+ "matipu": {
+  "text": "Les Matipu vivent dans le sud du Territoire Indigène du Xingu, au Mato Grosso. Ils sont 189 personnes (Siasi/Sesai, 2020) et parlent une langue caribe. Ils ont des liens étroits de mariage et de commerce avec les Kalapalo, les Kuikuro et les Nahukwá, qui parlent des langues de la même famille.",
+  "caption": "Tombée du jour sur le fleuve Xingu, dans le Parc Indigène du Xingu, Mato Grosso, 2016."
+ },
+ "kuikuro": {
+  "text": "Les Kuikuro sont aujourd'hui le peuple le plus nombreux du Haut Xingu, au Mato Grosso, avec 802 personnes (Siasi/Sesai, 2020). Ils parlent une langue caribe. Ils fabriquent les colliers et les ceintures en coquille d'escargot qui circulent dans les échanges et les paiements entre les peuples de la région.",
+  "caption": "Hommes Kuikuro à la clôture des Jeux des peuples autochtones, à Olinda, 2007."
+ },
+ "nahukwa": {
+  "text": "Les Nahukwá sont le plus petit des peuples du Haut Xingu, au Mato Grosso, avec 169 personnes (Siasi/Sesai, 2020). Ils parlent une langue caribe. Ils sont liés à leurs voisins par des échanges, des rituels et des mariages entre villages.",
+  "caption": "Tombée du jour sur le fleuve Xingu, dans le Parc Indigène du Xingu, Mato Grosso, 2016."
+ },
+ "tapayuna": {
+  "text": "Les Kajkwakratxi, ou Tapayuna, vivaient dans la région de la rivière Arinos, au Mato Grosso, et parlent une langue jê. Dans les années 1970, ils ont été empoisonnés avec de la viande de tapir offerte par des envahisseurs, et les 41 survivants ont été emmenés vers le Xingu. Ils sont aujourd'hui 432 personnes (Amigos da Terra, 2024), une partie dans le Territoire Indigène du Xingu et une partie avec les Mẽbêngôkre dans la Terre Indigène Capoto-Jarina.",
+  "caption": "Des Tapayuna des Terres Indigènes Capoto/Jarina et Wawi reçus par la Defensoria Pública da União pendant la COP30, à Belém, novembre 2025."
+ },
+ "kamaiura": {
+  "text": "Les Kamaiurá vivent dans le Haut Xingu, au Mato Grosso. Ils sont 710 personnes (Siasi/Sesai, 2020) et parlent une langue tupi-guarani. Les grands rituels qui réunissent les peuples de la région sont connus sous les noms qu'ils portent en langue kamaiurá, comme le Kwarup et le Jawari.",
+  "caption": "Danse devant les troncs lors de la fête du Kuarup, village Kamaiurá, Haut Xingu, 2004."
+ },
+ "kalapalo": {
+  "text": "Les Kalapalo vivent dans le Haut Xingu, au Mato Grosso. Ils sont 855 personnes (Siasi/Sesai, 2020) et parlent une langue caribe. À la saison sèche, de mai à septembre, la nourriture est abondante et c'est le temps des rituels avec de la musique et des invités d'autres villages. Ils participent activement à la surveillance des limites du territoire contre l'invasion des éleveurs voisins.",
+  "caption": "Deux hommes Kalapalo dans une pirogue, 2008."
+ },
+ "nambikwara": {
+  "text": "Les Nambikwara vivent dans de petits villages aux sources des rivières Juruena et Guaporé, au Mato Grosso et au Rondônia, aussi bien dans la savane que dans la forêt. Ils sont 2 332 personnes (Siasi/Sesai, 2014), en plusieurs groupes, et leurs langues forment une famille à elles seules. En 1992, il y avait 8 000 orpailleurs à l'intérieur de la Terre Indigène Sararé.",
+  "caption": "Des leaders Nambikwara, Manoki et Paresí avec la présidente de la Funai, à Brasilia, juillet 2024."
+ },
+ "cinta-larga": {
+  "text": "Les Cinta Larga vivent près de la limite entre le Rondônia et le Mato Grosso. Ils sont 1 954 personnes (Siasi/Sesai, 2014) et parlent une langue de la famille mondé, du tronc tupi. La chasse est leur activité centrale et elle est partagée lors de grandes fêtes. Cet équilibre est ébranlé par l'entrée d'orpailleurs sur leurs terres.",
+  "caption": "Janinha Cinta Larga à la 2e Marche des femmes autochtones, à Brasilia, septembre 2021."
+ },
+ "xikrin": {
+  "text": "Les Xikrin sont un peuple de langue mẽbêngôkre, de la famille jê, et vivent dans les Terres Indigènes Cateté et Trincheira Bacajá, au Pará. Ils sont 2 267 personnes (Siasi/Sesai, 2020). Ils accordent une grande valeur au fait d'écouter et de bien parler, et les discours sont prononcés au centre du village. La zone du Cateté est riche en acajou et en noyers du Brésil.",
+  "caption": "Des représentants du peuple Xikrin en audience avec la présidente du Tribunal suprême fédéral, à Brasilia, avril 2023."
+ },
+ "tembe": {
+  "text": "Les Tembé vivent au Pará et au Maranhão, sont 2 096 personnes (Siasi/Sesai, 2020) et parlent une langue tupi-guarani. Ils s'appellent eux-mêmes Tenetehara. Ils sont contraints de cohabiter avec des centaines de familles d'occupants sans titre sur leurs terres et avec l'activité irrégulière d'exploitants forestiers et d'éleveurs, et ils luttent pour l'évacuation de leur territoire.",
+  "caption": "Puyr Tembé parmi des femmes autochtones pendant l'occupation du Secrétariat spécial à la santé autochtone, lors de la 1re Marche des femmes autochtones, à Brasilia, août 2019."
+ },
+ "timbira": {
+  "text": "Timbira est le nom d'un ensemble de peuples de langue jê, parmi lesquels les Apinayé, les Canela, les Gavião, les Krahô et les Krikati. Certaines familles timbira, comme les Krenyê, vivent aujourd'hui parmi les Tembé et les Guajajara, et c'est le cas dans la Terre Indigène Alto Rio Guamá, au Pará."
+ },
+ "yanomami": {
+  "text": "Les Yanomami vivent dans la forêt entre l'Amazonas et le Roraima, et aussi au Venezuela. Au Brésil, ils sont 30 390 personnes (Dsei Yanomami, 2023) et leurs langues forment une famille à elles seules. Pour eux la forêt, urihi, est un être vivant, et non un espace à exploiter. Entre 1987 et 1990, environ 30 000 à 40 000 orpailleurs sont entrés sur leurs terres au Roraima, et il y a encore aujourd'hui des sites d'orpaillage à l'intérieur de celles-ci.",
+  "caption": "Homme Yanomami, 2008."
+ },
+ "arara": {
+  "text": "Les Arara vivent sur le moyen Xingu et sur la rivière Iriri, au Pará. Ils sont 377 personnes (Siasi/Sesai, 2014) et parlent une langue caribe. Au début des années 1970, la route Transamazonienne a coupé leurs jardins, leurs sentiers et leurs campements de chasse. L'un des groupes n'a été contacté qu'en 1987 et vit dans la Terre Indigène Cachoeira Seca."
+ },
+ "isolados": {
+  "text": "Les peuples isolés sont des peuples autochtones qui ont décidé de vivre à l'écart de tous les autres groupes, souvent après avoir subi des violences, des maladies et des massacres. Des contacts forcés ont déjà tué des peuples entiers par des épidémies, et c'est pourquoi la politique du Brésil depuis 1987 est de ne pas établir de contact et de protéger leurs territoires contre les envahisseurs."
+ },
+ "apiaka": {
+  "text": "Les Apiaká vivent au Mato Grosso et au Pará, sont 1 050 personnes (Siasi/Sesai, 2020) et parlent une langue tupi-guarani. Au milieu du XXe siècle, deux ethnologues les ont déclarés éteints, mais ils n'ont jamais cessé de se voir comme un peuple. Une chaîne de montagnes, deux rivières et une commune du nord du Mato Grosso portent leur nom.",
+  "caption": "Un leader Apiaká devant un barrage de police lors de la marche du Sommet des peuples, à Rio de Janeiro, juin 2012."
+ },
+ "parakana": {
+  "text": "Les Parakanã vivent au Pará, sur des terres des bassins du Tocantins et du Xingu, parmi lesquelles la Terre Indigène Apyterewa. Ils sont 2 042 personnes (Siasi/Sesai, 2020) et parlent une langue tupi-guarani. Ils s'appellent eux-mêmes awaeté, les vraies personnes. C'est un peuple de terre ferme, chasseur de mammifères terrestres, contacté entre 1971 et 1984, à partir de la construction de la Transamazonienne.",
+  "caption": "Un Parakanã dédicace le livre bilingue de récits traditionnels de son peuple, au Pará, octobre 2025."
+ },
+ "munduruku": {
+  "text": "Les Munduruku vivent dans la vallée du Tapajós, au Pará et dans l'Amazonas. Ils sont 17 997 personnes (Siasi/Sesai, 2020) et leur langue donne son nom à la famille munduruku. Au XIXe siècle, la région était connue sous le nom de Mundurukânia. Ils luttent aujourd'hui pour garder leur territoire entier face à l'orpaillage illégal et à des projets de barrages hydroélectriques et d'une voie navigable sur le Tapajós.",
+  "caption": "Hommes Munduruku à Brasilia, 2013, lorsqu'environ 140 Munduruku sont allés discuter avec le gouvernement de la suspension de chantiers énergétiques en Amazonie."
+ },
+ "wari": {
+  "text": "Les Wari' vivent au Rondônia, dans la région de Guajará-Mirim. Ils sont 4 461 personnes (Siasi/Sesai, 2020) et parlent une langue de la famille txapakura. Wari' veut dire gens, nous, et c'est ainsi qu'ils préfèrent être appelés, plutôt que Pakaa Nova. Traditionnellement, ils choisissaient l'emplacement des villages selon la terre noire, bonne pour planter le maïs."
+ },
+ "kaapor": {
+  "text": "Les Ka'apor vivent au Maranhão, sont 1 914 personnes (Siasi/Sesai, 2020) et parlent une langue tupi-guarani. Ils sont arrivés au Maranhão vers 1870, après une longue migration venue du Pará par la rivière Gurupi. Leurs coiffes de plumes colorées impressionnaient déjà ceux qui les voyaient vers 1900. Des invasions récentes de leur terre ont de nouveau mis en danger leur survie en tant que peuple.",
+  "caption": "Des leaders Ka'apor en réunion au Secrétariat à la santé autochtone, à Brasilia, février 2018."
+ },
+ "apyawa": {
+  "text": "Les Apyãwa, connus sous le nom de Tapirapé, vivent dans la région de la serra do Urubu Branco, au Mato Grosso, et aussi au Tocantins. Ils sont 917 personnes (Siasi/Sesai, 2020) et parlent une langue tupi-guarani. Leur territoire a été occupé par des fermes d'élevage bovin et ce n'est que dans les années 1990 que deux de leurs terres ont été reconnues. Dans la Terre Indigène Urubu Branco, ils font encore face à des invasions d'éleveurs et d'orpailleurs."
+ },
+ "paiter-surui": {
+  "text": "Les Paiter Suruí vivent au Rondônia et au Mato Grosso. Ils sont 1 375 personnes (Siasi/Sesai, 2014) et parlent une langue de la famille mondé. Le contact officiel a eu lieu en 1969, et depuis leur territoire est menacé par des colons, des entreprises forestières et des compagnies minières. Leur vie s'organise en deux moitiés qui alternent entre le village et la forêt, le jardin et la chasse, le travail et la fête.",
+  "caption": "Txai Suruí, militante Paiter Suruí, prend la parole au Web Summit Rio, à Rio de Janeiro, mai 2023."
+ },
+ "satere-mawe": {
+  "text": "Les Sateré-Mawé vivent dans l'Amazonas et sont 16 312 personnes (Siasi/Sesai, 2020). Leur langue appartient à la famille mawé. Ce sont eux qui ont domestiqué le guaraná, une liane sauvage, et créé la manière de transformer cette plante aujourd'hui consommée dans le monde entier.",
+  "caption": "Femmes Sateré-Mawé avec Joenia Wapichana à la 1re Marche des femmes autochtones, à Brasilia, août 2019."
+ },
+ "uru-eu-wau-wau": {
+  "text": "Les Jupaú, connus sous le nom d'Uru-Eu-Wau-Wau, vivent au Rondônia. Ils sont 127 personnes (Siasi/Sesai, 2020) et parlent une langue tupi-guarani. Dans les années 1970, le front de colonisation a avancé sur leurs terres, et les conflits avec les envahisseurs ont continué au moins jusqu'en 1985, même après le contact avec la Funai.",
+  "caption": "Familles Jupaú avec des aliments de leur production dans le village Jamari, Terre Indigène Uru-Eu-Wau-Wau, Rondônia, juin 2026."
+ },
+ "xavante": {
+  "text": "Les Xavante, qui s'appellent eux-mêmes A'uwẽ, les gens, vivent dans l'est du Mato Grosso. Ils sont 22 256 personnes (Siasi/Sesai, 2020) et parlent une langue jê. Des éleveurs ont défriché de vastes étendues de savane autour d'eux pour le riz, le soja et le bétail. Depuis la fin des années 1970, ils luttent pour récupérer des terres ancestrales, comme Marãiwatsédé.",
+  "caption": "Des Xavante à Brasilia, 2007, demandant la réouverture du poste de la Funai à Xavantina, Mato Grosso."
+ },
+ "arawete": {
+  "text": "Les Araweté vivent au Pará, sont 568 personnes (Siasi/Sesai, 2020) et parlent une langue tupi-guarani. Ce sont des chasseurs et des agriculteurs de la forêt de terre ferme. Ils disent vivre aujourd'hui au bord de la terre, après des fuites successives devant des ennemis plus forts.",
+  "caption": "Maisons et habitants d'un village Araweté, 2005."
+ },
+ "asurini-do-xingu": {
+  "text": "Les Asurini du Xingu vivent au Pará, sont 219 personnes (Siasi/Sesai, 2020) et parlent une langue tupi-guarani. Après le contact, en 1971, ils ont perdu une grande partie de leur population. Ils maintiennent de longs rituels, le chamanisme et un art graphique élaboré.",
+  "caption": "Timei Assurini reçoit une peinture corporelle de sa mère, 2020."
+ },
+ "zoro": {
+  "text": "Les Zoró vivent dans le nord-ouest du Mato Grosso et dans le sud du Rondônia. Ils sont 787 personnes (Siasi/Sesai, 2020) et parlent une langue de la famille mondé. Ils ont été contactés en 1977, et un an plus tard leur population avait diminué de moitié. Le retrait des envahisseurs dans les années 1990 n'a pas mis fin au vol de bois, et leur association, l'APIZ, agit pour la protection de la terre.",
+  "caption": "Homme Zoró pendant une fête à Rondolândia, Mato Grosso."
+ },
+ "awa-guaja": {
+  "text": "Les Awa Guajá vivent dans les derniers refuges de forêt amazonienne du Maranhão. Ils sont 520 personnes (Siasi/Sesai, 2020) et parlent une langue tupi-guarani. La plupart vivent dans des villages, mais il y a des groupes en isolement volontaire dans les Terres Indigènes Awá, Caru et Araribóia. Leur territoire a été coupé par la route BR-222 dans les années 1960 et par le chemin de fer de Carajás dans les années 1980."
+ },
+ "bare": {
+  "text": "Les Baré vivent le long de la rivière Xié et du haut rio Negro, dans l'Amazonas, où beaucoup ont été emmenés de force. Ils sont 11 472 personnes au Brésil (Siasi/Sesai, 2014). D'origine arawak, ils parlent aujourd'hui le nheengatu, langue véhiculaire diffusée par les missionnaires à l'époque coloniale. Leur histoire est marquée par la violence et par le travail forcé dans l'extractivisme.",
+  "caption": "Mariazinha Baré, présidente d'une coordination d'organisations autochtones de l'Amazonas, en réunion à la Defensoria Pública da União, à Brasilia, juin 2026."
+ },
+ "arapaso": {
+  "text": "Les Arapaso vivent sur le moyen Uaupés, dans le haut rio Negro, Amazonas. Ils sont 448 personnes (Siasi/Sesai, 2014), de la famille tukano orientale. D'anciens conflits les ont conduits à perdre leur langue d'origine, et ils parlent aujourd'hui le tukano, la langue de la plupart de leurs épouses et de leurs beaux-frères.",
+  "caption": "Rosimere Teles Arapaso, du Réseau des femmes autochtones de l'État d'Amazonas, lors d'une manifestation à Brasilia, avril 2018."
+ },
+ "karapana": {
+  "text": "Les Karapanã sont l'un des peuples de langue tukano orientale du bassin de la rivière Uaupés, dans le nord-ouest de l'Amazonas, et vivent aussi en Colombie. Au Brésil, ils sont 111 personnes (Siasi/Sesai, 2014). Les groupes de l'Uaupés se marient avec des personnes d'autres groupes, de préférence locutrices d'une autre langue, et les enfants appartiennent au groupe du père.",
+  "caption": "Gustavo Santos, archer Karapanã, s'entraîne pour les sélections olympiques de tir à l'arc, 2016."
+ },
+ "barasana": {
+  "text": "Les Barasana sont l'un des peuples de langue tukano orientale du bassin de la rivière Uaupés et vivent surtout en Colombie. Au Brésil, dans le nord-ouest de l'Amazonas, ils sont 55 personnes (Siasi/Sesai, 2014). Les groupes de l'Uaupés se marient avec des personnes d'autres groupes, de préférence locutrices d'une autre langue, et les enfants appartiennent au groupe du père.",
+  "caption": "Homme Barasana portant une coiffe traditionnelle sur la rivière Pirá-Paraná, dans le Vaupés, Colombie."
+ },
+ "kotiria": {
+  "text": "Les Kotiria, aussi appelés Wanano, sont l'un des peuples de langue tukano orientale de la rivière Uaupés, dans le nord-ouest de l'Amazonas et en Colombie. Au Brésil, ils sont 735 personnes (Dsei/Foirn, 2005). Les groupes de l'Uaupés se marient avec des personnes d'autres groupes, de préférence locutrices d'une autre langue, et les enfants appartiennent au groupe du père.",
+  "caption": "Des hommes Kotiria jouent des flûtes traditionnelles dans leur village, 2022."
+ },
+ "apurina": {
+  "text": "Les Apurinã vivent dans de nombreuses communautés près des rives de la rivière Purus, surtout dans l'Amazonas. Ils sont 10 228 personnes (Siasi/Sesai, 2020) et parlent une langue arawak. Leur histoire a été marquée par la violence des deux cycles du caoutchouc. Ils luttent encore pour la reconnaissance de terres qui sont envahies par des exploitants forestiers.",
+  "caption": "Des femmes des peuples Juma, Jiahui, Tenharim, Parintintin et Apurinã se présentent à la 1re Marche des femmes autochtones, à Brasilia, août 2019."
+ },
+ "ticuna": {
+  "text": "Les Ticuna sont le peuple autochtone le plus nombreux de l'Amazonie brésilienne, avec 57 571 personnes dans l'Amazonas (Siasi/Sesai, 2020), et vivent aussi en Colombie et au Pérou. Leur langue forme la famille tikuna. Après l'entrée violente de récolteurs de caoutchouc, de pêcheurs et d'exploitants forestiers sur le fleuve Solimões, ce n'est que dans les années 1990 que la plupart de leurs terres ont été reconnues. Leurs masques, leurs dessins et leurs peintures sont connus dans le monde entier.",
+  "caption": "La chanteuse Djuena Tikuna, 2021."
+ },
+ "mura": {
+  "text": "Les Mura vivent dans des terres autochtones et dans des villes comme Manaus, Autazes et Borba, dans la région des fleuves Madeira, Amazone et Purus. Ils sont 18 511 personnes (Siasi/Sesai, 2020). Depuis le XVIIe siècle, ils sont décrits comme un peuple navigateur, qui connaît comme peu d'autres les chemins entre ruisseaux, chenaux, îles et lacs. Le portugais est aujourd'hui leur langue principale.",
+  "caption": "Un leader Mura avec une peinture faciale, 2007."
+ },
+ "piraha": {
+  "text": "Les Pirahã vivent sur la rivière Maici, dans l'Amazonas. Ils sont 592 personnes (Siasi/Sesai, 2014) et leur langue appartient à la famille mura. Ils s'appellent eux-mêmes hiaitsiihi. Chaque personne reçoit plusieurs noms au cours de sa vie, le premier alors qu'elle est encore dans le ventre de sa mère.",
+  "caption": "Une famille Pirahã dans sa pirogue."
+ },
+ "makurap": {
+  "text": "Les Makurap vivent au Rondônia, sur la rive droite de la rivière Guaporé. Ils sont 579 personnes (Siasi/Sesai, 2014) et parlent une langue de la famille tupari. Depuis le début du XXe siècle, quand les exploitations de caoutchouc se sont emparées de la région, leur langue est devenue la langue commune entre les peuples voisins, et c'est encore celle qu'on entend le plus dans les fêtes de chicha.",
+  "caption": "Des habitants Makurap et Kujubim du village Ricardo Franco, dans la Terre Indigène Rio Guaporé, nettoient des poissons, 2023."
+ },
+ "matses": {
+  "text": "Les Matsés, aussi connus sous le nom de Mayoruna, vivent dans le bassin de la rivière Javari, à la frontière entre le Brésil et le Pérou. Au Brésil, ils sont environ 1 700 personnes (CTI, 2016), dans la Terre Indigène Vale do Javari, et parlent une langue pano. Ils alternent les lieux de chasse, de pêche et de culture pour ne pas épuiser le sol et les animaux, et surveillent ainsi également leurs terres.",
+  "caption": "Angela, du peuple Matsés, dans la Réserve nationale Matsés, au Pérou, mai 2017."
+ },
+ "matis": {
+  "text": "Les Matis vivent dans la Terre Indigène Vale do Javari, dans l'Amazonas, sont 529 personnes (Siasi/Sesai, 2020) et parlent une langue pano. Ils étaient plusieurs centaines à l'époque du contact, à la fin des années 1970, et en 1983 il en restait 87, après une série d'épidémies. Depuis, la population a recommencé à croître et certains rituels ont été repris.",
+  "caption": "Homme Matis aux Jeux mondiaux des peuples autochtones, 2015."
+ },
+ "kulina-pano": {
+  "text": "Les Kulina Pano vivent dans l'Amazonas, dans la Terre Indigène Vale do Javari, et parlent une langue de la famille pano."
+ },
+ "amanaye": {
+  "text": "Les Amanayé vivent sur le haut de la rivière Capim, au Pará. Ils sont 174 personnes (Siasi/Sesai, 2017) et leur langue est de la famille tupi-guarani. Ils s'appellent aujourd'hui Amanagé, nom qui signifierait association de personnes.",
+  "caption": "Ronaldo Amanayé à la COP30, à Belém, novembre 2025."
+ },
+ "enawene-nawe": {
+  "text": "Les Enawenê-Nawê vivent dans un seul grand village près de la rivière Iquê, affluent du Juruena, dans le nord-ouest du Mato Grosso. Ils sont 951 personnes (Siasi/Sesai, 2020) et parlent une langue arawak. Chaque année, ils accomplissent un long rituel au cours duquel ils offrent du poisson, du manioc, du sel et du miel aux êtres du monde souterrain et du ciel. Des projets de petites centrales hydroélectriques autour de leur terre menacent les rivières dont ce rituel dépend.",
+  "caption": "Des Enawenê-Nawê dansent et chantent le rituel Salumã aux 6es Jeux des peuples autochtones, à Palmas, Tocantins, 2003."
+ },
+ "tenharim": {
+  "text": "Les Tenharim sont trois groupes qui vivent dans la région du moyen Madeira, dans le sud de l'Amazonas, et s'appellent eux-mêmes Kagwahiva. Ils sont 828 personnes (Siasi/Sesai, 2014) et parlent une langue tupi-guarani. Le village de la rivière Marmelos est coupé par la route Transamazonienne, par laquelle ils écoulent leurs noix du Brésil, leur copaïba et leur farine de manioc.",
+  "caption": "Le cacique Tenharim Kiki, 2007."
+ },
+ "canela-apanyekra": {
+  "text": "Les Apanyekrá sont l'un des deux peuples Timbira connus sous le nom de Canela et vivent au Maranhão. Ils sont 1 076 personnes (Siasi/Sesai, 2012) et parlent une langue jê, la même que leurs voisins Memortumré. Ils maintiennent une vie rituelle complexe et cherchent à retrouver l'autonomie de leurs activités productives."
+ },
+ "canela": {
+  "text": "Les Memortumré, autrefois appelés Ramkokamekrá, sont l'un des deux peuples Timbira connus sous le nom de Canela et vivent au Maranhão. Ils sont 2 175 personnes (Siasi/Sesai, 2012) et parlent une langue jê. Ils maintiennent une vie rituelle complexe et cherchent à retrouver l'autonomie de leurs activités productives.",
+  "caption": "Homme Canela avec une peinture faciale, octobre 2015."
+ },
+ "karaja": {
+  "text": "Les Karajá, qui s'appellent eux-mêmes Iny, vivent depuis des siècles sur les rives du fleuve Araguaia, au Goiás, au Tocantins, au Mato Grosso et au Pará. Ils sont 4 373 personnes (Siasi/Sesai, 2020) et leur langue forme la famille karajá. Ils maintiennent les pêches en famille, les poupées de céramique, la fête d'Aruanã et la peinture de deux cercles sur le visage.",
+  "caption": "Hommes Iny Karajá avec leurs coiffes de plumes, 2015."
+ },
+ "karaja-do-norte": {
+  "text": "Les Karajá du Nord, plus connus sous le nom de Xambioá, vivent dans deux villages sur la rive droite du fleuve Araguaia, au Tocantins. Ils sont 287 personnes (Siasi/Sesai, 2014). Ils parlent la même langue que les Karajá et les Javaé de l'île du Bananal.",
+  "caption": "Femme Xambioá avec des colliers et une parure de plumes, octobre 2015."
+ },
+ "javae": {
+  "text": "Les Javaé vivent sur les rives du fleuve Araguaia, au Tocantins et au Goiás. Ils sont 1 510 personnes (Siasi/Sesai, 2020) et parlent un dialecte de la langue karajá. Ils sont l'un des rares peuples de l'ancienne Capitainerie de Goiás à avoir survécu aux captures des bandeirantes, aux épidémies et à l'invasion de leur territoire.",
+  "caption": "Homme Javaé avec une coiffe de plumes et une peinture faciale, octobre 2015."
+ },
+ "panara": {
+  "text": "Les Panará vivent au Mato Grosso, sont 704 personnes (DSEI, 2022) et parlent une langue jê. Ils ont été contactés en 1973, quand la route Cuiabá-Santarém a coupé leur territoire, et ont perdu les deux tiers de leur population à cause des maladies et des massacres. Après 20 ans d'exil dans le Xingu, ils ont reconquis la partie encore préservée de leur terre et, en 2000, ont obtenu en justice une indemnisation de l'État brésilien."
+ },
+ "myky": {
+  "text": "Les Mỹky vivent au Mato Grosso et sont 131 personnes (Siasi/Sesai, 2020). Leur langue, la même que celle des Manoki, n'a pas de parenté avec d'autres familles. Ils sont restés isolés jusqu'en 1971 et vivent depuis encerclés par la spéculation foncière. Ils revendiquent l'agrandissement de leur terre."
+ },
+ "manoki": {
+  "text": "Les Manoki, plus connus sous le nom d'Irantxe, vivent au Mato Grosso et sont 413 personnes (Siasi/Sesai, 2020). Leur langue n'a pas de parenté avec d'autres familles. Presque décimés par les massacres et les maladies, les survivants sont allés vivre dans une mission jésuite au milieu du XXe siècle, et en 1968 ils ont reçu une terre en dehors de leur zone historique. Ils revendiquent l'agrandissement de leurs terres.",
+  "caption": "Jeune Manoki avec une coiffe de plumes bleues, octobre 2015."
+ },
+ "wapichana": {
+  "text": "Les Wapichana vivent au Roraima, entre les rivières Branco et Rupununi, à la frontière avec le Guyana, où ils vivent aussi. Au Brésil, ils sont 11 309 personnes (Siasi/Sesai, 2020). Ils sont la plus grande population de langue arawak du nord de l'Amazonie.",
+  "caption": "Joênia Wapichana lors d'une audience publique au Sénat, 2018."
+ },
+ "macuxi": {
+  "text": "Les Macuxi vivent au Roraima, et aussi au Guyana. Au Brésil, ils sont 37 250 personnes (Siasi/Sesai, 2020) et parlent une langue caribe. Depuis le XVIIIe siècle, ils font face à des regroupements forcés en villages, à des fermes d'élevage bovin, à des orpailleurs et à des accapareurs de terres. Avec d'autres peuples de la région, ils ont lutté pendant des décennies pour la Terre Indigène Raposa Serra do Sol, homologuée en 2005 et confirmée par le Tribunal suprême fédéral en 2009.",
+  "caption": "L'écrivaine Macuxi Trudruá Dorrico, 2024."
+ },
+ "taurepang": {
+  "text": "La plupart des Taurepang vivent dans la savane vénézuélienne. Au Brésil, ils sont 849 personnes (Siasi/Sesai, 2020), dans des villages des Terres Indigènes São Marcos et Raposa Serra do Sol, au Roraima, et parlent une langue caribe. La route BR-174, dans les années 1970, puis une ligne de transport d'électricité ont coupé la Terre Indigène São Marcos.",
+  "caption": "Odete Barroso Tenente Taurepang à la 2e Marche des femmes autochtones, à Brasilia, septembre 2021."
+ },
+ "ingariko": {
+  "text": "Les Ingarikó vivent dans la région de montagnes proche du mont Roraima, à l'extrême nord du Brésil, et aussi au Guyana et au Venezuela. Au Brésil, ils sont 1 728 personnes (Coping, 2020) et parlent une langue caribe. Ils s'appellent eux-mêmes Kapon.",
+  "caption": "Dilson Ingarikó, président du Conseil du peuple autochtone Ingarikó, à Brasilia, septembre 2007."
+ },
+ "yaminawa": {
+  "text": "Les Yaminawá vivent dans l'Acre, et aussi au Pérou et en Bolivie. Au Brésil, ils sont 1 454 personnes (Siasi/Sesai, 2014) et parlent une langue pano. Une partie vit dans des villages en forêt et une partie à la périphérie de villes comme Rio Branco.",
+  "caption": "Famille Yaminawá en pirogue dans le village Betel, Terre Indigène Mamoadate, Acre."
+ },
+ "manchineri": {
+  "text": "Les Manchineri vivent dans l'Acre, la plupart dans la Terre Indigène Mamoadate, et il y a des familles dans des exploitations de caoutchouc à l'intérieur de la Réserve extractiviste Chico Mendes. Ils sont 1 332 personnes au Brésil (Siasi/Sesai, 2020). Ils parlent une langue arawak, la même que celle des Piro du Pérou.",
+  "caption": "Junior Manchineri, de l'Acre."
+ },
+ "deni": {
+  "text": "Les Deni vivent entre les rivières Juruá et Purus, dans l'Amazonas, sont 2 064 personnes (Siasi/Sesai, 2020) et parlent une langue de la famille arawá. Après des décennies d'attente, ils ont commencé à délimiter eux-mêmes leur terre, et la démarcation officielle n'a été achevée qu'en 2003. Ils font encore face à des invasions pour la pêche et l'extraction de bois."
+ },
+ "kaxarari": {
+  "text": "Les Kaxarari vivent à la limite entre le Rondônia et l'Amazonas, près de la route BR-364. Ils sont 522 personnes (Siasi/Sesai, 2020) et parlent une langue pano. Ils étaient environ 2 000 en 1910 et sont tombés à moins de 200 au début des années 1980, après des attaques de récolteurs de caoutchouc et de patrons d'exploitations de caoutchouc et après des épidémies."
+ },
+ "guajajara": {
+  "text": "Les Guajajara sont l'un des peuples autochtones les plus nombreux du Brésil, avec 28 858 personnes (Siasi/Sesai, 2020). Ils vivent dans plus de dix terres autochtones au Maranhão, à la bordure est de l'Amazonie, et parlent une langue tupi-guarani. À partir des années 1980, leurs terres ont commencé à subir la pression du Programme Grande Carajás et d'entreprises forestières de la région.",
+  "caption": "Sônia Guajajara à la COP30, à Belém, 2025."
+ },
+ "hixkaryana": {
+  "text": "Les Hixkaryana vivent sur la rivière Nhamundá, entre le Pará et l'Amazonas. Ils sont 1 242 personnes (Siasi/Sesai, 2012) et parlent une langue caribe. Leurs grands-parents ont fui vers l'amont la persécution des Blancs, et aujourd'hui ils reviennent occuper le territoire en aval."
+ },
+ "waiwai": {
+  "text": "Les Waiwai vivent au Pará, dans l'Amazonas et au Roraima, et aussi au Guyana. Au Brésil, ils sont 2 691 personnes (Siasi/Sesai, 2020), la plupart de langue caribe. Ils sont connus comme de grands voyageurs et comme fournisseurs de râpes à manioc, de perroquets parleurs et de chiens de chasse. Dans leurs communautés vivent des personnes de plusieurs peuples, comme les Mawayana, les Katuenayana et les Xerewyana.",
+  "caption": "Homme Waiwai aux Jeux mondiaux des peuples autochtones, 2015."
+ },
+ "waimiri-atroari": {
+  "text": "Les Waimiri Atroari, qui s'appellent eux-mêmes Kinja, vivent dans l'Amazonas. Ils sont 2 394 personnes (PWA, 2022) et parlent une langue caribe. L'ouverture de la route BR-174 par l'armée les a presque menés à l'extinction, puis sont venus une compagnie minière et un barrage hydroélectrique qui a inondé une partie de leur territoire. Aujourd'hui, les limites de leur terre sont garanties et la population augmente.",
+  "caption": "La route BR-174 traverse la Terre Indigène Waimiri-Atroari."
+ },
+ "katuenayana": {
+  "text": "Les Katuenayana sont un peuple de langue caribe de l'Amazonas et du Pará, avec 140 personnes (Siasi/Sesai, 2014), et une partie d'entre eux vit dans des communautés Waiwai.",
+  "caption": "Célébration de l'homologation de la Terre Indigène Kaxuyana-Tunayana, territoire des peuples Kaxuyana, Tunayana, Kahyana, Katuena, Mawayana, Txikiyana et Xerew, dans le village Santidade, Pará, février 2026."
+ },
+ "xerewyana": {
+  "text": "Les Xerewyana sont un peuple de langue caribe du Pará, et une partie d'entre eux vit dans des communautés Waiwai.",
+  "caption": "Célébration de l'homologation de la Terre Indigène Kaxuyana-Tunayana, territoire des peuples Kaxuyana, Tunayana, Kahyana, Katuena, Mawayana, Txikiyana et Xerew, dans le village Santidade, Pará, février 2026."
+ },
+ "tunayana": {
+  "text": "Les Tunayana sont un peuple de langue caribe du Pará et de l'Amazonas, avec 107 personnes (IBGE, 2010).",
+  "caption": "Célébration de l'homologation de la Terre Indigène Kaxuyana-Tunayana, territoire des peuples Kaxuyana, Tunayana, Kahyana, Katuena, Mawayana, Txikiyana et Xerew, dans le village Santidade, Pará, février 2026."
+ },
+ "txikiyana": {
+  "text": "Les Txikiyana sont un peuple de langue caribe du Pará.",
+  "caption": "Célébration de l'homologation de la Terre Indigène Kaxuyana-Tunayana, territoire des peuples Kaxuyana, Tunayana, Kahyana, Katuena, Mawayana, Txikiyana et Xerew, dans le village Santidade, Pará, février 2026."
+ },
+ "karapawyana": {
+  "text": "Les Karapawyana sont l'un des peuples qui vivent dans les communautés Waiwai."
+ },
+ "mawayana": {
+  "text": "Les Mawayana sont un peuple de langue arawak du Pará, et une partie d'entre eux vit dans des communautés Waiwai.",
+  "caption": "Célébration de l'homologation de la Terre Indigène Kaxuyana-Tunayana, territoire des peuples Kaxuyana, Tunayana, Kahyana, Katuena, Mawayana, Txikiyana et Xerew, dans le village Santidade, Pará, février 2026."
+ },
+ "katxuyana": {
+  "text": "Les Katxuyana sont un peuple de langue caribe du Pará et de l'Amazonas, avec 540 personnes (Siasi/Sesai, 2020).",
+  "caption": "Angela Kaxuyana, deuxième à partir de la droite, avec la délégation de l'Apib à Paris : Elizeu Guarani Kaiowá, Nara Baré, Sonia Guajajara, Alberto Terena et Kretã Kaingang."
+ },
+ "aikana": {
+  "text": "Les Aikanã vivent dans le sud-est du Rondônia, sont 350 personnes (Siasi/Sesai, 2014) et leur langue forme une famille à elle seule. La terre où vit la majorité n'est pas leur territoire traditionnel, car ils y ont été emmenés par l'organisme indigéniste en 1970, avec deux autres peuples. Le sol est peu fertile, et ils maintiennent leur langue vivante grâce à une école bilingue et à des projets culturels.",
+  "caption": "Elizabeth Aikanã à la 2e Marche des femmes autochtones, à Brasilia, septembre 2021."
+ },
+ "paresi": {
+  "text": "Les Paresí vivent au Mato Grosso, sont 2 138 personnes (Siasi/Sesai, 2014) et parlent une langue arawak. Ils sont en contact avec des non-autochtones depuis la fin du XVIIe siècle, souvent avec des conséquences dévastatrices. Ils cherchent aujourd'hui à maintenir leurs coutumes, à trouver de nouvelles sources de revenus et à conserver leurs terres.",
+  "caption": "Homme Paresí avec une coiffe de plumes devant une maison traditionnelle, à Campo Novo do Parecis, Mato Grosso, 2023."
+ },
+ "arara-do-rio-branco": {
+  "text": "Les Arara du Rio Branco vivent au Mato Grosso et sont 249 personnes (Siasi/Sesai, 2014). Ils ont vécu pendant des décennies sous la domination des patrons dans les exploitations de caoutchouc et, avec la fin du caoutchouc et l'accaparement des terres, ils se sont retrouvés sans travail et sans lieu où vivre. La reconnaissance de leur terre n'est venue qu'après de nombreuses années de lutte."
+ },
+ "ikolen": {
+  "text": "Les Ikolen, aussi connus sous le nom de Gavião, vivent au Rondônia, près de la limite avec le Mato Grosso. Ils sont 691 personnes (Siasi/Sesai, 2020) et parlent une langue de la famille mondé. Leurs six villages se trouvent dans la Terre Indigène Igarapé Lourdes, qu'ils partagent avec le peuple Karo.",
+  "caption": "Forêt sur les terres du peuple Gavião, dans le village Cacoal, Terre Indigène Igarapé Lourdes, Rondônia, 2021."
+ },
+ "karipuna-de-rondonia": {
+  "text": "Les Karipuna du Rondônia vivent sur la rivière Jaci-Paraná et parlent une langue tupi-guarani. En 2004, il restait quatorze survivants d'une histoire de maladies et d'invasions qui a commencé avec le caoutchouc et le chemin de fer Madeira-Mamoré. En 2014, ils étaient 55 personnes (Siasi/Sesai). Ils cherchent à protéger leur terre des invasions constantes d'exploitants forestiers, de chasseurs, de pêcheurs et d'occupants sans titre.",
+  "caption": "Le cacique André Karipuna dans la forêt de la Terre Indigène Karipuna, Rondônia, novembre 2021."
+ },
+ "jiahui": {
+  "text": "Les Jiahui vivent dans la région du moyen Madeira, dans le sud de l'Amazonas. Ils sont 115 personnes (Siasi/Sesai, 2014) et parlent une langue tupi-guarani du groupe kagwahiva. Leurs terres ont été occupées par des éleveurs et le peuple s'est presque défait, vivant parmi les Tenharim ou dans des villes. En 1998, ils ont commencé à reprendre leur territoire.",
+  "caption": "Des femmes des peuples Juma, Jiahui, Tenharim, Parintintin et Apurinã se présentent à la 1re Marche des femmes autochtones, à Brasilia, août 2019."
+ },
+ "parintintin": {
+  "text": "Les Parintintin vivent dans deux terres autochtones de la commune de Humaitá, dans l'Amazonas, appelées Ipixuna et Nove de Janeiro. Ils sont 480 personnes (Siasi/Sesai, 2014) et parlent une langue tupi-guarani. Ils font partie des peuples qui s'appellent Kagwahiva et s'organisent en deux moitiés portant des noms d'oiseaux.",
+  "caption": "Des femmes des peuples Juma, Jiahui, Tenharim, Parintintin et Apurinã se présentent à la 1re Marche des femmes autochtones, à Brasilia, août 2019."
+ },
+ "terena": {
+  "text": "Les Terena sont 26 065 personnes (Siasi/Sesai, 2014) et parlent une langue arawak. La plupart vivent au Mato Grosso do Sul, et il y a des communautés au Mato Grosso et dans l'État de São Paulo. Leur cohabitation intense avec les villes leur a valu l'étiquette d'Indiens urbains, qui cache des siècles de résistance pour maintenir leur culture.",
+  "caption": "Danse Terena à la clôture des Jeux des peuples autochtones, à Olinda, 2007."
+ },
+ "tupaiu": {
+  "text": "Les Tupaiú vivent au Pará et sont 546 personnes (Saúde e Alegria, 2014)."
+ },
+ "gaviao-parkateje": {
+  "text": "Les Gavião Parkatêjê vivent au Pará, sont 646 personnes (Siasi/Sesai, 2014) et parlent une langue jê. C'est un peuple Timbira. Ils ont perdu 70 % de leur population lors du contact des années 1970 et ont ensuite reconstruit leur mode de vie. Le village Kaikoturé, de 1984, reprend le plan circulaire des villages timbira.",
+  "caption": "Habitants du village Parkatêjê, à Marabá, Pará, juin 2021."
+ },
+ "tukano": {
+  "text": "Les Tukano vivent sur la rivière Uaupés et ses affluents, dans le nord-ouest de l'Amazonas, et aussi en Colombie. Au Brésil, ils sont 5 731 personnes (Siasi/Sesai, 2014), et leur langue donne son nom à la famille tukano. Les groupes de l'Uaupés se marient avec des personnes d'autres groupes, de préférence locutrices d'une autre langue, et les enfants appartiennent au groupe du père.",
+  "caption": "Daiara Tukano, artiste et communicatrice, lors d'une audience au Sénat sur la santé des femmes autochtones, 2016."
+ },
+ "desana": {
+  "text": "Les Desana sont l'un des peuples de langue tukano orientale du bassin de la rivière Uaupés, dans le nord-ouest de l'Amazonas et en Colombie. Au Brésil, ils sont 1 699 personnes (ISA/Foirn, 2017). Les groupes de l'Uaupés se marient avec des personnes d'autres groupes, de préférence locutrices d'une autre langue, et les enfants appartiennent au groupe du père.",
+  "caption": "Maison d'une communauté Desana au bord de la rivière, dans l'Amazonas, 2018."
+ },
+ "naduhup": {
+  "text": "Maku est le nom donné dans la région du rio Negro, dans l'Amazonas, à des peuples de la famille linguistique naduhup, qui sont les Hupd'äh (environ 1 000 personnes, 2012), les Yuhupdeh (1 058, Siasi/Sesai 2020), les Nadëb (483, Siasi/Sesai 2014) et les Dâw (142, 2020). Ils vivent entre les grands fleuves, loin des rives, et sont de grands connaisseurs des chemins de la forêt et de la chasse.",
+  "caption": "Américo Socot et Roberto Sanches, leaders des peuples Hupd'äh et Dâw, avec l'anthropologue Renato Athias, juin 2022."
+ },
+ "nadeb": {
+  "text": "Les Nadëb vivent dans l'Amazonas, dans la région du rio Negro, et sont 483 personnes (Siasi/Sesai, 2014). Ils sont l'un des peuples que leurs voisins appellent Maku, gens de la forêt, par contraste avec les peuples des rives des fleuves."
+ },
+ "tariana": {
+  "text": "Les Tariana vivent sur les rives de la rivière Uaupés, dans l'Amazonas, la plupart dans le bourg d'Iauaretê et dans des communautés voisines. Au Brésil, ils sont 2 684 personnes (Siasi/Sesai, 2014). D'origine arawak, ils parlent aujourd'hui presque tous la langue tukano. Parmi les peuples de l'Uaupés, ils sont connus comme les fils du sang du tonnerre.",
+  "caption": "Un homme Tariana joue de la flûte de Pan, Amazonas, 2008."
+ },
+ "baniwa": {
+  "text": "Les Baniwa vivent sur la rivière Içana et ses affluents, à la frontière du Brésil avec la Colombie et le Venezuela, et dans des villes comme São Gabriel da Cachoeira. Au Brésil, ils sont 7 145 personnes (Siasi/Sesai, 2014) et parlent une langue arawak. Ils sont des maîtres de la vannerie en arumã, qu'ils vendent aujourd'hui aussi sur le marché brésilien.",
+  "caption": "Edilson Baniwa, du ministère des Peuples autochtones, participe à une audience au Sénat sur l'éducation autochtone, à Brasilia, novembre 2025."
+ },
+ "koripako": {
+  "text": "Les Koripako vivent sur le haut de la rivière Içana, dans l'Amazonas, ainsi qu'en Colombie et au Venezuela. Au Brésil, ils sont 1 673 personnes (Siasi/Sesai, 2014). Ils parlent un dialecte de la langue baniwa, de la famille arawak, et comme les Baniwa ils sont des maîtres de la vannerie en arumã.",
+  "caption": "Rivière Içana, région des peuples Baniwa et Koripako, dans la Terre Indigène Alto Rio Negro, Amazonas, 2011."
+ },
+ "wayana": {
+  "text": "Les Wayana vivent sur la rivière Paru de Leste, au Pará, et aussi au Suriname et en Guyane française. Au Brésil, ils sont 374 personnes (Siasi/Sesai, 2020) et parlent une langue caribe. Depuis au moins cent ans, ils partagent les mêmes villages avec les Aparai et se marient entre eux, mais chaque peuple affirme sa propre histoire.",
+  "caption": "Jupta parle du travail des Wayana dans la gestion de leur autonomie, mai 2023."
+ },
+ "aparai": {
+  "text": "Les Aparai vivent sur la rivière Paru de Leste, au Pará. Au Brésil, ils sont 647 personnes (Siasi/Sesai, 2020) et parlent une langue caribe. Depuis au moins cent ans, ils partagent les mêmes villages avec les Wayana et se marient entre eux, mais chaque peuple affirme sa propre histoire."
+ },
+ "karipuna-do-amapa": {
+  "text": "Les Karipuna de l'Amapá vivent dans la région du bas Oiapoque, dans l'Amapá. Ils sont 3 030 personnes (Siasi/Sesai, 2020) et parlent une langue créole. Ils appellent notre système l'ensemble des pratiques et des connaissances qu'ils considèrent comme les leurs, et qui réunit des savoirs chamaniques et catholiques.",
+  "caption": "13e Assemblée générale du peuple Karipuna, dans la communauté Benoá, à Oiapoque, 2024."
+ },
+ "huni-kuin": {
+  "text": "Les Huni Kuin, aussi connus sous le nom de Kaxinawá, vivent dans l'Acre et au Pérou. Au Brésil, ils sont 11 729 personnes (Siasi/Sesai, 2020) et parlent une langue pano. Les femmes tissent et dessinent le kene kuin, leur style de dessin géométrique.",
+  "caption": "Siriani Huni Kuin, jeune leader, avec sa flûte, 2023."
+ },
+ "kulina": {
+  "text": "Les Kulina, qui s'appellent eux-mêmes Madiha, vivent sur les rives des rivières Juruá et Purus, et aussi au Pérou. Au Brésil, ils sont 7 211 personnes (Siasi/Sesai, 2014) et parlent une langue de la famille arawá. Ils maintiennent avec vigueur leur musique et leur chamanisme, et l'on ne connaît aucun Kulina vivant hors de leurs terres."
+ },
+ "katukina-do-rio-bia": {
+  "text": "Les Katukina du Rio Biá vivent dans l'Amazonas, sont 2 004 personnes (Siasi/Sesai, 2020) et parlent une langue de la famille katukina, proche de celle des Kanamari. Ils s'appellent eux-mêmes Tükuna, les gens. La céramique est un travail réservé aux femmes."
+ },
+ "jamamadi": {
+  "text": "Les Jamamadi vivent dans la région des rivières Juruá et Purus, dans l'Amazonas. Ils sont 1 138 personnes (Siasi/Sesai, 2020) et parlent une langue de la famille arawá. Ils ont survécu aux deux cycles du caoutchouc. Dans les années 1960, on prévoyait leur disparition en tant que peuple, mais ils se sont depuis rétablis en nombre et en culture.",
+  "caption": "Délégation des peuples Apurinã, Jamamadi, Tenharim, Jiahui et Parintintin, du sud de l'Amazonas, en route vers l'Acampamento Terra Livre, 2017."
+ },
+ "jarawara": {
+  "text": "Les Jarawara vivent dans la région des rivières Juruá et Purus, dans l'Amazonas, et sont 271 personnes (Jarawara, 2014). Ils parlent une langue de la famille arawá. Ils vivent uniquement dans la Terre Indigène Jarawara/Jamamadi/Kanamanti, constamment envahie par des pêcheurs et des exploitants forestiers."
+ },
+ "kokama": {
+  "text": "Les Kokama vivent sur le fleuve Solimões, dans l'Amazonas, et aussi au Pérou et en Colombie. Au Brésil, ils sont 19 052 personnes (Siasi/Sesai, 2020), et leur langue est de la famille tupi-guarani. Des missions et des fronts extractivistes les ont déplacés de force, et pendant de nombreuses décennies ils ont dû nier qu'ils étaient autochtones. Depuis les années 1980, l'identité kokama est de plus en plus valorisée dans la lutte pour la terre, la santé et l'éducation.",
+  "caption": "Le cacique kokama Jacinto Moraes Panuro à São Paulo de Olivença, Amazonas, 2017."
+ },
+ "rikbaktsa": {
+  "text": "Les Rikbaktsa vivent dans le bassin de la rivière Juruena, dans le nord-ouest du Mato Grosso. Ils sont 1 600 personnes (Siasi/Sesai, 2020) et leur langue forme une famille à elle seule. Dans les années 1960, ils ont perdu 75 % de leur peuple. Ils se sont rétablis et sont respectés dans la région pour la fermeté avec laquelle ils défendent leur territoire et leur mode de vie.",
+  "caption": "Des Rikbaktsa à la clôture des Jeux des peuples autochtones, à Olinda, 2007."
+ },
+ "kanamari": {
+  "text": "Les Kanamari vivent dans l'Amazonas, la plupart sur les affluents du haut et du moyen Juruá, et aussi sur le Javari et le Japurá. Ils sont 4 684 personnes (Siasi/Sesai, 2020) et parlent une langue de la famille katukina. Ils s'appellent eux-mêmes Tukuna, les gens. Malgré la présence croissante et violente de non-autochtones au XXe siècle, ils maintiennent la richesse de leur langue, de leurs mythes et de leurs rituels.",
+  "caption": "Une femme Kanamari épluche des ananas dans la Terre Indigène Vale do Javari, Amazonas, décembre 2018."
+ },
+ "noke-koi": {
+  "text": "Les Katukina de l'Acre vivent dans deux terres autochtones, sur les rivières Campinas et Gregório, et sont 1 154 personnes (Siasi/Sesai, 2014). Ils parlent une langue pano. Ces dernières années, à l'initiative de jeunes leaders, ils ont commencé à utiliser le nom Noke Kuin, les vraies personnes. La route BR-364 passe à côté du village du Campinas."
+ },
+ "gaviao-pykopje": {
+  "text": "Les Gavião Pykopjê vivent au Maranhão, sont 769 personnes (Siasi/Sesai, 2014) et parlent une langue jê. C'est un peuple Timbira. Ils continuent de parler leur langue, de se percer l'oreille et de faire leurs fêtes, moment où les enfants apprennent qui est qui dans le village. La pression autour de leur terre est forte."
+ },
+ "ava-canoeiro": {
+  "text": "Les Avá-Canoeiro vivent au Tocantins et au Goiás et parlent une langue tupi-guarani. Ils sont connus comme le peuple qui a le plus résisté aux colonisateurs dans le Brésil central, et les deux groupes qui restent ont en commun l'expérience du génocide. Ils étaient 25 personnes en 2012 (Siasi/Sesai)."
+ },
+ "yawanawa": {
+  "text": "Les Yawanawá vivent sur les rives de la rivière Gregório, dans l'Acre, dans la Terre Indigène Rio Gregório. Au Brésil, ils sont 849 personnes (Siasi/Sesai, 2020) et parlent une langue pano. Ils disent qu'ils sont comme les pécaris à lèvres blanches, tous ensemble. Le village Nova Esperança a été ouvert en 1992, après leur départ de l'exploitation de caoutchouc où ils travaillaient pour les patrons.",
+  "caption": "Hommes Yawanawá avec des lances, des coiffes de plumes et des jupes de paille, dans l'Acre."
+ },
+ "umutina": {
+  "text": "Les Balatiponé, connus sous le nom d'Umutina, vivent au Mato Grosso, dans la région du haut Paraguay. Ils sont 515 personnes (Siasi/Sesai, 2014), et leur langue est de la famille bororo. Le contact leur a coûté leur langue, leur terre traditionnelle et une grande partie de leur population. Ils travaillent aujourd'hui à retrouver leurs traditions.",
+  "caption": "Creusa Soipa, cacique des Umutina, 2007."
+ },
+ "suruwaha": {
+  "text": "Les Suruwaha vivent sur le moyen Purus, dans l'Amazonas, loin des principales voies de navigation. Ils sont 171 personnes (Siasi/Sesai, 2014) et parlent une langue de la famille arawá. Ils ont maintenu un isolement prudent jusqu'à la fin des années 1970, quand des récolteurs de sorva ont envahi leur territoire."
+ },
+ "arekuna": {
+  "text": "Les Arekuna, que des sources anciennes appellent Jaricuna, sont un peuple Pemon, recensé dans les années 1930 dans la région du mont Roraima. Au Roraima, ils étaient 57 personnes au recensement de 2022 (IBGE)."
+ },
+ "wajapi": {
+  "text": "Les Wajãpi vivent dans l'Amapá et au Pará, entre les rivières Oiapoque, Jari et Araguari, et aussi en Guyane française. Au Brésil, ils sont 1 612 personnes (Siasi/Sesai, 2020) et parlent une langue tupi-guarani. En 1994, ils ont commencé à délimiter eux-mêmes leur terre et ont fondé le Conseil des villages Wajãpi, l'Apina.",
+  "caption": "Marinau Wajãpi à la 2e Marche des femmes autochtones, à Brasilia, septembre 2021."
+ },
+ "anambe": {
+  "text": "Les Anambé vivent dans la région de la rivière Cairari, au Pará. Ils sont 182 personnes (Siasi/Sesai, 2020), de langue tupi-guarani. Leurs maisons et leur quotidien ressemblent à ceux de leurs voisins de la région, mais ils résistent à toute tentative de les faire partir du Cairari."
+ },
+ "sakurabiat": {
+  "text": "Les Sakurabiat vivent au Rondônia, sont 219 personnes (Siasi/Sesai, 2014) et parlent une langue de la famille tupari. Ils ont longtemps travaillé dans le caoutchouc et leur terre a été envahie par des entreprises forestières, jusqu'à sa démarcation en 1996. Les plus âgés racontent les histoires des anciens en langue sakurabiat, et le peuple cherche des moyens de l'enseigner de nouveau aux enfants."
+ },
+ "nukini": {
+  "text": "Les Nukini vivent dans la vallée du Juruá, dans l'Acre, sont 726 personnes (Siasi/Sesai, 2020) et appartiennent aux peuples de langue pano. Leur terre est voisine du Parc national de la Serra do Divisor, dans une zone toujours menacée par des exploitants forestiers et des chasseurs. Ils revendiquent l'agrandissement de leur territoire."
+ },
+ "ashaninka": {
+  "text": "La grande majorité des Ashaninka vit au Pérou. Au Brésil, ils sont 1 720 personnes (Siasi/Sesai, 2020), sur des terres de la région du Haut Juruá, dans l'Acre, et parlent une langue arawak. Du côté brésilien, ils combattent l'exploitation du bois sur leurs terres depuis 1980.",
+  "caption": "Des Ashaninka de Marechal Thaumaturgo, dans l'Acre, 2004."
+ },
+ "shawadawa": {
+  "text": "Les Shawãdawa, aussi appelés Arara, vivent dans l'Acre, sont 677 personnes (Siasi/Sesai, 2014) et parlent une langue pano. Depuis la fin du XIXe siècle, ils ont été exploités dans les exploitations de caoutchouc. Ces dernières années, ils travaillent à revaloriser leur langue et leurs traditions et à garantir leurs droits à la terre."
+ },
+ "kuruaya": {
+  "text": "Les Kuruaya vivent au Pará, sont 283 personnes (Siasi/Sesai, 2020), et leur langue est de la famille munduruku. Le travail forcé dans les exploitations de caoutchouc et de noix du Brésil a défait la vie dans leurs villages sur la rivière Curuá, et dans les années 1960 ils ont même été déclarés éteints. La conquête de leurs terres a garanti la reconnaissance de leur identité, et ils vivent aujourd'hui entre le village et la ville."
+ },
+ "juma": {
+  "text": "Les Juma vivent dans l'Amazonas et parlent une langue tupi-guarani du groupe kagwahiva. Au XVIIIe siècle, ils étaient probablement de 12 000 à 15 000. Après des massacres successifs, il restait cinq personnes en 2002. Ils sont aujourd'hui 28 (Associação do Povo Indígena Juma, 2026).",
+  "caption": "La cacique Mandeí Juma à la Marche des femmes autochtones, à Brasilia, août 2019."
+ },
+ "arara-da-volta-grande": {
+  "text": "Les Arara de la Volta Grande do Xingu vivent au Pará et sont 293 personnes (Verthic, 2019). Selon les plus âgés, ils descendent des Arara de la rivière Bacajá. Ils ont vécu l'avancée des exploitations de caoutchouc et l'ouverture de la Transamazonienne, et l'arrivée de la centrale de Belo Monte a eu des impacts encore plus grands sur leur mode de vie."
+ },
+ "puyanawa": {
+  "text": "Les Puyanawa vivent dans l'Acre, sont 745 personnes (Siasi/Sesai, 2014), et leur langue est de la famille pano. Au début du XXe siècle, ils ont été forcés de travailler dans les exploitations de caoutchouc, ont perdu leurs terres et ont été éduqués dans des écoles qui interdisaient leur culture. Avec la démarcation de leur territoire, ils ont commencé à reprendre leur langue, qui a peu de locuteurs.",
+  "caption": "Activité de l'école d'État Ixuay Rabui Puyanawa, dans le village Barão, Mâncio Lima, Acre, 2014."
+ },
+ "apinaje": {
+  "text": "Les Apinajé vivent au Tocantins, sont 2 699 personnes (Siasi/Sesai, 2020) et parlent une langue jê. C'est un peuple Timbira. Dans la seconde moitié du XXe siècle, leur territoire a été envahi par des centaines de familles de migrants et coupé par des routes comme la Belém-Brasília et la Transamazonienne. Ils cherchent à récupérer la partie de leur terre qui est restée en dehors de la démarcation.",
+  "caption": "Père et fils Apinajé, 2012."
+ },
+ "miranha": {
+  "text": "Les Miranha vivent dans l'Amazonas, et aussi en Colombie. Au Brésil, ils sont 1 685 personnes (Siasi/Sesai, 2020). Leur langue est très proche du bora. Au XXe siècle, leurs descendants ont été traités comme des groupes stigmatisés.",
+  "caption": "Hudson Miranha prend la parole lors d'une rencontre nationale sur la Décennie internationale des langues autochtones, août 2023."
+ },
+ "waikhana": {
+  "text": "Les Waikhana, connus dans la région sous le nom de Pira-tapuya, vivent sur les rivières Papuri et Uaupés, à la frontière entre le Brésil et la Colombie. Au Brésil, ils sont 756 personnes (Siasi/Sesai, 2020) et parlent une langue de la famille tukano. Waikhana veut dire peuple poisson."
+ },
+ "apolima-arara": {
+  "text": "Les Apolima-Arara, ou Arara du Rio Amônia, vivent dans l'Acre et sont 434 personnes (Siasi/Sesai, 2014).",
+  "caption": "Bateau du village Novo Destino, du peuple Arara de la rivière Amônia, Acre, juillet 2009."
+ },
+ "chiquitano": {
+  "text": "La grande majorité des Chiquitano vit en Bolivie. Au Brésil, ils sont 473 personnes (Siasi/Funasa, 2012), au Mato Grosso, dans la région de la frontière. Le peuple s'est formé à partir de plusieurs groupes réunis dans des missions jésuites au XVIIe siècle. Au Brésil, ils ont été exploités comme main-d'œuvre bon marché par des éleveurs et luttent pour le droit à une terre autochtone.",
+  "caption": "Présentation culturelle du peuple Chiquitano à Vila Bela da Santíssima Trindade, Mato Grosso, mars 2023."
+ },
+ "karitiana": {
+  "text": "Les Karitiana vivent au Rondônia et étaient 333 personnes en 2014 (Siasi/Sesai). Leur langue est la seule qui reste de la famille arikém. Ils investissent dans l'école pour renforcer l'enseignement de la langue, et leurs villages sont passés de deux en 2005 à sept en 2021.",
+  "caption": "Antenor Karitiana prononce un discours lors d'une séance du Sénat en hommage aux peuples autochtones, à Brasilia, avril 2015."
+ },
+ "krepynkateje": {
+  "text": "Les Krepynkatejê sont un peuple de langue jê du Maranhão, avec 960 personnes (CTI, 2022)."
+ },
+ "zoe": {
+  "text": "Les Zo'é vivent dans une zone de forêt dense entre les rivières Cuminapanema et Erepecuru, dans le nord du Pará. Ils sont 350 personnes (Iepé, 2025) et parlent une langue tupi-guarani. C'est un peuple de contact récent, qui maintient avec vigueur son organisation sociale et territoriale. Par l'intermédiaire de leur organisation, la Tekohara, ils s'occupent de la gestion de leur terre."
+ },
+ "naruvotu": {
+  "text": "Les Naruvotu sont un peuple de langue caribe du Haut Xingu, au Mato Grosso, avec 81 personnes en 2003 (Fiorini). Après les épidémies de 1946 et de 1954, ils ont été réduits à une dizaine de personnes, qui sont allées vivre dans les villages des Kalapalo et des Kuikuro. Ils ont même été déclarés éteints, et leur terre, Pequizal do Naruvotu, n'a été identifiée qu'en 2006."
+ },
+ "tora": {
+  "text": "Les Torá vivent près de l'embouchure de la rivière Marmelos, dans l'Amazonas, et sont 330 personnes (Siasi/Sesai, 2014). Leur langue, de la famille txapakura, s'est perdue, et ils parlent aujourd'hui portugais. Au XVIIIe siècle, ils ont été durement réprimés pour avoir tenté d'empêcher l'invasion de leurs terres et ont presque disparu."
+ },
+ "guarani": {
+  "text": "Les Guarani vivent sur un territoire qui s'étend sur le Brésil, la Bolivie, le Paraguay et l'Argentine. Au Brésil, ils sont 85 255 personnes (Mapa Guarani Continental, 2016), la plupart dans le Sud, le Sud-Est et au Mato Grosso do Sul, avec des communautés aussi au Pará. Ils parlent le guarani, de la famille tupi-guarani, et s'appellent eux-mêmes Avá, personne.",
+  "caption": "Des Guarani jouent au football dans le village Rio Silveiras, à Bertioga, São Paulo, 2018."
+ },
+ "arapium": {
+  "text": "Les Arapium vivent au Pará et sont 2 204 personnes (Siasi/Sesai, 2012).",
+  "caption": "Tereza Arapium avec un maracá, à Rio de Janeiro, août 2022."
+ },
+ "hi-merima": {
+  "text": "Les Hi-Merimã vivent en isolement volontaire entre les rivières Juruá et Purus, dans l'Amazonas, et leur langue est classée dans la famille arawá. On ne sait pas combien ils sont. Comme pour tous les peuples isolés, le contact forcé et les invasions entraînent un risque d'épidémies et de mort."
+ },
+ "krikati": {
+  "text": "Les Krĩkati vivent au Maranhão, sont 1 031 personnes (Siasi/Sesai, 2020) et parlent une langue jê. C'est un peuple Timbira. Leurs terres ont été envahies par des fermes d'élevage bovin depuis le XIXe siècle, et ce n'est qu'en 2004, après des décennies de conflit, que l'État brésilien a pleinement reconnu leurs droits sur elles.",
+  "caption": "Letícia Milhomem Krikati à la 2e Marche des femmes autochtones, à Brasilia, septembre 2021."
+ },
+ "aikewara": {
+  "text": "Les Aikewara vivent au Pará, sont 470 personnes (Siasi/Sesai, 2020) et parlent une langue tupi-guarani. En 1960, lors du contact définitif avec les Blancs, une épidémie de grippe a tué les deux tiers du peuple, qui s'est trouvé réduit à 40 personnes. Depuis, la population s'est rétablie."
+ },
+ "xipaya": {
+  "text": "Les Xipaya vivent au Pará, entre la ville d'Altamira et les villages. Ils sont 241 personnes (Siasi/Sesai, 2020), et leur langue est de la famille juruna. Depuis le XVIIe siècle, ils ont été persécutés et forcés de travailler dans l'extractivisme, et à Altamira leurs droits leur ont été refusés. Ils luttent pour leurs droits territoriaux.",
+  "caption": "Juma Xipaia en réunion au ministère autrichien du climat, à Vienne, avril 2022."
+ },
+ "bororo": {
+  "text": "Les Bororo, qui s'appellent eux-mêmes Boe, vivent au Mato Grosso et sont 1 817 personnes (Siasi/Sesai, 2014). Leur langue donne son nom à la famille bororo. Le mot bororo veut dire cour du village. Les maisons forment un cercle, et la cour au centre est le lieu des rituels. Ils ont aujourd'hui droit à un territoire discontinu, après au moins 300 ans de contact.",
+  "caption": "Hommes Bororo à la clôture des Jeux des peuples autochtones, à Olinda, 2007."
+ },
+ "kambeba": {
+  "text": "Les Kambeba, aussi connus sous le nom d'Omágua, vivent dans l'Amazonas et au Pérou. Au Brésil, ils sont 875 personnes (Siasi/Sesai, 2014), et leur langue est de la famille tupi-guarani. À cause de la violence et de la discrimination, ils ont longtemps cessé de se dire autochtones. À partir des années 1980, ils ont recommencé à s'affirmer en tant que peuple.",
+  "caption": "De jeunes archers des peuples Karapanã, à gauche, et Kambeba, à droite, s'entraînent pour les sélections olympiques, 2016."
+ },
+ "tuyuka": {
+  "text": "Les Tuyuka vivent à la frontière entre le Brésil et la Colombie, dans le nord-ouest de l'Amazonas. Au Brésil, ils sont 1 050 personnes (Siasi/Sesai, 2014) et parlent une langue de la famille tukano orientale. Ils racontent qu'ils sont les Fils du Serpent de Pierre, nés d'un voyage ancestral sur les rivières Negro et Uaupés.",
+  "caption": "Un Tuyuka lors d'une représentation dans la maloca de son village, près de Paricatuba, à Iranduba, Amazonas, février 2023."
+ },
+ "kaixana": {
+  "text": "Les Kaixana vivent sur le moyen Japurá, dans l'Amazonas, et sont 1 410 personnes (Siasi/Sesai, 2020). Dans les années 1940 et 1950, l'exploitation du caoutchouc les a expulsés de la terre ferme, et beaucoup sont allés vivre avec les Kokama dans la plaine inondable. L'orpaillage illégal et la pêche prédatrice continuent de menacer leur territoire."
+ },
+ "guato": {
+  "text": "Les Guató sont le peuple du Pantanal, et vivent au Mato Grosso do Sul et au Mato Grosso. Ils sont 419 personnes (Siasi/Sesai, 2014), et leur langue forme une famille à elle seule. Ils vivaient sur les îles et les rives du fleuve Paraguay, et à partir des années 1940 ils ont été expulsés par le bétail des éleveurs et par des marchands de peaux. Peu de familles ont réussi à rester sur l'île Ínsua.",
+  "caption": "La chamane Sandra da Silva Guató dans la Terre Indigène Baía dos Guató, Mato Grosso, 2020."
+ },
+ "asurini-do-tocantins": {
+  "text": "Les Asurini du Tocantins, aussi connus sous le nom d'Asurini du Trocará, le nom de leur terre, sont 671 personnes (Siasi/Sesai, 2020) et parlent une langue tupi-guarani. Ils racontent qu'après un déluge la terre est devenue molle, et que le héros Mahira a appelé le tapir pour la durcir de nouveau."
+ },
+ "kwaza": {
+  "text": "Les Kwazá vivent dans le sud du Rondônia, avec les Aikanã et les Latundê, et sont 54 personnes (Siasi/Sesai, 2014). Leur langue forme une famille à elle seule et compte environ 25 locuteurs. Ils ont été expulsés de leurs terres par des éleveurs après l'ouverture de la route BR-364, dans les années 1960.",
+  "caption": "Arlene Aikanã Kwazá à la 2e Marche des femmes autochtones, à Brasilia, septembre 2021."
+ },
+ "paumari": {
+  "text": "Les Paumari vivent sur le moyen Purus, dans l'Amazonas, sont 1 804 personnes (Siasi/Sesai, 2014) et parlent une langue de la famille arawá. Ce sont des pêcheurs des plaines inondables. Ils sont connus comme les nomades du Purus, pour leur mobilité et pour leurs maisons traditionnelles construites sur des radeaux, les flutuantes."
+ },
+ "banawa": {
+  "text": "Les Banawá vivent entre les rivières Juruá et Purus, dans l'Amazonas, sont 207 personnes (Siasi/Sesai, 2014) et parlent une langue de la famille arawá, proche de celle de leurs voisins Jamamadi. Leur territoire a été envahi depuis le cycle du caoutchouc, et ce n'est que dans les années 1990 que l'État a reconnu leurs droits à la terre. Ils font encore face à des invasions d'exploitants forestiers."
+ },
+ "kraho-kanela": {
+  "text": "Les Krahô-Kanela vivent au Tocantins, sont 122 personnes (Siasi/Sesai, 2014), et leur langue est classée dans la famille jê."
+ },
+ "akuntsu": {
+  "text": "Les Akuntsu vivent dans les forêts du ruisseau Omerê, affluent de la rivière Corumbiara, dans le sud-est du Rondônia, et leur langue est de la famille tupari. Ils étaient trois survivants en 2017 (CGIIRC/Funai). La zone où ils vivent est une petite réserve de forêt, autrefois partie d'une ferme, encerclée par l'avancée de l'agriculture et de l'élevage."
+ },
+ "kanoe": {
+  "text": "Les Kanoê vivent dans le sud du Rondônia, près de la frontière avec la Bolivie, et sont 319 personnes (Siasi/Sesai, 2014). Leur langue forme une famille à elle seule. La plupart vivent sur les rives de la rivière Guaporé, et une famille de la rivière Omerê n'a été contactée qu'en 1995. Ils vivent dans une région occupée par des exploitants forestiers et des accapareurs de terres, qui menacent leurs terres."
+ },
+ "bakairi": {
+  "text": "Les Bakairi, qui s'appellent eux-mêmes Kurâ, vivent au Mato Grosso, sont 982 personnes (Siasi/Sesai, 2014) et parlent une langue caribe. Ce sont des pêcheurs et des agriculteurs, surtout de manioc. Avant les routes et les pistes d'atterrissage, c'étaient eux qui contrôlaient l'accès des expéditions au Haut Xingu.",
+  "caption": "Délégation Bakairi de la Terre Indigène Bakairi, de Paranatinga, Mato Grosso, 2017."
+ },
+ "xerente": {
+  "text": "Les Xerente, qui s'appellent eux-mêmes Akwê, vivent dans la savane du Tocantins, sur la rive est du fleuve Tocantins, à 70 km au nord de Palmas. Ils sont 3 964 personnes (Siasi/Sesai, 2020) et parlent une langue jê. En 250 ans de contact avec des non-autochtones, ils ont maintenu leur identité.",
+  "caption": "Des Xerente reçoivent une délégation du gouvernement fédéral dans le village Brejo Comprido, à Tocantínia, Tocantins, octobre 2017."
+ },
+ "galibi-kalina": {
+  "text": "Les Galibi Kali'na vivent à Oiapoque, dans l'Amapá, où ils sont 89 personnes (Siasi/Sesai, 2017), et parlent une langue caribe. La grande majorité du peuple vit au Venezuela, au Suriname et en Guyane française. Ceux du Brésil sont venus de Mana, en Guyane française, se considèrent comme brésiliens et n'ont jamais accepté les invitations des autorités françaises à revenir.",
+  "caption": "Des Kali'na du village de Bigi Poika, au Suriname, jouent des tambours sambura, avril 2006."
+ },
+ "krenak": {
+  "text": "Les Krenak, qui s'appellent eux-mêmes Borum, vivent au Minas Gerais, au Mato Grosso et dans l'État de São Paulo et sont 494 personnes (Siasi/Sesai, 2020). Ils sont les derniers Botocudos de l'Est, cible de massacres que le gouvernement colonial a décrétés comme des guerres justes. Ils vivent aujourd'hui sur une zone réduite, reconquise avec beaucoup de difficulté.",
+  "caption": "Ailton Krenak, écrivain et leader du peuple Krenak, en 2010."
+ },
+ "kraho": {
+  "text": "Les Krahô vivent au Tocantins, sont 3 571 personnes (Siasi/Sesai, 2020) et parlent une langue jê. C'est un peuple Timbira. En 1940, ils ont été massacrés par des éleveurs. En 1986, ils sont allés au Museu Paulista, à São Paulo, pour récupérer la hache en demi-lune, importante dans leurs traditions.",
+  "caption": "Gecílha Crukoy Krahô, leader du peuple Krahô, lors d'une audience au Sénat, à Brasilia, novembre 2016."
+ },
+ "krenye": {
+  "text": "Les Krenyê sont un peuple Timbira, de langue jê, du Maranhão, avec 104 personnes (Nascimento, 2016), et une partie d'entre eux vit parmi les Tembé et les Guajajara."
+ }
+}

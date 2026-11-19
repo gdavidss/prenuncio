@@ -7,7 +7,7 @@
 // against data/actions.json, and opens the API panel, which must show api/v1/llms.txt as the file has it.
 // Run: python3 -m http.server 8878 -d web &   then   node test/sectors.mjs
 import { spawn } from "node:child_process";
-import { mkdtempSync, rmSync } from "node:fs";
+import { mkdtempSync, rmSync, existsSync, readFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import assert from "node:assert/strict";
 import { inflateSync } from "node:zlib";
@@ -1177,7 +1177,7 @@ try {
     assert.equal(await js(`document.getElementById("api-text").children.length`), 0, "plain text, not rendered");
     assert.equal(await style("#api-text", "whiteSpace"), "pre-wrap");
     assert.match(await style("#api-text", "fontFamily"), /monospace/);
-    assert.equal(await js(`document.getElementById("api").innerText.replace(document.getElementById("api-text").innerText, "").trim().split(/\\s+/).join(" ")`), l === "en" ? "https://prenuncio.com/api/v1 COPY" : "https://prenuncio.com/api/v1 COPIAR", `${l}: one line above the block, and no other copy`);
+    assert.equal(await js(`document.getElementById("api").innerText.replace(document.getElementById("api-text").innerText, "").trim().split(/\\s+/).join(" ")`), "https://prenuncio.com/api/v1", `${l}: one line above the block, and no other copy (Copy is the clipboard beside the X)`);
     await until(`document.getElementById("mapbox").dataset.as === "dock" && !("swap" in document.documentElement.dataset) && !document.querySelector(".shot")`, `${l}: the map in its corner, the API on the stage`);
     assert.deepEqual(await js(`(() => { const a = document.getElementById("api").getBoundingClientRect(), t = document.getElementById("top").getBoundingClientRect(), m = document.getElementById("mapbox").getBoundingClientRect(), x = document.getElementById("api-top").getBoundingClientRect(); return [Math.round(a.left), Math.round(a.right) === innerWidth, Math.round(a.top - t.bottom), Math.round(a.bottom) === innerHeight, document.getElementById("api").matches(":modal"), x.right <= m.left, document.getElementById("api-close").getAttribute("aria-label")]; })()`), [0, true, 0, true, false, true, l === "en" ? "Close" : "Fechar"], `${l}: the API's instructions have the whole stage, clear of the small map, with an X`);
     await send("Input.dispatchKeyEvent", { type: "keyDown", key: "Escape", code: "Escape", windowsVirtualKeyCode: 27 });
@@ -1324,12 +1324,15 @@ try {
   // ---------- the people of an Indigenous land. Selected in Sectors, a land that has an entry opens on its
   // people: the photograph whole, with its author and licence as a link to the source, the name, a few lines;
   // the other peoples of the land as names that open. A land with no entry looks as it always did.
-  const peoples = await fetch(`${SITE}data/peoples.json`).then(r => (r.ok ? r.json() : null)).catch(() => null);
+  const PEOPLE = {};  // the peoples as each language's file has them: lines and captions are plain strings in that language
+  for (const l of ["en", "pt", "de", "ja", "ar"]) PEOPLE[l] = await fetch(`${SITE}data/peoples/${l}.json`).then(r => (r.ok ? r.json() : null)).catch(() => null);
+  const peoples = PEOPLE.en;
+  assert.equal((await fetch(`${SITE}data/peoples.json`)).ok, false, "the old single file of two languages is gone");
   if (peoples) {
     const ti = await fetch(`${SITE}data/sectors_ti.json`).then(r => r.json()), tiIds = ti.items.map(it => String(it.id));
     const withPhoto = tiIds.find(id => peoples[id]?.[0]?.photo && peoples[id].length > 1), many = tiIds.filter(id => peoples[id]).sort((a, b) => peoples[b].length - peoples[a].length)[0], noPhoto = tiIds.find(id => peoples[id] && !peoples[id][0].photo), none = tiIds.find(id => !peoples[id]);
     for (const l of ["pt", "en"]) {
-      const P = peoples[withPhoto], p0 = P[0];
+      const P = PEOPLE[l][withPhoto], p0 = P[0];
       await send("Page.navigate", { url: SITE + `?story=0&pp=${l}#l=${l}&m=sectors&s=ti&t=months` });
       await until(`document.documentElement.lang === "${l}" && !!document.querySelector("#legend .ramp") && /v=/.test(location.hash) && document.querySelectorAll("#chart .bar").length > 0`, `${l}: the Indigenous lands`);
       const v0 = (await hash()).match(/v=[^&]+/)[0], dockBefore = await rect("chartbox");
@@ -1340,7 +1343,7 @@ try {
       const got = await js(`(() => { const a = document.getElementById("people"), box = document.getElementById("chartbox"), r = box.getBoundingClientRect(), im = a.querySelector("img"), ir = im.getBoundingClientRect(), c = a.querySelector("figcaption a"); return { kids: [...a.children].map(e => e.tagName).slice(0, 4).join(), inDock: box.contains(a) && box.dataset.as === "dock", src: im.getAttribute("src"), alt: im.alt, lazy: im.loading, whole: Math.abs(ir.width / ir.height - im.naturalWidth / im.naturalHeight) < 0.02 && ir.width > 120 && ir.height > 150, credit: c.textContent, href: c.getAttribute("href"), blank: c.target, name: a.querySelector("h2").textContent, text: a.querySelector("h2 + p").textContent, others: [...a.querySelectorAll("details summary")].map(e => e.textContent), left: r.left < innerWidth * 0.05 && r.right < innerWidth * 0.4 && Math.round(r.bottom) >= innerHeight - 40, taller: r.height, noChart: ["hazrow", "body", "chart"].every(id => !document.getElementById(id).offsetParent), headline: !!document.getElementById("say").offsetParent, noColumn: !document.querySelector("aside#people") && document.getElementById("list").hidden }; })()`);
       assert.ok(got.taller > dockBefore[3] - dockBefore[1] + 100 && got.taller <= vh - 100, `${l}: the dock is taller for the people, and still under the map's panel: ${got.taller}`);
       delete got.taller;
-      assert.deepEqual(got, { kids: "BUTTON,FIGURE,H2,P", inDock: true, src: p0.photo.file, alt: p0.photo.caption[l], lazy: "lazy", whole: true, credit: (l === "pt" ? "Foto: " : "Photo: ") + `${p0.photo.author}, ${p0.photo.license}`, href: p0.photo.source_url, blank: "_blank", name: p0.name, text: p0.text[l], others: P.slice(1).map(x => x.name), left: true, noChart: true, headline: true, noColumn: true }, `${l}: the people take the timeline's place in its dock: the photograph whole with its credit linked to the source, the name, the lines, the others as names, then the headline; no plot, and no column on the right`);
+      assert.deepEqual(got, { kids: "BUTTON,FIGURE,H2,P", inDock: true, src: p0.photo.file, alt: p0.photo.caption, lazy: "lazy", whole: true, credit: (l === "pt" ? "Foto: " : "Photo: ") + `${p0.photo.author}, ${p0.photo.license}`, href: p0.photo.source_url, blank: "_blank", name: p0.name, text: p0.text, others: P.slice(1).map(x => x.name), left: true, noChart: true, headline: true, noColumn: true }, `${l}: the people take the timeline's place in its dock: the photograph whole with its credit linked to the source, the name, the lines, the others as names, then the headline; no plot, and no column on the right`);
       assert.equal((await hash()).match(/v=[^&]+/)[0], v0, `${l}: and the map has not moved`);
       assert.equal((await fetch(SITE + p0.photo.file, { method: "HEAD" })).ok, true, "the photograph is there");
       assert.match(await text("#say"), /km²|\d/, "the forecast for the land is under them");
@@ -1357,6 +1360,24 @@ try {
     assert.equal(await js(`!!document.querySelector("#people h2").offsetParent && !document.getElementById("chart").offsetParent`), true, "the full view: the people and the headline, still no plot");
     await key("Escape");
     await until(`${settled("map")} && !document.querySelector(".shot")`, "back to the dock");
+    // In another language the lines are that language's: what content/peoples_i18n has for the people, where it has it,
+    // and otherwise the English, marked as such and set left to right (on an Arabic page too). Changing the language
+    // fetches that language's file.
+    const repo = new URL("..", import.meta.url).pathname, content = JSON.parse(readFileSync(repo + "content/peoples.json", "utf8")), lands = JSON.parse(readFileSync(repo + "content/ti_peoples.json", "utf8"));
+    for (const l of ["de", "ja", "ar"]) {
+      const f = repo + `content/peoples_i18n/${l}.json`, tr = existsSync(f) ? JSON.parse(readFileSync(f, "utf8")) : {}, p0 = PEOPLE[l][withPhoto][0], k0 = lands[withPhoto].find(k => content[k]?.name === p0.name), want = tr[k0]?.text || content[k0].en;
+      await send("Page.navigate", { url: SITE + `?story=0&pl=${l}#l=${l}&m=sectors&s=ti&r=${withPhoto}&t=months` });
+      await until(`document.documentElement.lang === "${l}" && !document.getElementById("people").hidden && !!document.querySelector("#people h2 + p")`, `${l}: the people of land ${withPhoto}`);
+      const got = await js(`(() => { const p = document.querySelector("#people h2 + p"), im = document.querySelector("#people img"); return { text: p.textContent, dir: p.getAttribute("dir"), flow: getComputedStyle(p).direction, alt: im?.alt ?? null, asked: performance.getEntriesByType("resource").filter(e => e.name.includes("data/peoples/")).map(e => e.name.split("/").pop()).join() }; })()`);
+      assert.equal(got.text, want, `${l}: the people's lines are ${tr[k0]?.text ? "the translation in content/peoples_i18n" : "the English, where there is no translation yet"}`);
+      assert.equal(got.text, p0.text, `${l}: and they are what the language's file has`);
+      assert.deepEqual([got.dir, got.flow], p0.fallback ? ["ltr", "ltr"] : [null, l === "ar" ? "rtl" : "ltr"], `${l}: only lines that fell back to English are set left to right`);
+      assert.equal(got.alt, p0.photo.caption, `${l}: the photograph's words are the file's`);
+      assert.equal(got.asked, `${l}.json`, `${l}: one file of peoples was fetched, this language's`);
+    }
+    await flip();
+    await until(`document.documentElement.lang === "pt" && document.querySelector("#people h2 + p")?.textContent === ${JSON.stringify(PEOPLE.pt[withPhoto][0].text)}`, "the language changed with the people open: their lines in Portuguese");
+    assert.equal(await js(`performance.getEntriesByType("resource").filter(e => e.name.includes("data/peoples/")).map(e => e.name.split("/").pop()).join()`), "ar.json,pt.json", "a change of language fetches that language's peoples");
     // a land of many peoples: the list is long, and the dock scrolls
     await send("Page.navigate", { url: SITE + `?story=0&pp=many#l=pt&m=sectors&s=ti&r=${many}&t=months` });
     await until(`!document.getElementById("people").hidden && document.querySelectorAll("#people details").length === ${peoples[many].length - 1}`, "a land of many peoples");
@@ -1394,7 +1415,8 @@ try {
   // ---------- languages. Every string is in web/i18n/<code>.json. Every file has every key of the English one;
   // each language draws the default screen and the story's first step with no hole in a sentence; Arabic runs
   // right to left; the language is chosen by the address, then the saved choice, then the country, then the browser.
-  const LANGS15 = ["en", "pt", "es", "zh", "hi", "ar", "fr", "ru", "de", "ja", "id", "bn", "tr", "ko", "it"];
+  const LANGS15 = ["en", "pt", "es", "zh", "hi", "ar", "fr", "ru", "de", "ja", "id", "bn", "tr", "ko", "it", "vi"];  // (sixteen now: Vietnamese fills the menu's last place)
+  assert.equal(await js(`prenuncio.country("VN")`), "vi", "a request from Vietnam opens in Vietnamese");
   assert.deepEqual(await js(`prenuncio.langs`), LANGS15);
   const FORMS = ["zero", "one", "two", "few", "many", "other"], isForms = o => o && typeof o === "object" && !Array.isArray(o) && "other" in o && Object.keys(o).every(k => FORMS.includes(k));
   const keysOf = (o, p = "") => Object.entries(o).flatMap(([k, v]) => (k === "like" ? [] : v && typeof v === "object" && !Array.isArray(v) && !isForms(v) ? keysOf(v, p + k + ".") : [p + k]));
@@ -1460,12 +1482,84 @@ try {
   // the menu: every language by its own name; choosing one saves it and puts it in the link
   await clickOn("#lang-btn");
   await until(`!document.getElementById("lang-menu").hidden`, "the language menu");
-  assert.deepEqual(await js(`[...document.querySelectorAll("#lang-menu button")].map(b => b.textContent)`), ["English", "Português", "Español", "中文", "हिन्दी", "العربية", "Français", "Русский", "Deutsch", "日本語", "Bahasa Indonesia", "বাংলা", "Türkçe", "한국어", "Italiano"]);
+  assert.deepEqual(await js(`[...document.querySelectorAll("#lang-menu button")].map(b => b.textContent)`), ["English", "Português", "Español", "中文", "हिन्दी", "العربية", "Français", "Русский", "Deutsch", "日本語", "Bahasa Indonesia", "বাংলা", "Türkçe", "한국어", "Italiano", "Tiếng Việt"]);
   assert.equal(await js(`(() => { const m = document.getElementById("lang-menu").getBoundingClientRect(); return m.right <= innerWidth && m.left >= 0 && m.bottom <= innerHeight && [...document.querySelectorAll("#lang-menu button")].every(b => b.getBoundingClientRect().height >= 40); })()`), true, "the menu is on the screen, its rows tall enough");
   await clickOn('#lang-menu [data-l="pt"]');
   await until(`document.documentElement.lang === "pt" && document.getElementById("lang-menu").hidden && /l=pt/.test(location.hash) && /km² de desmatamento/.test(document.getElementById("say").textContent)`, "Portuguese, from the menu");
   assert.equal(await js(`localStorage.getItem("lang") + "/" + document.getElementById("lang-btn").textContent`), "pt/PT");
   await js(`localStorage.setItem("lang", "en")`);
+
+  // ---------- every word a reader sees comes from the language's file (or from the content written for that
+  // language). In Japanese, on the default screen, Sectors with a land selected, Priorities with a row open, About
+  // and the API, no text on the page and no label or title has a run of four Latin letters or more, apart from
+  // names that are not translated, and the places and peoples of the data (their own elements are left out, as
+  // are the lines of the peoples, which are content of their own and full of proper names, and the agents' file).
+  await send("Emulation.setDeviceMetricsOverride", { width: 1440, height: 900, deviceScaleFactor: 1, mobile: false });
+  const NAMES = ["Prenúncio", "prenuncio", "GitHub", "Dávid", "guidavid", "Movimento", "Cibernético", "Brasileiro", "IBAMA", "INPE", "PRODES", "DETER", "Hansen", "Sentinel", "GLAD", "AlphaEarth", "SINAFLOR", "Esri", "Maxar", "Earthstar", "Geographics", "Niño", "Niña", "https", "http"];
+  const LATIN = `(() => { const seen = e => { for (let x = e; x && x.nodeType === 1; x = x.parentElement) { const s = getComputedStyle(x); if (s.display === "none" || s.visibility === "hidden" || +s.opacity === 0) return false; } const r = e.getBoundingClientRect(); return r.width > 0 && r.height > 0; }, names = new Set(${JSON.stringify(NAMES)}), out = new Set(), data = "script, style, #api-text, #api-base, #lang-menu, .state-name, #list-rows .nm, #people h2, #people summary, #people p, #people figcaption, #scope, .leaflet-tooltip b, .leaflet-tooltip small, #about .bench td";
+    const runs = (x, tag) => { for (const m of x.matchAll(/[A-Za-zÀ-ÿ]{4,}/g)) if (!names.has(m[0])) out.add(tag + m[0]); };
+    const w = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT); for (let n; (n = w.nextNode());) { const p = n.parentElement; if (p && !p.closest(data) && seen(p)) runs(n.textContent, ""); }
+    for (const e of document.querySelectorAll("[aria-label], [title], img[alt]")) if (seen(e) && !e.closest(data) && !e.closest("#people")) for (const a of ["aria-label", "title", "alt"]) runs(e.getAttribute(a) || "", "@");
+    runs(document.title, "title:"); runs(document.querySelector('meta[name="description"]').content, "description:"); return [...out]; })()`;
+  const landJa = (await fetch(`${SITE}data/sectors_ti.json`).then(r => r.json())).items.map(it => String(it.id)).find(id => PEOPLE.ja?.[id]?.[0]?.photo);
+  for (const [what, hash_, ready] of [["the default screen", "m=cells", `!!document.querySelector("canvas.cells")?.dataset.key`], ["Sectors with a land selected", `m=sectors&s=ti&r=${landJa}`, `!document.getElementById("people").hidden && !!document.querySelector("#legend .ramp")`], ["Priorities with a row open", "m=prio&b=1", `!!document.querySelector("#list-rows .why")`], ["About", "m=cells&about", `document.getElementById("about").open && !!document.querySelector("#about .bench")`], ["the API", "m=cells&api", `document.getElementById("api").open && document.getElementById("api-text").textContent.length > 100`]]) {
+    await send("Page.navigate", { url: SITE + `?story=0&ja=${encodeURIComponent(what)}#l=ja&${hash_}` });
+    await until(`document.documentElement.lang === "ja" && document.querySelectorAll("#chart .bar").length > 0 && ${ready}`, "in Japanese: " + what);
+    await sleep(900);
+    assert.deepEqual(await js(LATIN), [], `in Japanese, ${what}: no word is left in another language`);
+  }
+  assert.match(await js(`document.title`), /^Prenúncio、/, "the tab's name is the language's");
+  // The API's Copy is the clipboard beside the X: to its left, the same size, named by the file. It puts the
+  // instructions on the clipboard, turns into a check for a moment and says so to a screen reader.
+  await send("Browser.grantPermissions", { permissions: ["clipboardReadWrite", "clipboardSanitizedWrite"] }).catch(() => {});
+  await send("Page.navigate", { url: SITE + "?story=0&cp=1#l=pt&api" });
+  await until(`document.documentElement.lang === "pt" && document.getElementById("api").open && document.getElementById("api-text").textContent.length > 100`, "the API, for its clipboard");
+  await sleep(700);
+  const cp = await js(`(() => { const c = document.getElementById("api-copy"), x = document.getElementById("api-close"), a = c.getBoundingClientRect(), b = x.getBoundingClientRect(), g = c.querySelector("svg").getBoundingClientRect(), xs = getComputedStyle(x, "::before"); return { left: Math.round(b.left - a.right), level: Math.round(a.top - b.top), same: Math.round(a.width) === Math.round(b.width) && Math.round(a.height) === Math.round(b.height), glyph: Math.round(g.width) === Math.round(parseFloat(xs.width)), label: c.getAttribute("aria-label") + "/" + c.title, word: c.textContent.trim(), hit: !!document.elementFromPoint(a.left + a.width / 2, a.top + a.height / 2)?.closest("#api-copy") }; })()`);
+  assert.deepEqual(cp, { left: 0, level: 0, same: true, glyph: true, label: "Copiar/Copiar", word: "", hit: true }, "the clipboard stands right of nothing and left of the X, at its size, with no word on it: " + JSON.stringify(cp));
+  await clickOn("#api-copy");
+  await until(`"done" in document.getElementById("api-copy").dataset && document.getElementById("api-said").textContent === "Copiado"`, "copied: the check, and the word for a screen reader");
+  const clip = await jsA(`navigator.clipboard.readText().catch(() => null)`);
+  if (clip !== null) assert.equal(clip, await js(`document.getElementById("api-text").textContent`), "the instructions are on the clipboard");
+  await until(`!("done" in document.getElementById("api-copy").dataset) && document.getElementById("api-said").textContent === ""`, "and the clipboard is back after a moment");
+  // The map's panel is no wider than what it holds: the mode tabs side by side, the scale at its own width, and
+  // no block of empty ground over the map. (Spreading them across the screen is a phone's layout.)
+  for (const [w, h] of [[1440, 900], [1280, 720]]) {
+    await send("Emulation.setDeviceMetricsOverride", { width: w, height: h, deviceScaleFactor: 1, mobile: false });
+    const gaps = {};
+    for (const m of ["cells", "sectors"]) {
+      await send("Page.navigate", { url: SITE + `?story=0&pw=${w}${m}#l=pt&m=${m}&s=ti` });
+      await until(`innerWidth === ${w} && document.documentElement.lang === "pt" && !!document.querySelector("#legend .what") && document.querySelectorAll("#chart .bar").length > 0 && document.documentElement.dataset.mode === "${m}"`, `the panel in ${m} at ${w}`);
+      await sleep(700);
+      const pn = await js(`(() => { const p = document.getElementById("mappanel"), s = getComputedStyle(p), kids = [...p.querySelectorAll("#modes, #kindrow, #legend .what, #legend .steps, #legend .ticks, #legend .rng, #legend .sw, #share")].filter(e => e.offsetParent).map(e => e.getBoundingClientRect().width), m = [...document.querySelectorAll("#modes button")].map(e => e.getBoundingClientRect()); return { over: Math.round(p.getBoundingClientRect().width - parseFloat(s.paddingLeft) - parseFloat(s.paddingRight) - Math.max(...kids)), wide: Math.round(p.getBoundingClientRect().width), gaps: m.slice(1).map((x, i) => Math.round(x.left - m[i].right)) }; })()`);
+      assert.ok(pn.over <= 2 && pn.wide <= 440 && pn.gaps.every(g => g === pn.gaps[0] && g <= 4), `at ${w}x${h} in ${m} the panel is as wide as its widest piece and the mode tabs stand side by side: ${JSON.stringify(pn)}`);
+      gaps[m] = pn.gaps.join();
+    }
+    assert.equal(gaps.cells, gaps.sectors, "the tabs are spaced the same in Cells and in Sectors");
+  }
+  await send("Emulation.setDeviceMetricsOverride", { width: 1440, height: 900, deviceScaleFactor: 1, mobile: false });
+  // In Cells the pointer is the square it marks: no cursor over the square, a crosshair where there is no forest,
+  // never the open hand; and when a zoom settles under a still pointer the square is there again at once.
+  await send("Page.navigate", { url: SITE + "?story=0&cur=1#l=pt&m=cells" });
+  await until(`document.documentElement.lang === "pt" && !!document.querySelector("canvas.cells")?.dataset.key && /v=/.test(location.hash) && innerWidth === 1440`, "Cells, for the cursor");
+  await sleep(1200);
+  const CUR = `(() => { const m = document.getElementById("map"); return [getComputedStyle(m).cursor, !!document.querySelector("path.cellmark"), !!document.querySelector(".leaflet-tooltip.tip.cell")]; })()`;
+  let cpt = null;
+  for (const q of [[900, 450], [1000, 400], [800, 380], [1050, 520]]) { await send("Input.dispatchMouseEvent", { type: "mouseMoved", x: q[0] + 3, y: q[1] + 2 }); await sleep(60); await send("Input.dispatchMouseEvent", { type: "mouseMoved", x: q[0], y: q[1] }); await sleep(400); if ((await js(CUR))[1]) { cpt = q; break; } }
+  assert.ok(cpt, "a point of forest for the cursor");
+  assert.deepEqual(await js(CUR), ["none", true, true], "over the square there is no cursor");
+  for (let k = 0; k < 6; k++) { send("Input.dispatchMouseEvent", { type: "mouseWheel", x: cpt[0], y: cpt[1], deltaX: 0, deltaY: -40 }); await sleep(30); }
+  await sleep(120);
+  assert.notEqual((await js(CUR))[0], "grab", "no open hand while the map zooms");
+  await until(`!prenuncio.zooming`, "the zoom settled under a still pointer");
+  await sleep(250);
+  assert.deepEqual(await js(CUR), ["none", true, true], "and the square and its tip are back at once, with no bare cursor in between");
+  // over ground that is not forest (the page's own ground, outside the Amazon) the cursor is a crosshair
+  await send("Input.dispatchMouseEvent", { type: "mouseMoved", x: 700, y: 880 }); await sleep(60);
+  await clickOn(".leaflet-control-zoom a.home");
+  await until(`document.querySelector(".leaflet-control-zoom a.home").classList.contains("off") && !prenuncio.zooming`, "the whole map again");
+  await send("Input.dispatchMouseEvent", { type: "mouseMoved", x: 520, y: 840 }); await sleep(80); await send("Input.dispatchMouseEvent", { type: "mouseMoved", x: 524, y: 842 }); await sleep(400);
+  assert.deepEqual(await js(CUR), ["crosshair", false, false], "where there is no forest: a crosshair, and nothing said");
 
   // ---------- the kinds of sector and Ranking, and the people's dock under them. With the height for it the kinds are a
   // list, one to a line, and Ranking closes it; in a short window, they are one row that never wraps (13 px

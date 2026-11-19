@@ -135,6 +135,7 @@
  "copy": "Copier",
  "credit": "Images : Esri, Maxar, Earthstar Geographics",
  "csv": "CSV",
+ "description": "Où la forêt amazonienne sera déboisée, brûlée, dégradée ou exploitée par l'orpaillage, et quelle est la pression aujourd'hui. Chaque prévision passée peut être comparée à ce qui s'est produit.",
  "enso": [
   "El Niño",
   "La Niña",
@@ -523,6 +524,7 @@
  "tipFc": "environ {exp} km² attendus",
  "tipPast": "{exp} km² attendus, {act} déboisés",
  "tipRank": "{rank} sur {n}",
+ "title": "Prenúncio, une alerte précoce pour l'Amazonie",
  "to": "{a} à {b}",
  "under": "moins de {c}",
  "where": {
@@ -542,5 +544,7 @@
   "near": "Près d'une déforestation récente.",
   "permit": "A une autorisation de déboiser {ha} hectares."
  },
- "window": "prévision"
+ "window": "prévision",
+ "zoomIn": "Zoom avant",
+ "zoomOut": "Zoom arrière"
 }

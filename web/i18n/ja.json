@@ -132,6 +132,7 @@
  "copy": "コピー",
  "credit": "画像：Esri、Maxar、Earthstar Geographics",
  "csv": "CSV",
+ "description": "アマゾンの森林が次にどこで伐採され、焼かれ、劣化し、採掘されるか、そして今どれほどの圧力がかかっているか。過去の予測はすべて、実際に起きたことと照らし合わせて確かめられます。",
  "enso": [
   "エルニーニョ",
   "ラニーニャ",
@@ -480,6 +481,7 @@
  "tipFc": "約{exp} km²の見込み",
  "tipPast": "見込み{exp} km²、実際の伐採{act}",
  "tipRank": "{n}か所のうち{rank}",
+ "title": "Prenúncio、アマゾンの早期警報",
  "to": "{a}～{b}",
  "under": "{c}未満",
  "where": {
@@ -499,5 +501,7 @@
   "near": "最近の伐採地の近くにあります。",
   "permit": "{ha}ヘクタールの伐採許可が出ています。"
  },
- "window": "予測"
+ "window": "予測",
+ "zoomIn": "拡大",
+ "zoomOut": "縮小"
 }

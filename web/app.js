@@ -11,7 +11,7 @@ const root = document.documentElement;
 // other...) chosen by Intl.PluralRules; where it changes with a sector being selected it is { all, here }. A key
 // a language lacks falls back to English, except its table of places for comparisons (like) and the story's
 // sentence that uses one, which are never borrowed from another language.
-const LANGS = { en: ["English", "en-US"], pt: ["Português", "pt-BR"], es: ["Español", "es"], zh: ["中文", "zh-CN"], hi: ["हिन्दी", "hi-IN"], ar: ["العربية", "ar-u-nu-latn"], fr: ["Français", "fr-FR"], ru: ["Русский", "ru-RU"], de: ["Deutsch", "de-DE"], ja: ["日本語", "ja-JP"], id: ["Bahasa Indonesia", "id-ID"], bn: ["বাংলা", "bn-BD"], tr: ["Türkçe", "tr-TR"], ko: ["한국어", "ko-KR"], it: ["Italiano", "it-IT"] };
+const LANGS = { en: ["English", "en-US"], pt: ["Português", "pt-BR"], es: ["Español", "es"], zh: ["中文", "zh-CN"], hi: ["हिन्दी", "hi-IN"], ar: ["العربية", "ar-u-nu-latn"], fr: ["Français", "fr-FR"], ru: ["Русский", "ru-RU"], de: ["Deutsch", "de-DE"], ja: ["日本語", "ja-JP"], id: ["Bahasa Indonesia", "id-ID"], bn: ["বাংলা", "bn-BD"], tr: ["Türkçe", "tr-TR"], ko: ["한국어", "ko-KR"], it: ["Italiano", "it-IT"], vi: ["Tiếng Việt", "vi-VN"] };
 const RTL = new Set(["ar"]), FORMS = new Set(["zero", "one", "two", "few", "many", "other"]);
 const plural = o => "other" in o && Object.keys(o).every(k => FORMS.has(k)), plain = o => o && typeof o === "object" && !Array.isArray(o);
 const RAW = {}, T = {};
@@ -42,7 +42,7 @@ async function loadLang(l) {
 const COUNTRY = Object.fromEntries(Object.entries({
   pt: "BR PT AO MZ", es: "ES MX AR CO CL PE VE EC GT CU BO DO HN PY SV NI CR PA UY PR GQ", zh: "CN SG", hi: "IN",
   ar: "DZ BH KM DJ EG IQ JO KW LB LY MR MA OM PS QA SA SO SD SY TN AE YE", fr: "FR CD CI SN", ru: "RU BY KZ", de: "DE AT",
-  ja: "JP", id: "ID", bn: "BD", tr: "TR", ko: "KR", it: "IT",
+  ja: "JP", id: "ID", bn: "BD", tr: "TR", ko: "KR", it: "IT", vi: "VN",
 }).flatMap(([l, cs]) => cs.split(" ").map(c => [c, l])));
 
 // An area as a place people know. A pure choice: among the language's places and the multiples it has a sentence
@@ -443,7 +443,7 @@ function zoomStep(now) {
   ZOOM.t = now;
   const nz = done ? ZOOM.to : z + gap * (1 - Math.exp(-dt / ZOOM.tau)), half = map.getSize().divideBy(2);
   map._move(map.unproject(map.project(ZOOM.ll, nz).subtract(ZOOM.at.subtract(half)), nz), nz, { pinch: true, round: false });  // the place under the pointer is held exactly: nothing adds up from frame to frame  // (as a pinch: the layers scale, nothing is redrawn)
-  if (done) { ZOOM.raf = 0; ZOOM.to = null; map._moveEnd(true); return; }
+  if (done) { ZOOM.raf = 0; ZOOM.to = null; map._moveEnd(true); cellAgain(); return; }  // (the pointer has not moved: what is under it now is said at once)
   ZOOM.raf = requestAnimationFrame(zoomStep);
 }
 function zoomBy(levels, at) {  // at: the point of the map's pane that stays where it is
@@ -855,8 +855,12 @@ function cellSay(e) {
   WHERE.show = show;
   show();
 }
+// where the pointer was last seen on the map: when a zoom settles under a still pointer, the cell there is said again without waiting for it to move
+let pointerAt = null;
+function cellAgain() { if (pointerAt && !pin && !mapSmall()) cellSay({ type: "mousemove", containerPoint: pointerAt, latlng: map.containerPointToLatLng(pointerAt) }); }
+map.on("mousemove", e => { pointerAt = e.containerPoint; });
 map.on("mousemove click", cellSay);
-map.on("mouseout", () => { if (!pin) cellQuiet(); });
+map.on("mouseout", () => { pointerAt = null; if (!pin) cellQuiet(); });
 map.on("movestart zoomstart", () => { if (!pin || ZOOM.to != null) cellQuiet(); });
 function zoomed() {
   const z = map.getZoom();
@@ -905,18 +909,20 @@ async function drawSectors() {
 map.on("zoomend", () => { if (shown) SEC[shown].then(K => K.items.forEach(it => it.layer.setStyle(styleOf(it)))); });
 map.on("click", () => { if (S.mode === "sectors" && S.sel != null) select(null); });
 
-// The people of an Indigenous land (data/peoples.json, where there is an entry for it): the photograph first,
-// whole, with its author and licence under it as the licence asks; then the people's name and a few lines. Other
-// peoples of the same land follow as names that open. Text in the reader's language, or in English.
-let PEOPLES = null;
+// The people of an Indigenous land (data/peoples/<lang>.json, where there is an entry for it): the photograph
+// first, whole, with its author and licence under it as the licence asks; then the people's name and a few lines.
+// Other peoples of the same land follow as names that open. The lines and the caption are in the reader's
+// language: the file of that language is fetched, and again when the language changes. Where the pipeline had no
+// translation the English stands in, marked, and is set left to right.
+const PEOPLES = {};
 async function people() {
   const id = S.mode === "sectors" && S.kind === "ti" ? S.sel : null;
-  const all = id ? await (PEOPLES ||= fetch("data/peoples.json").then(r => (r.ok ? r.json() : {})).catch(() => ({}))) : {};
-  if (id !== (S.mode === "sectors" && S.kind === "ti" ? S.sel : null)) return;
-  const list = all[id] || [], own = x => x?.[lang] || x?.en || "", L_ = t().people, was = peopleOf;
+  const l = lang, all = id ? await (PEOPLES[l] ||= fetch(`data/peoples/${l}.json`).then(r => (r.ok ? r.json() : {})).catch(() => ({}))) : {};
+  if (l !== lang || id !== (S.mode === "sectors" && S.kind === "ti" ? S.sel : null)) return;
+  const list = all[id] || [], L_ = t().people, was = peopleOf, ltr = x => (x?.fallback ? ` dir="ltr" lang="en"` : "");
   peopleOf = list.length ? id : null;
-  const one = (p, head) => `${p.photo && head ? `<figure><img src="${esc(p.photo.file)}" alt="${esc(own(p.photo.caption))}" loading="lazy"><figcaption>${p.photo.place ? esc(own(p.photo.caption).replace(/\.$/, "")) + ". " : ""}<a href="${esc(p.photo.source_url)}" target="_blank" rel="noopener">${esc(L_.credit({ author: p.photo.author, license: p.photo.license }))}</a></figcaption></figure>` : ""}`
-    + (head ? `<h2 dir="auto">${esc(p.name)}</h2><p dir="auto">${esc(own(p.text))}</p>` : `<details><summary dir="auto">${esc(p.name)}</summary><p dir="auto">${esc(own(p.text))}</p></details>`);  // (dir=auto: a text that falls back to English reads left to right on a right-to-left page)
+  const one = (p, head) => `${p.photo && head ? `<figure><img src="${esc(p.photo.file)}" alt="${esc(p.photo.caption)}" loading="lazy"><figcaption>${p.photo.place ? `<span${ltr(p.photo)}>${esc(p.photo.caption)}</span> ` : ""}<a href="${esc(p.photo.source_url)}" target="_blank" rel="noopener">${esc(L_.credit({ author: p.photo.author, license: p.photo.license }))}</a></figcaption></figure>` : ""}`
+    + (head ? `<h2 dir="auto">${esc(p.name)}</h2><p${ltr(p)}>${esc(p.text)}</p>` : `<details><summary dir="auto">${esc(p.name)}</summary><p${ltr(p)}>${esc(p.text)}</p></details>`);  // (a name sets its own direction; lines that fell back to English read left to right on a right-to-left page)
   $("people").innerHTML = list.length ? `<button id="people-x" class="x" aria-label="${esc(t().close)}" title="${esc(t().close)}"></button>` + one(list[0], true) + (list.length > 1 ? `<h3>${esc(L_.also)}</h3>` + list.slice(1).map(p => one(p, false)).join("") : "") : "";
   $("people").hidden = !list.length;
   if (list.length) root.dataset.people = ""; else delete root.dataset.people;
@@ -1442,7 +1448,9 @@ function chrome() {
   const L_ = t(), btn = (k, label, on) => `<button data-k="${k}" aria-pressed="${on}">${label}</button>`;
   document.documentElement.lang = lang;
   document.documentElement.dir = RTL.has(lang) ? "rtl" : "ltr";
+  document.title = L_.title; document.querySelector('meta[name="description"]').content = L_.description;  // the tab's name and the page's description, in the reader's language
   document.documentElement.dataset.hazard = S.hazard;
+  document.documentElement.dataset.mode = S.mode;
   document.documentElement.dataset.scale = S.scale;
   document.documentElement.style.setProperty("--hue", `var(--${S.hazard})`);
   $("hazard").className = $("scale").className = $("kinds").className = $("ahead").className = "pick";
@@ -1473,12 +1481,13 @@ function chrome() {
   for (const [id, label] of [["chart-front", front === "chart" ? L_.close : L_.front.chart], ["map-front", L_.front.map]]) { $(id).setAttribute("aria-label", label); $(id).title = label; }
   for (const [id, label] of [["list-close", L_.closeList], ["about-close", L_.close], ["api-close", L_.close], ["menu-btn", L_.menu]]) { $(id).setAttribute("aria-label", label); $(id).title = label; }
   homeBtn.setAttribute("aria-label", L_.home); homeBtn.title = L_.home;
+  for (const [sel, label] of [[".leaflet-control-zoom-in", L_.zoomIn], [".leaflet-control-zoom-out", L_.zoomOut]]) { const b = document.querySelector(sel); if (b) { b.title = label; b.setAttribute("aria-label", label); } }
   fitRows();
   $("list-title").textContent = S.mode === "sectors" ? L_.ranking : L_.modes.prio;
   $("story-btn").textContent = L_.story;
   $("skip-btn").textContent = L_.skip;
   $("about-btn").textContent = L_.about;
-  $("api-copy").textContent = L_.copy;
+  $("api-copy").setAttribute("aria-label", L_.copy); $("api-copy").title = L_.copy;
   $("lang-btn").textContent = lang.toUpperCase();
   $("lang-btn").setAttribute("aria-label", L_.language); $("lang-btn").title = L_.language;
   $("lang-menu").innerHTML = Object.keys(LANGS).map(l => `<button data-l="${l}" lang="${l}" role="menuitemradio" aria-checked="${l === lang}">${LANGS[l][0]}</button>`).join("");
@@ -1685,8 +1694,8 @@ $("api-copy").onclick = async () => {
   try { await navigator.clipboard.writeText(apiText ?? ""); }
   catch (err) { getSelection().selectAllChildren($("api-text")); ok = document.execCommand("copy"); }  // no clipboard access: select the text and copy that
   if (!ok) return;  // the text stays selected, ready to be copied by hand
-  $("api-copy").textContent = t().copied;
-  setTimeout(() => ($("api-copy").textContent = t().copy), 1600);
+  $("api-copy").dataset.done = ""; $("api-said").textContent = t().copied;  // the clipboard turns into a check for a moment, and the word is said to a screen reader
+  setTimeout(() => { delete $("api-copy").dataset.done; $("api-said").textContent = ""; }, 1500);
 };
 $("api-close").onclick = () => $("api").close();
 

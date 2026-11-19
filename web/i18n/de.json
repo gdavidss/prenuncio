@@ -138,6 +138,7 @@
  "copy": "Kopieren",
  "credit": "Bilder: Esri, Maxar, Earthstar Geographics",
  "csv": "CSV",
+ "description": "Wo der Amazonaswald als Nächstes gerodet, verbrannt, geschädigt oder durch Bergbau zerstört wird und wie stark der Druck jetzt ist. Jede frühere Prognose lässt sich mit dem vergleichen, was geschah.",
  "enso": [
   "El Niño",
   "La Niña",
@@ -514,6 +515,7 @@
  "tipFc": "etwa {exp} km² erwartet",
  "tipPast": "{exp} km² erwartet, {act} gerodet",
  "tipRank": "{rank} von {n}",
+ "title": "Prenúncio, eine Frühwarnung für Amazonien",
  "to": "{a} bis {b}",
  "under": "unter {c}",
  "where": {
@@ -533,5 +535,7 @@
   "near": "Nahe an jüngster Rodung.",
   "permit": "Hat eine Genehmigung, {ha} Hektar zu roden."
  },
- "window": "Prognose"
+ "window": "Prognose",
+ "zoomIn": "Vergrößern",
+ "zoomOut": "Verkleinern"
 }

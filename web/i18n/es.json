@@ -138,6 +138,7 @@
  "copy": "Copiar",
  "credit": "Imágenes: Esri, Maxar, Earthstar Geographics",
  "csv": "CSV",
+ "description": "Dónde se deforestará, quemará, degradará o minará la selva amazónica a continuación, y cuánta presión hay ahora. Cada previsión pasada puede compararse con lo que ocurrió.",
  "enso": [
   "El Niño",
   "La Niña",
@@ -514,6 +515,7 @@
  "tipFc": "unos {exp} km² previstos",
  "tipPast": "{exp} km² previstos, {act} deforestados",
  "tipRank": "{rank} de {n}",
+ "title": "Prenúncio, una alerta temprana para la Amazonía",
  "to": "{a} a {b}",
  "under": "menos de {c}",
  "where": {
@@ -533,5 +535,7 @@
   "near": "Cerca de deforestación reciente.",
   "permit": "Tiene permiso para deforestar {ha} hectáreas."
  },
- "window": "pronóstico"
+ "window": "pronóstico",
+ "zoomIn": "Acercar",
+ "zoomOut": "Alejar"
 }

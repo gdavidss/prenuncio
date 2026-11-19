@@ -132,6 +132,7 @@
  "copy": "Copiar",
  "credit": "Imagens: Esri, Maxar, Earthstar Geographics",
  "csv": "CSV",
+ "description": "Onde a floresta amazônica será desmatada, queimada, degradada ou garimpada a seguir, e quão forte é a pressão agora. Cada previsão passada pode ser conferida com o que aconteceu.",
  "enso": [
   "El Niño",
   "La Niña",
@@ -513,6 +514,7 @@
  "tipFc": "cerca de {exp} km² esperados",
  "tipPast": "{exp} km² esperados, {act} desmatados",
  "tipRank": "{rank} entre {n}",
+ "title": "Prenúncio, um alerta antecipado para a Amazônia",
  "to": "{a} a {b}",
  "under": "menos de {c}",
  "where": {
@@ -532,5 +534,7 @@
   "near": "Fica perto de desmate recente.",
   "permit": "Tem licença para desmatar {ha} hectares."
  },
- "window": "previsão"
+ "window": "previsão",
+ "zoomIn": "Aproximar",
+ "zoomOut": "Afastar"
 }

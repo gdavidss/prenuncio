@@ -132,6 +132,7 @@
  "copy": "Copy",
  "credit": "Imagery: Esri, Maxar, Earthstar Geographics",
  "csv": "CSV",
+ "description": "Where the Amazon forest will be cleared, burned, degraded or mined next, and how hard the pressure is now. Every past forecast can be checked against what happened.",
  "enso": [
   "El Niño",
   "La Niña",
@@ -494,6 +495,7 @@
  "tipFc": "about {exp} km² expected",
  "tipPast": "{exp} km² expected, {act} cleared",
  "tipRank": "{rank} of {n}",
+ "title": "Prenúncio, an early warning for the Amazon",
  "to": "{a} to {b}",
  "under": "under {c}",
  "where": {
@@ -513,5 +515,7 @@
   "near": "Close to recent clearing.",
   "permit": "Has a permit to clear {ha} hectares."
  },
- "window": "forecast"
+ "window": "forecast",
+ "zoomIn": "Zoom in",
+ "zoomOut": "Zoom out"
 }

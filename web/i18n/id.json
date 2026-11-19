@@ -132,6 +132,7 @@
  "copy": "Salin",
  "credit": "Citra: Esri, Maxar, Earthstar Geographics",
  "csv": "CSV",
+ "description": "Di mana hutan Amazon akan dibuka, terbakar, rusak, atau ditambang berikutnya, dan seberapa kuat tekanannya sekarang. Setiap prakiraan lama dapat dibandingkan dengan apa yang terjadi.",
  "enso": [
   "El Niño",
   "La Niña",
@@ -480,6 +481,7 @@
  "tipFc": "sekitar {exp} km² diperkirakan",
  "tipPast": "{exp} km² diperkirakan, {act} dibuka",
  "tipRank": "{rank} dari {n}",
+ "title": "Prenúncio, peringatan dini untuk Amazon",
  "to": "{a} sampai {b}",
  "under": "di bawah {c}",
  "where": {
@@ -499,5 +501,7 @@
   "near": "Dekat dengan deforestasi yang baru terjadi.",
   "permit": "Memiliki izin membuka {ha} hektare."
  },
- "window": "prakiraan"
+ "window": "prakiraan",
+ "zoomIn": "Perbesar",
+ "zoomOut": "Perkecil"
 }

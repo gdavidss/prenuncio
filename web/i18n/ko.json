@@ -132,6 +132,7 @@
  "copy": "복사",
  "credit": "영상: Esri, Maxar, Earthstar Geographics",
  "csv": "CSV",
+ "description": "아마존 숲이 다음에 어디에서 벌채되고, 불타고, 훼손되고, 채굴될지, 그리고 지금 압력이 얼마나 큰지 보여 줍니다. 지난 예측은 모두 실제로 일어난 일과 비교해 볼 수 있습니다.",
  "enso": [
   "엘니뇨",
   "라니냐",
@@ -480,6 +481,7 @@
  "tipFc": "약 {exp} km² 예상",
  "tipPast": "예상 {exp} km², 벌채 {act}",
  "tipRank": "{n}곳 중 {rank}",
+ "title": "Prenúncio, 아마존 조기 경보",
  "to": "{a}~{b}",
  "under": "{c} 미만",
  "where": {
@@ -499,5 +501,7 @@
   "near": "최근 벌채지와 가깝습니다.",
   "permit": "{ha}헥타르의 벌채 허가가 있습니다."
  },
- "window": "예측"
+ "window": "예측",
+ "zoomIn": "확대",
+ "zoomOut": "축소"
 }

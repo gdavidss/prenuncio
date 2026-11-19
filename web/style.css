@@ -79,6 +79,13 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 .x { display: grid; place-items: center; width: 34px; height: 34px; flex: none; }
 .x::before { content: ""; width: 14px; height: 14px; background: linear-gradient(45deg, transparent 44%, currentColor 44% 56%, transparent 56%), linear-gradient(-45deg, transparent 44%, currentColor 44% 56%, transparent 56%); }
 .x:hover { background: var(--ink); color: var(--ground); }
+/* an X-sized button that carries a glyph of its own, drawn at the X's weight (the clipboard beside the X of the API) */
+.x.ico::before { content: none; }
+.x.ico svg { width: 14px; height: 14px; }
+.x.ico svg path { fill: none; stroke: currentColor; stroke-width: 1.7; }
+.x.ico .ok, .x.ico[data-done] .clip { display: none; }
+.x.ico[data-done] .ok { display: inline; }
+.sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
 
 /* ---------- the page: the map under everything, and the two boxes that swap ---------- */
 #app { position: absolute; inset: 0; }  /* (not fixed: its boxes take their place among the panels, by their own z-index) */
@@ -135,8 +142,7 @@ canvas.cells { position: absolute; left: 0; top: 0; transition: opacity 0.25s; }
 /* what the map shows and how to read it, set on the page at the top of the left column: the mode, the kinds
    of sector, the key to the colours (its steps are the filter) and the count of cells */
 #mappanel { position: absolute; z-index: 10; left: calc(var(--pad) - var(--in)); top: var(--top); display: flex; flex-direction: column; gap: 10px; width: fit-content; max-width: calc(var(--rail) + 2 * var(--in)); padding: 6px var(--in) 12px; background: var(--soft); animation: arrive 0.4s both; transition: opacity 0.5s, visibility 0s; }
-#mapctl { display: grid; width: min(340px, 100%); justify-items: start; row-gap: 2px; }
-#modes { width: min(349px, calc(100% + 9px)); justify-content: space-between; }
+#mapctl { display: grid; width: fit-content; max-width: 100%; justify-items: start; row-gap: 2px; }  /* as wide as what it holds: the panel is never a block of empty ground over the map */
 /* the kinds of sector: a list, one to a line, when the window has the height; Ranking closes it, a toggle with a
    small list before the word, since it opens the ranked list of the kind that is on and is not a kind itself */
 #kindrow { display: flex; flex-direction: column; align-items: flex-start; max-width: 100%; margin-top: 4px; }
@@ -151,7 +157,7 @@ canvas.cells { position: absolute; left: 0; top: 0; transition: opacity 0.25s; }
 #rank-btn[aria-pressed="true"] { color: var(--ink); border-bottom-color: var(--green); }
 #foot { display: flex; flex-direction: column; align-items: flex-start; gap: 6px; }
 #legend { margin: 0; display: flex; flex-direction: column; gap: 6px; width: 100%; font-size: 13px; font-weight: 500; }
-#legend .what { display: flex; align-items: baseline; gap: 8px; font: 700 15px/1.2 var(--cond); letter-spacing: 0.06em; text-transform: uppercase; text-wrap: balance; }
+#legend .what { display: flex; align-items: baseline; gap: 8px; font: 700 15px/1.2 var(--cond); letter-spacing: 0.06em; text-transform: uppercase; text-wrap: balance; max-width: 340px; }  /* (no wider than the scale under it: a long title wraps, it does not widen the panel) */
 #legend .what .glyph { transform: translateY(1px); }
 /* the steps of chance in one strip, green then the four reds, with the chance written where two steps meet.
    Each step is a button: choosing one leaves the cells at that chance or more. */
@@ -439,7 +445,7 @@ canvas.cells { position: absolute; left: 0; top: 0; transition: opacity 0.25s; }
 #about[open] > *, #api[open] > * { animation: enter 0.5s cubic-bezier(0.2, 0.7, 0.2, 1) both; }
 @keyframes enter { from { opacity: 0; transform: scale(0.96); } }
 .pbar { position: sticky; top: 0; z-index: 1; display: flex; justify-content: flex-end; flex: none; padding: 8px 0 4px; background: var(--ground); }
-.pbar .x { margin-right: -10px; }
+.pbar .x:not(.ico) { margin-right: -10px; }
 /* in the story one piece has the stage at a time, in the middle of it, and nothing scrolls */
 #about[data-only] { display: flex; flex-direction: column; padding-bottom: 0; overflow: hidden; }
 #about[data-only]:not([open]) { display: none; }
@@ -478,12 +484,11 @@ canvas.cells { position: absolute; left: 0; top: 0; transition: opacity 0.25s; }
 #api[open] { display: flex; flex-direction: column; }
 #api-top { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 20px; margin: 0 0 12px; font-size: 16px; font-weight: 600; flex: none; }
 #api-top a { color: inherit; text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 3px; overflow-wrap: anywhere; }
-#api-copy { font: 600 15px var(--cond); letter-spacing: 0.07em; text-transform: uppercase; color: var(--green); text-decoration: underline; text-underline-offset: 3px; }
 #api-text { flex: 1 1 auto; min-height: 0; overflow: auto; overscroll-behavior: contain; margin: 0; padding-top: 12px; border-top: 1px solid var(--ink); font: 13px/1.5 ui-monospace, "SF Mono", SFMono-Regular, Menlo, Consolas, monospace; white-space: pre-wrap; overflow-wrap: anywhere; tab-size: 4; }
 
 /* where there is not the height for the list (a short window) the kinds are one row that never wraps, Ranking at its end; its type is never under 13 px: the gaps tighten first, and then the row scrolls */
-@media (min-width: 861px) and (max-height: 780px) { #mappanel:has(#kindrow:not([hidden])) { width: calc(var(--rail) + 2 * var(--in)); } #mapctl { width: 100%; grid-template-columns: minmax(0, 1fr); } #kindrow { flex-direction: row; align-items: baseline; gap: 14px; width: 100%; } #kinds { flex-direction: row; flex: 0 1 auto; min-width: 0; gap: 0 14px; overflow-x: auto; scrollbar-width: none; } #kinds::-webkit-scrollbar { display: none; } #rank-btn { margin-top: 0; margin-inline-start: auto; } }
-@media (min-width: 861px) and (max-height: 879px) { :root[data-story] #mappanel:has(#kindrow:not([hidden])) { width: calc(var(--rail) + 2 * var(--in)); } :root[data-story] #mappanel:has(#kindrow:not([hidden])) #mapctl { width: 100%; grid-template-columns: minmax(0, 1fr); } :root[data-story] #mappanel:has(#kindrow:not([hidden])) #kindrow { flex-direction: row; align-items: baseline; gap: 14px; width: 100%; } :root[data-story] #mappanel:has(#kindrow:not([hidden])) #kinds { flex-direction: row; flex: 0 1 auto; min-width: 0; gap: 0 14px; overflow-x: auto; scrollbar-width: none; } :root[data-story] #mappanel:has(#kindrow:not([hidden])) #kinds::-webkit-scrollbar { display: none; } :root[data-story] #mappanel:has(#kindrow:not([hidden])) #rank-btn { margin-top: 0; margin-inline-start: auto; } }  /* (in the story, where the window has not the height for the list and the caption under it) */
+@media (min-width: 861px) and (max-height: 780px) { #mapctl { grid-template-columns: minmax(0, auto); } #kindrow { flex-direction: row; align-items: baseline; gap: 14px; } #kinds { flex-direction: row; flex: 0 1 auto; min-width: 0; gap: 0 14px; overflow-x: auto; scrollbar-width: none; } #kinds::-webkit-scrollbar { display: none; } #rank-btn { margin-top: 0; } }
+@media (min-width: 861px) and (max-height: 879px) { :root[data-story] #mappanel:has(#kindrow:not([hidden])) #mapctl { grid-template-columns: minmax(0, auto); } :root[data-story] #mappanel:has(#kindrow:not([hidden])) #kindrow { flex-direction: row; align-items: baseline; gap: 14px; } :root[data-story] #mappanel:has(#kindrow:not([hidden])) #kinds { flex-direction: row; flex: 0 1 auto; min-width: 0; gap: 0 14px; overflow-x: auto; scrollbar-width: none; } :root[data-story] #mappanel:has(#kindrow:not([hidden])) #kinds::-webkit-scrollbar { display: none; } :root[data-story] #mappanel:has(#kindrow:not([hidden])) #rank-btn { margin-top: 0; } }  /* (in the story, where the window has not the height for the list and the caption under it) */
 /* a tall window: the kinds are the list in the story as in the tool, and the caption stands under it, at one place for every step, its type a little smaller so the timeline keeps its dock */
 @media (min-width: 861px) and (min-height: 880px) { :root[data-story] #story { top: calc(var(--top) + 258px); } :root[data-story] #story-line { font-size: clamp(28px, 2.6vw, 38px); } }
 @media (min-width: 861px) {
@@ -549,7 +554,7 @@ canvas.cells { position: absolute; left: 0; top: 0; transition: opacity 0.25s; }
   /* what the map shows: a band under the header, the mode and a short key */
   #mappanel { left: 0; top: var(--top); width: 100%; padding: 0 16px 10px; gap: 4px; }
   #mapctl { width: 100%; }
-  #modes { width: calc(100% + 20px); }  /* across the screen: the first word at the left edge of the page, the last ending at the right */
+  #modes { width: calc(100% + 20px); justify-content: space-between; }  /* across the screen: the first word at the left edge of the page, the last ending at the right */
   #modes:has(button:first-child[aria-pressed="true"]), #modes:has(button:last-child[aria-pressed="true"]) { width: calc(100% + 10px); }
   .seg { margin-left: -10px; }
   .seg button { min-height: 44px; padding: 0 10px; font-size: 16px; }
@@ -562,7 +567,7 @@ canvas.cells { position: absolute; left: 0; top: 0; transition: opacity 0.25s; }
   #rank-btn::after { content: ""; position: absolute; inset: -2px -8px -2px -12px; }  /* a 44 px target */
   #kindrow { gap: 8px; }
   #legend { gap: 5px; font-size: 12.5px; }
-  #legend .what { font-size: 13.5px; }
+  #legend .what { font-size: 13.5px; max-width: none; }
   #legend .steps { width: 100%; }
   #legend .steps button { height: 12px; }
   #legend .steps button::after { inset: -16px 0; }
@@ -706,7 +711,7 @@ canvas.cells { position: absolute; left: 0; top: 0; transition: opacity 0.25s; }
   :root[data-people] #chartbox[data-as="dock"] #people figcaption { display: none; }
   :root[data-people] #chartbox[data-as="dock"] :is(#level, #sub) { display: none; }
   :root[data-people] #chartbox[data-as="stage"] #chartin { padding-bottom: 30px; }
-  #api-top a, #api-copy { min-height: 44px; display: inline-flex; align-items: center; }
+  #api-top a { min-height: 44px; display: inline-flex; align-items: center; }
   #api-text { font-size: 12px; padding-bottom: 24px; }
 }
 /* a short phone: the bulletin rests lower, without its hazards, so the Amazon keeps its place above it */
@@ -726,7 +731,7 @@ canvas.cells { position: absolute; left: 0; top: 0; transition: opacity 0.25s; }
 [dir="rtl"] #story-marks { margin: 0 0 0 auto; }
 [dir="rtl"] .seg { margin-left: 0; margin-right: -9px; }
 [dir="rtl"] #list-rows button, [dir="rtl"] #signs > div, [dir="rtl"] #signs > button { text-align: right; }
-[dir="rtl"] .pbar .x { margin-right: 0; margin-left: -10px; }
+[dir="rtl"] .pbar .x:not(.ico) { margin-right: 0; margin-left: -10px; }
 @media (max-width: 860px) { [dir="rtl"] .pbar { right: auto; left: 48px; } [dir="rtl"] .pbar .x { margin: 0; } }
 @media (min-width: 861px) {
   [dir="rtl"] #mappanel { left: auto; right: calc(var(--pad) - var(--in)); }
@@ -789,7 +794,9 @@ canvas.cells { position: absolute; left: 0; top: 0; transition: opacity 0.25s; }
   :root:is([lang="ar"], [lang="hi"], [lang="bn"], [lang="zh"], [lang="ja"], [lang="ko"]) #story-line { font-size: clamp(22px, 2.1vw, 27px); }
 }
 
-/* Cells: the square under the pointer is the pointer; the hand would cover it. */
-#map:has(.cellmark), #map:has(.cellmark) .leaflet-interactive { cursor: none; }
+/* In Cells the pointer is the square it marks: no cursor while the square is drawn, a crosshair where there is none (no forest, or while the map zooms), and a closed hand only while the map is being dragged. Never the open hand. */
+:root[data-mode="cells"] #map, :root[data-mode="cells"] #map .leaflet-interactive { cursor: crosshair; }
+:root[data-mode="cells"] #map:has(.cellmark), :root[data-mode="cells"] #map:has(.cellmark) .leaflet-interactive { cursor: none; }
+:root[data-mode="cells"] .leaflet-dragging #map, :root[data-mode="cells"] #map.leaflet-dragging, :root[data-mode="cells"] .leaflet-dragging #map .leaflet-interactive { cursor: grabbing; }
 
 #about .by .org { display: block; margin-top: 14px; height: 48px; width: auto; }

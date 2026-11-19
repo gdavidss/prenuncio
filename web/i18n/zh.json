@@ -132,6 +132,7 @@
  "copy": "复制",
  "credit": "影像：Esri、Maxar、Earthstar Geographics",
  "csv": "CSV",
+ "description": "亚马孙森林接下来会在哪里被毁、被烧、退化或被采矿，以及当前的压力有多大。每一次过去的预测都可以与实际发生的情况对照。",
  "enso": [
   "厄尔尼诺",
   "拉尼娜",
@@ -480,6 +481,7 @@
  "tipFc": "预计约{exp} km²",
  "tipPast": "预计{exp} km²，实际毁林{act}",
  "tipRank": "{n}个中排{rank}",
+ "title": "Prenúncio，亚马孙的早期预警",
  "to": "{a}至{b}",
  "under": "低于{c}",
  "where": {
@@ -499,5 +501,7 @@
   "near": "靠近近期的毁林地块。",
   "permit": "持有{ha}公顷的毁林许可。"
  },
- "window": "预测"
+ "window": "预测",
+ "zoomIn": "放大",
+ "zoomOut": "缩小"
 }

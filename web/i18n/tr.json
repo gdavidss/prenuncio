@@ -132,6 +132,7 @@
  "copy": "Kopyala",
  "credit": "Görüntüler: Esri, Maxar, Earthstar Geographics",
  "csv": "CSV",
+ "description": "Amazon ormanının bundan sonra nerede kesileceği, yanacağı, bozulacağı veya madencilikle kazılacağı ve baskının şu an ne kadar güçlü olduğu. Geçmiş her tahmin, olanlarla karşılaştırılabilir.",
  "enso": [
   "El Niño",
   "La Niña",
@@ -502,6 +503,7 @@
  "tipFc": "yaklaşık {exp} km² bekleniyor",
  "tipPast": "{exp} km² bekleniyordu, {act} ormansızlaştı",
  "tipRank": "{n} arasında {rank} sırada",
+ "title": "Prenúncio, Amazon için erken uyarı",
  "to": "{a} – {b}",
  "under": "{c} altı",
  "where": {
@@ -521,5 +523,7 @@
   "near": "Yakın zamanda ormansızlaşan bir alana yakın.",
   "permit": "{ha} hektarlık kesim izni var."
  },
- "window": "tahmin"
+ "window": "tahmin",
+ "zoomIn": "Yakınlaştır",
+ "zoomOut": "Uzaklaştır"
 }
