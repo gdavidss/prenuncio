@@ -50,8 +50,9 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 
 /* ---------- the header: the mark, then the story, About, the API and the language ---------- */
 #top { position: fixed; z-index: 40; top: 0; left: 0; right: 0; display: flex; align-items: center; height: var(--top); padding: 0 var(--pad); background: var(--soft); }
-.brand { display: flex; align-items: center; gap: 10px; margin-right: auto; font: 800 30px/1 var(--cond); letter-spacing: 0.02em; text-transform: uppercase; }
-.brand svg { width: 21px; height: 21px; }
+@font-face { font-family: "Oficina"; font-weight: 700; font-display: swap; src: url(fonts/mcbr-oficina-v3-display-bold.woff2) format("woff2"); }  /* the MCBR face, for the name only */
+.brand { display: flex; align-items: center; gap: 12px; margin-right: auto; font: 700 31px/1 "Oficina", var(--cond); letter-spacing: 0; text-transform: lowercase; }
+.brand svg { width: 24px; height: 24px; }
 .brand .f { fill: var(--green); }
 .brand .c { fill: var(--red); }
 #nav { display: flex; gap: 22px; }
@@ -533,7 +534,7 @@ canvas.cells { position: absolute; left: 0; top: 0; transition: opacity 0.25s; }
   :root[data-story]:not([data-has~="nav"]) { --peek: 213px; }                                  /* (in the story the bulletin rests without its hazards and its headline: nothing is for the hand yet, and the caption is the headline) */
   :root[data-story]:not([data-has~="chart"]) { --peek: 0px; }           /* (the bulletin has not come in yet) */
   .brand { font-size: 24px; gap: 8px; }
-  .brand svg { width: 17px; height: 15px; }
+  .brand svg { width: 19px; height: 19px; }
   #top { padding: 0 4px 0 16px; }
   #menu-btn { display: grid; place-items: center; width: 48px; height: 48px; }
   #menu-btn svg { width: 20px; height: 15px; }
@@ -771,7 +772,7 @@ canvas.cells { position: absolute; left: 0; top: 0; transition: opacity 0.25s; }
 :root:is([lang="ar"], [lang="hi"], [lang="bn"], [lang="zh"], [lang="ja"], [lang="ko"]) #say { font-size: clamp(24px, 2.4vw, 34px); }
 :root:is([lang="ar"], [lang="hi"], [lang="bn"], [lang="zh"], [lang="ja"], [lang="ko"]) #chartbox[data-as="dock"] #say { font-size: 19px; }
 :root:is([lang="ar"], [lang="hi"], [lang="bn"], [lang="zh"], [lang="ja"], [lang="ko"]) :is(.seg button, .pick button, #nav button) { font-size: 14.5px; font-weight: 600; }
-.brand { font-family: "Barlow Condensed", "Arial Narrow", sans-serif; }  /* the wordmark is Latin in every language */
+.brand { font-family: "Oficina", "Barlow Condensed", sans-serif; }  /* the wordmark is Latin in every language */
 @media (max-width: 860px) {
   :root:is([lang="ar"], [lang="hi"], [lang="bn"], [lang="zh"], [lang="ja"], [lang="ko"]) #story-line { font-size: 21px; line-height: 1.2; }
   :root:is([lang="ar"], [lang="hi"], [lang="bn"], [lang="zh"], [lang="ja"], [lang="ko"]) :is(#say, #chartbox[data-as="dock"] #say) { font-size: 19px; }
