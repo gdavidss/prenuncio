@@ -789,3 +789,5 @@ canvas.cells { position: absolute; left: 0; top: 0; transition: opacity 0.25s; }
 
 /* Cells: the square under the pointer is the pointer; the hand would cover it. */
 #map:has(.cellmark), #map:has(.cellmark) .leaflet-interactive { cursor: none; }
+
+#about .by .org { display: block; margin-top: 14px; height: 48px; width: auto; }

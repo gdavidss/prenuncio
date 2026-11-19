@@ -1648,7 +1648,7 @@ function about(at) {
     + p(esc(A.model({ name: "\u0001", span: +ST.forecast.made_on.slice(0, 4) - ST.history.years[0], m: ST.forest.cell_m })).replace("\u0001", `<b>${esc(MODEL)}</b>`)) + p(esc(A.tested({ y: ST.check.year, hit, of })))
     + `<h3 id="about-benchmark">${esc(A.benchmark)}</h3>${bench()}<p class="metric">${esc(A.metric({ b0: ST.benchmark.years[0], b1: ST.benchmark.years.at(-1) }))}</p>` + p(esc(A.open))
     + `<p class="go"><a class="btn" href="${esc(ST.links.benchmark)}" target="_blank" rel="noopener">${esc(B.submit)}</a><a href="${esc(ST.links.repository)}" target="_blank" rel="noopener">${esc(B.repo)}</a></p>`
-    + `<p class="by">${esc(A.by({ name: "Gui Dávid", site: "\u0001" })).replace("\u0001", `<a href="https://guidavid.com" target="_blank" rel="noopener">guidavid.com</a>`)} ${esc(A.org({ org: "Movimento Cibernético Brasileiro" }))}</p>`;
+    + `<p class="by">${esc(A.by({ name: "Gui Dávid", site: "\u0001" })).replace("\u0001", `<a href="https://guidavid.com" target="_blank" rel="noopener">guidavid.com</a>`)} ${esc(A.org({ org: "Movimento Cibernético Brasileiro" }))}<img class="org" src="img/mcbr.png" alt="" width="131" height="48" loading="lazy"></p>`;
 
   // in the story it is put together a piece at a time: the figure alone, then the benchmark alone, each entering as the other leaves
   const only = storyOn ? (at === "about-benchmark" ? "bench" : "fig") : "";
