@@ -425,15 +425,16 @@ const ZOOM = { per: 0.005, pinch: 0.02, tau: 75, to: null, at: null, t: 0, raf: 
 function zoomStep(now) {
   const z = map.getZoom(), dt = Math.max(0, Math.min(34, now - ZOOM.t)), gap = ZOOM.to - z, done = Math.abs(gap) < 0.01;
   ZOOM.t = now;
-  const nz = done ? ZOOM.to : z + gap * (1 - Math.exp(-dt / ZOOM.tau)), half = map.getSize().divideBy(2), k = 1 - 1 / map.getZoomScale(nz, z);
-  map._move(map.containerPointToLatLng(half.add(ZOOM.at.subtract(half).multiplyBy(k))), nz, { pinch: true, round: false });  // (as a pinch: the layers scale, nothing is redrawn)
+  const nz = done ? ZOOM.to : z + gap * (1 - Math.exp(-dt / ZOOM.tau)), half = map.getSize().divideBy(2);
+  map._move(map.unproject(map.project(ZOOM.ll, nz).subtract(ZOOM.at.subtract(half)), nz), nz, { pinch: true, round: false });  // the place under the pointer is held exactly: nothing adds up from frame to frame  // (as a pinch: the layers scale, nothing is redrawn)
   if (done) { ZOOM.raf = 0; ZOOM.to = null; map._moveEnd(true); return; }
   ZOOM.raf = requestAnimationFrame(zoomStep);
 }
 function zoomBy(levels, at) {  // at: the point of the map's pane that stays where it is
   if (ZOOM.to == null) { map._stop(); map._moveStart(true, false); ZOOM.to = map.getZoom(); ZOOM.t = performance.now(); }
   ZOOM.to = Math.max(map.getMinZoom(), Math.min(map.getMaxZoom(), ZOOM.to + levels));
-  ZOOM.at = at || map.getSize().divideBy(2);
+  const p = at || map.getSize().divideBy(2);
+  if (!ZOOM.at || !ZOOM.ll || p.distanceTo(ZOOM.at) > 0.5 || !ZOOM.raf) { ZOOM.at = p; ZOOM.ll = map.containerPointToLatLng(p); }  // the place that stays where it is, read once for a pointer that stays
   if (!ZOOM.raf) ZOOM.raf = requestAnimationFrame(zoomStep);
 }
 $("map").addEventListener("wheel", e => {
@@ -444,7 +445,7 @@ $("map").addEventListener("wheel", e => {
 }, { passive: false });
 map.zoomIn = (d = map.options.zoomDelta) => (zoomBy(d), map);  // the + and the − of the control
 map.zoomOut = (d = map.options.zoomDelta) => (zoomBy(-d), map);
-map.on("dblclick", e => zoomBy(e.originalEvent.shiftKey ? -1 : 1, e.containerPoint));
+map.on("dblclick", e => { if (e.originalEvent.shiftKey) zoomBy(-1, e.containerPoint); else if (!(S.mode === "cells" && e.originalEvent.pointerType !== "touch" && cellPx() < 8)) zoomBy(1, e.containerPoint); });  // (in Cells, from far, each click already zooms)
 
 // outside the Legal Amazon: bare ground when far, a veil over the imagery when close
 const GROUND = css("--ground"), INK = css("--ink");
@@ -766,7 +767,7 @@ function shareLine() {
 // the 1 km layers, the hectares the layer expects there in its window, decoded as pipeline/export.py encodes them
 // (the red channel is 255 times the cube root of the km²); for fire, which has no forecast amount, the band of
 // the forest the cell stands in. Nothing where the layer has nothing.
-function cellLine(ll) {
+function cellLine(ll, side) {  // side: how many cells across the square the pointer stands for (the chances only)
   const L_ = t();
   if (!cellsOn() || !grid || grid.key !== key() || !gridLayer._container.dataset.key) return "";
   const l0 = grid.levels[0], r = Math.floor((M.north - ll.lat) / grid.cell), c = Math.floor((ll.lng - M.west) / grid.cell);
@@ -778,7 +779,7 @@ function cellLine(ll) {
     if (hz === "fire") { const q = ["0.2", "1", "5"].find(k => km2 >= I.cut[k]); return q ? L_.cellFire({ p: fmt(+q, q === "0.2" ? 1 : 0) }) : L_.cellFireRest; }
     return 100 * km2 < 0.95 ? L_.cellHaLow[hz]({ n: I.months, count: I.months }) : L_.cellHa[hz]({ ha: approx(100 * km2), n: I.months, count: Math.round(100 * km2) });
   }
-  const f = +gridLayer._container.dataset.f || 1;
+  const f = side || +gridLayer._container.dataset.f || 1;
   let v = 0, n = 0, clr = 0;
   for (let y = r - r % f; y < Math.min(l0.rows, r - r % f + f); y++) for (let x = c - c % f, j = y * l0.cols + x; x < Math.min(l0.cols, c - c % f + f); x++, j++) {
     if (!l0.val[j]) continue;
@@ -804,25 +805,43 @@ function placeAt(ll) {
   const land = ti ? `${t().tag.ti} ${ti.n}` : uc ? `${t().tag.uc} ${uc.n}` : "";
   return mun ? (land ? t().cellPlaceIn : t().cellPlace)({ mun: mun.n, uf: mun.s, land }) : "";
 }
-// The pointer shows it; a click or a tap pins it, until a click elsewhere or Escape.
+// The pointer shows it, at every zoom, and the cell (from far, the square of cells that is one mark on the screen)
+// under it is let a little see-through, with a thin outline, so the ground shows. In Cells a click zooms in on
+// that point, two levels at a time, until the cells are drawn one by one; there, as with a tap, it pins what the
+// cell says, until a click elsewhere or Escape. Nothing is said while the map is being moved or zoomed.
 const cellTip = L.tooltip({ className: "tip cell", direction: "top", offset: [0, -8], opacity: 1 });
-let pin = null;
+const cellMark = L.rectangle([[0, 0], [0, 0]], { renderer: svgSel, interactive: false, color: INK, weight: 1, opacity: 0.9, fillColor: `rgb(${FOREST})`, fillOpacity: 0.45, className: "cellmark" });  // (the ground at 45% over the paint: the paint at 55%)
+let pin = null, said = "", marked = "";
+const cellPx = () => { const c = map.getCenter(); return grid ? map.project([c.lat, c.lng + grid.cell]).x - map.project(c).x : 99; };  // how wide a cell is on the screen
+// the square the pointer stands for: one cell when cells can be told apart, otherwise as many as make 10 px (whole marks of the far view)
+const cellSide = () => { const f = +gridLayer._container.dataset.f || 1, px = cellPx(); return !grid?.prob || px >= 8 ? 1 : f * Math.ceil(10 / px / f); };
+function cellQuiet() { pin = null; said = marked = ""; map.closeTooltip(cellTip); cellMark.remove(); }
 function cellSay(e) {
   if (mapSmall()) return;
-  if (e.type === "mousemove") { if (pin && map.hasLayer(cellTip)) return; pin = null; }
-  const ll = e.latlng, line = cellLine(ll);
-  if (!line) { pin = null; return map.closeTooltip(cellTip); }
-  pin = e.type === "click" ? ll : null;
+  const moving = e.type === "mousemove", touch = e.originalEvent?.pointerType === "touch";
+  if (moving && (ZOOM.to != null || map.dragging?.moving())) return;
+  if (moving) { if (pin && map.hasLayer(cellTip)) return; pin = null; }
+  const ll = e.latlng, f = cellSide(), line = cellLine(ll, f);
+  if (!line) return cellQuiet();
+  if (!moving && !touch && S.mode === "cells" && cellPx() < 8) {  // from far a click is the way in: on the point that was clicked
+    if (ZOOM.to == null) { cellQuiet(); zoomBy(Math.min(2, Math.max(0.5, Math.log2(8.5 / cellPx()))), e.containerPoint); }
+    return;
+  }
+  pin = moving ? null : ll;
+  const c = grid.cell, r0 = Math.floor((M.north - ll.lat) / c), c0 = Math.floor((ll.lng - M.west) / c), key_ = `${r0 - r0 % f},${c0 - c0 % f},${f}`;
+  if (key_ !== marked) { marked = key_; cellMark.setBounds([[M.north - (r0 - r0 % f + f) * c, M.west + (c0 - c0 % f) * c], [M.north - (r0 - r0 % f) * c, M.west + (c0 - c0 % f + f) * c]]); if (!map.hasLayer(cellMark)) cellMark.addTo(map); }
   const show = () => {
-    const where = placeAt(ll);
-    cellTip.setLatLng(ll).setContent(esc(line[0].toUpperCase() + line.slice(1)) + (where ? `<small>${esc(where)}</small>` : ""));
-    map.openTooltip(cellTip);
+    const where = placeAt(ll), html = esc(line[0].toUpperCase() + line.slice(1)) + (where ? `<small>${esc(where)}</small>` : "");
+    cellTip.setLatLng(ll);
+    if (html !== said) cellTip.setContent(said = html);  // (the words are set only when they change: a move of the pointer is a move of the tip)
+    if (!map.hasLayer(cellTip)) map.openTooltip(cellTip);
   };
   WHERE.show = show;
   show();
 }
 map.on("mousemove click", cellSay);
-map.on("mouseout", () => { if (!pin) map.closeTooltip(cellTip); });
+map.on("mouseout", () => { if (!pin) cellQuiet(); });
+map.on("movestart zoomstart", () => { if (!pin || ZOOM.to != null) cellQuiet(); });
 function zoomed() {
   const z = map.getZoom();
   gridLayer._container.style.opacity = z < SAT_ZOOM ? 1 : 0.7;  // over imagery, let the ground show through
@@ -1353,7 +1372,7 @@ async function swap(to = front === "map" ? "chart" : "map") {
   if (swapping || to === front) return;
   if (narrow()) { front = to; place(); sheetAt(); refresh(); return; }  // a phone: the timeline's sheet goes up or down over the map, which stays where it is
   swapping = true;
-  map.closeTooltip(cellTip); map.eachLayer(l => l.closeTooltip?.());  // no label rides the map into its dock
+  cellQuiet(); map.eachLayer(l => l.closeTooltip?.());  // no label rides the map into its dock
   const ms = calm() ? 0 : 600;
   root.dataset.swap = front = to;
   await Promise.all([chartMove(to === "chart", ms), mapMove(to === "chart", ms)]);
@@ -1365,7 +1384,7 @@ async function swap(to = front === "map" ? "chart" : "map") {
 // the map alone leaves the stage or comes back, for when what takes the stage is a panel
 async function mapTo(dock) {
   swapping = true;
-  map.closeTooltip(cellTip); map.eachLayer(l => l.closeTooltip?.());
+  cellQuiet(); map.eachLayer(l => l.closeTooltip?.());
   root.dataset.swap = "map";
   try { await mapMove(dock, calm() ? 0 : 600); }
   finally { BOX.map.dataset.as = dock ? "dock" : "stage"; BOX.map.style.visibility = ""; delete root.dataset.swap; swapping = false; }
@@ -1584,7 +1603,7 @@ $("step").onclick = e => {
 function pick(y) { if (y !== FY) leavePrio(); S.year = y; refresh(); }
 document.addEventListener("keydown", e => {
   if (storyOn) return;
-  if (e.key === "Escape" && pin) { pin = null; return map.closeTooltip(cellTip); }
+  if (e.key === "Escape" && pin) return cellQuiet();
   if (e.key === "Escape" && panel) return $(panel).close();
   if (panel) return;
   if (e.key === "Escape" && root.dataset.menu != null) return menu(false);

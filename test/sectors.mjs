@@ -231,6 +231,8 @@ try {
     assert.ok(arrived.every(k => tokens.includes(k)), `what has arrived stays at ${id}: ${arrived} then ${tokens}`);
     arrived = tokens;
     assert.equal(await LIVE(), "", `nothing of the tool is for the hand at ${id}`);
+    const kindPx = await js(`(k => (k && k.offsetParent && getComputedStyle(k).visibility === "visible" ? Math.min(...[...document.querySelectorAll("#kinds button, #rank-btn")].map(e => parseFloat(getComputedStyle(e).fontSize))) : null))(document.querySelector("#kinds button"))`);
+    assert.ok(kindPx === null || kindPx >= 13, `the kinds are never under 13 px, at ${id}: ${kindPx}`);
     assert.equal(await js(`[...document.querySelectorAll("#story-marks li")].findIndex(e => e.classList.contains("now"))`), i, `the mark of step ${id}`);
     // nothing is said under the line, except the small bars of the years while they run
     assert.equal((await js(`document.getElementById("story-text").innerText.replaceAll("\\u00a0", " ").replace(/\\s+/g, " ").trim()`)).startsWith(WANT[id]), true);
@@ -323,7 +325,7 @@ try {
     }
     if (id === "sectors") {  // the Sectors tab and the kinds arrive, in one row, and the map shows the states
       await until(`document.querySelector('#modes button[data-k="sectors"]').getAttribute("aria-pressed") === "true" && document.querySelector('#kinds button[data-k="uf"]')?.getAttribute("aria-pressed") === "true" && document.querySelectorAll(".state-name").length >= 9 && !!document.querySelector("#legend .ramp")`, "the states, in Sectors");
-      assert.equal(await js(`new Set([...document.querySelectorAll("#kinds button")].map(e => Math.round(e.getBoundingClientRect().top))).size === 1 && document.getElementById("mappanel").getBoundingClientRect().bottom <= document.getElementById("story").getBoundingClientRect().top`), true, "the kinds in one row, the key clear of the caption");
+      assert.equal(await js(`new Set([...document.querySelectorAll("#kinds button")].map(e => Math.round(e.getBoundingClientRect().top))).size === ${vh0 >= 880 ? 4 : 1} && parseFloat(getComputedStyle(document.querySelector("#kinds button")).fontSize) >= 13 && document.getElementById("mappanel").getBoundingClientRect().bottom <= document.getElementById("story").getBoundingClientRect().top`), true, "the kinds as the tool has them (a list in a tall window), the key clear of the caption");
       assert.equal(await js(`document.documentElement.dataset.new`), "sectors", "and that is what this step brought");
     }
     if (id === "use") {  // the header's links and the zoom arrive; the page is the tool, under the caption
@@ -497,6 +499,47 @@ try {
   // the + of the control and a double click go through the same easing: many frames, no jump
   const plus = await (async () => { await sleep(100); await js(`window.__q = []; window.__recq = true; (function f() { window.__q.push(prenuncio.zoom); if (window.__recq) requestAnimationFrame(f); })()`); await clickOn(".leaflet-control-zoom-in"); await sleep(900); return js(`(window.__recq = false, [...new Set(window.__q.map(x => x.toFixed(3)))].map(Number))`); })();
   assert.ok(plus.length >= 8 && Math.abs(plus.at(-1) - plus[0] - 0.75) < 0.01 && plus.every((x, i) => !i || (x > plus[i - 1] && x - plus[i - 1] < 0.3)), "the + eases through many frames to three quarters of a level: " + plus);
+  // A cell under the pointer, at every zoom: a flat tip says its chance (from far, of the square the pointer stands
+  // for), that square is let see-through with a thin outline, and in Cells a click zooms in on the point, which
+  // stays under the pointer, until a cell can be told apart; there a click pins what it says.
+  await clickOn(".leaflet-control-zoom a.home");
+  await until(`document.querySelector(".leaflet-control-zoom a.home").classList.contains("off") && !prenuncio.zooming`, "the whole map, for the pointer");
+  await sleep(600);
+  const TIP = `(() => { const t = document.querySelector(".leaflet-tooltip.tip.cell"), m = document.querySelector("path.cellmark"), r = m && m.getBoundingClientRect(), s = t && getComputedStyle(t), b = document.querySelector("canvas.base").getBoundingClientRect(), tr = t && t.getBoundingClientRect(); return { z: prenuncio.zoom, tip: t ? t.firstChild.textContent : null, flat: !t || (s.boxShadow === "none" && parseFloat(s.borderTopWidth) === 0 && s.borderRadius === "0px"), mark: r && r.width ? [Math.round(r.width), Math.round(r.height), getComputedStyle(m).fillOpacity, parseFloat(getComputedStyle(m).strokeWidth), Math.round(r.left + r.width / 2), Math.round(r.top + r.height / 2)] : null, base: [b.left, b.top, b.width, b.height], at: tr && [Math.round(tr.left + tr.width / 2), Math.round(tr.bottom)] }; })()`;
+  const over = async (x, y) => { await send("Input.dispatchMouseEvent", { type: "mouseMoved", x: x + 4, y: y + 3 }); await sleep(80); await send("Input.dispatchMouseEvent", { type: "mouseMoved", x, y }); await sleep(450); return js(TIP); };
+  let hp = null, h0 = null;
+  for (const p of [mid, [vw0 * 0.7, vh0 * 0.45], [vw0 * 0.55, vh0 * 0.4], [vw0 * 0.75, vh0 * 0.6]]) { h0 = await over(...p); if (h0.tip) { hp = p; break; } }
+  assert.ok(hp, "a point of forest under the pointer");
+  const seen3 = [];
+  for (let k = 0; k < 6; k++) {
+    const h = await over(...hp), far = /^(Até|Cada célula aqui)/.test(h.tip || ""), cell = /esta célula/.test(h.tip || "");
+    assert.ok(h.tip && (far || cell) && /%/.test(h.tip) && h.tip.includes("julho de " + fy0) && h.flat, `the tip says the chance, flat, at zoom ${h.z}: ${JSON.stringify(h)}`);
+    assert.ok(h.mark && h.mark[2] === "0.45" && h.mark[3] <= 1.5 && h.mark[0] >= 7 && h.mark[0] <= 30 && Math.abs(h.mark[4] - hp[0]) <= h.mark[0] && Math.abs(h.mark[5] - hp[1]) <= h.mark[1], `the square under the pointer is let see-through (the ground at 45% over it), with a thin outline, at zoom ${h.z}: ${JSON.stringify(h.mark)}`);
+    assert.ok(Math.abs(h.at[0] - hp[0]) <= 3 && h.at[1] <= hp[1] && h.at[1] >= hp[1] - 30, `the tip is at the pointer: ${h.at}`);
+    seen3.push([+h.z.toFixed(2), far ? "square" : "cell"]);
+    if (cell) break;
+    // a click: no tip while the map zooms, about two levels in, and the point that was clicked stays under the pointer
+    const fx = (hp[0] - h.base[0]) / h.base[2], fy = (hp[1] - h.base[1]) / h.base[3];
+    await click(...hp);
+    await sleep(150);
+    assert.equal((await js(TIP)).tip, null, "nothing is said while the map zooms");
+    await until(`!prenuncio.zooming`, "the zoom settled after a click"); await sleep(400);
+    const a = await js(TIP), gain = a.z - h.z;
+    assert.ok(gain >= 0.45 && gain <= 2.05, `a click zooms in, two levels at most: ${h.z} to ${a.z}`);
+    assert.ok(Math.abs(a.base[0] + fx * a.base[2] - hp[0]) <= 3 && Math.abs(a.base[1] + fy * a.base[3] - hp[1]) <= 3, `and the point that was clicked is still under the pointer: ${[a.base[0] + fx * a.base[2], a.base[1] + fy * a.base[3]]} for ${hp}`);
+  }
+  assert.ok(seen3.length >= 3 && seen3[0][1] === "square" && seen3.at(-1)[1] === "cell", "said at three zooms or more, from the square to the cell: " + JSON.stringify(seen3));
+  // where a cell can be told apart a click pins it: the zoom stays, the tip stays when the pointer leaves, Escape lets go
+  const zc = await js(`prenuncio.zoom`);
+  await click(...hp); await sleep(700);
+  await send("Input.dispatchMouseEvent", { type: "mouseMoved", x: hp[0] - 220, y: hp[1] + 120 }); await sleep(400);
+  const pinned = await js(TIP);
+  assert.ok(Math.abs(pinned.z - zc) < 0.01 && /esta célula/.test(pinned.tip || ""), "a click on a cell pins what it says: " + JSON.stringify(pinned));
+  await key("Escape"); await sleep(300);
+  assert.equal((await js(TIP)).tip, null, "Escape lets it go");
+  await clickOn(".leaflet-control-zoom a.home");
+  await until(`document.querySelector(".leaflet-control-zoom a.home").classList.contains("off") && !prenuncio.zooming`, "the whole map again, after the pointer's checks");
+  await sleep(500);
   // however wildly it is dragged, a good part of the Amazon stays in the part of the stage that nothing covers
   for (const [dx, dy] of [[900, 700], [900, 700], [-1300, -800], [-1300, -800], [-1300, -800]]) {
     await send("Input.dispatchMouseEvent", { type: "mousePressed", x: mid[0], y: mid[1], button: "left", clickCount: 1 });
@@ -533,7 +576,7 @@ try {
   const hover = async () => { const c = await js(`(() => { const r = document.getElementById("map").getBoundingClientRect(); return [r.x + r.width / 2, r.y + r.height / 2]; })()`); await send("Input.dispatchMouseEvent", { type: "mouseMoved", x: c[0] + 1, y: c[1] + 1 }); await send("Input.dispatchMouseEvent", { type: "mouseMoved", x: c[0], y: c[1] }); await until(`!!document.querySelector(".leaflet-tooltip.cell")`, "what the cell says"); return c; };
   for (const [layer, word] of [["mine12", "mining"], ["degr12", "degradation"], ["clear3", "clearing"], ["scar12", null]].filter(([k]) => meta.layers[k])) {
     const pk = await peak(layer), lat = meta.north - (pk.row + 0.5) * meta.cell, lng = meta.west + (pk.col + 0.5) * meta.cell, I = meta.layers[layer], km2 = (pk.code / 255) ** 3;
-    await send("Page.navigate", { url: SITE + `?story=0&c=${layer}#l=en&k=${layer}&t=months&m=cells&v=${lat.toFixed(6)},${lng.toFixed(6)},11` });
+    await send("Page.navigate", { url: SITE + `?story=0&c=${layer}#l=en&k=${layer}&t=months&m=cells&v=${lat.toFixed(6)},${lng.toFixed(6)},12` });
     await until(`document.documentElement.lang === "en" && document.querySelector("canvas.cells")?.dataset.key === "${layer}"`, "the cells of " + layer);
     await sleep(400);
     const c = await hover();
@@ -836,7 +879,7 @@ try {
     assert.deepEqual([pmap.w, pmap.h], [F.cols, F.rows]);
     const at0 = (F.rows >> 1) * F.cols, i = pmap.px.findIndex((v, n) => n > at0 && v >= 90 && v < 200), row = Math.floor(i / F.cols), col = i % F.cols;
     const lat = meta.north - (row + 0.5) * F.cell, lng = meta.west + (col + 0.5) * F.cell, want = `${chance(pmap.px[i])} chance this cell loses a hectare by July ${fyear}`;
-    await send("Page.navigate", { url: SITE + `#l=en&m=cells&v=${lat.toFixed(6)},${lng.toFixed(6)},11` });
+    await send("Page.navigate", { url: SITE + `#l=en&m=cells&v=${lat.toFixed(6)},${lng.toFixed(6)},12` });
     await until(`document.querySelector("canvas.cells")?.dataset.key === "${fyear}" && document.querySelector("canvas.cells").dataset.f === "1"`, "the chances of " + fyear + " at 500 m");
     assert.equal(await text("#legend"), `Chance each cell loses a hectare by July ${fyear}0.1%1%5%20%`, "the key states the event and the steps");
     const [mx, my] = await js(`(() => { const r = document.getElementById("map").getBoundingClientRect(); return [r.x + r.width / 2, r.y + r.height / 2]; })()`);
@@ -851,7 +894,7 @@ try {
     assert.deepEqual(rgb, [...STEP[stepOf(pmap.px[i])], 255], "the cell is painted in the red of its step");
     // and in a replayed year it also says whether clearing was mapped there
     const past = Math.max(...Object.keys(meta.years).map(Number).filter(y => meta.years[y].actual_km2 != null));
-    await send("Page.navigate", { url: SITE + `#l=en&m=cells&y=${past}&v=${lat.toFixed(6)},${lng.toFixed(6)},11` });
+    await send("Page.navigate", { url: SITE + `#l=en&m=cells&y=${past}&v=${lat.toFixed(6)},${lng.toFixed(6)},12` });
     await until(`document.querySelector("canvas.cells")?.dataset.key === "${past}"`, "the chances of " + past);
     await send("Input.dispatchMouseEvent", { type: "mouseMoved", x: mx + 1, y: my + 1 });
     await send("Input.dispatchMouseEvent", { type: "mouseMoved", x: mx, y: my });
@@ -1248,7 +1291,7 @@ try {
     assert.deepEqual([half.w, half.h], [Math.ceil(F.cols / 2), Math.ceil(F.rows / 2)], "the half-resolution chances are there, at half the rows and columns");
     const at0 = (half.h >> 1) * half.w, i = half.px.findIndex((v, n) => n > at0 && v >= 90 && v < 200), row = Math.floor(i / half.w), col = i % half.w;
     const lat = meta.north - (row + 0.5) * F.cell * 2, lng = meta.west + (col + 0.5) * F.cell * 2;
-    await send("Page.navigate", { url: SITE + `?story=0&raster=h#l=en&m=cells&v=${lat.toFixed(6)},${lng.toFixed(6)},11` });
+    await send("Page.navigate", { url: SITE + `?story=0&raster=h#l=en&m=cells&v=${lat.toFixed(6)},${lng.toFixed(6)},12` });
     await until(`document.querySelector("canvas.cells")?.dataset.key === "${meta.forecast.year}" && document.querySelector("canvas.cells").dataset.f === "1"`, "the chances at half resolution");
     assert.deepEqual(await js(`[prenuncio.lite, Math.round(1e4 * document.querySelector("canvas.cells").dataset.cell), prenuncio.mem().decodeMP < 9]`), [true, Math.round(2e4 * F.cell), true], "forced to the half pictures: cells of 1 km, and no picture over 9 megapixels decoded");
     const [mx, my] = await js(`(() => { const r = document.getElementById("map").getBoundingClientRect(); return [r.x + r.width / 2, r.y + r.height / 2]; })()`);
