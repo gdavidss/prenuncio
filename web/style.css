@@ -435,7 +435,8 @@ canvas.cells { position: absolute; left: 0; top: 0; transition: opacity 0.25s; }
    top, which stays there while the text passes under it. ---------- */
 #about, #api { position: fixed; z-index: 38; inset: var(--top) 0 0 0; width: auto; max-width: none; height: auto; max-height: none; margin: 0; padding: 0 var(--apad) 40px; overflow-y: auto; overscroll-behavior: contain; border: 0; background: var(--ground); color: var(--ink); --apad: max(var(--pad), calc((100vw - 780px) / 2)); }
 #api { --apad: max(var(--pad), calc((100vw - 1000px) / 2)); }
-#about[open], #api[open] { animation: enter 0.6s cubic-bezier(0.2, 0.7, 0.2, 1) both; }
+/* a panel takes the stage whole, at once, so nothing shows through it on the way; what is in it comes in */
+#about[open] > *, #api[open] > * { animation: enter 0.5s cubic-bezier(0.2, 0.7, 0.2, 1) both; }
 @keyframes enter { from { opacity: 0; transform: scale(0.96); } }
 .pbar { position: sticky; top: 0; z-index: 1; display: flex; justify-content: flex-end; flex: none; padding: 8px 0 4px; background: var(--ground); }
 .pbar .x { margin-right: -10px; }
@@ -502,7 +503,7 @@ canvas.cells { position: absolute; left: 0; top: 0; transition: opacity 0.25s; }
 @media (min-width: 861px) and (max-width: 1180px) { :root { --list-w: 340px; --rail: 380px; } }
 @media (prefers-reduced-motion: reduce) {
   .leaflet-image-layer, canvas.cells, .box, #mappanel, .loss, .leaflet-control-zoom, #list, #chartbox, #story { transition: none !important; }
-  #story-line.in, #list, #about[open], #api[open], #about-body.in { animation: none; }
+  #story-line.in, #list, #about[open] > *, #api[open] > *, #about-body.in { animation: none; }
 }
 /* the model's figure, in About: a stack of planes drawn on a canvas, and their names as text beside them */
 #model-fig { position: relative; margin: 14px 0 20px; }
@@ -521,8 +522,8 @@ canvas.cells { position: absolute; left: 0; top: 0; transition: opacity 0.25s; }
    it goes. Type has its own scale here: the story's line 27, a headline 21, text 15.5, labels 12.5. Everything
    that is tapped is 44 px or more. ---------- */
 @media (max-width: 860px) {
-  :root { --top: 48px; --pad: 16px; --in: 0px; --panel-h: 128px; --peek: 302px; --handle: 30px; --cap: 0px; --list-top: 56dvh; }
-  :root[data-list="true"] { --peek: var(--handle); }                    /* the list is open: the bulletin waits behind its handle */
+  :root { --top: 48px; --pad: 16px; --in: 0px; --panel-h: 128px; --peek-min: 302px; --peek: max(var(--peek-min), var(--peek-user, 0px)); --handle: 30px; --cap: 0px; --list-top: 56dvh; }
+  :root[data-list="true"] { --peek: 0px; }                              /* the list is open: it has the sheet's place whole, and the bulletin is away until it closes */
   :root[data-story] { --cap: 130px; }                                   /* (until the page says how tall the caption is) */
   :root[data-story]:not([data-has~="nav"]) { --peek: 213px; }                                  /* (in the story the bulletin rests without its hazards and its headline: nothing is for the hand yet, and the caption is the headline) */
   :root[data-story]:not([data-has~="chart"]) { --peek: 0px; }           /* (the bulletin has not come in yet) */
@@ -547,8 +548,9 @@ canvas.cells { position: absolute; left: 0; top: 0; transition: opacity 0.25s; }
   .x { width: 44px; height: 44px; }
   /* what the map shows: a band under the header, the mode and a short key */
   #mappanel { left: 0; top: var(--top); width: 100%; padding: 0 16px 10px; gap: 4px; }
-  #mapctl { width: min(300px, 100%); }
-  #modes { width: calc(100% + 10px); }
+  #mapctl { width: 100%; }
+  #modes { width: calc(100% + 20px); }  /* across the screen: the first word at the left edge of the page, the last ending at the right */
+  #modes:has(button:first-child[aria-pressed="true"]), #modes:has(button:last-child[aria-pressed="true"]) { width: calc(100% + 10px); }
   .seg { margin-left: -10px; }
   .seg button { min-height: 44px; padding: 0 10px; font-size: 16px; }
   #kindrow { flex-direction: row; align-items: center; gap: 14px; width: 100vw; max-width: none; margin: 0 -16px; padding: 0 16px; }
@@ -561,10 +563,13 @@ canvas.cells { position: absolute; left: 0; top: 0; transition: opacity 0.25s; }
   #kindrow { gap: 8px; }
   #legend { gap: 5px; font-size: 12.5px; }
   #legend .what { font-size: 13.5px; }
-  #legend .steps { width: min(300px, 100%); }
+  #legend .steps { width: 100%; }
   #legend .steps button { height: 12px; }
   #legend .steps button::after { inset: -16px 0; }
-  #legend .ticks { width: min(240px, 80%); margin-left: min(30px, 10%); }
+  #legend .ticks { width: 80%; margin-left: 10%; }
+  #legend .rng { display: flex; width: 100%; }
+  #legend .ramp { flex: 1; }
+  #legend .ramp i { flex: 1; width: auto; }
   #share { display: none; }
   #credit { right: 10px; bottom: calc(var(--peek) + var(--cap) + 104px); max-width: 46%; text-align: right; }
   .leaflet-control-zoom { margin: 0 10px calc(var(--peek) + var(--cap) + 10px) 0 !important; }
@@ -584,9 +589,7 @@ canvas.cells { position: absolute; left: 0; top: 0; transition: opacity 0.25s; }
   #sheet-grab { position: relative; display: block; flex: none; width: 100%; height: 20px; margin-bottom: -6px; }
   #sheet-grab::before, #list-grab::before { content: ""; display: block; width: 40px; height: 4px; margin: 0 auto; background: var(--line); }
   #sheet-grab::after { content: ""; position: absolute; inset: -12px 0; }  /* a 44 px target */
-  /* behind its handle: only the grip shows, and a tap or a pull on it brings the bulletin up */
-  :root[data-list="true"] #chartbox[data-as="dock"] #chartin > :not(#sheet-grab) { visibility: hidden; }
-  :root[data-list="true"] #chartbox[data-as="dock"] #sheet-grab { height: var(--handle); margin: 0; }
+  :root[data-list="true"]:not([data-story]) #chartbox[data-as="dock"] { visibility: hidden; }  /* (nothing of it shows or can be reached under the list) */
   #hazrow { height: 44px; }
   #hazard { gap: 0 14px; }
   #hazard button { font-size: 15px; letter-spacing: 0.04em; gap: 5px; }
@@ -669,7 +672,6 @@ canvas.cells { position: absolute; left: 0; top: 0; transition: opacity 0.25s; }
   .pbar .x { margin: 0; }
   :root[data-story] .pbar { display: none; }
   #about, #api { padding-top: 10px; z-index: 41; }
-  #about[open], #api[open] { animation-fill-mode: backwards; }  /* (so the X can be fixed to the screen, in the header's row, once the panel is in) */
   #about[data-only] { padding-top: 0; }
   #about[data-only="bench"] #about-body { justify-content: flex-start; padding-top: 14px; }
   /* About fills the screen; in the story it stands between the header and the caption, so the line, the way on and Skip stay in reach */
@@ -694,7 +696,7 @@ canvas.cells { position: absolute; left: 0; top: 0; transition: opacity 0.25s; }
   .people h2 { font-size: 21px; }
   .people p, .people summary { font-size: 15.5px; }
   .people summary { min-height: 44px; display: flex; align-items: center; }
-  :root[data-people]:not([data-list="true"]) { --peek: 356px; }  /* (the photograph, the name and the headline, at rest) */
+  :root[data-people]:not([data-list="true"]) { --peek: max(356px, var(--peek-user, 0px)); }  /* (the photograph, the name and the headline, at rest) */
   :root[data-people] #chartbox[data-as="dock"] { height: auto; max-height: none; }
   :root[data-people] #chartbox[data-as="dock"] #chartin { height: 100%; max-height: none; overflow: hidden; padding-top: 0; padding-bottom: 0; }
   :root[data-people] #chartbox[data-as="dock"] #people :is(p, h3, details) { display: none; }
@@ -709,7 +711,7 @@ canvas.cells { position: absolute; left: 0; top: 0; transition: opacity 0.25s; }
 }
 /* a short phone: the bulletin rests lower, without its hazards, so the Amazon keeps its place above it */
 @media (max-width: 860px) and (max-height: 700px) {
-  :root { --peek: 216px; }
+  :root { --peek-min: 216px; }
   #chartbox[data-as="dock"] #hazrow { display: none; }
   #chartbox[data-as="dock"] #sheet-grab { margin-bottom: 0; }
 }

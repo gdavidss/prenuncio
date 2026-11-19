@@ -145,3 +145,11 @@ The wheel, the + and − and the double click zoom through one easing. A notch o
 ## The cell under the pointer
 
 In Cells the pointer says what is under it at every zoom, in a flat dark tip at the pointer: one cell's chance where a cell is 8 px or more on the screen, otherwise the highest chance in the square the pointer stands for, which is as many cells as make 10 px. That cell or square is let see-through (the forest green at 45% over the paint) with a 1 px ink outline; nothing else on the map changes. A click zooms in on the point, two levels at most, through the page's zoom easing, and the point stays under the pointer; once a cell can be told apart a click pins what it says, until a click elsewhere or Escape. Nothing is said while the map is being moved or zoomed. A finger's tap pins as before and a double tap zooms. In the story on a tall window the kinds are the list, as in the tool, and the caption stands under it at one place for every step.
+
+## One thing moves
+
+When the stage changes, nothing is drawn twice. The timeline travels between its dock and the stage as itself: it is laid out once, at the start, as it will be where it is going, and one transform carries it there from the rectangle it had. No copy stands beside it and nothing cross-fades. A panel that takes the stage (About, the API) is whole from its first frame, so the dock never shows through it; only what is inside the panel comes in.
+
+## The phone's sheet
+
+The key's scale and the modes go across the screen, from one page padding to the other. The bulletin's sheet stays as tall as the finger leaves it, between its rest and the header; let go under its rest it settles there, and a flick or a tap on the grip takes it up whole or back down. The height is kept while the page is open, the plot is drawn for it and the Amazon takes the middle of what is left. Only a tap on the plot itself (or on a people's photograph) takes the sheet up; its words and edges do nothing, and a drag is never a tap. When the ranked list or the priority list is open it has the sheet's place whole: nothing of the bulletin, not even its grip, shows or can be reached until the list is closed, and then it returns at the height it had.

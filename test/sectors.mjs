@@ -535,8 +535,8 @@ try {
   await send("Input.dispatchMouseEvent", { type: "mouseMoved", x: hp[0] - 220, y: hp[1] + 120 }); await sleep(400);
   const pinned = await js(TIP);
   assert.ok(Math.abs(pinned.z - zc) < 0.01 && /esta célula/.test(pinned.tip || ""), "a click on a cell pins what it says: " + JSON.stringify(pinned));
-  await key("Escape"); await sleep(300);
-  assert.equal((await js(TIP)).tip, null, "Escape lets it go");
+  await key("Escape");
+  await until(`!document.querySelector(".leaflet-tooltip.tip.cell")`, "Escape lets it go");
   await clickOn(".leaflet-control-zoom a.home");
   await until(`document.querySelector(".leaflet-control-zoom a.home").classList.contains("off") && !prenuncio.zooming`, "the whole map again, after the pointer's checks");
   await sleep(500);
@@ -590,8 +590,7 @@ try {
       await sleep(300);
       assert.equal(await count(".leaflet-tooltip.cell"), 1, "a click pins what the cell says: it stays when the pointer leaves");
       await key("Escape");
-      await sleep(200);
-      assert.equal(await count(".leaflet-tooltip.cell"), 0, "and Escape lets it go");
+      await until(`document.querySelectorAll(".leaflet-tooltip.cell").length === 0`, "and Escape lets it go (the tip takes a moment to leave the page)");
     }
   }
   // The timeline's way to the stage and back, frame by frame, on the whole page. No frame is blank where the one
@@ -729,6 +728,27 @@ try {
   steady(await greens(() => clickOn("#map-front"), rested("map")), false, "the map coming back");
   steady(await greens(() => clickOn("#about-btn"), `document.getElementById("about").open && document.getElementById("mapbox").dataset.as === "dock" && !("swap" in document.documentElement.dataset) && !document.querySelector(".shot")`), true, "the map leaving the stage to About");
   steady(await greens(() => clickOn("#about-close"), `!document.getElementById("about").open && document.getElementById("mapbox").dataset.as === "stage" && !("swap" in document.documentElement.dataset) && !document.querySelector(".shot")`), false, "the map coming back from About");
+  await sleep(300);
+  // Every change of the stage, frame by frame: one thing moves and nothing is drawn twice. The timeline's box is
+  // the timeline itself (never a copy beside it), its width goes one way only, and a panel that takes the stage is
+  // whole from its first frame, so nothing shows through it.
+  const film = async (start, done) => {
+    await js(`window.__f = []; window.__fr = true; (function f() { const c = document.getElementById("chartbox"), a = document.getElementById("about"), seen = e => { let o = 1; for (let x = e; x && x.nodeType === 1; x = x.parentElement) { const s = getComputedStyle(x); if (s.visibility === "hidden" || s.display === "none") return false; o *= +s.opacity; } return o > 0.05; }; window.__f.push([c.getBoundingClientRect().width, [...document.querySelectorAll('[id="say"]')].filter(seen).length + [...document.querySelectorAll(".shot")].filter(e => e.querySelector('[id="say"], [id="chart"]')).length, a.open ? +getComputedStyle(a).opacity : -1]); if (window.__fr) requestAnimationFrame(f); })()`);
+    await start();
+    await until(done, "a change of the stage, filmed");
+    await sleep(350);
+    return js(`(window.__fr = false, window.__f)`);
+  };
+  const oneThing = (f, what, grows) => {
+    assert.ok(f.length >= 12, `${what}: frames were taken: ${f.length}`);
+    assert.ok(f.every(x => x[1] <= 1), `${what}: the timeline's headline is on the page once at every frame: ${Math.max(...f.map(x => x[1]))}`);
+    if (grows != null) { const w = f.map(x => x[0]); assert.ok(w.every((x, i) => !i || (grows ? x >= w[i - 1] - 1 : x <= w[i - 1] + 1)) && Math.abs(w.at(-1) - w[0]) > 300, `${what}: the box's width goes one way: ${Math.round(w[0])} to ${Math.round(w.at(-1))}`); }
+    assert.ok(f.every(x => x[2] < 0 || x[2] > 0.95), `${what}: a panel on the stage is never half there: ${[...new Set(f.map(x => x[2].toFixed(2)))]}`);
+  };
+  oneThing(await film(() => clickOn("#chart-front"), rested("chart")), "the timeline going to the stage", true);
+  oneThing(await film(() => clickOn("#chart-front"), rested("map")), "the timeline going back to its dock", false);
+  oneThing(await film(() => clickOn("#about-btn"), `document.getElementById("about").open && document.getElementById("mapbox").dataset.as === "dock" && !("swap" in document.documentElement.dataset) && !document.querySelector(".shot")`), "About taking the stage");
+  oneThing(await film(() => clickOn("#about-close"), `!document.getElementById("about").open && document.getElementById("mapbox").dataset.as === "stage" && !("swap" in document.documentElement.dataset) && !document.querySelector(".shot")`), "About giving it back");
   await sleep(300);
 
   // sectors, chosen on the map's own panel
@@ -1592,6 +1612,9 @@ try {
     assert.deepEqual(await js(`["story", "chartbox", "list", "nav", "top", "mappanel", "about", "api"].filter(id => { const s = getComputedStyle(document.getElementById(id)); return s.boxShadow !== "none" || s.backgroundImage !== "none" || (s.maskImage || "none") !== "none" || (s.webkitMaskImage || "none") !== "none"; })`), [], `${what}: flat edges, no shadow and no gradient`);
   };
   await STAGE("the default phone screen");
+  // the key and the modes go across the screen: the scale from one side's padding to the other's with its ticks spread under it, the first mode at the left padding and the last ending at the right
+  const across = await js(`(() => { const R = e => e.getBoundingClientRect(), s = R(document.querySelector("#legend .steps")), t = [...document.querySelectorAll("#legend .ticks > *")].map(R), m = [...document.querySelectorAll("#modes button")], f = R(m[0]), l = R(m.at(-1)), pl = parseFloat(getComputedStyle(m[0]).paddingLeft); return { scale: [Math.round(s.left), Math.round(s.right)], ticks: [Math.round(t[0].left + t[0].width / 2 - s.left - s.width / 5), Math.round(t.at(-1).left + t.at(-1).width / 2 - s.left - 4 * s.width / 5)], first: Math.round(f.left + (m[0].getAttribute("aria-pressed") === "true" ? 0 : pl)), last: Math.round(l.right - (m.at(-1).getAttribute("aria-pressed") === "true" ? 0 : pl)), size: parseFloat(getComputedStyle(m[0]).fontSize) }; })()`);
+  assert.deepEqual(across, { scale: [16, 374], ticks: [0, 0], first: 16, last: 374, size: 16 }, "the scale and the modes span the screen between its paddings: " + JSON.stringify(across));
   assert.equal(await js(`document.getElementById("hazard").scrollWidth <= document.getElementById("hazard").clientWidth`), true, "the four hazards fit the sheet's width");
   // the bulletin: its top is tapped or pulled up to the header, where it is whole, and pushed back
   const pull = async (sel, dy) => { const [x, y] = await js(`(() => { const r = document.querySelector("${sel}").getBoundingClientRect(); return [r.x + r.width / 2, r.y + r.height / 2]; })()`); await send("Input.dispatchMouseEvent", { type: "mousePressed", x, y, button: "left", clickCount: 1 }); for (let k = 1; k <= 6; k++) await send("Input.dispatchMouseEvent", { type: "mouseMoved", x, y: y + dy * k / 6, button: "left" }); await send("Input.dispatchMouseEvent", { type: "mouseReleased", x, y: y + dy, button: "left", clickCount: 1 }); await sleep(500); };
@@ -1611,21 +1634,36 @@ try {
   assert.deepEqual(await place("mapbox"), [0, 0, 390, 844], "the map is still the screen, under the sheet");
   await pull("#sheet-grab", 400);
   await until(settled("map"), "pushed back");
-  await clickOn("#say");
-  await until(settled("chart"), "up again by a tap on its top");
+  // only the plot takes the sheet up: a tap on its headline, its level or its edges does nothing
+  for (const sel of ["#say", "#level", "#lead"]) { await clickOn(sel); await sleep(500); assert.equal(await js(settled("map")), true, `a tap on ${sel} leaves the sheet where it is`); }
+  await clickOn("#chart");
+  await until(settled("chart"), "up again by a tap on the plot");
   await clickOn("#chart-front");
   await until(settled("map"), "and down by its X");
   await sleep(450);
   [, cs] = await sheets();
   assert.ok(cs[1] === 844 && cs[1] - cs[0] < 320, "showing its top again: " + cs);
-  // priorities on a phone: the mode opens the list's sheet and the bulletin waits behind a small handle under it
+  // The sheet stays as tall as the finger leaves it. Pulled slowly and held, it rests there, its plot drawn for
+  // that height and the Amazon in the middle of what is left; let go under its rest it settles at its rest.
+  const slow = async (sel, dy) => { const [x, y] = await js(`(() => { const r = document.querySelector("${sel}").getBoundingClientRect(); return [r.x + r.width / 2, r.y + r.height / 2]; })()`); await send("Input.dispatchMouseEvent", { type: "mousePressed", x, y, button: "left", clickCount: 1 }); for (let k = 1; k <= 10; k++) { await send("Input.dispatchMouseEvent", { type: "mouseMoved", x, y: y + dy * k / 10, button: "left" }); await sleep(50); } await sleep(260); await send("Input.dispatchMouseEvent", { type: "mouseReleased", x, y: y + dy, button: "left", clickCount: 1 }); await sleep(1300); };
+  const restTop = (await sheets())[1][0], plot0 = await plot();
+  await slow("#sheet-grab", -160);
+  let free = await js(`(() => { const c = document.getElementById("chartbox").getBoundingClientRect(), a = document.querySelector("canvas.base").getBoundingClientRect(), k = document.getElementById("mappanel").getBoundingClientRect().bottom; return { top: Math.round(c.top), as: document.getElementById("chartbox").dataset.as, up: Math.round(a.top - k), down: Math.round(c.top - a.bottom) }; })()`);
+  assert.ok(Math.abs(free.top - (restTop - 160)) <= 6 && free.as === "dock" && await plot() >= plot0 + 120, `the sheet stays where it was left, its plot taller: ${JSON.stringify(free)}, plot ${await plot()} from ${plot0}`);
+  assert.ok(free.up >= 0 && free.down >= 0 && Math.abs(free.up - free.down) <= 30, "and the Amazon is in the middle of what is left: " + JSON.stringify(free));
+  await slow("#sheet-grab", 420);
+  assert.equal((await sheets())[1][0], restTop, "let go under its rest, it settles at its rest");
+  await slow("#sheet-grab", -120);
+  const keptTop = (await sheets())[1][0];
+  assert.ok(Math.abs(keptTop - (restTop - 120)) <= 6, "and it is left higher again, for the lists to find it there afterwards: " + keptTop);
+  // priorities on a phone: the mode opens the list's sheet, which has the bulletin's place whole
   await clickOn('#modes button[data-k="prio"]');
   await until(`!!document.getElementById("list").offsetParent && document.getElementById("list").dataset.at === "half" && document.querySelectorAll("#list-rows li").length > 100`, "the list's sheet, from the mode");
   await sleep(500);
   [ls, cs] = await apart("with the list open");
   await STAGE("priorities on a phone");
-  assert.ok(ls[0] > 0.4 * 844 && ls[0] < 0.7 * 844 && ls[1] === cs[0] && cs[1] === 844 && cs[1] - cs[0] <= 40, "the list has the lower half, and the bulletin is a small handle under it: " + JSON.stringify([ls, cs]));
-  assert.equal(await js(`["hazard", "level", "say", "chart"].some(id => getComputedStyle(document.getElementById(id)).visibility === "visible" && !!document.getElementById(id).offsetParent)`), false, "nothing of the bulletin shows behind the handle");
+  assert.ok(ls[0] > 0.4 * 844 && ls[0] < 0.7 * 844 && ls[1] === 844 && cs === null, "the list has the lower half down to the foot of the screen, and the bulletin is away: " + JSON.stringify([ls, cs]));
+  assert.equal(await js(`["sheet-grab", "hazard", "level", "say", "chart"].some(id => getComputedStyle(document.getElementById(id)).visibility === "visible" && !!document.getElementById(id).offsetParent) || !document.elementFromPoint(195, 838)?.closest("#list")`), false, "nothing of the bulletin shows or can be reached under the list, not even its grip");
   assert.equal(await js(`[...document.querySelectorAll("#list-close, #list-csv, #list-grab, #list-rows li:nth-child(-n+4) button")].every(e => e.getBoundingClientRect().height >= 44)`), true, "the list's controls and rows are 44 px tall");
   assert.deepEqual([await px("#list-rows .nm"), await px("#list-rows .tag")].map(x => Math.round(x * 2) / 2), [15.5, 12.5], "the list's type");
   // a row brings its place into view above the sheet and says why
@@ -1639,31 +1677,22 @@ try {
   await until(`document.getElementById("list").dataset.at === "full"`, "the list pulled up");
   await sleep(450);
   [ls, cs] = await apart("with the list whole");
-  assert.ok(ls[0] < 60 && ls[1] === cs[0], "whole, under the header, on the handle: " + JSON.stringify([ls, cs]));
+  assert.ok(ls[0] < 60 && ls[1] === 844 && cs === null, "whole, under the header: " + JSON.stringify([ls, cs]));
   await pull("#list-grab", 300);
   await until(`document.getElementById("list").dataset.at === "half"`, "pushed back to the half");
   await clickOn("#list-grab");
   await until(`document.getElementById("list").dataset.at === "full"`, "and up again by a tap on its bar");
   await clickOn("#list-grab");
   await until(`document.getElementById("list").dataset.at === "half"`, "and back");
-  // the handle brings the bulletin up over everything, and its X sends it back behind the list
-  await sleep(400);
-  await clickOn("#sheet-grab");
-  await until(settled("chart"), "the bulletin, from its handle");
-  await sleep(450);
-  [ls, cs] = await apart("with the bulletin up from its handle");
-  assert.ok(ls === null && cs[0] <= 50, "the bulletin is up and the list is not shown: " + JSON.stringify([ls, cs]));
-  await clickOn("#chart-front");
-  await until(settled("map"), "the bulletin sent back");
-  await sleep(450);
-  [ls, cs] = await apart("with the bulletin back behind its handle");
-  assert.ok(ls && cs[1] - cs[0] <= 40, "the list again, on the handle: " + JSON.stringify([ls, cs]));
   // closing the list brings the bulletin back
   await clickOn("#list-close");
   await until(`document.getElementById("list").hidden && /m=cells/.test(location.hash)`, "the list closed by its X, the map on its cells");
   await sleep(500);
   [ls, cs] = await apart("with the list closed");
-  assert.ok(ls === null && cs[1] === 844 && cs[1] - cs[0] > 200 && await plot() >= 120, "and the bulletin is back at rest, with its plot: " + JSON.stringify(cs));
+  assert.ok(ls === null && cs[1] === 844 && Math.abs(cs[0] - keptTop) <= 2 && await plot() >= 120, `and the bulletin is back at the height it had (${keptTop}), with its plot: ` + JSON.stringify(cs));
+  await pull("#sheet-grab", 500);  // (a flick down: back to its rest, for what follows)
+  await sleep(900);
+  assert.equal((await sheets())[1][0], restTop, "a flick down takes it to its rest");
   // About on a phone: the whole screen, its text at the text size, its way out at the top
   await clickOn("#menu-btn");
   await until(`"menu" in document.documentElement.dataset`, "the menu again");

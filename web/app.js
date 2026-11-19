@@ -268,16 +268,30 @@ function sheetAt(at) {
   // the list's half-way place: under the Amazon, which on a phone sits right under the map's band
   if (narrow()) { const H = innerHeight, y = lengthOf("--top") + lengthOf("--panel-h") + 8 + (innerWidth - 20) / 1.27 - 26; root.style.setProperty("--list-top", Math.round(Math.max(H * 0.5, Math.min(y, H - 300))) + "px"); }  // (its top may stand on the Amazon's southern tip)
 }
-function grip(handle, sheet, done) {  // done(dy): where the sheet goes when it is let go, dy being how far it was pulled (0: a tap)
-  let y0 = null, top0 = 0;
-  handle.addEventListener("pointerdown", e => { if (!narrow()) return; y0 = e.clientY; top0 = rectOf(sheet).top; handle.setPointerCapture(e.pointerId); });
-  handle.addEventListener("pointermove", e => { if (y0 == null) return; sheet.classList.add("dragging"); sheet.style.top = Math.max(lengthOf("--top"), top0 + e.clientY - y0) + "px"; });
-  const end = e => { if (y0 == null) return; const dy = e.clientY - y0; y0 = null; sheet.classList.remove("dragging"); sheet.style.top = ""; done(Math.abs(dy) < 8 ? 0 : dy); };
+function grip(handle, sheet, done) {  // done(dy, v, top): where the sheet goes when it is let go: how far it was pulled (0: a tap), how fast (px a ms, down is positive), and where its top was left
+  let y0 = null, top0 = 0, last = null, v = 0;
+  handle.addEventListener("pointerdown", e => { if (!narrow()) return; y0 = e.clientY; top0 = rectOf(sheet).top; last = [e.clientY, performance.now()]; v = 0; handle.setPointerCapture(e.pointerId); });
+  handle.addEventListener("pointermove", e => { if (y0 == null) return; const now = performance.now(); if (now > last[1]) v = 0.6 * v + 0.4 * (e.clientY - last[0]) / (now - last[1]); last = [e.clientY, now]; sheet.classList.add("dragging"); sheet.style.top = Math.max(lengthOf("--top"), top0 + e.clientY - y0) + "px"; });
+  const end = e => { if (y0 == null) return; const dy = e.clientY - y0, top = Math.max(lengthOf("--top"), top0 + dy), still = performance.now() - last[1] > 120; y0 = null; sheet.classList.remove("dragging"); sheet.style.top = ""; done(Math.abs(dy) < 8 ? 0 : dy, still ? 0 : v, top); };
   handle.addEventListener("pointerup", end);
   handle.addEventListener("pointercancel", end);
   handle.addEventListener("click", e => e.stopPropagation());  // the grip has spoken for itself
 }
-grip($("sheet-grab"), BOX.chart, dy => { if (dy ? (dy < -40) === (front === "map") : true) swap(); });
+// The bulletin's sheet stays as tall as the finger leaves it, anywhere between its rest and the header: a tap
+// on the grip takes it up or down whole, a flick does the same, and let go under its rest it settles there. The
+// height is kept while the page is open; the plot is drawn again for it and the Amazon takes the middle of what is left.
+function sheetTo(peek, full) {
+  if (peek != null) root.style.setProperty("--peek-user", Math.round(peek) + "px");
+  if (full !== (front === "chart")) swap(); else refresh();
+  setTimeout(() => { if (narrow()) { chart(); refresh(); } }, 380);  // (when the sheet has arrived)
+}
+grip($("sheet-grab"), BOX.chart, (dy, v, top) => {
+  const H = innerHeight - lengthOf("--cap"), up = lengthOf("--top");
+  if (!dy) return sheetTo(null, front === "map");                        // a tap: up whole, or back to where it rested
+  if (Math.abs(v) > 0.6) return sheetTo(v < 0 ? null : 0, v < 0);         // a flick: up whole, or down to its rest
+  if (top < up + 70) return sheetTo(null, true);                         // left at the header: up whole
+  sheetTo(H - top, false);                                               // left anywhere else: it stays there (never under its rest)
+});
 grip($("list-grab"), $("list"), dy => sheetAt(dy ? (dy < -40 ? "full" : dy > 40 ? "half" : SHEET.list) : SHEET.list === "half" ? "full" : "half"));
 // a phone's header: the mark and one menu
 const menu = on => { if (on) root.dataset.menu = ""; else delete root.dataset.menu; $("menu-btn").setAttribute("aria-expanded", !!on); };
@@ -295,11 +309,13 @@ const sideOn = listOn;  // the ranked list stands on the right of the page
 // On a phone the panel is a band under the header and the Amazon sits right under it, above the sheets.
 const lengthOf = name => parseFloat(css(name)) || 0;
 // where the map's panel ends: the people's dock stops under it, however tall the kinds and the key make it
-const panelAt = () => root.style.setProperty("--panel-bottom", Math.round(rectOf($("mappanel")).bottom) + "px");
+const panelAt = () => { root.style.setProperty("--panel-bottom", Math.round(rectOf($("mappanel")).bottom) + "px"); try { recentre(); } catch (err) { /* the map is not made yet */ } };  // (on a phone the Amazon follows the band's height)
 new ResizeObserver(panelAt).observe($("mappanel"));
 addEventListener("resize", panelAt);
 // the story until its last step: the caption and the key have their room kept; at the last step the page is laid out as the tool is
 const touring = () => storyOn && !/\bnav\b/.test(root.dataset.has || "");
+// how tall the bulletin's sheet rests on a phone, in pixels (the stylesheet has it as the larger of its rest and the height the finger left it at)
+const peekPx = () => { const px = x => (/var\(/.test(x) ? px(x.replace(/var\((--[\w-]+)(?:,\s*([^()]+))?\)/g, (_, n, d) => css(n).trim() || d || "0px")) : /^max\(/.test(x) ? Math.max(...x.slice(4, -1).split(",").map(px)) : parseFloat(x) || 0); return px(css("--peek").trim()); };
 const CAP_FIT = 164, KEY_FIT = 140;  // on a phone, in the story: the room kept for the caption and for the key, the same at every step so the map stays put
 let restPeek = 0;
 const pagePad = () => parseFloat(getComputedStyle($("top")).paddingLeft) || 0;
@@ -308,7 +324,7 @@ function room() {
   if (mapSmall()) return { top: 6, right: 6, bottom: 6, left: 6 };
   if (narrow()) {  // a phone: the Amazon in the middle of what is free between the map's band and what stands at the bottom (the caption, the sheet at rest, the list)
     const tour = touring(), cap = tour ? CAP_FIT : 0, panel = $("mappanel"), y0 = tour ? top + KEY_FIT : panel.offsetParent ? rectOf(panel).bottom : top, lt = lengthOf("--list-top");
-    if (!root.dataset.people) restPeek = lengthOf("--peek");  // (the people's taller sheet does not move the map: selecting never does)
+    if (!root.dataset.people) restPeek = peekPx();  // (the people's taller sheet does not move the map: selecting never does)
     const y1 = root.dataset.list === "true" || (tour && restPeek > 0) ? (lt > 100 ? lt : m.y * 0.56) : m.y - restPeek - cap;  // (in the story the timeline takes the list's place: the map stays where the list left it)
     return { top: y0 + 6, right: 10, left: 10, bottom: Math.max(10, m.y - y1 + 6) };
   }
@@ -1341,33 +1357,19 @@ async function mapMove(dock, ms) {
 async function chartMove(up, ms) {
   const cb = BOX.chart;
   if (!ms) { cb.dataset.as = up ? "stage" : "dock"; chart(); return; }
-  const copy = () => { const c = cb.cloneNode(true); c.classList.add("shot"); c.inert = true; c.setAttribute("aria-hidden", "true"); c.style.visibility = ""; c.style.zIndex = 38; $("app").append(c); return c; };  // (under the picture of the map, both ways)
-  let big, small, pic, first = null;
-  if (up) {
-    small = rectOf(cb);
-    first = copy();
-    cb.style.visibility = "hidden";
-    cb.dataset.as = "stage";
-    chart();
-    big = rectOf(cb);
-    pic = copy();
-    $("app").append(first);
-  } else {
-    big = rectOf(cb);
-    pic = copy();
-    cb.dataset.as = "dock";
-    chart();
-    small = rectOf(cb);
-  }
-  const anims = morph(pic, big, small, corner(big, small), small.width / big.width, !up, ms);
-  if (first) first.animate({ opacity: [1, 0] }, { duration: 200, fill: "forwards" }).finished.then(() => first.remove(), () => first.remove());
+  // One box moves, and it is the timeline itself: it is laid out once, at the start, as it will be where it is
+  // going, and travels there from the rectangle it had. Nothing is drawn twice and nothing fades over anything.
+  const from = rectOf(cb);
+  cb.dataset.as = up ? "stage" : "dock";
+  chart();
+  const to = rectOf(cb);
+  cb.style.zIndex = 38; cb.style.pointerEvents = "none"; cb.classList.add("flying");  // (under the picture of the map, both ways)
+  const anims = morph(cb, to, from, corner(to, from), from.width / to.width, false, ms);
   await Promise.race([Promise.all(anims.map(a => a.finished)), new Promise(r => setTimeout(r, ms + 500))]).catch(() => {});
-  cb.style.visibility = "";
-  await new Promise(r => requestAnimationFrame(r));
-  await pic.animate({ opacity: [1, 0] }, { duration: 180, easing: "linear" }).finished.catch(() => {});
-  pic.remove();
+  for (const a of anims) a.cancel();
+  cb.style.zIndex = cb.style.pointerEvents = ""; cb.classList.remove("flying");
 }
-// The swap of the map and the timeline: each moves as a picture of itself, at the same time.
+// The swap of the map and the timeline, at the same time: the map as a picture of itself, the timeline as itself.
 async function swap(to = front === "map" ? "chart" : "map") {
   if (swapping || to === front) return;
   if (narrow()) { front = to; place(); sheetAt(); refresh(); return; }  // a phone: the timeline's sheet goes up or down over the map, which stays where it is
@@ -1413,8 +1415,12 @@ $("map-front").onclick = () => (panel ? $(panel).close() : swap("map"));  // the
 // docked, the timeline comes forward at a click anywhere on it, except on the controls it keeps there: the
 // hazards, the year stepper and the way out of a sector. (The path is the one the click took: by now a control
 // may have redrawn itself, and its old button is no longer in the page.)
+let pressAt = null;  // where a press on the timeline began: a drag is never a tap
+BOX.chart.addEventListener("pointerdown", e => (pressAt = [e.clientX, e.clientY]), true);
 BOX.chart.addEventListener("click", e => {
   const path = e.composedPath(), on = id => path.includes($(id));
+  if (pressAt && Math.hypot(e.clientX - pressAt[0], e.clientY - pressAt[1]) > 8) return;
+  if (narrow() && !on("chart") && !path.some(n => n.tagName === "IMG")) return;  // on a phone only the plot itself (or the people's photograph) takes the sheet up: a touch on its words or its edges does nothing
   if (docked("chart") && !on("hazard") && !on("step") && !(on("scope") && path.some(n => n.tagName === "BUTTON")) && !path.some(n => n.tagName === "A" || n.tagName === "SUMMARY")) swap("chart");
 });
 
@@ -1497,8 +1503,13 @@ async function refresh() {
   list();
   people();
   // a phone: when what stands around the map has changed enough, the Amazon glides to the middle of what is free
+  recentre();
+}
+function recentre() {
   if (narrow() && pristine && map._loaded) requestAnimationFrame(() => {
     if (!pristine || !narrow() || swapping) return;
+    const r = room();
+    if (map.getSize().y - r.top - r.bottom < 140) return;  // (a sheet pulled far up leaves the map as it is: the Amazon is not made tiny for it)
     const v = fitNow(), d = map.latLngToContainerPoint(v.c).distanceTo(map.latLngToContainerPoint(map.getCenter()));
     if (d > 12 || Math.abs(v.z - map.getZoom()) > 0.05) view(v, !calm());
   });
