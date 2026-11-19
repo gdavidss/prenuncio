@@ -2,11 +2,11 @@
  "about": "About",
  "aboutText": {
   "benchmark": "Benchmark",
-  "by": "Made by {name} ({site}).",
+  "by": "Made by {name}.",
   "line1": "Prenúncio forecasts where the Amazon will be cleared by July {year}.",
   "line2": "We built it so enforcement can arrive before the clearing does.",
   "metric": "The score is the mean of {b0} to {b1}.",
-  "model": "The model is called {name} and learned from {span} years of public data. It divides the forest into {m} metre squares, the cells, and calculates for each one the chance of clearing in the year ahead.",
+  "model": "The map uses the model that leads the benchmark, today {name}. The forest is divided into {m} metre squares, the cells, and the model gives each one its chance of clearing in the year ahead.",
   "open": "The code, the data and the benchmark are open. Build a better model and it replaces ours.",
   "org": "An initiative of {org}.",
   "tested": "To test it, we hid a year from the model and asked for its forecast. In {y}, {hit} of every {of} places it pointed to were cleared."

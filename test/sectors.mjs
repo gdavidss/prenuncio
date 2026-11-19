@@ -1199,20 +1199,19 @@ try {
   // ---------- About: a panel beside the map, and exactly this: what the site shows and who it is for, the model's
   // figure, the model and how it did in two sentences, the benchmark as a bare table with at most one short line
   // under it, that it is open with the way in as a button, that it gets things wrong, and whose data it is.
-  const span = +story.forecast.made_on.slice(0, 4) - story.history.years[0];
+  const lead = [...story.leaderboard.rows].sort((a, b) => a.rank - b.rank).find(r => r.kind === "model").model;  // the model on the map: the benchmark's first, read from the data, never written in the page
   const ABOUT = {
     en: [`Prenúncio forecasts where the Amazon will be cleared by July ${story.forecast.year}.`, "We built it so enforcement can arrive before the clearing does.",
-      `The model is called ${story.model.name} and learned from ${span} years of public data. It divides the forest into ${story.forest.cell_m} metre squares, the cells, and calculates for each one the chance of clearing in the year ahead.`,
+      `The map uses the model that leads the benchmark, today ${lead}. The forest is divided into ${story.forest.cell_m} metre squares, the cells, and the model gives each one its chance of clearing in the year ahead.`,
       `To test it, we hid a year from the model and asked for its forecast. In ${story.check.year}, ${hit5} of every ${of5} places it pointed to were cleared.`,
       "Benchmark", `The score is the mean of ${story.benchmark.years[0]} to ${story.benchmark.years.at(-1)}.`,
-      "The code, the data and the benchmark are open. Build a better model and it replaces ours.", "Submit a modelGitHub", "Made by Gui Dávid (guidavid.com). An initiative of Movimento Cibernético Brasileiro."],
+      "The code, the data and the benchmark are open. Build a better model and it replaces ours.", "Submit a modelGitHub", "Made by Gui Dávid. An initiative of Movimento Cibernético Brasileiro."],
     pt: [`O Prenúncio prevê onde a Amazônia será desmatada até julho de ${story.forecast.year}.`, "Fizemos para que a fiscalização chegue antes do desmate.",
-      `O modelo se chama ${story.model.name} e aprendeu com ${span} anos de dados públicos. Ele divide a floresta em quadrados de ${story.forest.cell_m} metros, as células, e calcula para cada uma a chance de desmate no ano seguinte.`,
+      `O mapa usa o modelo que lidera o benchmark, hoje o ${lead}. A floresta é dividida em quadrados de ${story.forest.cell_m} metros, as células, e o modelo dá a cada uma a chance de desmate no ano seguinte.`,
       `Para testar, escondemos um ano do modelo e pedimos a previsão. Em ${story.check.year}, de cada ${of5} lugares que ele apontou, ${hit5} foram desmatados.`,
       "Benchmark", `A nota é a média de ${story.benchmark.years[0]} a ${story.benchmark.years.at(-1)}.`,
-      "O código, os dados e o benchmark são abertos. Quem fizer um modelo melhor substitui o nosso.", "Enviar um modeloGitHub", "Feito por Gui Dávid (guidavid.com). Uma iniciativa do Movimento Cibernético Brasileiro."],
+      "O código, os dados e o benchmark são abertos. Quem fizer um modelo melhor substitui o nosso.", "Enviar um modeloGitHub", "Feito por Gui Dávid. Uma iniciativa do Movimento Cibernético Brasileiro."],
   };
-  assert.equal(span, 18, "the years of public data, from the first year of the record to the day the forecast was made");
   for (const l of ["en", "pt"]) {
     const en = l === "en", LOC = { en: "en-US", pt: "pt-BR" }[l], n = (x, d = 0) => x.toLocaleString(LOC, { maximumFractionDigits: d, minimumFractionDigits: d }), rows = story.leaderboard.rows, name = story.model.name;
     await send("Page.navigate", { url: SITE + `#l=${l}&about` });
@@ -1248,7 +1247,7 @@ try {
     assert.deepEqual(await js(`(() => { const t = document.querySelector("#about .bench"), s = [t, ...t.querySelectorAll("tr, td, th")].map(e => getComputedStyle(e)); return [s.every(x => parseFloat(x.borderTopWidth) === 0 && parseFloat(x.borderBottomWidth) === 0 && parseFloat(x.borderLeftWidth) === 0), new Set(s.slice(1).map(x => x.backgroundColor)).size]; })()`), [true, 1], `${l}: a bare table: no rules, no stripes`);
     assert.deepEqual(await js(`[document.querySelector("#about .go .btn").textContent, document.querySelector("#about .go .btn").getAttribute("href"), document.querySelector("#about .go a:not(.btn)").textContent, document.querySelector("#about .go a:not(.btn)").getAttribute("href")]`), [en ? "Submit a model" : "Enviar um modelo", story.links.benchmark, "GitHub", story.links.repository], `${l}: the way in is a button, the repository a link`);
     assert.deepEqual([...new Set(await js(`[...document.querySelectorAll("#about a")].map(a => a.getAttribute("href"))`))].sort(), [...new Set([story.links.benchmark, story.links.repository, "https://guidavid.com", ...rows.map(r => r.url)])].sort(), `${l}: the links are the benchmark, the repository, the models and the author's site`);
-    assert.deepEqual(await js(`(a => [a.textContent, a.target, a.rel])(document.querySelector("#about .by a"))`), ["guidavid.com", "_blank", "noopener"], `${l}: the last line links to the author's site in a new tab`);
+    assert.deepEqual(await js(`(a => [a.textContent, a.target, a.rel])(document.querySelector("#about .by a"))`), ["Gui Dávid", "_blank", "noopener"], `${l}: the last line links to the author's site in a new tab`);
     assert.equal(await count("#about [class*=card], #about [class*=grid], #about ul, #about h2"), 0, "no cards, no lists, no title");
     assert.doesNotMatch(body, /It gets things wrong|Ele erra|Data from INPE|Dados do INPE/, `${l}: the two closing lines are gone`);
     assert.equal(await js(`[...document.querySelectorAll("#about .go a, #about .bench a")].every(a => a.target === "_blank" && a.rel === "noopener") && document.querySelectorAll("#about .go a, #about .bench a").length`), 2 + rows.length, `${l}: the button, the GitHub link and the models open in a new tab`);
@@ -1822,6 +1821,57 @@ try {
     assert.ok(m[0] <= 9 && m[1] < 16 && !(await js(`performance.getEntriesByType("resource").some(e => /data\\/[pf]\\d{4}\\.png/.test(e.name))`)), "and in the tool, after the list, the sectors and the people: " + m);
     console.log("phone budget, story: " + JSON.stringify(budget.map(([id, m]) => [id, +m[0].toFixed(1), +m[1].toFixed(1), m[2]])) + "; tool: " + m.map(x => +x.toFixed(1)));
   }
+  // ---------- the sheet under a real finger, as Safari on an iPhone gets it: touch events, not a mouse. The whole
+  // sheet at rest is its grip: dragged from the headline or the hazards, let go while the finger still moves, it
+  // stays where it was left, through a tap on the map, a change of hazard, the list opening and closing and the
+  // phone turning on its side and back. Dragged under its rest it settles at its rest; to the header, it is whole.
+  // A tap on a hazard still chooses it, a tap on the headline does nothing, a tap on the plot brings it up.
+  await send("Emulation.setUserAgentOverride", { userAgent: "Mozilla/5.0 (iPhone; CPU iPhone OS 18_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.1 Mobile/15E148 Safari/604.1", platform: "iPhone" });
+  await send("Emulation.setTouchEmulationEnabled", { enabled: true, maxTouchPoints: 5 });
+  await send("Page.navigate", { url: SITE + "?story=0&ios=1#l=pt&m=cells" });
+  await until(`innerWidth === 390 && document.documentElement.lang === "pt" && !!document.querySelector("canvas.cells")?.dataset.key && document.querySelectorAll("#chart .bar").length > 0`, "the tool, on an iPhone");
+  await sleep(1500);
+  const touch = (type, x, y) => send("Input.dispatchTouchEvent", { type, touchPoints: type === "touchEnd" ? [] : [{ x, y, id: 1 }] });
+  const finger = async (sel, dy, ms = 320) => { const [x, y] = await js(`(r => [r.left + Math.min(60, r.width / 2), r.top + r.height / 2])(document.querySelector(${JSON.stringify(sel)}).getBoundingClientRect())`); await touch("touchStart", x, y); await sleep(30); for (let k = 1; k <= 18; k++) { await touch("touchMove", x, y + dy * (1 - (1 - k / 18) ** 2)); await sleep(ms / 18); } await touch("touchEnd"); await sleep(1100); };
+  const tapAt = async sel => { const [x, y] = await js(`(r => [r.left + r.width / 2, r.top + r.height / 2])(document.querySelector(${JSON.stringify(sel)}).getBoundingClientRect())`); await touch("touchStart", x, y); await sleep(50); await touch("touchEnd"); await sleep(1000); };
+  const topNow = () => js(`Math.round(document.getElementById("chartbox").getBoundingClientRect().top) + "/" + document.getElementById("chartbox").dataset.as`);
+  const rest0 = await topNow();
+  await finger("#say", -260);
+  const kept = await topNow(), keptY = parseInt(kept);
+  assert.ok(kept.endsWith("/dock") && Math.abs(keptY - (parseInt(rest0) - 260)) <= 8, `dragged by its headline and let go while moving, the sheet stays there: ${rest0} to ${kept}`);
+  await finger("#hazard", 120);
+  const kept2 = await topNow();
+  assert.ok(kept2.endsWith("/dock") && Math.abs(parseInt(kept2) - (keptY + 120)) <= 8, `and by its hazards: ${kept} to ${kept2}`);
+  await touch("touchStart", 200, 150); await sleep(50); await touch("touchEnd"); await sleep(900);
+  assert.equal(await topNow(), kept2, "a tap on the map leaves it there");
+  await tapAt('#hazard button[data-k="fire"]');
+  await until(`document.documentElement.dataset.hazard === "scar" || document.documentElement.dataset.hazard === "fire"`, "a tap on a hazard chooses it");
+  assert.equal(await topNow(), kept2, "a change of hazard leaves it there");
+  await tapAt('#hazard button[data-k="clear"]');
+  await tapAt("#say");
+  assert.equal(await topNow(), kept2, "a tap on the headline does nothing");
+  await clickOn('#modes button[data-k="prio"]');
+  await until(`document.documentElement.dataset.list === "true" && !!document.getElementById("list").offsetParent`, "the list");
+  await sleep(600);
+  await clickOn("#list-close");
+  await until(`document.documentElement.dataset.list === "false"`, "the list closed"); await sleep(900);
+  assert.equal(await topNow(), kept2, "the list opens and closes and the sheet is where it was");
+  await send("Emulation.setDeviceMetricsOverride", { width: 844, height: 390, deviceScaleFactor: 2, mobile: true });
+  await sleep(1200);
+  assert.ok(parseInt(await topNow()) >= 48 + 40, "turned on its side the sheet fits the shorter screen: " + await topNow());
+  await send("Emulation.setDeviceMetricsOverride", { width: 390, height: 844, deviceScaleFactor: 2, mobile: true });
+  await sleep(1200);
+  assert.equal(await topNow(), kept2, "and turned back it is where it was left");
+  await finger("#say", 600);
+  assert.equal(await topNow(), rest0, "dragged under its rest it settles at its rest");
+  await finger("#say", -620);
+  assert.equal(await topNow(), "48/stage", "dragged to the header it is whole");
+  await clickOn("#chart-front"); await until(settled("map"), "back down"); await sleep(500);
+  await tapAt("#chart");
+  await until(settled("chart"), "a tap on the plot brings it up");
+  await clickOn("#chart-front"); await until(settled("map"), "and down");
+  assert.equal(await js(`getComputedStyle(document.getElementById("say")).touchAction`), "none", "at rest the browser does not take a finger on the sheet for a scroll");
+  await send("Emulation.setUserAgentOverride", { userAgent: "" });
   await send("Emulation.setDeviceMetricsOverride", DESK);
 
   assert.deepEqual(errors, [], "no script errors");

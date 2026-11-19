@@ -2,11 +2,11 @@
  "about": "Hakkında",
  "aboutText": {
   "benchmark": "Benchmark",
-  "by": "{name} tarafından yapıldı ({site}).",
+  "by": "{name} tarafından yapıldı.",
   "line1": "Prenúncio, Amazon'un Temmuz {year} sonuna kadar nerede ormansızlaşacağını tahmin eder.",
   "line2": "Denetim ormansızlaşmadan önce varsın diye yaptık.",
   "metric": "Puan, {b0} ile {b1} arasındaki yılların ortalamasıdır.",
-  "model": "Modelin adı {name}; {span} yıllık kamuya açık veriden öğrendi. Ormanı {m} metrelik karelere, yani hücrelere böler ve her biri için gelecek yıl ormansızlaşma olasılığını hesaplar.",
+  "model": "Harita, benchmark'ta önde olan modeli kullanır; bugün bu {name}. Orman {m} metrelik karelere, yani hücrelere bölünür ve model her birine gelecek yıl ormansızlaşma olasılığını verir.",
   "open": "Kod, veri ve benchmark açık. Daha iyi bir model yapan bizimkinin yerini alır.",
   "org": "{org} girişimidir.",
   "tested": "Sınamak için bir yılı modelden sakladık ve tahminini istedik. {y} yılında işaret ettiği her {of} yerden {hit} tanesi ormansızlaştı."

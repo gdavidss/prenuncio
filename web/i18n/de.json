@@ -2,11 +2,11 @@
  "about": "Info",
  "aboutText": {
   "benchmark": "Benchmark",
-  "by": "Erstellt von {name} ({site}).",
+  "by": "Erstellt von {name}.",
   "line1": "Prenúncio sagt vorher, wo in Amazonien bis Juli {year} gerodet wird.",
   "line2": "Wir haben es gebaut, damit die Kontrolle vor der Rodung da ist.",
   "metric": "Der Score ist der Mittelwert von {b0} bis {b1}.",
-  "model": "Das Modell heißt {name} und hat aus {span} Jahren öffentlicher Daten gelernt. Es teilt den Wald in Quadrate von {m} Metern, die Zellen, und berechnet für jede die Wahrscheinlichkeit einer Rodung im Folgejahr.",
+  "model": "Die Karte nutzt das Modell, das den Benchmark anführt, derzeit {name}. Der Wald ist in Quadrate von {m} Metern geteilt, die Zellen, und das Modell gibt jeder ihre Wahrscheinlichkeit einer Rodung im Folgejahr.",
   "open": "Code, Daten und Benchmark sind offen. Wer ein besseres Modell baut, ersetzt unseres.",
   "org": "Eine Initiative des {org}.",
   "tested": "Zum Test haben wir dem Modell ein Jahr vorenthalten und nach seiner Prognose gefragt. {y} wurden von {of} Orten, auf die es zeigte, {hit} gerodet."

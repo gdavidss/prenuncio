@@ -2,11 +2,11 @@
  "about": "Acerca de",
  "aboutText": {
   "benchmark": "Benchmark",
-  "by": "Hecho por {name} ({site}).",
+  "by": "Hecho por {name}.",
   "line1": "Prenúncio prevé dónde se deforestará la Amazonía hasta julio de {year}.",
   "line2": "Lo hicimos para que la fiscalización llegue antes que la deforestación.",
   "metric": "La puntuación es la media de {b0} a {b1}.",
-  "model": "El modelo se llama {name} y aprendió de {span} años de datos públicos. Divide el bosque en cuadrados de {m} metros, las celdas, y calcula para cada una la probabilidad de deforestación en el año siguiente.",
+  "model": "El mapa usa el modelo que lidera el benchmark, hoy {name}. El bosque se divide en cuadrados de {m} metros, las celdas, y el modelo da a cada una su probabilidad de deforestación en el año siguiente.",
   "open": "El código, los datos y el benchmark son abiertos. Quien haga un modelo mejor reemplaza al nuestro.",
   "org": "Una iniciativa del {org}.",
   "tested": "Para probarlo, le ocultamos un año al modelo y le pedimos su previsión. En {y}, de cada {of} lugares que señaló, {hit} fueron deforestados."

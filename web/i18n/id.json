@@ -2,11 +2,11 @@
  "about": "Tentang",
  "aboutText": {
   "benchmark": "Benchmark",
-  "by": "Dibuat oleh {name} ({site}).",
+  "by": "Dibuat oleh {name}.",
   "line1": "Prenúncio memprakirakan bagian Amazon yang akan dibuka sampai Juli {year}.",
   "line2": "Kami membuatnya agar penegakan hukum tiba sebelum hutan dibuka.",
   "metric": "Skor adalah rata-rata {b0} sampai {b1}.",
-  "model": "Model ini bernama {name} dan belajar dari {span} tahun data publik. Model membagi hutan menjadi petak {m} meter, yaitu sel, dan menghitung untuk tiap sel peluang deforestasi pada tahun berikutnya.",
+  "model": "Peta memakai model yang memimpin benchmark, saat ini {name}. Hutan dibagi menjadi petak {m} meter, yaitu sel, dan model memberi tiap sel peluang deforestasi pada tahun berikutnya.",
   "open": "Kode, data, dan benchmark terbuka. Buat model yang lebih baik, dan model itu menggantikan model kami.",
   "org": "Sebuah inisiatif {org}.",
   "tested": "Untuk mengujinya, kami menyembunyikan satu tahun dari model dan meminta prakiraannya. Pada {y}, {hit} dari setiap {of} tempat yang ditunjuknya benar-benar dibuka."

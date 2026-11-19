@@ -280,18 +280,58 @@ function grip(handle, sheet, done) {  // done(dy, v, top): where the sheet goes 
 // The bulletin's sheet stays as tall as the finger leaves it, anywhere between its rest and the header: a tap
 // on the grip takes it up or down whole, a flick does the same, and let go under its rest it settles there. The
 // height is kept while the page is open; the plot is drawn again for it and the Amazon takes the middle of what is left.
+// At rest or anywhere below the header, the whole sheet is the grip: a finger on its grip, its hazards, its level
+// or its headline (or on the plot) that moves up or down more than a few pixels moves the sheet with it, and a
+// touch that does not move is a tap on what is under it. Pulled up whole, the sheet scrolls, and only its grip row
+// brings it down. A finger lets go while still moving: only a fast flick counts as a flick, judged on the last
+// tenth of a second; a slower release leaves the sheet where it is. A cancelled touch leaves it where it was.
+const SHEETY = { want: 0 };  // the height the reader left the sheet at, kept for the page's life and fitted to the screen it is on
+function sheetFit() { if (!narrow()) return; const most = innerHeight - lengthOf("--top") - lengthOf("--cap") - 48; root.style.setProperty("--peek-user", Math.round(Math.min(SHEETY.want, most)) + "px"); }
 function sheetTo(peek, full) {
-  if (peek != null) root.style.setProperty("--peek-user", Math.round(peek) + "px");
+  if (peek != null) { SHEETY.want = Math.round(peek); sheetFit(); }
   if (full !== (front === "chart")) swap(); else refresh();
   setTimeout(() => { if (narrow()) { chart(); refresh(); } }, 380);  // (when the sheet has arrived)
 }
-grip($("sheet-grab"), BOX.chart, (dy, v, top) => {
-  const H = innerHeight - lengthOf("--cap"), up = lengthOf("--top");
-  if (!dy) return sheetTo(null, front === "map");                        // a tap: up whole, or back to where it rested
-  if (Math.abs(v) > 0.6) return sheetTo(v < 0 ? null : 0, v < 0);         // a flick: up whole, or down to its rest
-  if (top < up + 70) return sheetTo(null, true);                         // left at the header: up whole
-  sheetTo(H - top, false);                                               // left anywhere else: it stays there (never under its rest)
-});
+addEventListener("resize", sheetFit);
+let dragged = false;  // a drag of the sheet is never a tap on what it started on
+{
+  const cb = BOX.chart;
+  let d = null;
+  const release = (e, cancelled) => {
+    if (!d || (e && e.pointerId !== d.id)) return;
+    const was = d; d = null;
+    cb.classList.remove("dragging");
+    if (!was.moved) { if (was.grab && !cancelled) sheetTo(null, front === "map"); return; }  // a tap on the grip: up whole, or back to where it rested
+    dragged = true; setTimeout(() => (dragged = false), 400);
+    const top = parseFloat(cb.style.top) || rectOf(cb).top, now = performance.now(), recent = was.pts.filter(p => now - p[1] < 100), v = !cancelled && recent.length > 1 ? (recent.at(-1)[0] - recent[0][0]) / Math.max(16, recent.at(-1)[1] - recent[0][1]) : 0;
+    cb.style.top = "";
+    const H = innerHeight - lengthOf("--cap"), up = lengthOf("--top");
+    if (Math.abs(v) > 1.2) return sheetTo(v < 0 ? null : 0, v < 0);       // a flick (over 1,200 px a second): up whole, or down to its rest
+    if (top < up + 70) return sheetTo(null, true);                         // left at the header: up whole
+    sheetTo(H - top, false);                                               // left anywhere else: it stays there (never under its rest)
+  };
+  cb.addEventListener("pointerdown", e => {
+    if (!narrow() || storyOn || (e.pointerType === "mouse" && e.button !== 0)) return;
+    const grab = !!e.target.closest("#sheet-grab");
+    if (!docked("chart") && !grab) return;  // pulled up whole, the sheet's content scrolls
+    d = { id: e.pointerId, x0: e.clientX, y0: e.clientY, top0: rectOf(cb).top, moved: false, grab, pts: [[e.clientY, performance.now()]] };
+  });
+  addEventListener("pointermove", e => {  // (on the window: the finger leaves the sheet's old place as soon as it moves it)
+    if (!d || e.pointerId !== d.id) return;
+    const dy = e.clientY - d.y0;
+    if (!d.moved) {
+      if (Math.abs(dy) < 8 || Math.abs(dy) < Math.abs(e.clientX - d.x0)) return;
+      d.moved = true; cb.classList.add("dragging");
+      try { cb.setPointerCapture(e.pointerId); } catch (err) { /* the finger is already gone */ }
+    }
+    d.pts.push([e.clientY, performance.now()]); if (d.pts.length > 8) d.pts.shift();
+    cb.style.top = Math.max(lengthOf("--top"), d.top0 + dy) + "px";
+  });
+  addEventListener("pointerup", e => release(e, false));
+  addEventListener("pointercancel", e => release(e, true));
+  cb.addEventListener("touchmove", e => { if (d?.moved) e.preventDefault(); }, { passive: false });  // (Safari: the page never scrolls or bounces under a sheet being moved)
+  cb.addEventListener("click", e => { if (dragged) { dragged = false; e.stopImmediatePropagation(); e.preventDefault(); } }, true);
+}
 grip($("list-grab"), $("list"), dy => sheetAt(dy ? (dy < -40 ? "full" : dy > 40 ? "half" : SHEET.list) : SHEET.list === "half" ? "full" : "half"));
 // a phone's header: the mark and one menu
 const menu = on => { if (on) root.dataset.menu = ""; else delete root.dataset.menu; $("menu-btn").setAttribute("aria-expanded", !!on); };
@@ -357,7 +397,7 @@ const cvSectors = L.canvas({ padding: LITE ? 0.1 : 0.4 }), cvLines = L.canvas({ 
 // that the view the map will have in its dock is known before it gets there.
 function fitView(size, fit) {
   const b = L.latLngBounds(AMAZON), tl = L.point(fit.paddingTopLeft), br = L.point(fit.paddingBottomRight), sw = map.project(b.getSouthWest(), 0), ne = map.project(b.getNorthEast(), 0);
-  const room = size.subtract(tl).subtract(br), z0 = Math.log2(Math.min(room.x / (ne.x - sw.x), room.y / (sw.y - ne.y)));
+  const room_ = size.subtract(tl).subtract(br), room = L.point(Math.max(40, room_.x), Math.max(40, room_.y)), z0 = Math.log2(Math.min(room.x / (ne.x - sw.x), room.y / (sw.y - ne.y)));
   const z = Math.max(FLOOR, Math.min(map.getMaxZoom(), Math.floor(z0 * 16 + 1e-6) / 16));
   return { c: map.unproject(map.project(b.getSouthWest(), z).add(map.project(b.getNorthEast(), z)).divideBy(2).add(br.subtract(tl).divideBy(2)), z), z };
 }
@@ -1651,7 +1691,7 @@ document.addEventListener("click", () => langMenu(false));
 // About: a panel beside the map. What this is and who it is for, the model's figure, what the model is and how
 // it did, the benchmark as a bare table with the way in as a button, and that it gets things wrong. Every number
 // is read from data/story.json. `at` opens it on the figure or on the benchmark.
-const MODEL = ST?.model?.name || ST?.leaderboard?.rows?.find(r => r.kind === "model")?.model || "prenuncio";  // the model on this site, by the name it has in the benchmark
+const MODEL = [...(ST?.leaderboard?.rows || [])].sort((a, b) => a.rank - b.rank).find(r => r.kind === "model")?.model || ST?.model?.name || "prenuncio";  // the model on the map is the one that leads the benchmark, by its name there
 const of5 = x => (Math.abs(x * 5 - Math.round(x * 5)) < 0.02 ? [Math.round(x * 5), 5] : [Math.round(x * 10), 10]);  // a share as so many in five, or in ten
 function bench() {
   const L_ = t().bench, B = ST.benchmark, pc = x => (x == null ? "" : pcOf(x, 1)), day = d => { const [y, m_, dd] = d.split("-").map(Number); return new Date(y, m_ - 1, dd).toLocaleDateString(loc(), { day: "numeric", month: "short", year: "numeric" }); };
@@ -1665,10 +1705,10 @@ function about(at) {
   const [hit, of] = of5(ST.check.priority_blocks_that_lost_10ha);
   const A = t().aboutText, B = t().bench, p = x => `<p>${x}</p>`;
   $("about-body").innerHTML = `<div class="lede">${p(esc(A.line1({ year: ST.forecast.year })))}${p(esc(A.line2))}</div><div id="model-fig"></div>`
-    + p(esc(A.model({ name: "\u0001", span: +ST.forecast.made_on.slice(0, 4) - ST.history.years[0], m: ST.forest.cell_m })).replace("\u0001", `<b>${esc(MODEL)}</b>`)) + p(esc(A.tested({ y: ST.check.year, hit, of })))
+    + p(esc(A.model({ name: "\u0001", m: ST.forest.cell_m })).replace("\u0001", `<b>${esc(MODEL)}</b>`)) + p(esc(A.tested({ y: ST.check.year, hit, of })))
     + `<h3 id="about-benchmark">${esc(A.benchmark)}</h3>${bench()}<p class="metric">${esc(A.metric({ b0: ST.benchmark.years[0], b1: ST.benchmark.years.at(-1) }))}</p>` + p(esc(A.open))
     + `<p class="go"><a class="btn" href="${esc(ST.links.benchmark)}" target="_blank" rel="noopener">${esc(B.submit)}</a><a href="${esc(ST.links.repository)}" target="_blank" rel="noopener">${esc(B.repo)}</a></p>`
-    + `<p class="by">${esc(A.by({ name: "Gui Dávid", site: "\u0001" })).replace("\u0001", `<a href="https://guidavid.com" target="_blank" rel="noopener">guidavid.com</a>`)} ${esc(A.org({ org: "Movimento Cibernético Brasileiro" }))}<img class="org" src="img/mcbr.png" alt="" width="131" height="48" loading="lazy"></p>`;
+    + `<p class="by">${esc(A.by({ name: "\u0001" })).replace("\u0001", `<a href="https://guidavid.com" target="_blank" rel="noopener">Gui Dávid</a>`)} ${esc(A.org({ org: "Movimento Cibernético Brasileiro" }))}<img class="org" src="img/mcbr.png" alt="" width="131" height="48" loading="lazy"></p>`;
 
   // in the story it is put together a piece at a time: the figure alone, then the benchmark alone, each entering as the other leaves
   const only = storyOn ? (at === "about-benchmark" ? "bench" : "fig") : "";
