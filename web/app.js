@@ -298,21 +298,23 @@ const lengthOf = name => parseFloat(css(name)) || 0;
 const panelAt = () => root.style.setProperty("--panel-bottom", Math.round(rectOf($("mappanel")).bottom) + "px");
 new ResizeObserver(panelAt).observe($("mappanel"));
 addEventListener("resize", panelAt);
-const CAP_FIT = 164, KEY_FIT = 98;  // on a phone, in the story: the room kept for the caption and for the key, the same at every step so the map stays put
+// the story until its last step: the caption and the key have their room kept; at the last step the page is laid out as the tool is
+const touring = () => storyOn && !/\bnav\b/.test(root.dataset.has || "");
+const CAP_FIT = 164, KEY_FIT = 140;  // on a phone, in the story: the room kept for the caption and for the key, the same at every step so the map stays put
 let restPeek = 0;
 const pagePad = () => parseFloat(getComputedStyle($("top")).paddingLeft) || 0;
 function room() {
   const m = map.getSize(), top = lengthOf("--top");
   if (mapSmall()) return { top: 6, right: 6, bottom: 6, left: 6 };
   if (narrow()) {  // a phone: the Amazon in the middle of what is free between the map's band and what stands at the bottom (the caption, the sheet at rest, the list)
-    const cap = storyOn ? CAP_FIT : 0, panel = $("mappanel"), y0 = storyOn ? top + KEY_FIT : panel.offsetParent ? rectOf(panel).bottom : top, lt = lengthOf("--list-top");
+    const tour = touring(), cap = tour ? CAP_FIT : 0, panel = $("mappanel"), y0 = tour ? top + KEY_FIT : panel.offsetParent ? rectOf(panel).bottom : top, lt = lengthOf("--list-top");
     if (!root.dataset.people) restPeek = lengthOf("--peek");  // (the people's taller sheet does not move the map: selecting never does)
-    const y1 = root.dataset.list === "true" || (storyOn && restPeek > 0) ? (lt > 100 ? lt : m.y * 0.56) : m.y - restPeek - cap;  // (in the story the timeline takes the list's place: the map stays where the list left it)
+    const y1 = root.dataset.list === "true" || (tour && restPeek > 0) ? (lt > 100 ? lt : m.y * 0.56) : m.y - restPeek - cap;  // (in the story the timeline takes the list's place: the map stays where the list left it)
     return { top: y0 + 6, right: 10, left: 10, bottom: Math.max(10, m.y - y1 + 6) };
   }
   const left = pagePad() + lengthOf("--rail") + lengthOf("--in");  // the right edge of the left column's surfaces
   if (RTL.has(lang)) return { top, left: sideOn() ? lengthOf("--list-w") : 0, right: left + 16, bottom: 0 };  // mirrored: the column is on the right, the list on the left
-  return { top, right: sideOn() ? lengthOf("--list-w") : 0, bottom: 0, left, panel: Math.max(top + lengthOf("--panel-h"), $("mappanel").offsetParent ? rectOf($("mappanel")).bottom : 0), dock: Math.min(m.y - pagePad() - lengthOf("--dock-h"), docked("chart") && BOX.chart.offsetParent && !peopleOf ? rectOf(BOX.chart).top : 1e9), column: sideOn() || storyOn };
+  return { top, right: sideOn() ? lengthOf("--list-w") : 0, bottom: 0, left, panel: Math.max(top + lengthOf("--panel-h"), $("mappanel").offsetParent ? rectOf($("mappanel")).bottom : 0), dock: Math.min(m.y - pagePad() - lengthOf("--dock-h"), docked("chart") && BOX.chart.offsetParent && !peopleOf ? rectOf(BOX.chart).top : 1e9), column: sideOn() || touring() };
 }
 // the same room as the padding of a view that is sent somewhere: a sector or a block is brought to the middle of what is free
 const FIT = () => { const r = room(), g = mapSmall() || narrow() ? 0 : 14; return { paddingTopLeft: [r.left + g, r.top + g], paddingBottomRight: [r.right + g, r.bottom + g] }; };
@@ -421,7 +423,7 @@ map.on("moveend", hold);
 // fingers on a trackpad about two, a pinch on a trackpad four times as strong.
 const ZOOM = { per: 0.005, pinch: 0.02, tau: 75, to: null, at: null, t: 0, raf: 0 };
 function zoomStep(now) {
-  const z = map.getZoom(), dt = Math.max(0, Math.min(64, now - ZOOM.t)), gap = ZOOM.to - z, done = Math.abs(gap) < 0.01;
+  const z = map.getZoom(), dt = Math.max(0, Math.min(34, now - ZOOM.t)), gap = ZOOM.to - z, done = Math.abs(gap) < 0.01;
   ZOOM.t = now;
   const nz = done ? ZOOM.to : z + gap * (1 - Math.exp(-dt / ZOOM.tau)), half = map.getSize().divideBy(2), k = 1 - 1 / map.getZoomScale(nz, z);
   map._move(map.containerPointToLatLng(half.add(ZOOM.at.subtract(half).multiplyBy(k))), nz, { pinch: true, round: false });  // (as a pinch: the layers scale, nothing is redrawn)
@@ -878,13 +880,11 @@ async function people() {
   if (id !== (S.mode === "sectors" && S.kind === "ti" ? S.sel : null)) return;
   const list = all[id] || [], own = x => x?.[lang] || x?.en || "", L_ = t().people, was = peopleOf;
   peopleOf = list.length ? id : null;
-  const one = (p, head) => `${p.photo && head ? `<figure><img src="${esc(p.photo.file)}" alt="${esc(own(p.photo.caption))}" loading="lazy"><figcaption><a href="${esc(p.photo.source_url)}" target="_blank" rel="noopener">${esc(L_.credit({ author: p.photo.author, license: p.photo.license }))}</a></figcaption></figure>` : ""}`
+  const one = (p, head) => `${p.photo && head ? `<figure><img src="${esc(p.photo.file)}" alt="${esc(own(p.photo.caption))}" loading="lazy"><figcaption>${p.photo.place ? esc(own(p.photo.caption).replace(/\.$/, "")) + ". " : ""}<a href="${esc(p.photo.source_url)}" target="_blank" rel="noopener">${esc(L_.credit({ author: p.photo.author, license: p.photo.license }))}</a></figcaption></figure>` : ""}`
     + (head ? `<h2 dir="auto">${esc(p.name)}</h2><p dir="auto">${esc(own(p.text))}</p>` : `<details><summary dir="auto">${esc(p.name)}</summary><p dir="auto">${esc(own(p.text))}</p></details>`);  // (dir=auto: a text that falls back to English reads left to right on a right-to-left page)
   $("people").innerHTML = list.length ? `<button id="people-x" class="x" aria-label="${esc(t().close)}" title="${esc(t().close)}"></button>` + one(list[0], true) + (list.length > 1 ? `<h3>${esc(L_.also)}</h3>` + list.slice(1).map(p => one(p, false)).join("") : "") : "";
   $("people").hidden = !list.length;
-  const had = "people" in root.dataset;
   if (list.length) root.dataset.people = ""; else delete root.dataset.people;
-  if (had !== !!list.length) fitRows();  // (with the people in the dock the kinds are a row: its type is fitted again)
   if (was !== peopleOf) { $("chartin").scrollTop = 0; $("chartin").classList.remove("in"); void $("chartin").offsetWidth; $("chartin").classList.add("in"); chart(); }  // one leaves the dock and the other comes in, as on the stage
 }
 // The selection is one thing in one place: its outline is on the map only while a sector is selected, and goes
@@ -1405,7 +1405,7 @@ function fitRows() {
   for (const el of [$("hazard"), $("modes"), $("scale"), $("kinds")]) {
     for (const b of el.children) b.style.fontSize = b.style.letterSpacing = "";
     el.style.gap = "";
-    for (const [size, gap] of [[14, "0 12px"], [13, "0 9px"], [12, "0 7px"], [11, "0 5px"]]) {
+    for (const [size, gap] of el === $("kinds") ? [[14, "0 10px"], [13, "0 9px"], [13, "0 6px"], [13, "0 4px"]] : [[14, "0 12px"], [13, "0 9px"], [12, "0 7px"], [11, "0 5px"]]) {  // (the kinds stop at 13 px: after that their row scrolls)
       if (!el.offsetParent || el.scrollWidth <= el.clientWidth + 1 && el.getBoundingClientRect().right <= (el.parentElement.closest("#mappanel, #chartin") || el.parentElement).getBoundingClientRect().right + 1) break;
       for (const b of el.children) { b.style.fontSize = size + "px"; b.style.letterSpacing = "0.02em"; }
       if (el !== $("modes")) el.style.gap = gap;
@@ -1700,13 +1700,17 @@ const SCENES = [
   { id: "forestB", fx: "mosaic" },
   { id: "lossA", loss: true, fx: "loss", extra: "years" },
   { id: "lossB", loss: true, extra: "years" },
-  { id: "model", has: "legend", cells: FY, fx: "sweep" },
+  { id: "model", has: "legend", cells: FY, fx: "sweep" },                                  // the key, and the Cells tab
   { id: "proof", has: "legend", cells: CY, fx: "proof" },
-  { id: "sources", has: "legend about", cells: FY, about: "model-fig" },
-  { id: "open", has: "legend about", cells: FY, about: "about-benchmark" },
-  { id: "first", has: "legend about list", cells: FY, prio: true },
-  { id: "ahead", has: "legend about list chart", cells: FY, prio: true },
+  { id: "sources", has: "legend", cells: FY, about: "model-fig" },
+  { id: "open", has: "legend", cells: FY, about: "about-benchmark" },
+  { id: "sectors", has: "legend sectors", cells: FY, mode: "sectors" },                    // the Sectors tab and the kinds
+  { id: "first", has: "legend sectors prio list", cells: FY, mode: "prio" },               // the Priorities tab and the list
+  { id: "ahead", has: "legend sectors prio list chart", cells: FY, mode: "prio" },         // the timeline in its dock
+  { id: "use", has: "legend sectors prio list chart nav", cells: FY },                     // the header's links and the zoom: the tool as it will be left
 ].filter(s => s.cells !== CY || (CY && CY !== FY && M.years[CY]?.flags500 && P?.years?.[CY]));
+let KIND0 = null;
+const INERT = () => [$("mappanel"), $("chartbox"), $("list"), $("story-btn"), $("about-btn"), $("api-btn"), $("menu-btn"), document.querySelector(".leaflet-control-zoom")];
 let sAt = 0, sRun = 0, storyShut = false;  // the step on screen; a count that tells a running effect it has been overtaken; whether the reader closed the list
 const wait = ms => new Promise(r => setTimeout(r, ms));
 // what each line says, from the data
@@ -1721,6 +1725,8 @@ function storyWords(id) {
     case "proof": return L_.proof({ y: chk.year, hit, of });
     case "sources": return L_.sources({ n: t().numSources[ST.model.inputs.length] ?? fmt(ST.model.inputs.length), count: ST.model.inputs.length });
     case "open": return L_.open;
+    case "sectors": return L_.sectors;
+    case "use": return LITE || matchMedia("(pointer: coarse)").matches ? L_.useTouch : L_.use;  // a finger has no pointer to move
     case "first": return L_.first({ n: n0(ST.priority.blocks), count: ST.priority.blocks });
     case "ahead": {  // the three months behind against a year before, as the level counts them, and the three ahead
       const [now, prev] = three(monthly(null, "clear")), hz = MO?.hazards?.clear, f = hz?.forecast?.[2], rise = prev >= 1 ? Math.round(100 * (now / prev - 1)) : 0;
@@ -1867,7 +1873,8 @@ function storyText() {
   capAt();
 }
 // on a phone the caption is as tall as its words need, and the sheets stand on it: they are told its height
-const capAt = () => { if (storyOn && narrow()) root.style.setProperty("--cap", $("story").offsetHeight + "px"); else root.style.removeProperty("--cap"); };
+const capAt = () => { if (storyOn && narrow()) root.style.setProperty("--cap", (touring() ? $("story").offsetHeight : 0) + "px"); else root.style.removeProperty("--cap"); };  // (at the last step the sheet rests where the tool has it, and the caption lies over it)
+new ResizeObserver(() => capAt()).observe($("story"));  // (the caption may wrap again when its type arrives)
 addEventListener("resize", capAt);
 // the clearing mapped year by year (the f<year>.png masks), counted per block of 2 km in a worker and drawn dark
 // on the forest: the first n years of them
@@ -1977,12 +1984,17 @@ async function proof(my) {  // the year that is replayed: first the chances as t
   requestAnimationFrame(tick);
 }
 async function scene(i, dir = 0) {
-  const sc = SCENES[sAt = Math.max(0, Math.min(SCENES.length - 1, i))], my = ++sRun, fwd = dir > 0 && !calm(), has = sc.has || "", listed = !storyShut && /list/.test(has) && !(narrow() && /chart/.test(has));  // (a phone shows one sheet at a time: there the timeline takes the list's place)
+  const sc = SCENES[sAt = Math.max(0, Math.min(SCENES.length - 1, i))], my = ++sRun, fwd = dir > 0 && !calm(), has = sc.has || "", listed = !storyShut && sc.mode === "prio" && !(narrow() && /chart/.test(has));  // (a phone shows one sheet at a time: there the timeline takes the list's place)
+  const had = (root.dataset.has || "").split(" ");
   root.dataset.has = has;  // the pieces of the tool that are on the page by now
+  root.dataset.new = dir > 0 ? has.split(" ").filter(k => k && !had.includes(k)).join(" ") : "";  // what this step brings: it comes in with the stage's motion
+  for (const el of INERT()) el.inert = true;  // what is on the page is not for the hand until the story is over
   storyText();
   // what the map and the timeline are set to
   S.hazard = "clear"; S.sel = null; S.min = 0; S.h = 0; S.rank = false; S.line = false;
-  S.mode = sc.prio && listed ? "prio" : "cells"; S.block = sc.prio && listed ? 1 : null;
+  S.mode = listed ? "prio" : sc.mode === "sectors" ? "sectors" : "cells"; S.block = listed ? 1 : null;
+  KIND0 ??= S.kind; S.kind = sc.mode === "sectors" ? "uf" : KIND0;  // (the story shows the states; the tool keeps the kind it had)
+  if (sc.id === "use") pristine = true;  // the last step is the tool as it opens: the cells, the whole Amazon
   S.scale = sc.cells && sc.cells !== FY ? "years" : "months";
   S.year = sc.cells || FY;
   veil.off = !sc.cells; veil.mapped = !(fwd && sc.fx === "proof"); veil.th = 0; veil.amt = 1;
@@ -2022,7 +2034,8 @@ function storyEnd() {
   storyOn = false;
   sRun++;
   try { localStorage.setItem("story", root.dataset.storyVersion); } catch (err) { /* private mode: it plays again next time */ }
-  for (const k of ["story", "has", "step"]) delete root.dataset[k];
+  for (const k of ["story", "has", "step", "new"]) delete root.dataset[k];
+  for (const el of INERT()) el.inert = false;
   $("story").hidden = true;
   veil.off = false; veil.th = 0; veil.mapped = true; veil.amt = 1; delete $("legend").dataset.mapped;
   lossShow(0);
@@ -2034,13 +2047,14 @@ function storyEnd() {
   if ($("about").open) $("about").close();
   unselect();
   S.hazard = "clear"; S.min = 0; S.h = 0; S.rank = false; S.scale = "months"; S.year = FY;
-  const shut = storyShut || narrow();  // (a phone shows one sheet at a time, and the last step's is the timeline)
-  S.mode = shut ? "cells" : "prio"; S.block = shut ? null : 1;
-  flown = true;  // the first place is marked from far, as on the story's last step: the map is not sent to it
+  S.mode = "cells"; S.block = null; pristine = true;  // as the last step leaves it: the cells, the whole Amazon
+  if (KIND0) S.kind = KIND0;
   front = "map"; place();
   if (new URLSearchParams(location.search).has("story")) history.replaceState(null, "", location.pathname + location.hash);
   root.style.removeProperty("--cap");
   refresh();
+  // skipped from an earlier step, the Amazon goes to where the tool has it (from the last step it is there already)
+  requestAnimationFrame(() => { const v = fitNow(); if (pristine && (map.latLngToContainerPoint(v.c).distanceTo(map.latLngToContainerPoint(map.getCenter())) > 2 || Math.abs(v.z - map.getZoom()) > 0.01)) view(v, !calm()); });
 }
 const storyStep = d => { if (!storyOn) return; if (d > 0 && sAt === SCENES.length - 1) storyEnd(); else if (sAt + d >= 0) scene(sAt + d, d); };
 $("story-next").onclick = () => storyStep(1);

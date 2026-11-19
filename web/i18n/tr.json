@@ -484,7 +484,10 @@
   "next": "İleri",
   "open": "Kod ve benchmark açık. Daha iyi bir model yapan bizimkinin yerini alır.",
   "proof": "{y} yılını modelden sakladık ve tahminini istedik. İşaret ettiği her {of} yerden {hit} tanesi ormansızlaştı.",
-  "sources": "Model, uydu görüntülerinden kesim izinlerine, kamuya açık {n} kaynaktan öğreniyor."
+  "sectors": "Bölgeler modunda tahmin eyalete, belediyeye, yerli toprağına veya koruma alanına göre toplanır.",
+  "sources": "Model, uydu görüntülerinden kesim izinlerine, kamuya açık {n} kaynaktan öğreniyor.",
+  "use": "Her hücrenin olasılığını görmek için imleci haritanın üzerine getirin. Yakınlaştırmak için tıklayın.",
+  "useTouch": "Her hücrenin olasılığını görmek için haritaya dokunun."
  },
  "stepHi": "{c} üstü",
  "stepLo": "{c} altı",

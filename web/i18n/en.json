@@ -476,7 +476,10 @@
   "next": "Next",
   "open": "The code and the benchmark are open. Build a better model and it replaces ours.",
   "proof": "We hid {y} from the model and asked for its forecast. Of every {of} places it pointed to, {hit} were cleared.",
-  "sources": "The model learns from {n} public sources, from satellite images to clearing permits."
+  "sectors": "In Sectors, the forecast is added up by state, municipality, Indigenous land or conservation unit.",
+  "sources": "The model learns from {n} public sources, from satellite images to clearing permits.",
+  "use": "Move the pointer over the map to see each cell's chance. Click to zoom in.",
+  "useTouch": "Tap the map to see each cell's chance."
  },
  "stepHi": "over {c}",
  "stepLo": "under {c}",

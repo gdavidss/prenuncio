@@ -493,10 +493,13 @@
   "next": "Siguiente",
   "open": "El código y el benchmark son abiertos. Quien haga un modelo mejor reemplaza al nuestro.",
   "proof": "Le ocultamos {y} al modelo y le pedimos su previsión. De cada {of} lugares que señaló, {hit} fueron deforestados.",
+  "sectors": "En Sectores, la previsión se suma por estado, municipio, tierra indígena o unidad de conservación.",
   "sources": {
    "one": "El modelo aprende de {n} fuente pública, de imágenes de satélite a permisos de desmonte.",
    "other": "El modelo aprende de {n} fuentes públicas, de imágenes de satélite a permisos de desmonte."
-  }
+  },
+  "use": "Pasa el cursor por el mapa para ver la probabilidad de cada celda. Haz clic para acercar.",
+  "useTouch": "Toca el mapa para ver la probabilidad de cada celda."
  },
  "stepHi": "más de {c}",
  "stepLo": "menos de {c}",

@@ -78,7 +78,15 @@
    "https://pib.socioambiental.org/pt/Povo:Wauja",
    "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos"
   ],
-  "photo": null,
+  "photo": {
+   "file": "img/peoples/wauja.jpg",
+   "author": "Douglas Wialin Menezes de Oliveira",
+   "license": "CC BY-SA 4.0",
+   "source_url": "https://commons.wikimedia.org/wiki/File:Fotos_no_Paque_indigena_do_Xingu.jpg",
+   "caption_pt": "Entardecer no rio Xingu, no Parque Indígena do Xingu, Mato Grosso, 2016.",
+   "caption_en": "Dusk on the Xingu river, in the Xingu Indigenous Park, Mato Grosso, 2016.",
+   "kind": "place"
+  },
   "confidence": "checked"
  },
  "kisedje": {
@@ -94,7 +102,14 @@
    "https://pib.socioambiental.org/pt/Povo:Khisêtjê",
    "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos"
   ],
-  "photo": null,
+  "photo": {
+   "file": "img/peoples/kisedje.jpg",
+   "author": "Tauan Alencar / MME",
+   "license": "CC BY-NC 2.0",
+   "source_url": "https://www.flickr.com/photos/minaseenergia/54424435394/",
+   "caption_pt": "Reunião em uma aldeia Kĩsêdjê, no Xingu, Mato Grosso, março de 2025.",
+   "caption_en": "A meeting in a Kĩsêdjê village in the Xingu, Mato Grosso, March 2025."
+  },
   "confidence": "checked"
  },
  "trumai": {
@@ -108,7 +123,15 @@
    "https://pib.socioambiental.org/pt/Povo:Trumai",
    "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos"
   ],
-  "photo": null,
+  "photo": {
+   "file": "img/peoples/trumai.jpg",
+   "author": "Douglas Wialin Menezes de Oliveira",
+   "license": "CC BY-SA 4.0",
+   "source_url": "https://commons.wikimedia.org/wiki/File:Fotos_no_Paque_indigena_do_Xingu.jpg",
+   "caption_pt": "Entardecer no rio Xingu, no Parque Indígena do Xingu, Mato Grosso, 2016.",
+   "caption_en": "Dusk on the Xingu river, in the Xingu Indigenous Park, Mato Grosso, 2016.",
+   "kind": "place"
+  },
   "confidence": "checked"
  },
  "yawalapiti": {
@@ -144,7 +167,14 @@
    "https://pib.socioambiental.org/pt/Povo:Mehinako",
    "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos"
   ],
-  "photo": null,
+  "photo": {
+   "file": "img/peoples/mehinako.jpg",
+   "author": "Marizilda Cruppe / Amazônia Real",
+   "license": "CC BY-NC-SA 2.0",
+   "source_url": "https://www.flickr.com/photos/amazoniareal/51889780383/",
+   "caption_pt": "Alawero Mehinako na 2ª Marcha das Mulheres Indígenas, em Brasília, setembro de 2021.",
+   "caption_en": "Alawero Mehinako at the 2nd Indigenous Women's March in Brasília, September 2021."
+  },
   "confidence": "checked"
  },
  "aweti": {
@@ -158,7 +188,15 @@
    "https://pib.socioambiental.org/pt/Povo:Aweti",
    "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos"
   ],
-  "photo": null,
+  "photo": {
+   "file": "img/peoples/aweti.jpg",
+   "author": "Douglas Wialin Menezes de Oliveira",
+   "license": "CC BY-SA 4.0",
+   "source_url": "https://commons.wikimedia.org/wiki/File:Fotos_no_Paque_indigena_do_Xingu.jpg",
+   "caption_pt": "Entardecer no rio Xingu, no Parque Indígena do Xingu, Mato Grosso, 2016.",
+   "caption_en": "Dusk on the Xingu river, in the Xingu Indigenous Park, Mato Grosso, 2016.",
+   "kind": "place"
+  },
   "confidence": "checked"
  },
  "ikpeng": {
@@ -172,7 +210,15 @@
    "https://pib.socioambiental.org/pt/Povo:Ikpeng",
    "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos"
   ],
-  "photo": null,
+  "photo": {
+   "file": "img/peoples/ikpeng.jpg",
+   "author": "Douglas Wialin Menezes de Oliveira",
+   "license": "CC BY-SA 4.0",
+   "source_url": "https://commons.wikimedia.org/wiki/File:Fotos_no_Paque_indigena_do_Xingu.jpg",
+   "caption_pt": "Entardecer no rio Xingu, no Parque Indígena do Xingu, Mato Grosso, 2016.",
+   "caption_en": "Dusk on the Xingu river, in the Xingu Indigenous Park, Mato Grosso, 2016.",
+   "kind": "place"
+  },
   "confidence": "checked"
  },
  "matipu": {
@@ -186,7 +232,15 @@
    "https://pib.socioambiental.org/pt/Povo:Matipu",
    "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos"
   ],
-  "photo": null,
+  "photo": {
+   "file": "img/peoples/matipu.jpg",
+   "author": "Douglas Wialin Menezes de Oliveira",
+   "license": "CC BY-SA 4.0",
+   "source_url": "https://commons.wikimedia.org/wiki/File:Fotos_no_Paque_indigena_do_Xingu.jpg",
+   "caption_pt": "Entardecer no rio Xingu, no Parque Indígena do Xingu, Mato Grosso, 2016.",
+   "caption_en": "Dusk on the Xingu river, in the Xingu Indigenous Park, Mato Grosso, 2016.",
+   "kind": "place"
+  },
   "confidence": "checked"
  },
  "kuikuro": {
@@ -220,7 +274,15 @@
    "https://pib.socioambiental.org/pt/Povo:Nahukwá",
    "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos"
   ],
-  "photo": null,
+  "photo": {
+   "file": "img/peoples/nahukwa.jpg",
+   "author": "Douglas Wialin Menezes de Oliveira",
+   "license": "CC BY-SA 4.0",
+   "source_url": "https://commons.wikimedia.org/wiki/File:Fotos_no_Paque_indigena_do_Xingu.jpg",
+   "caption_pt": "Entardecer no rio Xingu, no Parque Indígena do Xingu, Mato Grosso, 2016.",
+   "caption_en": "Dusk on the Xingu river, in the Xingu Indigenous Park, Mato Grosso, 2016.",
+   "kind": "place"
+  },
   "confidence": "checked"
  },
  "tapayuna": {
@@ -303,7 +365,14 @@
    "https://pib.socioambiental.org/pt/Povo:Nambikwara",
    "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos"
   ],
-  "photo": null,
+  "photo": {
+   "file": "img/peoples/nambikwara.jpg",
+   "author": "Lohana Chaves / Funai",
+   "license": "CC BY-ND 3.0",
+   "source_url": "https://www.gov.br/funai/pt-br/assuntos/noticias/2024/funai-recebe-liderancas-nambikwara-manoki-e-paresi-para-tratar-da-regularizacao-de-lavouras-mecanizadas-no-mt",
+   "caption_pt": "Lideranças Nambikwara, Manoki e Paresí com a presidenta da Funai, em Brasília, julho de 2024.",
+   "caption_en": "Nambikwara, Manoki and Paresí leaders with the president of Funai, in Brasília, July 2024."
+  },
   "confidence": "checked"
  },
  "cinta-larga": {
@@ -318,7 +387,14 @@
    "https://pib.socioambiental.org/pt/Povo:Cinta_larga",
    "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos"
   ],
-  "photo": null,
+  "photo": {
+   "file": "img/peoples/cinta-larga.jpg",
+   "author": "Marizilda Cruppe / Amazônia Real",
+   "license": "CC BY-NC-SA 2.0",
+   "source_url": "https://www.flickr.com/photos/amazoniareal/51890345575/",
+   "caption_pt": "Janinha Cinta Larga na 2ª Marcha das Mulheres Indígenas, em Brasília, setembro de 2021.",
+   "caption_en": "Janinha Cinta Larga at the 2nd Indigenous Women's March in Brasília, September 2021."
+  },
   "confidence": "checked"
  },
  "xikrin": {
@@ -412,7 +488,6 @@
    "https://pib.socioambiental.org/pt/Povo:Arara",
    "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos"
   ],
-  "photo": null,
   "confidence": "checked"
  },
  "isolados": {
@@ -440,7 +515,15 @@
    "https://pib.socioambiental.org/pt/Povo:Apiaká",
    "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos"
   ],
-  "confidence": "checked"
+  "confidence": "checked",
+  "photo": {
+   "file": "img/peoples/apiaka.jpg",
+   "author": "Brent Millikan / International Rivers",
+   "license": "CC BY-NC-SA 2.0",
+   "source_url": "https://www.flickr.com/photos/internationalrivers/7420916116/",
+   "caption_pt": "Liderança Apiaká diante de um bloqueio policial na marcha da Cúpula dos Povos, no Rio de Janeiro, junho de 2012.",
+   "caption_en": "An Apiaká leader in front of a police blockade at the People's Summit march in Rio de Janeiro, June 2012."
+  }
  },
  "parakana": {
   "name": "Parakanã",
@@ -453,7 +536,14 @@
    "https://pib.socioambiental.org/pt/Povo:Parakanã",
    "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos"
   ],
-  "photo": null,
+  "photo": {
+   "file": "img/peoples/parakana.jpg",
+   "author": "Funai",
+   "license": "CC BY-ND 3.0",
+   "source_url": "https://www.gov.br/funai/pt-br/assuntos/noticias/2025/povo-parakana-lanca-livro-bilingue-de-narrativas-tradicionais-no-para",
+   "caption_pt": "Um Parakanã autografa o livro bilíngue de narrativas tradicionais de seu povo, no Pará, outubro de 2025.",
+   "caption_en": "A Parakanã man signing the bilingual book of his people's traditional narratives, in Pará, October 2025."
+  },
   "confidence": "checked"
  },
  "munduruku": {
@@ -506,7 +596,14 @@
    "https://pib.socioambiental.org/pt/Povo:Ka'apor",
    "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos"
   ],
-  "photo": null,
+  "photo": {
+   "file": "img/peoples/kaapor.jpg",
+   "author": "Alejandro Zambrana / Sesai",
+   "license": "CC BY-NC 2.0",
+   "source_url": "https://www.flickr.com/photos/sesai/39591683964/",
+   "caption_pt": "Lideranças Ka'apor em reunião na Secretaria de Saúde Indígena, em Brasília, fevereiro de 2018.",
+   "caption_en": "Ka'apor leaders at a meeting at the Indigenous health secretariat in Brasília, February 2018."
+  },
   "confidence": "checked"
  },
  "apyawa": {
@@ -520,7 +617,6 @@
    "https://pib.socioambiental.org/pt/Povo:Apyãwa",
    "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos"
   ],
-  "photo": null,
   "confidence": "checked"
  },
  "paiter-surui": {
@@ -579,7 +675,14 @@
    "https://pib.socioambiental.org/pt/Povo:Uru-Eu-Wau-Wau",
    "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos"
   ],
-  "photo": null,
+  "photo": {
+   "file": "img/peoples/uru-eu-wau-wau.jpg",
+   "author": "Divulgação / Funai",
+   "license": "CC BY-ND 3.0",
+   "source_url": "https://www.gov.br/funai/pt-br/assuntos/noticias/2026/em-rondonia-funai-apoia-producao-local-e-seguranca-alimentar-com-entrega-de-alimentos-insumos-e-equipamentos-na-terra-indigena-uru-eu-wau-wau",
+   "caption_pt": "Famílias Jupaú com alimentos de sua produção na aldeia Jamari, Terra Indígena Uru-Eu-Wau-Wau, Rondônia, junho de 2026.",
+   "caption_en": "Jupaú families with food they produced, in Jamari village, Uru-Eu-Wau-Wau Indigenous Land, Rondônia, June 2026."
+  },
   "confidence": "checked"
  },
  "xavante": {
@@ -637,7 +740,14 @@
    "https://pib.socioambiental.org/pt/Povo:Asurini_do_Xingu",
    "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos"
   ],
-  "photo": null,
+  "photo": {
+   "file": "img/peoples/asurini-do-xingu.jpg",
+   "author": "Carla Romano",
+   "license": "CC BY-SA 4.0",
+   "source_url": "https://commons.wikimedia.org/wiki/File:Pintura_Corporal_Asurini.jpg",
+   "caption_pt": "Timei Assurini recebe pintura corporal da mãe, 2020.",
+   "caption_en": "Timei Assurini being painted by his mother, 2020."
+  },
   "confidence": "checked"
  },
  "zoro": {
@@ -651,7 +761,14 @@
    "https://pib.socioambiental.org/pt/Povo:Zoró",
    "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos"
   ],
-  "photo": null,
+  "photo": {
+   "file": "img/peoples/zoro.jpg",
+   "author": "Rodrigo Farhat",
+   "license": "CC BY-NC-SA 2.0",
+   "source_url": "https://www.flickr.com/photos/rodrigofarhat/4309909050/",
+   "caption_pt": "Homem Zoró durante uma festa em Rondolândia, Mato Grosso.",
+   "caption_en": "A Zoró man during a festival in Rondolândia, Mato Grosso."
+  },
   "confidence": "checked"
  },
  "awa-guaja": {
@@ -701,7 +818,14 @@
    "https://pib.socioambiental.org/pt/Povo:Arapaso",
    "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos"
   ],
-  "photo": null,
+  "photo": {
+   "file": "img/peoples/arapaso.jpg",
+   "author": "Fábio Zuker / Amazônia Real",
+   "license": "CC BY 2.0",
+   "source_url": "https://commons.wikimedia.org/wiki/File:PROTESTO_AGU_FOTO_FABIO_ZUKER4_(39898604780).jpg",
+   "caption_pt": "Rosimere Teles Arapaso, da Rede de Mulheres Indígenas do Estado do Amazonas, em protesto em Brasília, abril de 2018.",
+   "caption_en": "Rosimere Teles Arapaso, of the Amazonas state network of Indigenous women, at a protest in Brasília, April 2018."
+  },
   "confidence": "checked"
  },
  "karapana": {
@@ -735,7 +859,14 @@
    "https://pib.socioambiental.org/pt/Povo:Barasana",
    "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos"
   ],
-  "photo": null,
+  "photo": {
+   "file": "img/peoples/barasana.jpg",
+   "author": "Delwell30",
+   "license": "CC BY-SA 4.0",
+   "source_url": "https://commons.wikimedia.org/wiki/File:Barasano,_Rio_Pira_Paran%C3%A1.png",
+   "caption_pt": "Homem Barasana com cocar tradicional no rio Pirá-Paraná, no Vaupés, Colômbia.",
+   "caption_en": "A Barasana man in a traditional headdress on the Pirá-Paraná river, in Vaupés, Colombia."
+  },
   "confidence": "checked"
  },
  "kotiria": {
@@ -772,7 +903,14 @@
    "https://pib.socioambiental.org/pt/Povo:Apurinã",
    "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos"
   ],
-  "photo": null,
+  "photo": {
+   "file": "img/peoples/apurina.jpg",
+   "author": "Douglas Freitas / Apib Comunicação",
+   "license": "CC BY-SA 2.0",
+   "source_url": "https://commons.wikimedia.org/wiki/File:MarchaDasMulheresIndigenas_MarchaDasMulheresIndigenas_Marcha_das_Mulheres_Ind%C3%ADgenas_-_11_08_2019_-_Bras%C3%ADlia_(DF)_%C2%A9_Douglas_Freitas_@alassderivas_(48554411946).jpg",
+   "caption_pt": "Mulheres dos povos Juma, Jiahui, Tenharim, Parintintin e Apurinã se apresentam na 1ª Marcha das Mulheres Indígenas, em Brasília, agosto de 2019.",
+   "caption_en": "Women of the Juma, Jiahui, Tenharim, Parintintin and Apurinã peoples at the 1st Indigenous Women's March in Brasília, August 2019."
+  },
   "confidence": "checked"
  },
  "ticuna": {
@@ -810,7 +948,14 @@
    "https://pib.socioambiental.org/pt/Povo:Mura",
    "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos"
   ],
-  "photo": null,
+  "photo": {
+   "file": "img/peoples/mura.jpg",
+   "author": "Fabio Rodrigues Pozzebom / Agência Brasil",
+   "license": "CC BY 3.0 BR",
+   "source_url": "https://commons.wikimedia.org/wiki/File:Murachief.jpg",
+   "caption_pt": "Liderança Mura com pintura facial, 2007.",
+   "caption_en": "A Mura leader with face paint, 2007."
+  },
   "confidence": "checked"
  },
  "piraha": {
@@ -868,7 +1013,14 @@
    "https://pib.socioambiental.org/pt/Povo:Matsés",
    "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos"
   ],
-  "photo": null,
+  "photo": {
+   "file": "img/peoples/matses.jpg",
+   "author": "Michiel van Nimwegen",
+   "license": "CC BY-NC-ND 2.0",
+   "source_url": "https://www.flickr.com/photos/lapland/35116535616/",
+   "caption_pt": "Angela, do povo Matsés, na Reserva Nacional Matsés, no Peru, maio de 2017.",
+   "caption_en": "Angela, of the Matsés people, in the Matsés National Reserve, Peru, May 2017."
+  },
   "confidence": "checked"
  },
  "matis": {
@@ -961,7 +1113,14 @@
    "https://pib.socioambiental.org/pt/Povo:Tenharim",
    "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos"
   ],
-  "photo": null,
+  "photo": {
+   "file": "img/peoples/tenharim.jpg",
+   "author": "Valter Campanato / Agência Brasil",
+   "license": "CC BY 3.0 BR",
+   "source_url": "https://commons.wikimedia.org/wiki/File:Tenharim.jpg",
+   "caption_pt": "O cacique Tenharim Kiki, 2007.",
+   "caption_en": "The Tenharim leader Kiki, 2007."
+  },
   "confidence": "checked"
  },
  "canela-apanyekra": {
@@ -993,7 +1152,14 @@
    "https://pib.socioambiental.org/pt/Povo:Canela_Memortumré",
    "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos"
   ],
-  "photo": null,
+  "photo": {
+   "file": "img/peoples/canela.jpg",
+   "author": "Marcelo Camargo / Agência Brasil",
+   "license": "CC BY 3.0 BR",
+   "source_url": "https://commons.wikimedia.org/wiki/File:Canelas.jpg",
+   "caption_pt": "Homem Canela com pintura facial, outubro de 2015.",
+   "caption_en": "A Canela man with face paint, October 2015."
+  },
   "confidence": "checked"
  },
  "karaja": {
@@ -1174,7 +1340,14 @@
    "https://pib.socioambiental.org/pt/Povo:Taurepang",
    "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos"
   ],
-  "photo": null,
+  "photo": {
+   "file": "img/peoples/taurepang.jpg",
+   "author": "Marizilda Cruppe / Amazônia Real",
+   "license": "CC BY-NC-SA 2.0",
+   "source_url": "https://www.flickr.com/photos/amazoniareal/51888725567/",
+   "caption_pt": "Odete Barroso Tenente Taurepang na 2ª Marcha das Mulheres Indígenas, em Brasília, setembro de 2021.",
+   "caption_en": "Odete Barroso Tenente Taurepang at the 2nd Indigenous Women's March in Brasília, September 2021."
+  },
   "confidence": "checked"
  },
  "ingariko": {
@@ -1189,7 +1362,14 @@
    "https://pib.socioambiental.org/pt/Povo:Ingarikó",
    "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos"
   ],
-  "photo": null,
+  "photo": {
+   "file": "img/peoples/ingariko.jpg",
+   "author": "Elza Fiúza / Agência Brasil",
+   "license": "CC BY 3.0 BR",
+   "source_url": "https://commons.wikimedia.org/wiki/File:Ingariko.jpg",
+   "caption_pt": "Dilson Ingarikó, presidente do Conselho do Povo Indígena Ingarikó, em Brasília, setembro de 2007.",
+   "caption_en": "Dilson Ingarikó, president of the Ingarikó Indigenous People's Council, in Brasília, September 2007."
+  },
   "confidence": "checked"
  },
  "yaminawa": {
@@ -1204,7 +1384,14 @@
    "https://pib.socioambiental.org/pt/Povo:Yaminawá",
    "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos"
   ],
-  "photo": null,
+  "photo": {
+   "file": "img/peoples/yaminawa.jpg",
+   "author": "Toya Manchineri",
+   "license": "CC BY-NC-ND 2.0",
+   "source_url": "https://www.flickr.com/photos/manchineri/3547207360/",
+   "caption_pt": "Família Yaminawá em canoa na aldeia Betel, Terra Indígena Mamoadate, Acre.",
+   "caption_en": "A Yaminawá family in a canoe at Betel village, Mamoadate Indigenous Land, Acre."
+  },
   "confidence": "checked"
  },
  "manchineri": {
@@ -1220,7 +1407,14 @@
    "https://pib.socioambiental.org/pt/Povo:Manchineri",
    "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos"
   ],
-  "photo": null,
+  "photo": {
+   "file": "img/peoples/manchineri.jpg",
+   "author": "Daldeia / Mídia NINJA",
+   "license": "CC BY-NC 2.0",
+   "source_url": "https://www.flickr.com/photos/midianinja/52369495005/",
+   "caption_pt": "Junior Manchineri, do Acre.",
+   "caption_en": "Junior Manchineri, from Acre."
+  },
   "confidence": "checked"
  },
  "deni": {
@@ -1319,7 +1513,15 @@
    "https://pib.socioambiental.org/pt/Povo:Waimiri_Atroari",
    "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos"
   ],
-  "photo": null,
+  "photo": {
+   "file": "img/peoples/waimiri-atroari.jpg",
+   "author": "SallesNeto BR",
+   "license": "Public domain",
+   "source_url": "https://commons.wikimedia.org/wiki/File:BR-174_Sul.jpg",
+   "caption_pt": "A rodovia BR-174 atravessa a Terra Indígena Waimiri-Atroari.",
+   "caption_en": "The BR-174 highway crossing the Waimiri-Atroari Indigenous Land.",
+   "kind": "place"
+  },
   "confidence": "checked"
  },
  "katuenayana": {
@@ -1335,7 +1537,14 @@
    "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos",
    "https://pib.socioambiental.org/pt/Povo:Waiwai"
   ],
-  "photo": null,
+  "photo": {
+   "file": "img/peoples/katuenayana.jpg",
+   "author": "Mayra Wapichana / Funai",
+   "license": "CC BY-ND 3.0",
+   "source_url": "https://www.gov.br/funai/pt-br/assuntos/noticias/2026/funai-participa-da-comemoracao-historica-de-homologacao-da-ti-kaxuayana-tunayana",
+   "caption_pt": "Celebração da homologação da Terra Indígena Kaxuyana-Tunayana, território dos povos Kaxuyana, Tunayana, Kahyana, Katuena, Mawayana, Txikiyana e Xerew, na aldeia Santidade, Pará, fevereiro de 2026.",
+   "caption_en": "Celebration of the official recognition of the Kaxuyana-Tunayana Indigenous Land, territory of the Kaxuyana, Tunayana, Kahyana, Katuena, Mawayana, Txikiyana and Xerew peoples, in Santidade village, Pará, February 2026."
+  },
   "confidence": "thin"
  },
  "xerewyana": {
@@ -1351,7 +1560,14 @@
    "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos",
    "https://pib.socioambiental.org/pt/Povo:Waiwai"
   ],
-  "photo": null,
+  "photo": {
+   "file": "img/peoples/xerewyana.jpg",
+   "author": "Mayra Wapichana / Funai",
+   "license": "CC BY-ND 3.0",
+   "source_url": "https://www.gov.br/funai/pt-br/assuntos/noticias/2026/funai-participa-da-comemoracao-historica-de-homologacao-da-ti-kaxuayana-tunayana",
+   "caption_pt": "Celebração da homologação da Terra Indígena Kaxuyana-Tunayana, território dos povos Kaxuyana, Tunayana, Kahyana, Katuena, Mawayana, Txikiyana e Xerew, na aldeia Santidade, Pará, fevereiro de 2026.",
+   "caption_en": "Celebration of the official recognition of the Kaxuyana-Tunayana Indigenous Land, territory of the Kaxuyana, Tunayana, Kahyana, Katuena, Mawayana, Txikiyana and Xerew peoples, in Santidade village, Pará, February 2026."
+  },
   "confidence": "thin"
  },
  "tunayana": {
@@ -1363,7 +1579,14 @@
    "https://pib.socioambiental.org/pt/Povo:Tunayana",
    "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos"
   ],
-  "photo": null,
+  "photo": {
+   "file": "img/peoples/tunayana.jpg",
+   "author": "Mayra Wapichana / Funai",
+   "license": "CC BY-ND 3.0",
+   "source_url": "https://www.gov.br/funai/pt-br/assuntos/noticias/2026/funai-participa-da-comemoracao-historica-de-homologacao-da-ti-kaxuayana-tunayana",
+   "caption_pt": "Celebração da homologação da Terra Indígena Kaxuyana-Tunayana, território dos povos Kaxuyana, Tunayana, Kahyana, Katuena, Mawayana, Txikiyana e Xerew, na aldeia Santidade, Pará, fevereiro de 2026.",
+   "caption_en": "Celebration of the official recognition of the Kaxuyana-Tunayana Indigenous Land, territory of the Kaxuyana, Tunayana, Kahyana, Katuena, Mawayana, Txikiyana and Xerew peoples, in Santidade village, Pará, February 2026."
+  },
   "confidence": "thin"
  },
  "txikiyana": {
@@ -1378,7 +1601,14 @@
    "https://pib.socioambiental.org/pt/Povo:Txikiyana",
    "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos"
   ],
-  "photo": null,
+  "photo": {
+   "file": "img/peoples/txikiyana.jpg",
+   "author": "Mayra Wapichana / Funai",
+   "license": "CC BY-ND 3.0",
+   "source_url": "https://www.gov.br/funai/pt-br/assuntos/noticias/2026/funai-participa-da-comemoracao-historica-de-homologacao-da-ti-kaxuayana-tunayana",
+   "caption_pt": "Celebração da homologação da Terra Indígena Kaxuyana-Tunayana, território dos povos Kaxuyana, Tunayana, Kahyana, Katuena, Mawayana, Txikiyana e Xerew, na aldeia Santidade, Pará, fevereiro de 2026.",
+   "caption_en": "Celebration of the official recognition of the Kaxuyana-Tunayana Indigenous Land, territory of the Kaxuyana, Tunayana, Kahyana, Katuena, Mawayana, Txikiyana and Xerew peoples, in Santidade village, Pará, February 2026."
+  },
   "confidence": "thin"
  },
  "karapawyana": {
@@ -1406,7 +1636,14 @@
    "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos",
    "https://pib.socioambiental.org/pt/Povo:Waiwai"
   ],
-  "photo": null,
+  "photo": {
+   "file": "img/peoples/mawayana.jpg",
+   "author": "Mayra Wapichana / Funai",
+   "license": "CC BY-ND 3.0",
+   "source_url": "https://www.gov.br/funai/pt-br/assuntos/noticias/2026/funai-participa-da-comemoracao-historica-de-homologacao-da-ti-kaxuayana-tunayana",
+   "caption_pt": "Celebração da homologação da Terra Indígena Kaxuyana-Tunayana, território dos povos Kaxuyana, Tunayana, Kahyana, Katuena, Mawayana, Txikiyana e Xerew, na aldeia Santidade, Pará, fevereiro de 2026.",
+   "caption_en": "Celebration of the official recognition of the Kaxuyana-Tunayana Indigenous Land, territory of the Kaxuyana, Tunayana, Kahyana, Katuena, Mawayana, Txikiyana and Xerew peoples, in Santidade village, Pará, February 2026."
+  },
   "confidence": "thin"
  },
  "katxuyana": {
@@ -1420,7 +1657,14 @@
    "https://pib.socioambiental.org/pt/Povo:Katxuyana",
    "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos"
   ],
-  "photo": null,
+  "photo": {
+   "file": "img/peoples/katxuyana.jpg",
+   "author": "Gert-Peter Bruch",
+   "license": "CC BY-SA 4.0",
+   "source_url": "https://commons.wikimedia.org/wiki/File:Sonia_Guajajara_avec_la_d%C3%A9l%C3%A9gation_de_l%27APIB_%C3%A0_Paris_le_12_novembre_2019_pendant_la_tourn%C3%A9e_%22Sang_Indig%C3%A8ne,_pas_une_goutte_de_plus%22.png",
+   "caption_pt": "Angela Kaxuyana, segunda a partir da direita, com a delegação da Apib em Paris: Elizeu Guarani Kaiowá, Nara Baré, Sonia Guajajara, Alberto Terena e Kretã Kaingang.",
+   "caption_en": "Angela Kaxuyana, second from right, with the Apib delegation in Paris: Elizeu Guarani Kaiowá, Nara Baré, Sonia Guajajara, Alberto Terena and Kretã Kaingang."
+  },
   "confidence": "thin"
  },
  "aikana": {
@@ -1434,7 +1678,14 @@
    "https://pib.socioambiental.org/pt/Povo:Aikanã",
    "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos"
   ],
-  "photo": null,
+  "photo": {
+   "file": "img/peoples/aikana.jpg",
+   "author": "Marizilda Cruppe / Amazônia Real",
+   "license": "CC BY-NC-SA 2.0",
+   "source_url": "https://www.flickr.com/photos/amazoniareal/51890025299/",
+   "caption_pt": "Elizabeth Aikanã na 2ª Marcha das Mulheres Indígenas, em Brasília, setembro de 2021.",
+   "caption_en": "Elizabeth Aikanã at the 2nd Indigenous Women's March in Brasília, September 2021."
+  },
   "confidence": "checked"
  },
  "paresi": {
@@ -1450,7 +1701,14 @@
    "https://pib.socioambiental.org/pt/Povo:Paresí",
    "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos"
   ],
-  "photo": null,
+  "photo": {
+   "file": "img/peoples/paresi.jpg",
+   "author": "Rayane Mara",
+   "license": "CC BY-SA 4.0",
+   "source_url": "https://commons.wikimedia.org/wiki/File:Indigenas_pareci_12.jpg",
+   "caption_pt": "Homem Paresí com cocar diante de uma casa tradicional, em Campo Novo do Parecis, Mato Grosso, 2023.",
+   "caption_en": "A Paresí man in a headdress in front of a traditional house, in Campo Novo do Parecis, Mato Grosso, 2023."
+  },
   "confidence": "checked"
  },
  "arara-do-rio-branco": {
@@ -1481,7 +1739,15 @@
    "https://pib.socioambiental.org/pt/Povo:Ikolen",
    "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos"
   ],
-  "photo": null,
+  "photo": {
+   "file": "img/peoples/ikolen.jpg",
+   "author": "José Palahv Gavião",
+   "license": "CC BY-SA 4.0",
+   "source_url": "https://commons.wikimedia.org/wiki/File:Aldeia_Cacoal_02.jpg",
+   "caption_pt": "Floresta nas terras do povo Gavião, na aldeia Cacoal, Terra Indígena Igarapé Lourdes, Rondônia, 2021.",
+   "caption_en": "Forest on the lands of the Gavião people, at Cacoal village, Igarapé Lourdes Indigenous Land, Rondônia, 2021.",
+   "kind": "place"
+  },
   "confidence": "checked"
  },
  "karipuna-de-rondonia": {
@@ -1496,7 +1762,14 @@
    "https://pib.socioambiental.org/pt/Povo:Karipuna_de_Rondônia",
    "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos"
   ],
-  "photo": null,
+  "photo": {
+   "file": "img/peoples/karipuna-de-rondonia.jpg",
+   "author": "Alexandre Cruz Noronha / Amazônia Real",
+   "license": "CC BY-NC-SA 2.0",
+   "source_url": "https://www.flickr.com/photos/amazoniareal/51899661862/",
+   "caption_pt": "O cacique André Karipuna na floresta da Terra Indígena Karipuna, Rondônia, novembro de 2021.",
+   "caption_en": "The leader André Karipuna in the forest of the Karipuna Indigenous Land, Rondônia, November 2021."
+  },
   "confidence": "checked"
  },
  "jiahui": {
@@ -1511,7 +1784,14 @@
    "https://pib.socioambiental.org/pt/Povo:Jiahui",
    "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos"
   ],
-  "photo": null,
+  "photo": {
+   "file": "img/peoples/jiahui.jpg",
+   "author": "Douglas Freitas / Apib Comunicação",
+   "license": "CC BY-SA 2.0",
+   "source_url": "https://commons.wikimedia.org/wiki/File:MarchaDasMulheresIndigenas_MarchaDasMulheresIndigenas_Marcha_das_Mulheres_Ind%C3%ADgenas_-_11_08_2019_-_Bras%C3%ADlia_(DF)_%C2%A9_Douglas_Freitas_@alassderivas_(48554411946).jpg",
+   "caption_pt": "Mulheres dos povos Juma, Jiahui, Tenharim, Parintintin e Apurinã se apresentam na 1ª Marcha das Mulheres Indígenas, em Brasília, agosto de 2019.",
+   "caption_en": "Women of the Juma, Jiahui, Tenharim, Parintintin and Apurinã peoples at the 1st Indigenous Women's March in Brasília, August 2019."
+  },
   "confidence": "checked"
  },
  "parintintin": {
@@ -1525,7 +1805,14 @@
    "https://pib.socioambiental.org/pt/Povo:Parintintin",
    "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos"
   ],
-  "photo": null,
+  "photo": {
+   "file": "img/peoples/parintintin.jpg",
+   "author": "Douglas Freitas / Apib Comunicação",
+   "license": "CC BY-SA 2.0",
+   "source_url": "https://commons.wikimedia.org/wiki/File:MarchaDasMulheresIndigenas_MarchaDasMulheresIndigenas_Marcha_das_Mulheres_Ind%C3%ADgenas_-_11_08_2019_-_Bras%C3%ADlia_(DF)_%C2%A9_Douglas_Freitas_@alassderivas_(48554411946).jpg",
+   "caption_pt": "Mulheres dos povos Juma, Jiahui, Tenharim, Parintintin e Apurinã se apresentam na 1ª Marcha das Mulheres Indígenas, em Brasília, agosto de 2019.",
+   "caption_en": "Women of the Juma, Jiahui, Tenharim, Parintintin and Apurinã peoples at the 1st Indigenous Women's March in Brasília, August 2019."
+  },
   "confidence": "checked"
  },
  "terena": {
@@ -1573,7 +1860,14 @@
    "https://pib.socioambiental.org/pt/Povo:Gavião_Parkatêjê",
    "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos"
   ],
-  "photo": null,
+  "photo": {
+   "file": "img/peoples/gaviao-parkateje.jpg",
+   "author": "Mídia NINJA",
+   "license": "CC BY-NC 2.0",
+   "source_url": "https://www.flickr.com/photos/midianinja/51274609241/",
+   "caption_pt": "Moradores da aldeia Parkatêjê, em Marabá, Pará, junho de 2021.",
+   "caption_en": "Residents of Parkatêjê village, in Marabá, Pará, June 2021."
+  },
   "confidence": "checked"
  },
  "tukano": {
@@ -1610,7 +1904,15 @@
    "https://pib.socioambiental.org/pt/Povo:Desana",
    "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos"
   ],
-  "photo": null,
+  "photo": {
+   "file": "img/peoples/desana.jpg",
+   "author": "Ana Dayse",
+   "license": "CC BY-SA 4.0",
+   "source_url": "https://commons.wikimedia.org/wiki/File:Casa_da_tribo_Dessana.jpg",
+   "caption_pt": "Casa de uma comunidade Desana à beira do rio, no Amazonas, 2018.",
+   "caption_en": "The house of a Desana community on the riverbank, in Amazonas, 2018.",
+   "kind": "place"
+  },
   "confidence": "checked"
  },
  "naduhup": {
@@ -1628,7 +1930,14 @@
    "https://pib.socioambiental.org/pt/Povo:Dâw",
    "https://pib.socioambiental.org/pt/Povo:Nadöb"
   ],
-  "photo": null,
+  "photo": {
+   "file": "img/peoples/naduhup.jpg",
+   "author": "Alberto César Araújo / Amazônia Real",
+   "license": "CC BY-NC-ND 2.0",
+   "source_url": "https://www.flickr.com/photos/amazoniareal/52195483568/",
+   "caption_pt": "Américo Socot e Roberto Sanches, lideranças dos povos Hupd'äh e Dâw, com o antropólogo Renato Athias, junho de 2022.",
+   "caption_en": "Américo Socot and Roberto Sanches, leaders of the Hupd'äh and Dâw peoples, with the anthropologist Renato Athias, June 2022."
+  },
   "confidence": "checked"
  },
  "nadeb": {
@@ -1657,7 +1966,14 @@
    "https://pib.socioambiental.org/pt/Povo:Tariana",
    "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos"
   ],
-  "photo": null,
+  "photo": {
+   "file": "img/peoples/tariana.jpg",
+   "author": "Julio Pantoja / World Bank",
+   "license": "CC BY-NC-ND 2.0",
+   "source_url": "https://www.flickr.com/photos/worldbank/2366489313/",
+   "caption_pt": "Homem Tariana toca flauta de pã, Amazonas, 2008.",
+   "caption_en": "A Tariana man playing panpipes, Amazonas, 2008."
+  },
   "confidence": "checked"
  },
  "baniwa": {
@@ -1671,7 +1987,14 @@
    "https://pib.socioambiental.org/pt/Povo:Baniwa",
    "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos"
   ],
-  "photo": null,
+  "photo": {
+   "file": "img/peoples/baniwa.jpg",
+   "author": "Agência Senado",
+   "license": "CC BY-SA 4.0",
+   "source_url": "https://commons.wikimedia.org/wiki/File:2025-11-03,_CDH_-_Comiss%C3%A3o_de_Direitos_Humanos_e_Legisla%C3%A7%C3%A3o_Participativa,_002.jpg",
+   "caption_pt": "Edilson Baniwa, do Ministério dos Povos Indígenas, participa de audiência no Senado sobre educação indígena, em Brasília, novembro de 2025.",
+   "caption_en": "Edilson Baniwa, of the Ministry of Indigenous Peoples, taking part in a Senate hearing on Indigenous education, in Brasília, November 2025."
+  },
   "confidence": "checked"
  },
  "koripako": {
@@ -1686,7 +2009,15 @@
    "https://pib.socioambiental.org/pt/Povo:Koripako",
    "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos"
   ],
-  "photo": null,
+  "photo": {
+   "file": "img/peoples/koripako.jpg",
+   "author": "Liana Amin Lima",
+   "license": "CC BY-SA 3.0",
+   "source_url": "https://commons.wikimedia.org/wiki/File:Rio_I%C3%A7ana_espelhado.JPG",
+   "caption_pt": "Rio Içana, região dos povos Baniwa e Koripako, na Terra Indígena Alto Rio Negro, Amazonas, 2011.",
+   "caption_en": "The Içana river, home of the Baniwa and Koripako peoples, in the Alto Rio Negro Indigenous Land, Amazonas, 2011.",
+   "kind": "place"
+  },
   "confidence": "checked"
  },
  "wayana": {
@@ -1698,7 +2029,14 @@
    "https://pib.socioambiental.org/pt/Povo:Wayana",
    "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos"
   ],
-  "photo": null,
+  "photo": {
+   "file": "img/peoples/wayana.jpg",
+   "author": "Awana Digital",
+   "license": "CC BY-NC-SA 2.0",
+   "source_url": "https://www.flickr.com/photos/digitaldemocracy/52936967512/",
+   "caption_pt": "Jupta fala sobre o trabalho dos Wayana na gestão de sua autonomia, maio de 2023.",
+   "caption_en": "Jupta speaking about the Wayana's work on managing their autonomy, May 2023."
+  },
   "confidence": "checked"
  },
  "aparai": {
@@ -1803,7 +2141,14 @@
    "https://pib.socioambiental.org/pt/Povo:Jamamadi",
    "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos"
   ],
-  "photo": null,
+  "photo": {
+   "file": "img/peoples/jamamadi.jpg",
+   "author": "Apib Comunicação",
+   "license": "CC BY-SA 2.0",
+   "source_url": "https://commons.wikimedia.org/wiki/File:Delega%C3%A7%C3%A3o_do_Povo_Apurin%C3%A3,_Jamamadi,_Tenharin,_Djahui,_Parintintin_do_Sul_do_Amazonas_e_Rio_Madeira_(34233907672).jpg",
+   "caption_pt": "Delegação dos povos Apurinã, Jamamadi, Tenharim, Jiahui e Parintintin, do sul do Amazonas, a caminho do Acampamento Terra Livre, 2017.",
+   "caption_en": "The delegation of the Apurinã, Jamamadi, Tenharim, Jiahui and Parintintin peoples of southern Amazonas on its way to the Acampamento Terra Livre gathering, 2017."
+  },
   "confidence": "checked"
  },
  "jarawara": {
@@ -1831,7 +2176,14 @@
    "https://pib.socioambiental.org/pt/Povo:Kokama",
    "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos"
   ],
-  "photo": null,
+  "photo": {
+   "file": "img/peoples/kokama.jpg",
+   "author": "Fábio Pontes / Amazônia Real",
+   "license": "CC BY 2.0",
+   "source_url": "https://commons.wikimedia.org/wiki/File:CACIQUE_KOKAMA_JACINTO_MORAES_PANURO_FOTO_FABIO_PONTES_(36956801383).jpg",
+   "caption_pt": "O cacique kokama Jacinto Moraes Panuro em São Paulo de Olivença, Amazonas, 2017.",
+   "caption_en": "The Kokama leader Jacinto Moraes Panuro in São Paulo de Olivença, Amazonas, 2017."
+  },
   "confidence": "checked"
  },
  "rikbaktsa": {
@@ -1868,7 +2220,15 @@
    "https://pib.socioambiental.org/pt/Povo:Kanamari",
    "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos"
   ],
-  "confidence": "checked"
+  "confidence": "checked",
+  "photo": {
+   "file": "img/peoples/kanamari.jpg",
+   "author": "Bruno Kelly / Amazônia Real",
+   "license": "CC BY 2.0",
+   "source_url": "https://commons.wikimedia.org/wiki/File:Kanamari-227_(33180293898).jpg",
+   "caption_pt": "Mulher Kanamari descasca abacaxis na Terra Indígena Vale do Javari, Amazonas, dezembro de 2018.",
+   "caption_en": "A Kanamari woman peeling pineapples in the Vale do Javari Indigenous Land, Amazonas, December 2018."
+  }
  },
  "noke-koi": {
   "name": "Noke Kuin (Katukina)",
@@ -1949,7 +2309,14 @@
    "https://pib.socioambiental.org/pt/Povo:Balatiponé_(Umutina)",
    "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos"
   ],
-  "photo": null,
+  "photo": {
+   "file": "img/peoples/umutina.jpg",
+   "author": "Valter Campanato / Agência Brasil",
+   "license": "CC BY 3.0 BR",
+   "source_url": "https://commons.wikimedia.org/wiki/File:Umutina.jpg",
+   "caption_pt": "Creusa Soipa, cacique Umutina, 2007.",
+   "caption_en": "Creusa Soipa, Umutina leader, 2007."
+  },
   "confidence": "checked"
  },
  "suruwaha": {
@@ -1993,7 +2360,14 @@
    "https://pib.socioambiental.org/pt/Povo:Wajãpi",
    "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos"
   ],
-  "photo": null,
+  "photo": {
+   "file": "img/peoples/wajapi.jpg",
+   "author": "Marizilda Cruppe / Amazônia Real",
+   "license": "CC BY-NC-SA 2.0",
+   "source_url": "https://www.flickr.com/photos/amazoniareal/51890023129/",
+   "caption_pt": "Marinau Wajãpi na 2ª Marcha das Mulheres Indígenas, em Brasília, setembro de 2021.",
+   "caption_en": "Marinau Wajãpi at the 2nd Indigenous Women's March in Brasília, September 2021."
+  },
   "confidence": "checked"
  },
  "anambe": {
@@ -2179,7 +2553,14 @@
    "https://pib.socioambiental.org/pt/Povo:Miranha",
    "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos"
   ],
-  "photo": null,
+  "photo": {
+   "file": "img/peoples/miranha.jpg",
+   "author": "Andrés Cardona Cruz / Vist Project / Amazônia Real",
+   "license": "CC BY-NC-ND 2.0",
+   "source_url": "https://www.flickr.com/photos/amazoniareal/53117517162/",
+   "caption_pt": "Hudson Miranha fala em encontro nacional sobre a Década Internacional das Línguas Indígenas, agosto de 2023.",
+   "caption_en": "Hudson Miranha speaking at a national meeting on the International Decade of Indigenous Languages, August 2023."
+  },
   "confidence": "checked"
  },
  "waikhana": {
@@ -2211,7 +2592,15 @@
    "https://pib.socioambiental.org/pt/Povo:Arara_do_Rio_Amônia",
    "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos"
   ],
-  "photo": null,
+  "photo": {
+   "file": "img/peoples/apolima-arara.jpg",
+   "author": "Vihh",
+   "license": "CC BY-NC-ND 2.0",
+   "source_url": "https://www.flickr.com/photos/vihh/3818587956/",
+   "caption_pt": "Barco da aldeia Novo Destino, do povo Arara do rio Amônia, Acre, julho de 2009.",
+   "caption_en": "A boat of Novo Destino village, of the Arara people of the Amônia river, Acre, July 2009.",
+   "kind": "place"
+  },
   "confidence": "thin"
  },
  "chiquitano": {
@@ -2246,7 +2635,14 @@
    "https://pib.socioambiental.org/pt/Povo:Karitiana",
    "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos"
   ],
-  "photo": null,
+  "photo": {
+   "file": "img/peoples/karitiana.jpg",
+   "author": "Moreira Mariz / Agência Senado",
+   "license": "CC BY 2.0",
+   "source_url": "https://commons.wikimedia.org/wiki/File:Plen%C3%A1rio_do_Senado_(16989421248).jpg",
+   "caption_pt": "Antenor Karitiana discursa em sessão do Senado em homenagem aos povos indígenas, em Brasília, abril de 2015.",
+   "caption_en": "Antenor Karitiana speaking at a Senate session honouring Indigenous peoples, in Brasília, April 2015."
+  },
   "confidence": "checked"
  },
  "krepynkateje": {
@@ -2340,7 +2736,14 @@
    "https://pib.socioambiental.org/pt/Povo:Arapium",
    "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos"
   ],
-  "photo": null,
+  "photo": {
+   "file": "img/peoples/arapium.jpg",
+   "author": "Mídia NINJA",
+   "license": "CC BY-NC 2.0",
+   "source_url": "https://www.flickr.com/photos/midianinja/52356669730/",
+   "caption_pt": "Tereza Arapium com um maracá, no Rio de Janeiro, agosto de 2022.",
+   "caption_en": "Tereza Arapium holding a maracá, in Rio de Janeiro, August 2022."
+  },
   "confidence": "thin"
  },
  "hi-merima": {
@@ -2373,7 +2776,14 @@
    "https://pib.socioambiental.org/pt/Povo:Krikatí",
    "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos"
   ],
-  "photo": null,
+  "photo": {
+   "file": "img/peoples/krikati.jpg",
+   "author": "Marizilda Cruppe / Amazônia Real",
+   "license": "CC BY-NC-SA 2.0",
+   "source_url": "https://www.flickr.com/photos/amazoniareal/51889779088/",
+   "caption_pt": "Letícia Milhomem Krikati na 2ª Marcha das Mulheres Indígenas, em Brasília, setembro de 2021.",
+   "caption_en": "Letícia Milhomem Krikati at the 2nd Indigenous Women's March in Brasília, September 2021."
+  },
   "confidence": "checked"
  },
  "aikewara": {
@@ -2403,7 +2813,14 @@
    "https://pib.socioambiental.org/pt/Povo:Xipaya",
    "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos"
   ],
-  "photo": null,
+  "photo": {
+   "file": "img/peoples/xipaya.jpg",
+   "author": "Cajetan Perwein / BMK",
+   "license": "CC BY-ND 2.0",
+   "source_url": "https://www.flickr.com/photos/199503567@N07/54264704385/",
+   "caption_pt": "Juma Xipaia em reunião no ministério do clima da Áustria, em Viena, abril de 2022.",
+   "caption_en": "Juma Xipaia at a meeting at Austria's climate ministry in Vienna, April 2022."
+  },
   "confidence": "checked"
  },
  "bororo": {
@@ -2440,7 +2857,14 @@
    "https://pib.socioambiental.org/pt/Povo:Kambeba",
    "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos"
   ],
-  "photo": null,
+  "photo": {
+   "file": "img/peoples/kambeba.jpg",
+   "author": "Tânia Rêgo / Agência Brasil",
+   "license": "CC BY 3.0 BR",
+   "source_url": "https://commons.wikimedia.org/wiki/File:Arqueiros_ind%C3%ADgenas.jpg",
+   "caption_pt": "Jovens arqueiros das etnias Karapanã, à esquerda, e Kambeba, à direita, treinam para as seletivas olímpicas, 2016.",
+   "caption_en": "Young archers of the Karapanã, left, and Kambeba, right, peoples training for the Olympic trials, 2016."
+  },
   "confidence": "checked"
  },
  "tuyuka": {
@@ -2525,7 +2949,14 @@
    "https://pib.socioambiental.org/pt/Povo:Kwazá",
    "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos"
   ],
-  "photo": null,
+  "photo": {
+   "file": "img/peoples/kwaza.jpg",
+   "author": "Marizilda Cruppe / Amazônia Real",
+   "license": "CC BY-NC-SA 2.0",
+   "source_url": "https://www.flickr.com/photos/amazoniareal/51889696406/",
+   "caption_pt": "Arlene Aikanã Kwazá na 2ª Marcha das Mulheres Indígenas, em Brasília, setembro de 2021.",
+   "caption_en": "Arlene Aikanã Kwazá at the 2nd Indigenous Women's March in Brasília, September 2021."
+  },
   "confidence": "checked"
  },
  "paumari": {
@@ -2657,7 +3088,14 @@
    "https://pib.socioambiental.org/pt/Povo:Galibi_Kali'na",
    "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos"
   ],
-  "photo": null,
+  "photo": {
+   "file": "img/peoples/galibi-kalina.jpg",
+   "author": "We El",
+   "license": "Public domain",
+   "source_url": "https://commons.wikimedia.org/wiki/File:Carib_Sambura.jpg",
+   "caption_pt": "Kali'na da aldeia de Bigi Poika, no Suriname, tocam os tambores sambura, abril de 2006.",
+   "caption_en": "Kali'na from the village of Bigi Poika, in Suriname, playing sambura drums, April 2006."
+  },
   "confidence": "checked"
  },
  "krenak": {
@@ -2694,7 +3132,14 @@
    "https://pib.socioambiental.org/pt/Povo:Krahô",
    "https://pib.socioambiental.org/pt/Quadro_Geral_dos_Povos"
   ],
-  "photo": null,
+  "photo": {
+   "file": "img/peoples/kraho.jpg",
+   "author": "Geraldo Magela / Agência Senado",
+   "license": "CC BY 2.0",
+   "source_url": "https://commons.wikimedia.org/wiki/File:CDH_-_Comiss%C3%A3o_de_Direitos_Humanos_e_Legisla%C3%A7%C3%A3o_Participativa_(30771123981).jpg",
+   "caption_pt": "Gecílha Crukoy Krahô, liderança do povo Krahô, em audiência no Senado, em Brasília, novembro de 2016.",
+   "caption_en": "Gecílha Crukoy Krahô, a leader of the Krahô people, at a Senate hearing in Brasília, November 2016."
+  },
   "confidence": "checked"
  },
  "krenye": {

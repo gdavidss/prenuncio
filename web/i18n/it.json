@@ -493,10 +493,13 @@
   "next": "Avanti",
   "open": "Il codice e il benchmark sono aperti. Chi fa un modello migliore sostituisce il nostro.",
   "proof": "Abbiamo nascosto il {y} al modello e chiesto la sua previsione. Su {of} luoghi indicati, {hit} sono stati disboscati.",
+  "sectors": "In Settori, la previsione è sommata per stato, comune, terra indigena o unità di conservazione.",
   "sources": {
    "one": "Il modello impara da {n} fonte pubblica, dalle immagini satellitari ai permessi di disboscamento.",
    "other": "Il modello impara da {n} fonti pubbliche, dalle immagini satellitari ai permessi di disboscamento."
-  }
+  },
+  "use": "Passa il cursore sulla mappa per vedere la probabilità di ogni cella. Clicca per ingrandire.",
+  "useTouch": "Tocca la mappa per vedere la probabilità di ogni cella."
  },
  "stepHi": "oltre {c}",
  "stepLo": "sotto {c}",

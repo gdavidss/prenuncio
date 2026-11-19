@@ -19,7 +19,7 @@ for land, keys in T.items():
         ph = p.get("photo")
         if ph:
             assert (ROOT / "web" / ph["file"]).exists(), ph["file"]
-            ph = {"file": ph["file"], "author": ph["author"], "license": ph["license"], "source_url": ph["source_url"], "caption": {"pt": ph.get("caption_pt", ""), "en": ph.get("caption_en", "")}}
+            ph = {"file": ph["file"], "author": ph["author"], "license": ph["license"], "source_url": ph["source_url"], "caption": {"pt": ph.get("caption_pt", ""), "en": ph.get("caption_en", "")}, "place": ph.get("kind") == "place"}
         rows.append({"name": p["name"], "text": {"pt": p.get("pt", ""), "en": p.get("en", "")}, "photo": ph or None})
     if rows:
         out[str(land)] = sorted(rows, key=lambda r: r["photo"] is None)  # a people with a photograph leads

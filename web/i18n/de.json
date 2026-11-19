@@ -493,10 +493,13 @@
   "next": "Weiter",
   "open": "Code und Benchmark sind offen. Wer ein besseres Modell baut, ersetzt unseres.",
   "proof": "Wir haben dem Modell {y} vorenthalten und nach seiner Prognose gefragt. Von {of} gezeigten Orten wurden {hit} gerodet.",
+  "sectors": "In Sektoren wird die Prognose nach Bundesstaat, Gemeinde, indigenem Gebiet oder Schutzgebiet summiert.",
   "sources": {
    "one": "Das Modell lernt aus {n} öffentlichen Quelle, von Satellitenbildern bis zu Rodungsgenehmigungen.",
    "other": "Das Modell lernt aus {n} öffentlichen Quellen, von Satellitenbildern bis zu Rodungsgenehmigungen."
-  }
+  },
+  "use": "Zeiger über die Karte bewegen, um die Wahrscheinlichkeit jeder Zelle zu sehen. Klicken zum Vergrößern.",
+  "useTouch": "Auf die Karte tippen, um die Wahrscheinlichkeit jeder Zelle zu sehen."
  },
  "stepHi": "über {c}",
  "stepLo": "unter {c}",

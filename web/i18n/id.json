@@ -462,7 +462,10 @@
   "next": "Lanjut",
   "open": "Kode dan benchmark terbuka. Buat model yang lebih baik, dan model itu menggantikan model kami.",
   "proof": "Kami menyembunyikan {y} dari model dan meminta prakiraannya. Dari tiap {of} tempat yang ditunjuknya, {hit} dibuka.",
-  "sources": "Model belajar dari {n} sumber publik, dari citra satelit sampai izin pembukaan hutan."
+  "sectors": "Di Wilayah, prakiraan dijumlahkan per negara bagian, kotamadya, tanah adat, atau kawasan konservasi.",
+  "sources": "Model belajar dari {n} sumber publik, dari citra satelit sampai izin pembukaan hutan.",
+  "use": "Arahkan kursor ke peta untuk melihat peluang tiap sel. Klik untuk memperbesar.",
+  "useTouch": "Ketuk peta untuk melihat peluang tiap sel."
  },
  "stepHi": "di atas {c}",
  "stepLo": "di bawah {c}",

@@ -413,15 +413,21 @@ canvas.cells { position: absolute; left: 0; top: 0; transition: opacity 0.25s; }
 #story-back:disabled { visibility: hidden; }
 #story-nav svg { width: 26px; height: 16px; }
 #story-nav svg path { fill: none; stroke: currentColor; stroke-width: 2.4; stroke-linecap: square; stroke-linejoin: miter; }
-/* the header keeps the mark, the language and a quiet way out; About and the API come in with the model */
-:root[data-story] #story-btn, :root[data-story]:not([data-has~="about"]) :is(#about-btn, #api-btn) { display: none; }
-:root[data-story] #skip-btn { display: block; }
-:root[data-story] :is(#mapbox, #mappanel, #chartbox, #list-rows) { pointer-events: none; }
-:root[data-story]:not([data-has~="legend"]) :is(#mappanel, .leaflet-control-zoom), :root[data-story]:not([data-has~="chart"]) #chartbox { opacity: 0; visibility: hidden; }
-:root[data-story]:not([data-has~="list"]) .state-name { display: none; }
+/* The header keeps the mark, the language and a quiet way out, which stands before the links so that nothing
+   moves when it goes. Each piece arrives at the step that speaks of it and stays: the key and the Cells tab with
+   the model; the Sectors tab, the kinds and the states' names; the Priorities tab and the list; the timeline; at
+   the last step the header's links and the zoom. What has arrived is there to be seen, not yet for the hand. */
+:root[data-story]:not([data-has~="nav"]) :is(#story-btn, #about-btn, #api-btn) { display: none; }
+:root[data-story] #skip-btn { display: block; order: 1; margin: 0 22px 0 0; }
+:root[data-story] #nav { order: 2; }
+:root[data-story] #menu-btn { order: 3; }
+:root[data-story] :is(#mapbox, #mappanel, #chartbox, #list, #story-btn, #about-btn, #api-btn, #menu-btn, .leaflet-control-zoom, .leaflet-control-zoom a) { pointer-events: none !important; cursor: default; }
+:root[data-story]:not([data-has~="legend"]) #mappanel, :root[data-story]:not([data-has~="nav"]) .leaflet-control-zoom, :root[data-story]:not([data-has~="chart"]) #chartbox { opacity: 0; visibility: hidden; }
+:root[data-story]:not([data-has~="sectors"]) :is(#modes button[data-k="sectors"], #kindrow), :root[data-story]:not([data-has~="prio"]) #modes button[data-k="prio"] { visibility: hidden; }
+:root[data-story]:not([data-has~="sectors"]) .state-name { display: none; }
+:root[data-new~="sectors"] :is(#modes button[data-k="sectors"], #kindrow), :root[data-new~="prio"] #modes button[data-k="prio"], :root[data-new~="nav"] :is(#story-btn, #about-btn, #api-btn, #menu-btn, .leaflet-control-zoom) { animation: arrive 0.4s both; }
 #legend[data-mapped] .sw { transition: opacity 1s linear; }
 #legend[data-mapped="wait"] .sw { opacity: 0; transition: none; }
-:root[data-story] #mapctl { visibility: hidden; }  /* modes, kinds and Ranking come in when the story ends */
 
 /* ---------- what takes the stage in the map's place: About (what this is, the model's figure, the benchmark)
    and the API's instructions. Each fills the page under the header, its content a column in the middle; the map
@@ -474,10 +480,10 @@ canvas.cells { position: absolute; left: 0; top: 0; transition: opacity 0.25s; }
 #api-copy { font: 600 15px var(--cond); letter-spacing: 0.07em; text-transform: uppercase; color: var(--green); text-decoration: underline; text-underline-offset: 3px; }
 #api-text { flex: 1 1 auto; min-height: 0; overflow: auto; overscroll-behavior: contain; margin: 0; padding-top: 12px; border-top: 1px solid var(--ink); font: 13px/1.5 ui-monospace, "SF Mono", SFMono-Regular, Menlo, Consolas, monospace; white-space: pre-wrap; overflow-wrap: anywhere; tab-size: 4; }
 
-/* where there is not the height for the list (a short window; the people in the dock) the kinds are one row that never wraps, Ranking at its end */
-@media (min-width: 861px) and (max-height: 780px) { #mappanel:has(#kindrow:not([hidden])) { width: calc(var(--rail) + 2 * var(--in)); } #mapctl { width: 100%; grid-template-columns: minmax(0, 1fr); } #kindrow { flex-direction: row; align-items: baseline; gap: 14px; width: 100%; } #kinds { flex-direction: row; flex: 0 1 auto; min-width: 0; gap: 0 14px; overflow: hidden; } #rank-btn { margin-top: 0; margin-inline-start: auto; } }
+/* where there is not the height for the list (a short window) the kinds are one row that never wraps, Ranking at its end; its type is never under 13 px: the gaps tighten first, and then the row scrolls */
+@media (min-width: 861px) and (max-height: 780px) { #mappanel:has(#kindrow:not([hidden])) { width: calc(var(--rail) + 2 * var(--in)); } #mapctl { width: 100%; grid-template-columns: minmax(0, 1fr); } #kindrow { flex-direction: row; align-items: baseline; gap: 14px; width: 100%; } #kinds { flex-direction: row; flex: 0 1 auto; min-width: 0; gap: 0 14px; overflow-x: auto; scrollbar-width: none; } #kinds::-webkit-scrollbar { display: none; } #rank-btn { margin-top: 0; margin-inline-start: auto; } }
+@media (min-width: 861px) { :root[data-story] #mappanel:has(#kindrow:not([hidden])) { width: calc(var(--rail) + 2 * var(--in)); } :root[data-story] #mappanel:has(#kindrow:not([hidden])) #mapctl { width: 100%; grid-template-columns: minmax(0, 1fr); } :root[data-story] #mappanel:has(#kindrow:not([hidden])) #kindrow { flex-direction: row; align-items: baseline; gap: 14px; width: 100%; } :root[data-story] #mappanel:has(#kindrow:not([hidden])) #kinds { flex-direction: row; flex: 0 1 auto; min-width: 0; gap: 0 14px; overflow-x: auto; scrollbar-width: none; } :root[data-story] #mappanel:has(#kindrow:not([hidden])) #kinds::-webkit-scrollbar { display: none; } :root[data-story] #mappanel:has(#kindrow:not([hidden])) #rank-btn { margin-top: 0; margin-inline-start: auto; } }  /* (in the story too, while the kinds are shown: the caption has the column under the key) */
 @media (min-width: 861px) {
-  :root[data-people] #mappanel:has(#kindrow:not([hidden])) { width: calc(var(--rail) + 2 * var(--in)); } :root[data-people] #mapctl { width: 100%; grid-template-columns: minmax(0, 1fr); } :root[data-people] #kindrow { flex-direction: row; align-items: baseline; gap: 14px; width: 100%; } :root[data-people] #kinds { flex-direction: row; flex: 0 1 auto; min-width: 0; gap: 0 14px; overflow: hidden; } :root[data-people] #rank-btn { margin-top: 0; margin-inline-start: auto; }
   /* and the photograph gives way before anything meets: whole, only smaller */
   :root[data-people] #chartbox[data-as="dock"] .people img { width: auto; max-width: 100%; max-height: max(110px, calc(100dvh - var(--panel-bottom, calc(var(--top) + 150px)) - 36px - 250px)); }
 }
@@ -516,7 +522,7 @@ canvas.cells { position: absolute; left: 0; top: 0; transition: opacity 0.25s; }
   :root { --top: 48px; --pad: 16px; --in: 0px; --panel-h: 128px; --peek: 302px; --handle: 30px; --cap: 0px; --list-top: 56dvh; }
   :root[data-list="true"] { --peek: var(--handle); }                    /* the list is open: the bulletin waits behind its handle */
   :root[data-story] { --cap: 130px; }                                   /* (until the page says how tall the caption is) */
-  :root[data-story] { --peek: 213px; }                                  /* (in the story the bulletin rests without its hazards and its headline: nothing is for the hand yet, and the caption is the headline) */
+  :root[data-story]:not([data-has~="nav"]) { --peek: 213px; }                                  /* (in the story the bulletin rests without its hazards and its headline: nothing is for the hand yet, and the caption is the headline) */
   :root[data-story]:not([data-has~="chart"]) { --peek: 0px; }           /* (the bulletin has not come in yet) */
   .brand { font-size: 24px; gap: 8px; }
   .brand svg { width: 17px; height: 15px; }
@@ -528,8 +534,9 @@ canvas.cells { position: absolute; left: 0; top: 0; transition: opacity 0.25s; }
   :root[data-menu] #nav { display: flex; }
   #nav button { min-height: 50px; padding: 0 22px; border: 0; text-align: left; font-size: 17px; }
   /* in the story the header keeps the language and the way out, side by side */
-  :root[data-story] #menu-btn, :root[data-story] :is(#about-btn, #api-btn) { display: none; }
-  :root[data-story] #nav { display: flex; position: static; flex-direction: row; min-width: 0; padding: 0; background: none; box-shadow: none; }
+  :root[data-story]:not([data-has~="nav"]) :is(#menu-btn, #story-btn, #about-btn, #api-btn) { display: none; }
+  :root[data-story]:not([data-has~="nav"]) #nav { display: flex; position: static; flex-direction: row; min-width: 0; padding: 0; background: none; box-shadow: none; }  /* (at the last step the header is the tool's: the menu, with the language in it) */
+  :root[data-story] #skip-btn { margin: 0 6px 0 0; }
   :root[data-story] #nav button, #skip-btn { min-width: 48px; min-height: 48px; padding: 0 10px; border: 0; font-size: 16px; text-align: center; }
   #skip-btn { margin: 0 6px 0 0; color: var(--ink); }
   .pick { flex-wrap: nowrap; gap: 0 16px; overflow-x: auto; scrollbar-width: none; }
@@ -559,8 +566,8 @@ canvas.cells { position: absolute; left: 0; top: 0; transition: opacity 0.25s; }
   #share { display: none; }
   #credit { right: 10px; bottom: calc(var(--peek) + var(--cap) + 104px); max-width: 46%; text-align: right; }
   .leaflet-control-zoom { margin: 0 10px calc(var(--peek) + var(--cap) + 10px) 0 !important; }
-  :root[data-list="true"] .leaflet-control-zoom, :root[data-story] .leaflet-control-zoom { display: none; }  /* the list has the lower half; two fingers zoom */
-  :root[data-story] #chartbox[data-as="dock"] :is(#hazrow, #say) { display: none; }
+  :root[data-list="true"] .leaflet-control-zoom, :root[data-story]:not([data-has~="nav"]) .leaflet-control-zoom { display: none; }  /* the list has the lower half; two fingers zoom */
+  :root[data-story]:not([data-has~="nav"]) #chartbox[data-as="dock"] :is(#hazrow, #say) { display: none; }
   .leaflet-control-zoom a { width: 44px !important; height: 44px !important; line-height: 43px !important; font-size: 24px !important; }
   /* the map stays the screen when the bulletin's sheet is up */
   #mapbox[data-as="dock"] { inset: 0; width: auto; height: auto; z-index: 0; }
@@ -655,14 +662,12 @@ canvas.cells { position: absolute; left: 0; top: 0; transition: opacity 0.25s; }
   #story-nav { margin-top: 6px; }
   #story-next { width: 64px; height: 48px; }
   #story-back { width: 48px; height: 48px; }
-  :root[data-story] #mapctl { display: none; }  /* (the key right under the header: the stage has the rest) */
   /* a panel on the stage has the whole height: its X stands in the header's row, beside the menu; in the story the arrows are the way on and there is no X */
   .pbar { position: fixed; z-index: 61; top: 0; right: 48px; height: var(--top); padding: 0; background: none; align-items: center; }
   .pbar .x { margin: 0; }
   :root[data-story] .pbar { display: none; }
   #about, #api { padding-top: 10px; z-index: 41; }
   #about[open], #api[open] { animation-fill-mode: backwards; }  /* (so the X can be fixed to the screen, in the header's row, once the panel is in) */
-  :root[data-story] #mappanel { padding-top: 6px; }
   #about[data-only] { padding-top: 0; }
   #about[data-only="bench"] #about-body { justify-content: flex-start; padding-top: 14px; }
   /* About fills the screen; in the story it stands between the header and the caption, so the line, the way on and Skip stay in reach */

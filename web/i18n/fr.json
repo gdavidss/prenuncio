@@ -502,10 +502,13 @@
   "next": "Suivant",
   "open": "Le code et le benchmark sont ouverts. Faites un meilleur modèle et il remplacera le nôtre.",
   "proof": "Nous avons caché {y} au modèle et demandé sa prévision. Sur {of} lieux qu'il a désignés, {hit} ont été déboisés.",
+  "sectors": "Dans Secteurs, la prévision est additionnée par État, municipalité, terre indigène ou unité de conservation.",
   "sources": {
    "one": "Le modèle apprend d'{n} source publique, des images satellite aux autorisations de déboisement.",
    "other": "Le modèle apprend de {n} sources publiques, des images satellite aux autorisations de déboisement."
-  }
+  },
+  "use": "Passez le pointeur sur la carte pour voir la probabilité de chaque cellule. Cliquez pour zoomer.",
+  "useTouch": "Touchez la carte pour voir la probabilité de chaque cellule."
  },
  "stepHi": "plus de {c}",
  "stepLo": "moins de {c}",
