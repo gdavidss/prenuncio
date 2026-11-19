@@ -285,8 +285,18 @@ function grip(handle, sheet, done) {  // done(dy, v, top): where the sheet goes 
 // touch that does not move is a tap on what is under it. Pulled up whole, the sheet scrolls, and only its grip row
 // brings it down. A finger lets go while still moving: only a fast flick counts as a flick, judged on the last
 // tenth of a second; a slower release leaves the sheet where it is. A cancelled touch leaves it where it was.
-const SHEETY = { want: 0 };  // the height the reader left the sheet at, kept for the page's life and fitted to the screen it is on
-function sheetFit() { if (!narrow()) return; const most = innerHeight - lengthOf("--top") - lengthOf("--cap") - 48; root.style.setProperty("--peek-user", Math.round(Math.min(SHEETY.want, most)) + "px"); }
+// The sheet is as tall as the reader leaves it, anywhere from its floor (its grip and its row of hazards, nothing
+// cut in the middle of a row) to the header. Until it is moved it rests at the height the page gives it; after
+// that it never goes back there by itself: only a tap on its grip, at the floor, opens it to that rest again.
+const SHEETY = { want: null };  // the height the reader left the sheet at (null: never moved), kept for the page's life and fitted to the screen it is on
+const sheetFloor = () => { const h = $("hazrow"), g = $("sheet-grab"); return h.offsetParent ? Math.ceil(rectOf(h).bottom - rectOf(g).top) + 6 : 64; };
+function sheetFit() {
+  if (!narrow()) return;
+  if (SHEETY.want == null) { root.style.removeProperty("--peek-user"); delete root.dataset.sheet; return; }
+  const most = innerHeight - lengthOf("--top") - lengthOf("--cap") - 48, h = Math.round(Math.max(sheetFloor(), Math.min(SHEETY.want, most)));
+  root.style.setProperty("--peek-user", h + "px");
+  if (h < 200) root.dataset.sheet = "low"; else delete root.dataset.sheet;  // (too low for a plot: what is under the hazards is cut off, never squeezed)
+}
 function sheetTo(peek, full) {
   if (peek != null) { SHEETY.want = Math.round(peek); sheetFit(); }
   if (full !== (front === "chart")) swap(); else refresh();
@@ -301,14 +311,17 @@ let dragged = false;  // a drag of the sheet is never a tap on what it started o
     if (!d || (e && e.pointerId !== d.id)) return;
     const was = d; d = null;
     cb.classList.remove("dragging");
-    if (!was.moved) { if (was.grab && !cancelled) sheetTo(null, front === "map"); return; }  // a tap on the grip: up whole, or back to where it rested
+    if (!was.moved) {  // a tap on the grip: at the floor it opens to the page's rest; otherwise up whole, or back to where it was left
+      if (was.grab && !cancelled) { if (docked("chart") && SHEETY.want != null && SHEETY.want <= sheetFloor() + 2) { SHEETY.want = null; sheetFit(); sheetTo(null, false); } else sheetTo(null, front === "map"); }
+      return;
+    }
     dragged = true; setTimeout(() => (dragged = false), 400);
     const top = parseFloat(cb.style.top) || rectOf(cb).top, now = performance.now(), recent = was.pts.filter(p => now - p[1] < 100), v = !cancelled && recent.length > 1 ? (recent.at(-1)[0] - recent[0][0]) / Math.max(16, recent.at(-1)[1] - recent[0][1]) : 0;
     cb.style.top = "";
     const H = innerHeight - lengthOf("--cap"), up = lengthOf("--top");
-    if (Math.abs(v) > 1.2) return sheetTo(v < 0 ? null : 0, v < 0);       // a flick (over 1,200 px a second): up whole, or down to its rest
+    if (Math.abs(v) > 1.2) return sheetTo(v < 0 ? null : 0, v < 0);       // a flick (over 1,200 px a second): up whole, or down to its floor
     if (top < up + 70) return sheetTo(null, true);                         // left at the header: up whole
-    sheetTo(H - top, false);                                               // left anywhere else: it stays there (never under its rest)
+    sheetTo(H - top, false);                                               // left anywhere else: it stays there (under its floor, at the floor)
   };
   cb.addEventListener("pointerdown", e => {
     if (!narrow() || storyOn || (e.pointerType === "mouse" && e.button !== 0)) return;
@@ -355,7 +368,7 @@ addEventListener("resize", panelAt);
 // the story until its last step: the caption and the key have their room kept; at the last step the page is laid out as the tool is
 const touring = () => storyOn && !/\bnav\b/.test(root.dataset.has || "");
 // how tall the bulletin's sheet rests on a phone, in pixels (the stylesheet has it as the larger of its rest and the height the finger left it at)
-const peekPx = () => { const px = x => (/var\(/.test(x) ? px(x.replace(/var\((--[\w-]+)(?:,\s*([^()]+))?\)/g, (_, n, d) => css(n).trim() || d || "0px")) : /^max\(/.test(x) ? Math.max(...x.slice(4, -1).split(",").map(px)) : parseFloat(x) || 0); return px(css("--peek").trim()); };
+const peekPx = () => { const raw = css("--peek").trim(), u = root.style.getPropertyValue("--peek-user"); return /^-?[\d.]+px$/.test(raw) ? parseFloat(raw) : u ? parseFloat(u) : lengthOf("--peek-min"); };
 const CAP_FIT = 164, KEY_FIT = 140;  // on a phone, in the story: the room kept for the caption and for the key, the same at every step so the map stays put
 let restPeek = 0;
 const pagePad = () => parseFloat(getComputedStyle($("top")).paddingLeft) || 0;
@@ -2140,6 +2153,16 @@ $("story-next").onclick = () => storyStep(1);
 $("story-back").onclick = () => storyStep(-1);
 $("skip-btn").onclick = () => storyEnd();
 $("story-btn").onclick = () => { leaving = true; location.href = location.pathname + "?story=1"; };  // played again from a clean page; what it loads is already cached
+// on a touch screen a sideways swipe anywhere goes on (to the left) or back (to the right; the other way round in a
+// right-to-left language): 40 px or more, more across than down, within 0.6 s. Up and down does nothing.
+let swipe = null;
+document.addEventListener("touchstart", e => { const t = e.touches[0]; swipe = storyOn && e.touches.length === 1 ? [t.clientX, t.clientY, performance.now()] : null; }, { passive: true });
+document.addEventListener("touchend", e => {
+  if (!swipe || !storyOn) return;
+  const t = e.changedTouches[0], dx = t.clientX - swipe[0], dy = t.clientY - swipe[1], quick = performance.now() - swipe[2] < 600;
+  swipe = null;
+  if (quick && Math.abs(dx) >= 40 && Math.abs(dx) > Math.abs(dy)) storyStep((dx < 0) !== RTL.has(lang) ? 1 : -1);
+}, { passive: true });
 // until the story is over, a click or a tap anywhere that is not a control goes on
 document.addEventListener("click", e => { if (storyOn && !e.target.closest("button, a, dialog, #list")) storyStep(1); });
 document.addEventListener("keydown", e => {

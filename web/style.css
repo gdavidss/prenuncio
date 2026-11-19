@@ -44,6 +44,8 @@
 * { box-sizing: border-box; }
 html, body { margin: 0; height: 100%; overflow: hidden; background: var(--ground); color: var(--ink); }
 button { font: inherit; color: inherit; background: none; border: 0; padding: 0; cursor: pointer; }
+/* taps on controls are taps, never a double tap that zooms the page (the page can still be pinched) */
+:is(button, a, summary, [role="button"], .leaflet-control-zoom a, #story, #story *) { touch-action: manipulation; }
 :focus-visible { outline: 3px solid var(--ink); outline-offset: 3px; }
 [hidden] { display: none !important; }
 ::selection { background: var(--ink); color: var(--ground); }
@@ -529,7 +531,7 @@ canvas.cells { position: absolute; left: 0; top: 0; transition: opacity 0.25s; }
    it goes. Type has its own scale here: the story's line 27, a headline 21, text 15.5, labels 12.5. Everything
    that is tapped is 44 px or more. ---------- */
 @media (max-width: 860px) {
-  :root { --top: 48px; --pad: 16px; --in: 0px; --panel-h: 128px; --peek-min: 302px; --peek: max(var(--peek-min), var(--peek-user, 0px)); --handle: 30px; --cap: 0px; --list-top: 56dvh; }
+  :root { --top: 48px; --pad: 16px; --in: 0px; --panel-h: 128px; --peek-min: 302px; --peek: var(--peek-user, var(--peek-min)); --handle: 30px; --cap: 0px; --list-top: 56dvh; }
   :root[data-list="true"] { --peek: 0px; }                              /* the list is open: it has the sheet's place whole, and the bulletin is away until it closes */
   :root[data-story] { --cap: 130px; }                                   /* (until the page says how tall the caption is) */
   :root[data-story]:not([data-has~="nav"]) { --peek: 213px; }                                  /* (in the story the bulletin rests without its hazards and its headline: nothing is for the hand yet, and the caption is the headline) */
@@ -590,6 +592,8 @@ canvas.cells { position: absolute; left: 0; top: 0; transition: opacity 0.25s; }
   /* the bulletin: a sheet. At rest its top shows: the hazards, the level, the headline and the plot. */
   #chartbox[data-as] { left: 0; right: 0; bottom: var(--cap); width: auto; height: auto; z-index: 20; background: var(--ground); transition: top 0.34s cubic-bezier(0.2, 0.7, 0.2, 1), bottom 0.34s cubic-bezier(0.2, 0.7, 0.2, 1), opacity 0.5s, visibility 0s; }
   #chartbox[data-as="dock"] { top: calc(100dvh - var(--peek) - var(--cap)); --cpad: 16px; }
+  :root[data-sheet="low"] #chartbox[data-as="dock"] #chartin > * { flex-shrink: 0; }  /* a low sheet cuts off what is under its hazards: nothing is squeezed */
+  :root[data-sheet="low"] #chartbox[data-as="dock"] #body { visibility: hidden; }
   #chartbox[data-as="stage"] { top: var(--top); --cpad: 16px; }
   #chartbox.dragging, #list.dragging { transition: none; }
   #sheet-grab, #list-grab { touch-action: none; }
@@ -705,7 +709,7 @@ canvas.cells { position: absolute; left: 0; top: 0; transition: opacity 0.25s; }
   .people h2 { font-size: 21px; }
   .people p, .people summary { font-size: 15.5px; }
   .people summary { min-height: 44px; display: flex; align-items: center; }
-  :root[data-people]:not([data-list="true"]) { --peek: max(356px, var(--peek-user, 0px)); }  /* (the photograph, the name and the headline, at rest) */
+  :root[data-people]:not([data-list="true"]) { --peek: var(--peek-user, 356px); }  /* (the photograph, the name and the headline, at rest) */
   :root[data-people] #chartbox[data-as="dock"] { height: auto; max-height: none; }
   :root[data-people] #chartbox[data-as="dock"] #chartin { height: 100%; max-height: none; overflow: hidden; padding-top: 0; padding-bottom: 0; }
   :root[data-people] #chartbox[data-as="dock"] #people :is(p, h3, details) { display: none; }

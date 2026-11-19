@@ -1727,6 +1727,10 @@ try {
   assert.deepEqual(await place("mapbox"), [0, 0, 390, 844], "the map is still the screen, under the sheet");
   await pull("#sheet-grab", 400);
   await until(settled("map"), "pushed back");
+  await sleep(500);
+  assert.ok((await sheets())[1][0] >= 844 - 90, "a flick down from the top leaves the sheet at its floor, the map open: " + JSON.stringify(await sheets()));
+  await clickOn("#sheet-grab");  // (a tap on its grip at the floor opens it to its rest)
+  await sleep(900);
   // only the plot takes the sheet up: a tap on its headline, its level or its edges does nothing
   for (const sel of ["#say", "#level", "#lead"]) { await clickOn(sel); await sleep(500); assert.equal(await js(settled("map")), true, `a tap on ${sel} leaves the sheet where it is`); }
   await clickOn("#chart");
@@ -1744,11 +1748,12 @@ try {
   let free = await js(`(() => { const c = document.getElementById("chartbox").getBoundingClientRect(), a = document.querySelector("canvas.base").getBoundingClientRect(), k = document.getElementById("mappanel").getBoundingClientRect().bottom; return { top: Math.round(c.top), as: document.getElementById("chartbox").dataset.as, up: Math.round(a.top - k), down: Math.round(c.top - a.bottom) }; })()`);
   assert.ok(Math.abs(free.top - (restTop - 160)) <= 6 && free.as === "dock" && await plot() >= plot0 + 120, `the sheet stays where it was left, its plot taller: ${JSON.stringify(free)}, plot ${await plot()} from ${plot0}`);
   assert.ok(free.up >= 0 && free.down >= 0 && Math.abs(free.up - free.down) <= 30, "and the Amazon is in the middle of what is left: " + JSON.stringify(free));
-  await slow("#sheet-grab", 420);
-  assert.equal((await sheets())[1][0], restTop, "let go under its rest, it settles at its rest");
-  await slow("#sheet-grab", -120);
+  await slow("#sheet-grab", 520);
+  const floorTop = (await sheets())[1][0];
+  assert.ok(floorTop > restTop + 150 && floorTop >= 844 - 90 && await js(`(h => h.bottom <= document.getElementById("chartbox").getBoundingClientRect().bottom)(document.getElementById("hazrow").getBoundingClientRect())`), `let go under its floor, it settles at its floor, the grip and the hazards whole: ${floorTop}`);
+  await slow("#sheet-grab", -260);
   const keptTop = (await sheets())[1][0];
-  assert.ok(Math.abs(keptTop - (restTop - 120)) <= 6, "and it is left higher again, for the lists to find it there afterwards: " + keptTop);
+  assert.ok(Math.abs(keptTop - (floorTop - 260)) <= 6, "from the floor it is left higher again, where it was let go, for the lists to find it there afterwards: " + keptTop);
   // priorities on a phone: the mode opens the list's sheet, which has the bulletin's place whole
   await clickOn('#modes button[data-k="prio"]');
   await until(`!!document.getElementById("list").offsetParent && document.getElementById("list").dataset.at === "half" && document.querySelectorAll("#list-rows li").length > 100`, "the list's sheet, from the mode");
@@ -1783,9 +1788,11 @@ try {
   await sleep(500);
   [ls, cs] = await apart("with the list closed");
   assert.ok(ls === null && cs[1] === 844 && Math.abs(cs[0] - keptTop) <= 2 && await plot() >= 120, `and the bulletin is back at the height it had (${keptTop}), with its plot: ` + JSON.stringify(cs));
-  await pull("#sheet-grab", 500);  // (a flick down: back to its rest, for what follows)
+  await pull("#sheet-grab", 500);  // (a flick down: to its floor)
   await sleep(900);
-  assert.equal((await sheets())[1][0], restTop, "a flick down takes it to its rest");
+  assert.equal((await sheets())[1][0], floorTop, "a flick down takes it to its floor, not back to its rest");
+  await clickOn("#sheet-grab"); await sleep(900);
+  assert.equal((await sheets())[1][0], restTop, "and a tap on its grip at the floor opens it to its rest");
   // About on a phone: the whole screen, its text at the text size, its way out at the top
   await clickOn("#menu-btn");
   await until(`"menu" in document.documentElement.dataset`, "the menu again");
@@ -1862,15 +1869,55 @@ try {
   await send("Emulation.setDeviceMetricsOverride", { width: 390, height: 844, deviceScaleFactor: 2, mobile: true });
   await sleep(1200);
   assert.equal(await topNow(), kept2, "and turned back it is where it was left");
-  await finger("#say", 600);
-  assert.equal(await topNow(), rest0, "dragged under its rest it settles at its rest");
-  await finger("#say", -620);
+  // dragged down it stays down: by 150 slowly, by 150 more while moving, then below its floor, where it settles
+  const fingerSlow = async (sel, dy) => { const [x, y] = await js(`(r => [r.left + Math.min(60, r.width / 2), r.top + r.height / 2])(document.querySelector(${JSON.stringify(sel)}).getBoundingClientRect())`); await touch("touchStart", x, y); await sleep(30); for (let k = 1; k <= 18; k++) { await touch("touchMove", x, y + dy * k / 18); await sleep(40); } await sleep(250); await touch("touchEnd"); await sleep(1100); };
+  const a0 = parseInt(await topNow());
+  await fingerSlow("#hazard", 150);
+  const d1 = await topNow();
+  assert.ok(d1.endsWith("/dock") && Math.abs(parseInt(d1) - (a0 + 150)) <= 6, `dragged down by 150 and let go slowly, it stays there: ${a0} to ${d1}`);
+  await touch("touchStart", 200, 150); await sleep(50); await touch("touchEnd"); await sleep(900);
+  assert.equal(await topNow(), d1, "through a tap on the map");
+  await finger("#hazard", 300);
+  const fl = await topNow();
+  assert.ok(fl.endsWith("/dock") && parseInt(fl) >= 844 - 90 && parseInt(fl) < 844 - 40, `dragged by 300 more while moving, below its floor, it settles at the floor: ${fl}`);
+  await tapAt('#hazard button[data-k="degr"]');
+  assert.equal(await topNow(), fl, "at the floor a hazard can still be chosen, and the sheet stays");
+  await tapAt('#hazard button[data-k="clear"]');
+  await clickOn('#modes button[data-k="prio"]'); await until(`document.documentElement.dataset.list === "true"`, "the list"); await sleep(600);
+  await clickOn("#list-close"); await until(`document.documentElement.dataset.list === "false"`, "closed"); await sleep(900);
+  assert.equal(await topNow(), fl, "the list opens and closes and it is still at the floor");
+  await send("Emulation.setDeviceMetricsOverride", { width: 844, height: 390, deviceScaleFactor: 2, mobile: true }); await sleep(1200);
+  await send("Emulation.setDeviceMetricsOverride", { width: 390, height: 844, deviceScaleFactor: 2, mobile: true }); await sleep(1200);
+  assert.equal(await topNow(), fl, "and through turning the phone and back");
+  assert.equal(await js(`getComputedStyle(document.getElementById("chart")).visibility === "hidden" || document.getElementById("body").getBoundingClientRect().top >= document.getElementById("chartbox").getBoundingClientRect().bottom`), true, "at the floor the plot is not squeezed: it is cut off");
+  await finger("#hazard", -760);
   assert.equal(await topNow(), "48/stage", "dragged to the header it is whole");
   await clickOn("#chart-front"); await until(settled("map"), "back down"); await sleep(500);
+  assert.ok(parseInt(await topNow()) >= 844 - 90, "sent back down, it is where it was left: at its floor");
+  await tapAt("#sheet-grab"); await sleep(400);
+  assert.equal(await topNow(), rest0, "a tap on its grip at the floor opens it to its rest");
   await tapAt("#chart");
   await until(settled("chart"), "a tap on the plot brings it up");
   await clickOn("#chart-front"); await until(settled("map"), "and down");
   assert.equal(await js(`getComputedStyle(document.getElementById("say")).touchAction`), "none", "at rest the browser does not take a finger on the sheet for a scroll");
+  // the story under a finger: ten quick taps on the way on go ten steps on and the page is never zoomed; a swipe to
+  // the left goes on and to the right goes back; up and down does nothing
+  await send("Page.navigate", { url: SITE + "?story=1&sw=1#l=pt" });
+  await until(`${onStory} && document.documentElement.dataset.step === "forestA" && !!document.querySelector("canvas.base")`, "the story on an iPhone");
+  await sleep(800);
+  const stepNo = () => js(`[...document.querySelectorAll("#story-marks li")].findIndex(e => e.classList.contains("now"))`);
+  const [nx, ny] = await js(`(r => [r.left + r.width / 2, r.top + r.height / 2])(document.getElementById("story-next").getBoundingClientRect())`);
+  for (let k = 0; k < 10; k++) { await touch("touchStart", nx, ny); await sleep(25); await touch("touchEnd"); await sleep(90); }
+  await sleep(600);
+  assert.deepEqual([await stepNo(), await js(`visualViewport.scale`)], [10, 1], "ten quick taps: ten steps on, and the page not zoomed");
+  for (let k = 0; k < 4; k++) await clickOn("#story-back");
+  await until(`document.documentElement.dataset.step === "${IDS[6]}"`, "back to step 7"); await sleep(800);
+  const sw = async (dx, dy) => { await touch("touchStart", 220, 400); for (let k = 1; k <= 6; k++) { await touch("touchMove", 220 + dx * k / 6, 400 + dy * k / 6); await sleep(25); } await touch("touchEnd"); await sleep(700); };
+  await sw(-120, 10); assert.equal(await stepNo(), 7, "a swipe to the left goes on, over the panel on the stage");
+  await sw(120, -8); assert.equal(await stepNo(), 6, "a swipe to the right goes back");
+  await sw(10, -200); assert.equal(await stepNo(), 6, "up and down does nothing");
+  assert.equal(await js(`getComputedStyle(document.getElementById("story-next")).touchAction`), "manipulation", "the arrows take taps as taps");
+  await clickOn("#skip-btn"); await until(`!(${onStory})`, "the story left");
   await send("Emulation.setUserAgentOverride", { userAgent: "" });
   await send("Emulation.setDeviceMetricsOverride", DESK);
 
