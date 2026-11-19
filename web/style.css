@@ -592,8 +592,13 @@ canvas.cells { position: absolute; left: 0; top: 0; transition: opacity 0.25s; }
   /* the bulletin: a sheet. At rest its top shows: the hazards, the level, the headline and the plot. */
   #chartbox[data-as] { left: 0; right: 0; bottom: var(--cap); width: auto; height: auto; z-index: 20; background: var(--ground); transition: top 0.34s cubic-bezier(0.2, 0.7, 0.2, 1), bottom 0.34s cubic-bezier(0.2, 0.7, 0.2, 1), opacity 0.5s, visibility 0s; }
   #chartbox[data-as="dock"] { top: calc(100dvh - var(--peek) - var(--cap)); --cpad: 16px; }
-  :root[data-sheet="low"] #chartbox[data-as="dock"] #chartin > * { flex-shrink: 0; }  /* a low sheet cuts off what is under its hazards: nothing is squeezed */
-  :root[data-sheet="low"] #chartbox[data-as="dock"] #body { visibility: hidden; }
+  /* under its rest the sheet gives its room to the plot: the band and the headline shrink together (--shrink, 0 at the rest, 1 at the floor), then the band goes, then the headline; the plot is redrawn to what is left, never under its floor */
+  :root[style*="--shrink"] #chartbox[data-as="dock"] #say { font-size: calc(21px - 6px * var(--shrink)); line-height: 1.05; }
+  :root[style*="--shrink"] #chartbox[data-as="dock"] #level { min-height: calc(32px - 8px * var(--shrink)); margin-bottom: calc(8px - 4px * var(--shrink)); font-size: calc(13px - 1px * var(--shrink)); }
+  :root[style*="--shrink"] #chartbox[data-as="dock"] #level b { font-size: calc(17px - 4px * var(--shrink)); }
+  :root[style*="--shrink"] #chartbox[data-as="dock"] #lead { padding-bottom: calc(6px - 3px * var(--shrink)); }
+  :root:is([data-sheet="noband"], [data-sheet="nohead"]) #chartbox[data-as="dock"] :is(#level, #scope) { display: none; }
+  :root[data-sheet="nohead"] #chartbox[data-as="dock"] #lead { display: none; }
   #chartbox[data-as="stage"] { top: var(--top); --cpad: 16px; }
   #chartbox.dragging, #list.dragging { transition: none; }
   #sheet-grab, #list-grab { touch-action: none; }

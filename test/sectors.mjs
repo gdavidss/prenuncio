@@ -1728,7 +1728,7 @@ try {
   await pull("#sheet-grab", 400);
   await until(settled("map"), "pushed back");
   await sleep(500);
-  assert.ok((await sheets())[1][0] >= 844 - 90, "a flick down from the top leaves the sheet at its floor, the map open: " + JSON.stringify(await sheets()));
+  assert.ok((await sheets())[1][0] >= 844 - 200, "a flick down from the top leaves the sheet at its floor, the map open: " + JSON.stringify(await sheets()));
   await clickOn("#sheet-grab");  // (a tap on its grip at the floor opens it to its rest)
   await sleep(900);
   // only the plot takes the sheet up: a tap on its headline, its level or its edges does nothing
@@ -1750,7 +1750,9 @@ try {
   assert.ok(free.up >= 0 && free.down >= 0 && Math.abs(free.up - free.down) <= 30, "and the Amazon is in the middle of what is left: " + JSON.stringify(free));
   await slow("#sheet-grab", 520);
   const floorTop = (await sheets())[1][0];
-  assert.ok(floorTop > restTop + 150 && floorTop >= 844 - 90 && await js(`(h => h.bottom <= document.getElementById("chartbox").getBoundingClientRect().bottom)(document.getElementById("hazrow").getBoundingClientRect())`), `let go under its floor, it settles at its floor, the grip and the hazards whole: ${floorTop}`);
+  assert.ok(floorTop > restTop + 100 && floorTop >= 844 - 200 && floorTop <= 844 - 160 && await js(`(h => h.bottom <= document.getElementById("chartbox").getBoundingClientRect().bottom)(document.getElementById("hazrow").getBoundingClientRect())`), `let go under its floor, it settles at its floor, the grip and the hazards whole: ${floorTop}`);
+  const atFloor = await js(`(() => { const c = document.getElementById("chartbox").getBoundingClientRect(), bars = [...document.querySelectorAll("#chart .bar rect")].map(e => e.getBoundingClientRect()).filter(r => r.height > 0), years = [...document.querySelectorAll("#chart text")].map(e => e.getBoundingClientRect()).filter(r => r.height > 0); return { bars: Math.round(Math.max(...bars.map(r => r.bottom)) - Math.min(...bars.map(r => r.top))), years: years.length > 0 && years.every(r => r.bottom <= c.bottom + 0.5 && r.top >= c.top) }; })()`);
+  assert.ok(atFloor.bars >= 80 && atFloor.years, "at the floor the plot keeps its bars, 80 px or more, with their years whole under them: " + JSON.stringify(atFloor));
   await slow("#sheet-grab", -260);
   const keptTop = (await sheets())[1][0];
   assert.ok(Math.abs(keptTop - (floorTop - 260)) <= 6, "from the floor it is left higher again, where it was let go, for the lists to find it there afterwards: " + keptTop);
@@ -1872,14 +1874,14 @@ try {
   // dragged down it stays down: by 150 slowly, by 150 more while moving, then below its floor, where it settles
   const fingerSlow = async (sel, dy) => { const [x, y] = await js(`(r => [r.left + Math.min(60, r.width / 2), r.top + r.height / 2])(document.querySelector(${JSON.stringify(sel)}).getBoundingClientRect())`); await touch("touchStart", x, y); await sleep(30); for (let k = 1; k <= 18; k++) { await touch("touchMove", x, y + dy * k / 18); await sleep(40); } await sleep(250); await touch("touchEnd"); await sleep(1100); };
   const a0 = parseInt(await topNow());
-  await fingerSlow("#hazard", 150);
+  await fingerSlow("#hazard", 80);
   const d1 = await topNow();
-  assert.ok(d1.endsWith("/dock") && Math.abs(parseInt(d1) - (a0 + 150)) <= 6, `dragged down by 150 and let go slowly, it stays there: ${a0} to ${d1}`);
+  assert.ok(d1.endsWith("/dock") && Math.abs(parseInt(d1) - Math.min(a0 + 80, floorTop)) <= 6, `dragged down by 80 and let go slowly, it stays there: ${a0} to ${d1}`);
   await touch("touchStart", 200, 150); await sleep(50); await touch("touchEnd"); await sleep(900);
   assert.equal(await topNow(), d1, "through a tap on the map");
   await finger("#hazard", 300);
   const fl = await topNow();
-  assert.ok(fl.endsWith("/dock") && parseInt(fl) >= 844 - 90 && parseInt(fl) < 844 - 40, `dragged by 300 more while moving, below its floor, it settles at the floor: ${fl}`);
+  assert.ok(fl.endsWith("/dock") && Math.abs(parseInt(fl) - floorTop) <= 2, `dragged by 300 more while moving, below its floor, it settles at the floor: ${fl}`);
   await tapAt('#hazard button[data-k="degr"]');
   assert.equal(await topNow(), fl, "at the floor a hazard can still be chosen, and the sheet stays");
   await tapAt('#hazard button[data-k="clear"]');
@@ -1889,17 +1891,27 @@ try {
   await send("Emulation.setDeviceMetricsOverride", { width: 844, height: 390, deviceScaleFactor: 2, mobile: true }); await sleep(1200);
   await send("Emulation.setDeviceMetricsOverride", { width: 390, height: 844, deviceScaleFactor: 2, mobile: true }); await sleep(1200);
   assert.equal(await topNow(), fl, "and through turning the phone and back");
-  assert.equal(await js(`getComputedStyle(document.getElementById("chart")).visibility === "hidden" || document.getElementById("body").getBoundingClientRect().top >= document.getElementById("chartbox").getBoundingClientRect().bottom`), true, "at the floor the plot is not squeezed: it is cut off");
+  const fl2 = await js(`(() => { const c = document.getElementById("chartbox").getBoundingClientRect(), bars = [...document.querySelectorAll("#chart .bar rect")].map(e => e.getBoundingClientRect()).filter(r => r.height > 0), years = [...document.querySelectorAll("#chart text")].map(e => e.getBoundingClientRect()).filter(r => r.height > 0); return { bars: Math.round(Math.max(...bars.map(r => r.bottom)) - Math.min(...bars.map(r => r.top))), years: years.length > 0 && years.every(r => r.bottom <= c.bottom + 0.5 && r.top >= c.top) }; })()`);
+  assert.ok(fl2.bars >= 80 && fl2.years, "at the floor the plot is still there, its bars 80 px or more and its years whole: " + JSON.stringify(fl2));
   await finger("#hazard", -760);
   assert.equal(await topNow(), "48/stage", "dragged to the header it is whole");
   await clickOn("#chart-front"); await until(settled("map"), "back down"); await sleep(500);
-  assert.ok(parseInt(await topNow()) >= 844 - 90, "sent back down, it is where it was left: at its floor");
+  assert.ok(Math.abs(parseInt(await topNow()) - floorTop) <= 2, "sent back down, it is where it was left: at its floor");
   await tapAt("#sheet-grab"); await sleep(400);
   assert.equal(await topNow(), rest0, "a tap on its grip at the floor opens it to its rest");
   await tapAt("#chart");
   await until(settled("chart"), "a tap on the plot brings it up");
   await clickOn("#chart-front"); await until(settled("map"), "and down");
   assert.equal(await js(`getComputedStyle(document.getElementById("say")).touchAction`), "none", "at rest the browser does not take a finger on the sheet for a scroll");
+  // From its rest down to its floor the headline and the band get smaller, then go, and the plot's share of the
+  // sheet never falls under what it has at the rest; nothing is cut in the middle of a line.
+  const GIVE = `(() => { const c = document.getElementById("chartbox").getBoundingClientRect(), ch = document.getElementById("chart").getBoundingClientRect(), s = document.getElementById("say"), on = s.offsetParent && getComputedStyle(document.getElementById("lead")).display !== "none", r = s.getBoundingClientRect(), lh = parseFloat(getComputedStyle(s).lineHeight); return { h: Math.round(c.height), say: on ? parseFloat(getComputedStyle(s).fontSize) : 0, lines: on ? r.height / lh : 0, share: ch.height / c.height, inside: [...document.querySelectorAll("#hazrow, #lead, #chart")].filter(e => e.offsetParent && getComputedStyle(e).display !== "none").every(e => { const q = e.getBoundingClientRect(); return q.top >= c.top - 0.5 && q.bottom <= c.bottom + 0.5; }) }; })()`;
+  await finger("#hazard", 700); await tapAt("#sheet-grab"); await sleep(400);  // (to the floor, and a tap on the grip there opens it to its rest)
+  assert.equal(await topNow(), rest0, "the sheet at its rest, to start from");
+  const give = [await js(GIVE)];
+  for (let k = 0; k < 4; k++) { await fingerSlow("#hazard", 25); give.push(await js(GIVE)); }
+  assert.ok(give.every((g, i) => !i || (g.h < give[i - 1].h && g.say <= give[i - 1].say + 0.01 && g.share >= give[0].share - 0.01)), "under its rest the headline only gets smaller and the plot's share never falls: " + JSON.stringify(give));
+  assert.ok(give.every(g => g.inside && (g.lines === 0 || Math.abs(g.lines - Math.round(g.lines)) < 0.15 && g.lines <= 2.1) && (g.say === 0 || g.say >= 14.5)), "nothing is cut in the middle of a line, and the headline is two lines at most, 15 px or more: " + JSON.stringify(give));
   // the story under a finger: ten quick taps on the way on go ten steps on and the page is never zoomed; a swipe to
   // the left goes on and to the right goes back; up and down does nothing
   await send("Page.navigate", { url: SITE + "?story=1&sw=1#l=pt" });

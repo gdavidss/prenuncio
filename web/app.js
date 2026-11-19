@@ -289,13 +289,29 @@ function grip(handle, sheet, done) {  // done(dy, v, top): where the sheet goes 
 // cut in the middle of a row) to the header. Until it is moved it rests at the height the page gives it; after
 // that it never goes back there by itself: only a tap on its grip, at the floor, opens it to that rest again.
 const SHEETY = { want: null };  // the height the reader left the sheet at (null: never moved), kept for the page's life and fitted to the screen it is on
-const sheetFloor = () => { const h = $("hazrow"), g = $("sheet-grab"); return h.offsetParent ? Math.ceil(rectOf(h).bottom - rectOf(g).top) + 6 : 64; };
+// Under its rest the sheet gives its room to the plot: the level band and the headline get smaller together (down
+// to about 15 px, two lines at most); when that is not enough the band goes, then the headline. The plot keeps
+// its bars at 90 px or more with their years under them, and that, with the grip and the hazards, is the floor.
+const PLOT_MIN = 112;  // the plot's own height at the floor: 6 above, 90 of bars, 16 for the years
+const sheetParts = () => { const g = $("sheet-grab"), b = $("body"), bar = $("bar"); return { top: Math.ceil(rectOf($("hazrow")).bottom - rectOf(g).top), bar: bar.offsetParent ? bar.offsetHeight : 0, pad: parseFloat(getComputedStyle(b).paddingBottom) || 0 }; };
+const sheetFloor = () => { if (!docked("chart") || !$("hazrow").offsetParent) return SHEETY.floor || 180; const q = sheetParts(); return (SHEETY.floor = q.top + q.bar + PLOT_MIN + q.pad); };  // (measured on the sheet at rest; pulled up whole it is laid out otherwise, and the last measure stands)
 function sheetFit() {
   if (!narrow()) return;
-  if (SHEETY.want == null) { root.style.removeProperty("--peek-user"); delete root.dataset.sheet; return; }
-  const most = innerHeight - lengthOf("--top") - lengthOf("--cap") - 48, h = Math.round(Math.max(sheetFloor(), Math.min(SHEETY.want, most)));
+  const lean = () => { root.style.removeProperty("--shrink"); delete root.dataset.sheet; };
+  if (SHEETY.want == null) { root.style.removeProperty("--peek-user"); return lean(); }
+  const most = innerHeight - lengthOf("--top") - lengthOf("--cap") - 48, floor = sheetFloor(), h = Math.round(Math.max(floor, Math.min(SHEETY.want, most)));
   root.style.setProperty("--peek-user", h + "px");
-  if (h < 200) root.dataset.sheet = "low"; else delete root.dataset.sheet;  // (too low for a plot: what is under the hazards is cut off, never squeezed)
+  const rest = lengthOf("--peek-min");
+  if (h >= rest || root.dataset.people != null) return lean();
+  // the plot never has a smaller share of the sheet than it has at the rest: the headline and the band shrink to keep
+  // it so, and when that is not enough the band goes, then the headline. (Once the headline has gone, what is left
+  // under the hazards is all plot, and only that shrinks, down to the floor.)
+  lean();
+  const q = sheetParts(), plot = () => h - q.top - $("lead").offsetHeight - q.bar - q.pad, u = Math.min(1, (rest - h) / Math.max(1, rest - floor));
+  const share0 = (rest - q.top - $("lead").offsetHeight - q.bar - q.pad) / rest, want = Math.max(PLOT_MIN, h * share0) - 1;
+  root.style.setProperty("--shrink", u.toFixed(3));
+  if (plot() < want) root.dataset.sheet = "noband";
+  if (plot() < want) root.dataset.sheet = "nohead";
 }
 function sheetTo(peek, full) {
   if (peek != null) { SHEETY.want = Math.round(peek); sheetFit(); }
@@ -2173,7 +2189,8 @@ document.addEventListener("keydown", e => {
   else if (e.key === "Escape") storyEnd();
 }, true);
 
-document.fonts?.ready.then(fitRows);  // (the rows were fitted in the fallback face if the page was quicker than its type)
+document.fonts?.ready.then(fitRows);
+document.fonts?.ready.then(() => requestAnimationFrame(sheetFloor));  // (the sheet's floor, measured once it is laid out in its own type)  // (the rows were fitted in the fallback face if the page was quicker than its type)
 if (storyOn) storyBegin();
 else if (S.sel != null) select(S.sel); else refresh();
 if (H.has("about")) about();
