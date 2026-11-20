@@ -66,7 +66,7 @@ let lang = [Q.get("lang"), H.get("l"), (() => { try { return localStorage.lang; 
 let langInLink = !!LANGS[H.get("l")];
 if (!lang) {
   lang = browserLang();
-  const country = window.__country !== undefined ? window.__country : await Promise.race([fetch("/api/geo").then(r => (r.ok ? r.json() : null)).then(j => j?.country ?? null).catch(() => null), new Promise(r => setTimeout(r, 350, null))]);
+  const country = window.__country !== undefined ? window.__country : await Promise.race([fetch("/api/geo").then(r => (r.ok ? r.json() : null)).then(j => j?.country ?? null).catch(() => null), new Promise(r => setTimeout(r, 1500, null))]);
   if (COUNTRY[country]) lang = COUNTRY[country];
 }
 await loadLang(lang);
