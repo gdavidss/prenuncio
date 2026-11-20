@@ -1507,7 +1507,7 @@ try {
     await sleep(900);
     assert.deepEqual(await js(LATIN), [], `in Japanese, ${what}: no word is left in another language`);
   }
-  assert.match(await js(`document.title`), /^Prenúncio、/, "the tab's name is the language's");
+  assert.equal(await js(`document.title`), "Prenúncio", "the tab is the name alone");
   // The API's Copy is the clipboard beside the X: to its left, the same size, named by the file. It puts the
   // instructions on the clipboard, turns into a check for a moment and says so to a screen reader.
   await send("Browser.grantPermissions", { permissions: ["clipboardReadWrite", "clipboardSanitizedWrite"] }).catch(() => {});

@@ -552,7 +552,7 @@
  "tipFc": "ожидается около {exp} км²",
  "tipPast": "ожидалось {exp} км², вырублено {act}",
  "tipRank": "{rank} место из {n}",
- "title": "Prenúncio, раннее предупреждение для Амазонии",
+ "title": "Prenúncio",
  "to": "{a} – {b}",
  "under": "меньше {c}",
  "where": {
