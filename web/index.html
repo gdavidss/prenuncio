@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en" data-story-version="4">
+<html lang="en" data-story-version="6">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -28,7 +28,15 @@
 (function () {
   var root = document.documentElement, q = new URLSearchParams(location.search).get("story"), seen = null;
   try { seen = localStorage.getItem("story"); } catch (e) {}
-  if (q === "1" || (q !== "0" && location.hash.length < 2 && seen !== root.dataset.storyVersion)) root.dataset.story = root.dataset.has = "";
+  if (q === "1" || (q !== "0" && location.hash.length < 2 && seen !== root.dataset.storyVersion)) {
+    root.dataset.story = root.dataset.has = "";
+    // the story's motion runs on GSAP (vendor/gsap.min.js, the core alone). Only a visit that is told the story asks
+    // for it, here, so it is on its way before anything else and never holds the first line.
+    var s = document.createElement("script");
+    s.src = "vendor/gsap.min.js"; s.async = true; s.dataset.gsap = "";
+    s.onerror = function () { s.dataset.failed = "1"; };
+    document.head.appendChild(s);
+  }
 })();
 </script>
 <link rel="preconnect" href="https://unpkg.com">
@@ -37,7 +45,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700;800&family=Barlow:wght@400;500;600&display=swap">
 <link rel="stylesheet" href="style.css">
-<link rel="preload" href="fonts/mcbr-oficina-v3-display-bold.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="fonts/mcbr-oficina-v3-display-bold.woff2?v=g3" as="font" type="font/woff2" crossorigin>
 </head>
 <body>
 <header id="top">

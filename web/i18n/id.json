@@ -7,7 +7,7 @@
   "line2": "Kami membuatnya agar penegakan hukum tiba sebelum hutan dibuka.",
   "metric": "Skor adalah rata-rata {b0} sampai {b1}.",
   "model": "Peta memakai model yang memimpin benchmark, saat ini {name}, yang menggabungkan gradient boosting dan jaringan U-Net. Hutan dibagi menjadi petak {m} meter, yaitu sel, dan model memberi tiap sel peluang deforestasi pada tahun berikutnya.",
-  "open": "Kode, data, dan benchmark terbuka. Buat model yang lebih baik, dan model itu menggantikan model kami.",
+  "open": "Kode, data, dan benchmark terbuka. Siapa pun bisa mengirimkan model.",
   "org": "Sebuah inisiatif {org}.",
   "tested": "Untuk mengujinya, kami menyembunyikan satu tahun dari model dan meminta prakiraannya. Pada {y}, {hit} dari setiap {of} tempat yang ditunjuknya benar-benar dibuka."
  },
@@ -462,7 +462,7 @@
   "model": "Kami melatih sebuah model AI untuk menghitung peluang tiap sel dibuka pada tahun berikutnya.",
   "moreKm": 128297,
   "next": "Lanjut",
-  "open": "Kode dan benchmark terbuka. Buat model yang lebih baik, dan model itu menggantikan model kami.",
+  "open": "Kode dan benchmark terbuka. Siapa pun bisa mengirimkan model.",
   "proof": "Kami menyembunyikan {y} dari model dan meminta prakiraannya. Dari tiap {of} tempat yang ditunjuknya, {hit} dibuka.",
   "sectors": "Di Wilayah, prakiraan dijumlahkan per negara bagian, kotamadya, tanah adat, atau kawasan konservasi.",
   "sources": "Model belajar dari {n} sumber publik, dari citra satelit sampai izin pembukaan hutan.",

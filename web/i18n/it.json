@@ -7,7 +7,7 @@
   "line2": "Lo abbiamo costruito perché i controlli arrivino prima del disboscamento.",
   "metric": "Il punteggio è la media dal {b0} al {b1}.",
   "model": "La mappa usa il modello in testa al benchmark, oggi {name}, che combina gradient boosting e una rete U-Net. La foresta è divisa in quadrati di {m} metri, le celle, e il modello dà a ciascuna la sua probabilità di disboscamento nell'anno successivo.",
-  "open": "Il codice, i dati e il benchmark sono aperti. Chi fa un modello migliore sostituisce il nostro.",
+  "open": "Il codice, i dati e il benchmark sono aperti. Chiunque può inviare un modello.",
   "org": "Un'iniziativa del {org}.",
   "tested": "Per provarlo abbiamo nascosto un anno al modello e chiesto la sua previsione. Nel {y}, su {of} luoghi che ha indicato, {hit} sono stati disboscati."
  },
@@ -493,7 +493,7 @@
   "model": "Abbiamo addestrato un modello di IA per calcolare la probabilità che ogni cella venga disboscata nell'anno successivo.",
   "moreKm": 131957,
   "next": "Avanti",
-  "open": "Il codice e il benchmark sono aperti. Chi fa un modello migliore sostituisce il nostro.",
+  "open": "Il codice e il benchmark sono aperti. Chiunque può inviare un modello.",
   "proof": "Abbiamo nascosto il {y} al modello e chiesto la sua previsione. Su {of} luoghi indicati, {hit} sono stati disboscati.",
   "sectors": "In Settori, la previsione è sommata per stato, comune, terra indigena o unità di conservazione.",
   "sources": {

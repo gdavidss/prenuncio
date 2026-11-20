@@ -140,7 +140,7 @@ The actions view shows what measured enforcement accounts for. It has no level a
 
 The kinds of sector stand under the modes. When the window has the height they are a list, one to a line; in a short window they are one row that never wraps, never under 13 px: its gaps tighten first, then it scrolls. With the people of a land in the dock the list stays and the photograph gives way. Ranking is not a mode and is never on the modes' row. It goes with the kinds, after the last one, in their size and colour, with a small list glyph before the word; on a phone it is the glyph alone at the end of the row. The people's dock stops 16 px or more under the panel, wherever the panel ends, and the photograph gets smaller, whole, before anything meets.
 
-The wheel, the + and − and the double click zoom through one easing. A notch of a mouse wheel is half a level, a pixel of trackpad scroll 0.005 of a level, a trackpad pinch four times that. The zoom follows its target with a time constant of 75 ms about the point under the pointer; the layers are scaled during the gesture and drawn once when it settles. Nothing the wheel says is dropped.
+The wheel, the + and − and the double click zoom through one easing. A notch of a mouse wheel is half a level, a pixel of trackpad scroll 0.005 of a level, a trackpad pinch four times that. The zoom follows its target with a time constant of 65 ms, on the clock and not on the count of frames, about the point under the pointer; the layers are scaled during the gesture and drawn once when it settles. Nothing the wheel says is dropped.
 
 ## The cell under the pointer
 
@@ -153,3 +153,6 @@ When the stage changes, nothing is drawn twice. The timeline travels between its
 ## The phone's sheet
 
 The key's scale and the modes go across the screen, from one page padding to the other. The bulletin's sheet stays as tall as the finger leaves it, between its rest and the header; let go under its rest it settles there, and a flick or a tap on the grip takes it up whole or back down. The height is kept while the page is open, the plot is drawn for it and the Amazon takes the middle of what is left. Only a tap on the plot itself (or on a people's photograph) takes the sheet up; its words and edges do nothing, and a drag is never a tap. When the ranked list or the priority list is open it has the sheet's place whole: nothing of the bulletin, not even its grip, shows or can be reached until the list is closed, and then it returns at the height it had.
+
+## MCBR attribution — 2026-11-19
+The institutional signature uses `web/img/mcbr.svg`: approved Vale 02 shoulder only, preserving the existing red field, transparent person, full three-line name and horizontal placement. This replaces the older raster attribution only. Keep Prenúncio’s forest mark and palette. Oficina’s lowercase g has a repaired descender join; other lettering remains unchanged.

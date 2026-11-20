@@ -15,6 +15,7 @@ import pandas as pd
 import rasterio
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
+from api_benchmark import payload as benchmark_payload  # noqa: E402
 from az import GRID, ROOT  # noqa: E402
 
 WEB, OUT, BASE = ROOT / "web/data", ROOT / "web/api/v1", "https://prenuncio.com/api/v1"
@@ -152,7 +153,7 @@ put("priority.json", PRIO, "The 500 blocks of 5 km ranked highest for 2027, with
 shutil.copy(WEB / "priority.csv", OUT / "priority.csv")
 put("enforcement-effect.json", ACT, "Clearing observed against clearing implied had IBAMA enforcement stayed at its 2021 to 2022 level, by semester, with the action series. A floor, not a causal estimate.")
 put("permits.json", PERMITS, "Clearing permits (SINAFLOR authorisations of vegetation suppression, IBAMA open data) inside the grid: dates, point, hectares, purpose, municipality. No holder names or tax numbers.")
-put("benchmark.json", {"leaderboard": json.load(open(ROOT / "benchmark/leaderboard.json")), "scorer": "https://github.com/gdavidss/prenuncio/tree/main/benchmark"}, "The open benchmark's leaderboard.")
+put("benchmark.json", benchmark_payload(), "The open benchmark's leaderboard.")
 put("cells/grid.json", {"west": G["west"], "north": G["north"], "cell_degrees": G["cell"], "rows": G["rows"], "cols": G["cols"], "tile": TILE, "tiles": tiles,
                         "decode": "chance = (byte / 255) ** 2; byte 0 = not forest; row = floor((north - lat) / cell_degrees), col = floor((lon - west) / cell_degrees)",
                         "tile_url": f"{BASE}/cells/2027/{{floor(row/100)}}_{{floor(col/100)}}.bin", "tile_layout": "row-major uint8, 100 columns per row (fewer in the last column and row of tiles); a missing tile means no forest",

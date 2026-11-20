@@ -7,7 +7,7 @@
   "line2": "Denetim ormansızlaşmadan önce varsın diye yaptık.",
   "metric": "Puan, {b0} ile {b1} arasındaki yılların ortalamasıdır.",
   "model": "Harita, benchmark'ta önde olan modeli kullanır; bugün bu {name} (gradient boosting ve U-Net ağının birleşimi). Orman {m} metrelik karelere, yani hücrelere bölünür ve model her birine gelecek yıl ormansızlaşma olasılığını verir.",
-  "open": "Kod, veri ve benchmark açık. Daha iyi bir model yapan bizimkinin yerini alır.",
+  "open": "Kod, veri ve benchmark açık. Herkes bir model gönderebilir.",
   "org": "{org} girişimidir.",
   "tested": "Sınamak için bir yılı modelden sakladık ve tahminini istedik. {y} yılında işaret ettiği her {of} yerden {hit} tanesi ormansızlaştı."
  },
@@ -484,7 +484,7 @@
   "model": "Her hücrenin gelecek yıl ormansızlaşma olasılığını hesaplaması için bir yapay zekâ modeli eğittik.",
   "moreKm": 131957,
   "next": "İleri",
-  "open": "Kod ve benchmark açık. Daha iyi bir model yapan bizimkinin yerini alır.",
+  "open": "Kod ve benchmark açık. Herkes bir model gönderebilir.",
   "proof": "{y} yılını modelden sakladık ve tahminini istedik. İşaret ettiği her {of} yerden {hit} tanesi ormansızlaştı.",
   "sectors": "Bölgeler modunda tahmin eyalete, belediyeye, yerli toprağına veya koruma alanına göre toplanır.",
   "sources": "Model, uydu görüntülerinden kesim izinlerine, kamuya açık {n} kaynaktan öğreniyor.",

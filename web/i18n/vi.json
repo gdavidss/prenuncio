@@ -7,7 +7,7 @@
   "line2": "Chúng tôi làm ra nó để lực lượng kiểm tra đến trước khi rừng bị phá.",
   "metric": "Điểm là trung bình các năm từ {b0} đến {b1}.",
   "model": "Bản đồ dùng mô hình đứng đầu benchmark, hiện là {name}, kết hợp gradient boosting và mạng U-Net. Rừng được chia thành các ô vuông cạnh {m} mét, gọi là ô, và mô hình cho mỗi ô khả năng bị phá trong năm tới.",
-  "open": "Mã nguồn, dữ liệu và benchmark đều mở. Ai làm được mô hình tốt hơn, mô hình đó sẽ thay mô hình của chúng tôi.",
+  "open": "Mã nguồn, dữ liệu và benchmark đều mở. Ai cũng có thể gửi mô hình.",
   "org": "Một sáng kiến của {org}.",
   "tested": "Để kiểm tra, chúng tôi giấu một năm khỏi mô hình và yêu cầu nó dự báo. Năm {y}, cứ {of} nơi nó chỉ ra thì {hit} nơi đã bị phá."
  },
@@ -485,7 +485,7 @@
   "model": "Chúng tôi huấn luyện một mô hình AI để tính khả năng mỗi ô bị phá trong năm tới.",
   "moreKm": 100400,
   "next": "Tiếp",
-  "open": "Mã nguồn và benchmark đều mở. Ai làm được mô hình tốt hơn, nó sẽ thay mô hình của chúng tôi.",
+  "open": "Mã nguồn và benchmark đều mở. Ai cũng có thể gửi mô hình.",
   "proof": "Chúng tôi giấu năm {y} khỏi mô hình và yêu cầu dự báo. Cứ {of} nơi nó chỉ ra thì {hit} nơi đã bị phá.",
   "sectors": "Trong Khu vực, dự báo được cộng theo bang, đô thị, đất bản địa hoặc khu bảo tồn.",
   "sources": "Mô hình học từ {n} nguồn công khai, từ ảnh vệ tinh đến giấy phép phá rừng.",

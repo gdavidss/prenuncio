@@ -6,7 +6,7 @@ A public test for models that forecast where the Brazilian Legal Amazon will be 
 
 On 31 July of year T-1, give every 500 m cell of the Legal Amazon a number that ranks it by how much of it will be cleared in PRODES year T, which runs from 1 August of T-1 to 31 July of T. The outcome is INPE's PRODES map of that year. The scored years are 2022 to 2025. 2026 is scored apart, because INPE has mapped it for its priority scenes only.
 
-A forecast for 2027 can be registered until 31 December 2026 and is scored when the map exists. Nobody can leak an outcome that does not exist yet, so this live track is the test that counts.
+A forecast for 2027 can be registered until 31 December 2026 and is scored when the map exists. The main live track uses the July cutoff below. Forecasts using later information or registered after the deadline are listed separately.
 
 ## The score
 

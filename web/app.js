@@ -80,7 +80,7 @@ const ras = F => (LITE ? { cols: Math.ceil(F.cols / 2), rows: Math.ceil(F.rows /
 const MEM = { decode: 0 };  // the largest picture decoded so far, in pixels (for the test's budget)
 const t = () => T[lang];
 const loc = () => LANGS[lang][1];
-window.prenuncio = { get zoom() { return map.getZoom(); }, get zooming() { return ZOOM.to != null; }, get mapped() { return veil.mapped ? veil.amt : 0; }, lite: LITE, mem: () => ({ decodeMP: MEM.decode / 1e6, canvasMP: [...document.querySelectorAll("canvas")].reduce((x, c) => x + c.width * c.height, 0) / 1e6 }), like: async (a, l) => likeArea(a, (await loadLang(l))?.like), country: c => COUNTRY[c] ?? null, pick: id => select(id), langs: Object.keys(LANGS), step: async id => classOf((await sectors(S.kind)).byId.get(String(id))) };  // (for the test)
+window.prenuncio = { get zoom() { return map.getZoom(); }, get zooming() { return ZOOM.to != null; }, get mapped() { return veil.mapped ? veil.amt : 0; }, get story() { return STORY.tl ? { t: STORY.tl.time(), rest: STORY.rest, at: sAt, want: STORY.want, ...FX } : null; }, lite: LITE, mem: () => ({ decodeMP: MEM.decode / 1e6, canvasMP: [...document.querySelectorAll("canvas")].reduce((x, c) => x + c.width * c.height, 0) / 1e6 }), like: async (a, l) => likeArea(a, (await loadLang(l))?.like), country: c => COUNTRY[c] ?? null, pick: id => select(id), langs: Object.keys(LANGS), step: async id => classOf((await sectors(S.kind)).byId.get(String(id))) };  // (for the test)
 const fmt = (x, d = 0) => x.toLocaleString(loc(), { maximumFractionDigits: d, minimumFractionDigits: d });
 const km = x => fmt(x, x < 9.95 ? 1 : 0);
 const round = (x, n) => { const p = 10 ** (Math.floor(Math.log10(x)) - n + 1); return Math.round(x / p) * p; };
@@ -479,6 +479,7 @@ function limit() {
 let keeping = false;
 let holdT = 0;
 function hold() {
+  limit();  // (the way back to the whole map is lit or dimmed the moment the map has stopped; only the pulling back waits)
   clearTimeout(holdT);
   holdT = setTimeout(held, 260);  // only once the hand has stopped: nothing is refitted or pulled back in the middle of a zoom or a drag
 }
@@ -507,9 +508,9 @@ map.on("moveend", hold);
 // point under the pointer. During the gesture the layers are only scaled, as in a pinch; they are drawn again
 // once, when it settles. Nothing is dropped: a notch of a mouse wheel is half a level, a hand's width of two
 // fingers on a trackpad about two, a pinch on a trackpad four times as strong.
-const ZOOM = { per: 0.005, pinch: 0.02, tau: 75, to: null, at: null, t: 0, raf: 0 };
+const ZOOM = { per: 0.005, pinch: 0.02, tau: 65, to: null, at: null, t: 0, raf: 0 };
 function zoomStep(now) {
-  const z = map.getZoom(), dt = Math.max(0, Math.min(34, now - ZOOM.t)), gap = ZOOM.to - z, done = Math.abs(gap) < 0.01;
+  const z = map.getZoom(), dt = Math.max(0, Math.min(100, now - ZOOM.t)), gap = ZOOM.to - z, done = Math.abs(gap) < 0.01;
   ZOOM.t = now;
   const nz = done ? ZOOM.to : z + gap * (1 - Math.exp(-dt / ZOOM.tau)), half = map.getSize().divideBy(2);
   map._move(map.unproject(map.project(ZOOM.ll, nz).subtract(ZOOM.at.subtract(half)), nz), nz, { pinch: true, round: false });  // the place under the pointer is held exactly: nothing adds up from frame to frame  // (as a pinch: the layers scale, nothing is redrawn)
@@ -813,7 +814,7 @@ const GridLayer = L.Renderer.extend({
           if (lv.mx[j] < th) continue;
           const k = (lv.k[j] & 15) - 1, on = k && k >= min;
           if (shown && lv.clr && lv.clr[j]) out[i] = dark(on ? k : 0, amt * Math.min(1, 0.55 + 1.8 * Math.sqrt(lv.clr[j] / 255)));
-          else if (on) out[i] = th && lv.mx[j] < th + soft ? ((PCOL[k] & 0xffffff) | ((255 * (lv.mx[j] - th + 1) / soft) << 24)) >>> 0 : PCOL[k];  // the edge of the stain is soft
+          else if (on) out[i] = th && lv.mx[j] < th + soft ? ((PCOL[k] & 0xffffff) | (Math.min(255, 255 * (lv.mx[j] - th + 1) / soft) << 24)) >>> 0 : PCOL[k];  // the edge of the stain is soft
           else if (min && (lv.k[j] >> 4) >= min) out[i] = faint[min];
         }
       }
@@ -1349,15 +1350,15 @@ new ResizeObserver(() => chart()).observe($("chart"));
 // ---------- the swap. The box that grows takes its place on the stage at once and is drawn out from the
 // dock; the one that shrinks is drawn down to its dock and only then laid out there. So what moves is always
 // the large drawing, scaled, and nothing is laid out or painted again while it moves.
-const ease = x => (x < 0.5 ? 4 * x * x * x : 1 - (-2 * x + 2) ** 3 / 2);
+const ease = x => (x < 0.5 ? 4 * x * x * x : 1 - (-2 * x + 2) ** 3 / 2), easeOut = x => 1 - (1 - x) ** 3, easeIn = x => x * x * x;
 // A box drawn between its place on the stage (big) and its place in the dock (small). The frame takes every
 // rect in between; its rule is an outline on the box's ::after, kept at two pixels while the box is scaled. The
 // contents keep their proportions inside it: ref is where one point of them sits on the page at each end, s their
 // scale in the dock.
-function morph(box, big, small, ref, s, down, ms) {
+function morph(box, big, small, ref, s, down, ms, ez = ease) {  // ez: the easing of the way, from where it starts (0) to where it ends (1)
   const inner = box.firstElementChild, I = rectOf(inner), N = 24, outer = [], inn = [], rim = [], opt = { duration: ms, easing: "linear", fill: "both" };
   for (let k = 0; k <= N; k++) {
-    const u = down ? ease(k / N) : 1 - ease(k / N), mid = (a, b) => a + (b - a) * u;
+    const u = down ? ez(k / N) : 1 - ez(k / N), mid = (a, b) => a + (b - a) * u;
     const x = mid(big.x, small.x), y = mid(big.y, small.y), sx = mid(big.width, small.width) / big.width, sy = mid(big.height, small.height) / big.height;
     const sc = mid(1, s), cx = mid(ref.big[0], ref.small[0]), cy = mid(ref.big[1], ref.small[1]), rule = 2 / Math.min(sx, sy);
     outer.push({ transform: `translate(${x - big.x}px, ${y - big.y}px) scale(${sx}, ${sy})` });
@@ -1394,7 +1395,7 @@ function mapShot(clear) {  // clear: the ground is left out, so what is under th
 // The map leaves the stage for its dock, or comes back. What moves is never the map itself but a picture of it:
 // the map is laid out and painted in its new place at once, under the picture, and shown only when the picture
 // has arrived and fades from over it. So nothing is cleared, resized or repainted in sight, in either direction.
-async function mapMove(dock, ms, arrived = () => {}, overlap = false) {  // overlap: the small picture fades out over the first moments (when nothing else is moving), instead of going at once  // arrived: called as soon as the picture is in its place, before it hands over to the map itself
+async function mapMove(dock, ms, arrived = () => {}, overlap = false, started = () => {}, ez = ease) {  // started: called on the frame the picture begins to move  // overlap: the small picture fades out over the first moments (when nothing else is moving), instead of going at once  // arrived: called as soon as the picture is in its place, before it hands over to the map itself
   const box = BOX.map, G = L.latLngBounds(AMAZON).getCenter(), frame = () => new Promise(r => requestAnimationFrame(r));
   const at = () => { const r = rectOf($("map")), p = map.latLngToContainerPoint(G); return [r.x + p.x, r.y + p.y]; };  // where the middle of the Amazon is on the page
   const boxed = (cv, r) => { const w = document.createElement("div"), i = document.createElement("div"); w.className = "box shot"; i.className = "in"; w.style.cssText = `left:${r.x}px;top:${r.y}px;width:${r.width}px;height:${r.height}px`; i.append(cv); w.append(i); $("app").append(w); return w; };
@@ -1403,7 +1404,11 @@ async function mapMove(dock, ms, arrived = () => {}, overlap = false) {  // over
     big = rectOf(box);
     const g0 = at(), z0 = map.getZoom(), [sm, pane] = dockOf(box), size = L.point(pane.width, pane.height), v = dockView(size);
     if (!pristine) stageView = { c: map.getCenter(), z: z0 };
-    if (ms) shot = boxed(mapShot(), big);
+    if (ms) {
+      shot = boxed(mapShot(), big); shot.style.zIndex = 9; box.style.visibility = "hidden";
+      const rise = (n = 0) => ("swap" in root.dataset || n > 20 ? (shot.style.zIndex = "") : requestAnimationFrame(() => rise(n + 1)));  // (it rises on the frame the pieces over it have gone)
+      rise();
+    }  // (for its first beat the picture lies under the panel, the list and the timeline, which fade from over it; then it rises over the timeline coming in)
     box.dataset.as = "dock";
     map.invalidateSize({ pan: false }); view(v);
     const p = map.project(G, v.z).subtract(map.project(v.c, v.z));
@@ -1421,31 +1426,42 @@ async function mapMove(dock, ms, arrived = () => {}, overlap = false) {  // over
     if (ms) { await frame(); await frame(); shot = boxed(mapShot(true), big); shot.style.background = "none"; }  // (the lines are drawn on the next frame; the picture is the Amazon alone, so the timeline going down to its dock shows under it)
   }
   if (!ms) return;
-  const anims = morph(shot, big, small, ref, s, dock, ms);
+  const anims = morph(shot, big, small, ref, s, dock, ms, ez);
+  started();
   if (first && overlap) { $("app").append(first); first.animate({ opacity: [1, 0] }, { duration: 200, fill: "forwards" }).finished.then(() => first.remove(), () => first.remove()); }
   else if (first) first.remove();  // (beside the timeline the moving picture starts where the small one was: one map at a time)
   await Promise.race([Promise.all(anims.map(a => a.finished)), new Promise(r => setTimeout(r, ms + 500))]).catch(() => {});  // (never left waiting on a drawing that was cut short)
   arrived();
   box.style.visibility = "";
-  await frame();
-  await shot.animate({ opacity: [1, 0] }, { duration: 180, easing: "linear" }).finished.catch(() => {});
+  await Promise.race([frame(), new Promise(r => setTimeout(r, 100))]);
+  await Promise.race([shot.animate({ opacity: [1, 0] }, { duration: 180, easing: "linear" }).finished, new Promise(r => setTimeout(r, 600))]).catch(() => {});  // (never left waiting on a frame or a fade that a busy machine did not give)
   shot.remove();
 }
-// The timeline goes to the stage or back to its dock in three beats, and nothing in it is ever scaled. What it
-// shows leaves, where it is (80 ms). An empty surface of its colour then travels from its old rectangle to its new
-// one while the map makes its own move (180 ms, easing out); the timeline is laid out in its new place meanwhile,
-// out of sight. When both have arrived what it shows comes in, already in its new layout (100 ms). So no word,
-// bar or band is ever drawn at a size it does not have, twice, or under the map.
+// The timeline goes to the stage or back to its dock, and nothing in it is ever scaled. Three beats that overlap,
+// so the stage is never empty: what the timeline shows fades where it is (80 ms) while the map already starts its
+// own move; then an empty surface of the timeline's colour travels from its old rectangle to its new one while the
+// map is still moving, and the timeline is laid out in its new place out of sight; when the surface lands, what
+// the timeline shows comes in, already in its new layout (100 ms), as the map finishes.
 async function chartMove(up, ms, alongside = () => null) {
   const cb = BOX.chart, inn = $("chartin");
   if (!ms) { cb.dataset.as = up ? "stage" : "dock"; chart(); await alongside(); return; }
   const from = rectOf(cb), bg0 = getComputedStyle(cb).backgroundColor;
   // (the map's panel, the list and the zoom leave with it, in the same beat: they come back on their own when the swap is over)
-  const side = [$("mappanel"), $("list"), document.querySelector(".leaflet-control-zoom")].filter(e => e && e.offsetParent).map(e => e.animate({ opacity: [+getComputedStyle(e).opacity, 0] }, { duration: 80, easing: "linear", fill: "forwards" }));
+  const sideEls = [$("mappanel"), $("list"), document.querySelector(".leaflet-control-zoom")].filter(e => e && e.offsetParent);
+  let begin; const begun = new Promise(r => (begin = r)), mapGoes = alongside(begin);  // the map is set going first, and what the timeline shows starts to fade on the frame the map starts to move
+  await Promise.race([begun, new Promise(r => setTimeout(r, 150))]);
+  const side = sideEls.map(e => e.animate({ opacity: [+getComputedStyle(e).opacity, 0] }, { duration: 80, easing: "linear", fill: "forwards" }));
   const out = inn.animate({ opacity: [1, 0] }, { duration: 80, easing: "linear", fill: "forwards" });
   await Promise.race([out.finished, new Promise(r => setTimeout(r, 300))]).catch(() => {});
   root.dataset.swap = front;
   for (const a of side) a.cancel();
+  if (up) {  // going up, the timeline is laid out on the stage at once, under the picture of the map, and comes in as the map draws back to its corner
+    out.cancel();
+    cb.dataset.as = "stage";
+    chart();
+    await Promise.all([Promise.race([inn.animate({ opacity: [0, 1] }, { duration: 100, easing: "linear" }).finished, new Promise(r => setTimeout(r, 400))]).catch(() => {}), mapGoes]);
+    return;
+  }
   const sf = document.createElement("div");
   sf.className = "surface"; sf.setAttribute("aria-hidden", "true");
   sf.style.cssText = `position:absolute;left:${from.x}px;top:${from.y}px;width:${from.width}px;height:${from.height}px;z-index:38;background:${bg0};transform-origin:0 0;pointer-events:none`;
@@ -1454,26 +1470,24 @@ async function chartMove(up, ms, alongside = () => null) {
   cb.dataset.as = up ? "stage" : "dock";
   chart();
   const to = rectOf(cb), bg1 = getComputedStyle(cb).backgroundColor;
-  const move = sf.animate([{ transform: "none", backgroundColor: bg0 }, { transform: `translate(${to.x - from.x}px, ${to.y - from.y}px) scale(${to.width / from.width}, ${to.height / from.height})`, backgroundColor: bg1 }], { duration: ms, easing: "cubic-bezier(0.2, 0.7, 0.2, 1)", fill: "forwards" });
-  await Promise.all([Promise.race([move.finished, new Promise(r => setTimeout(r, ms + 400))]).catch(() => {}), alongside()]);
+  const move = sf.animate([{ transform: "none", backgroundColor: bg0 }, { transform: `translate(${to.x - from.x}px, ${to.y - from.y}px) scale(${to.width / from.width}, ${to.height / from.height})`, backgroundColor: bg1 }], { duration: Math.max(60, ms - 140), easing: "cubic-bezier(0.2, 0.7, 0.2, 1)", fill: "forwards" });
+  await Promise.race([move.finished, new Promise(r => setTimeout(r, ms + 400))]).catch(() => {});
   out.cancel();
   inn.style.opacity = "0";
   cb.style.visibility = "";
   sf.remove();
   inn.style.opacity = "";
-  await Promise.race([inn.animate({ opacity: [0, 1] }, { duration: 100, easing: "linear" }).finished, new Promise(r => setTimeout(r, 400))]).catch(() => {});
+  await Promise.all([Promise.race([inn.animate({ opacity: [0, 1] }, { duration: 100, easing: "linear" }).finished, new Promise(r => setTimeout(r, 400))]).catch(() => {}), mapGoes]);
 }
-// The swap of the map and the timeline: the timeline's surface and the map move together, while what the timeline shows is away.
+// The swap of the map and the timeline: the map and the timeline's surface move together, overlapping, so the stage is never empty.
 async function swap(to = front === "map" ? "chart" : "map") {
   if (swapping || to === front) return;
   if (narrow()) { front = to; place(); sheetAt(); refresh(); return; }  // a phone: the timeline's sheet goes up or down over the map, which stays where it is
   swapping = true;
   cellQuiet(); map.eachLayer(l => l.closeTooltip?.());  // no label rides the map into its dock
-  const ms = calm() ? 0 : 180;
+  const ms = calm() ? 0 : 240;
   front = to;
-  let mapDone = null;
-  await chartMove(to === "chart", ms, () => new Promise(r => { mapDone = mapMove(to === "chart", ms, r); if (!ms) mapDone.then(r); }));  // (what the timeline shows comes back as soon as the map is in its place)
-  await mapDone;
+  await chartMove(to === "chart", ms, started => mapMove(to === "chart", ms, undefined, false, started, to === "chart" ? easeIn : easeOut));  // (the map grows quickly from its corner and draws back slowly: the stage is never empty)
   root.dataset.front = panel || to;
   delete root.dataset.swap;
   swapping = false;
@@ -1685,7 +1699,15 @@ async function block(rank, fly = true, write = true) {
   for (const el of $("list-rows").querySelectorAll(".why")) el.remove();
   const el = $("list-rows").querySelector(`[data-b="${rank}"]`);
   if (el) { el.setAttribute("aria-current", "true"); el.setAttribute("aria-expanded", "true"); el.insertAdjacentHTML("afterend", reasons(PR, b)); el.parentNode.scrollIntoView({ block: "nearest" }); }
-  if (fly) { pristine = false; map.flyToBounds(L.latLngBounds(box).pad(3), { ...FIT(), maxZoom: 11, duration: calm() ? 0 : 0.6 }); }
+  if (fly) {
+    pristine = false;
+    // While the map flies in, what is painted over the ground (the cells, the lines, the sectors, the ring) would be
+    // stretched many times over between redraws: it steps aside and comes back, faded in, when the map has arrived.
+    const mc = map.getContainer();
+    mc.classList.add("flying");
+    map.once("moveend", () => requestAnimationFrame(() => mc.classList.remove("flying")));
+    map.flyToBounds(L.latLngBounds(box).pad(3), { ...FIT(), maxZoom: 11, duration: calm() ? 0 : 0.6 });
+  }
   if (write) link();
 }
 // the list's way out: the map goes back to its cells, or the ranking closes
@@ -1741,13 +1763,13 @@ document.addEventListener("click", () => langMenu(false));
 // About: a panel beside the map. What this is and who it is for, the model's figure, what the model is and how
 // it did, the benchmark as a bare table with the way in as a button, and that it gets things wrong. Every number
 // is read from data/story.json. `at` opens it on the figure or on the benchmark.
-const MODEL = [...(ST?.leaderboard?.rows || [])].sort((a, b) => a.rank - b.rank).find(r => r.kind === "model")?.model || ST?.model?.name || "prenuncio";  // the model on the map is the one that leads the benchmark, by its name there
+const MODEL = ST?.model?.name || "prenuncio"; // The model that generated the shipped forecast.
 const of5 = x => (Math.abs(x * 5 - Math.round(x * 5)) < 0.02 ? [Math.round(x * 5), 5] : [Math.round(x * 10), 10]);  // a share as so many in five, or in ten
 function bench() {
   const L_ = t().bench, B = ST.benchmark, pc = x => (x == null ? "" : pcOf(x, 1)), day = d => { const [y, m_, dd] = d.split("-").map(Number); return new Date(y, m_ - 1, dd).toLocaleDateString(loc(), { day: "numeric", month: "short", year: "numeric" }); };
   // until the file carries the table, the same rows from the benchmark's own figures
   const rows = ST.leaderboard?.rows || [{ rank: 1, model: MODEL, url: ST.links.leaderboard, cap5: B.today, unseen_2026: B.unseen_2026, by: "Prenúncio", kind: "model" }, { rank: 2, model: "last year", url: ST.links.benchmark, cap5: B.naive, by: "reference", kind: "reference" }];
-  const head = L_.head.map((h, i) => `<th${i === 2 || i === 3 ? ' class="n"' : ""}>${i === 3 ? ST.model.trained_on.last_outcome_year : h}</th>`).join("");
+  const head = L_.head.map((h, i) => `<th${i === 2 || i === 3 ? ' class="n"' : ""}>${i === 3 ? 2026 : h}</th>`).join("");
   return `<table class="bench"><thead><tr>${head}</tr></thead><tbody>${rows.map(r => `<tr${r.kind === "reference" ? ' class="ref"' : ""}><td>${r.rank}</td><td><a href="${esc(r.url)}" target="_blank" rel="noopener">${esc(r.kind === "reference" && L_.refName ? L_.refName : r.model)}</a></td><td class="n">${pc(r.cap5)}</td><td class="n">${pc(r.unseen_2026)}</td><td>${r.kind === "reference" ? L_.ref : esc(r.by)}</td><td>${r.date ? day(r.date) : ""}</td></tr>`).join("")}</tbody></table>`;
 }
 function about(at) {
@@ -1758,12 +1780,13 @@ function about(at) {
     + p(esc(A.model({ name: "\u0001", m: ST.forest.cell_m })).replace("\u0001", `<b>${esc(MODEL)}</b>`)) + p(esc(A.tested({ y: ST.check.year, hit, of })))
     + `<h3 id="about-benchmark">${esc(A.benchmark)}</h3>${bench()}<p class="metric">${esc(A.metric({ b0: ST.benchmark.years[0], b1: ST.benchmark.years.at(-1) }))}</p>` + p(esc(A.open))
     + `<p class="go"><a class="btn" href="${esc(ST.links.benchmark)}" target="_blank" rel="noopener">${esc(B.submit)}</a><a href="${esc(ST.links.repository)}" target="_blank" rel="noopener">${esc(B.repo)}</a></p>`
-    + `<p class="by">${esc(A.by({ name: "\u0001" })).replace("\u0001", `<a href="https://guidavid.com" target="_blank" rel="noopener">Gui Dávid</a>`)} ${esc(A.org({ org: "\u0002" })).replace("\u0002", `<a href="https://cibernetico.org" target="_blank" rel="noopener">Movimento Cibernético Brasileiro</a>`)}<a class="org" href="https://cibernetico.org" target="_blank" rel="noopener"><img src="img/mcbr.png" alt="Movimento Cibernético Brasileiro" width="131" height="48" loading="lazy"></a></p>`;
+    + `<p class="by">${esc(A.by({ name: "\u0001" })).replace("\u0001", `<a href="https://guidavid.com" target="_blank" rel="noopener">Gui Dávid</a>`)} ${esc(A.org({ org: "\u0002" })).replace("\u0002", `<a href="https://cibernetico.org" target="_blank" rel="noopener">Movimento Cibernético Brasileiro</a>`)}<a class="org" href="https://cibernetico.org" target="_blank" rel="noopener"><img src="img/mcbr.svg?v=02-original-lockup" alt="Movimento Cibernético Brasileiro" width="131" height="48" loading="lazy"></a></p>`;
 
   // in the story it is put together a piece at a time: the figure alone, then the benchmark alone, each entering as the other leaves
   const only = storyOn ? (at === "about-benchmark" ? "bench" : "fig") : "";
-  if (only) { if ($("about").dataset.only !== only) { $("about-body").classList.remove("in"); void $("about-body").offsetWidth; $("about-body").classList.add("in"); } $("about").dataset.only = only; } else { delete $("about").dataset.only; $("about-body").classList.remove("in"); }
-  stageOn("about");  // it takes the stage, and the map waits in its corner
+  if (only) $("about").dataset.only = only; else delete $("about").dataset.only;
+  if (storyOn) { if ($("api").open) $("api").close(); if (!$("about").open) $("about").show(); panel = "about"; root.dataset.front = "about"; }  // (in the story the stage is set by the story's own timeline, which also brings in what the panel shows)
+  else stageOn("about");  // it takes the stage, and the map waits in its corner
   if (storyOn) $("story-next").focus({ preventScroll: true });  // (opening takes the focus to the panel's X; in the story it belongs to the way on, so Enter and Space go on)
   figure();
   $("about").scrollTop = !only && at && $(at) ? $(at).offsetTop - $("about-bar").offsetHeight : 0;  // that part, right under the bar
@@ -1828,20 +1851,15 @@ const SCENES = [
   { id: "forestA" },
   { id: "lossA", loss: true, fx: "loss", extra: "years" },
   { id: "lossB", loss: true, extra: "years" },
-  { id: "forestB", fx: "mosaic" },                                                       // the cells come in once the loss is told, just before the model
+  { id: "forestB", fx: "dive" },                                                         // the cells come in once the loss is told, just before the model: a dive into them
   { id: "model", has: "legend", cells: FY, fx: "sweep" },                                  // the key, and the Cells tab
   { id: "proof", has: "legend", cells: CY, fx: "proof" },
   { id: "sources", has: "legend", cells: FY, about: "model-fig" },
   { id: "open", has: "legend", cells: FY, about: "about-benchmark" },
-  { id: "sectors", has: "legend sectors", cells: FY, mode: "sectors" },                    // the Sectors tab and the kinds
-  { id: "first", has: "legend sectors prio list", cells: FY, mode: "prio" },               // the Priorities tab and the list
-  { id: "ahead", has: "legend sectors prio list chart", cells: FY, mode: "prio" },         // the timeline in its dock
-  { id: "use", has: "legend sectors prio list chart nav", cells: FY },                     // the header's links and the zoom: the tool as it will be left
 ].filter(s => s.cells !== CY || (CY && CY !== FY && M.years[CY]?.flags500 && P?.years?.[CY]));
 let KIND0 = null;
 const INERT = () => [$("mappanel"), $("chartbox"), $("list"), $("story-btn"), $("about-btn"), $("api-btn"), $("menu-btn"), document.querySelector(".leaflet-control-zoom")];
-let sAt = 0, sRun = 0, storyShut = false;  // the step on screen; a count that tells a running effect it has been overtaken; whether the reader closed the list
-const wait = ms => new Promise(r => setTimeout(r, ms));
+let sAt = 0, storyShut = false;  // the step on screen; whether the reader closed the list
 // what each line says, from the data
 function storyWords(id) {
   const L_ = t().st, n0 = x => fmt(Math.round(x)), hist = ST.history, chk = ST.check, sum = hist.km2.reduce((a, b) => a + b, 0), [hit, of] = of5(chk.priority_blocks_that_lost_10ha);
@@ -1864,12 +1882,6 @@ function storyWords(id) {
       return (rise > 0 ? L_.ahead.rise : L_.ahead.flat)({ pct: fmt(rise), km: approx(hz.sums[3].p50), month: month(y, m_ - 1, { month: "long" }) });
     }
   }
-}
-// the years of clearing as small bars under the line: all of them up to `upTo`, the one being counted in ink
-function yearBars(upTo, all) {
-  const h = ST.history, W = 300, Hh = 56, n = h.years.length, pitch = W / n, max = Math.max(...h.km2), at = h.years.indexOf(upTo);
-  const bars = h.years.map((y, i) => { const hh = Math.max(1.5, (Hh - 2) * h.km2[i] / max); return `<rect class="${i > at ? "todo" : all || i < at ? "done" : "now"}" x="${(i * pitch + 1.5).toFixed(1)}" y="${(Hh - hh).toFixed(1)}" width="${(pitch - 3).toFixed(1)}" height="${hh.toFixed(1)}"/>`; }).join("");
-  return `<div class="years"><svg viewBox="0 0 ${W} ${Hh}" width="${W}" height="${Hh}" aria-hidden="true">${bars}</svg><p>${all ? `${h.years[0]}<span>${h.years.at(-1)}</span>` : `<b>${upTo}</b> ${fmt(h.km2[Math.max(0, at)])} km²`}</p></div>`;
 }
 // ---------- the figure of the model, in About. The nine public sources are nine layers of the same territory:
 // a stack of thin planes seen from above and to one side, each the Amazon's outline with a hint of what that
@@ -1990,11 +2002,15 @@ function figure() {
 addEventListener("resize", () => { if ($("about").open) { clearTimeout(FIG.t); FIG.t = setTimeout(figure, 150); } });
 $("about").addEventListener("close", () => cancelAnimationFrame(FIG.raf));
 // the line, and under it, while the years run, their small bars. The way on and the way back are arrows.
+const BARS = { el: null, rects: null, o: [], lab: null };
 function storyText() {
   const sc = SCENES[sAt], L_ = t().st, last = sAt === SCENES.length - 1;
-  $("story-line").textContent = storyWords(sc.id).replaceAll(" km²", "\u00a0km²");
-  $("story-extra").innerHTML = sc.extra === "years" ? yearBars(ST.history.years.at(-1), sc.id === "lossB") : "";
-  $("story-line").classList.remove("in"); void $("story-line").offsetWidth; $("story-line").classList.add("in");  // the line arrives again
+  $("story-line").textContent = storyWords(sc.id).replaceAll(" km²", " km²");
+  if (sc.extra === "years") {
+    if (!BARS.el?.isConnected) { $("story-extra").innerHTML = yearBars(); BARS.el = $("story-extra").firstElementChild; BARS.rects = [...BARS.el.querySelectorAll("rect")]; BARS.o = []; }
+    BARS.lab = null;
+    barsAt();
+  } else if (BARS.el || $("story-extra").firstChild) { $("story-extra").innerHTML = ""; BARS.el = null; }
   for (const [id, label] of [["story-next", last ? L_.done : L_.next], ["story-back", L_.back]]) { $(id).setAttribute("aria-label", label); $(id).title = label; }
   $("story-back").disabled = sAt === 0;
   $("story-marks").innerHTML = SCENES.map((_, i) => `<li class="${i < sAt ? "done" : i === sAt ? "now" : ""}"></li>`).join("");
@@ -2005,9 +2021,23 @@ function storyText() {
 const capAt = () => { if (storyOn && narrow()) root.style.setProperty("--cap", (touring() ? $("story").offsetHeight : 0) + "px"); else root.style.removeProperty("--cap"); };  // (at the last step the sheet rests where the tool has it, and the caption lies over it)
 new ResizeObserver(() => capAt()).observe($("story"));  // (the caption may wrap again when its type arrives)
 addEventListener("resize", capAt);
-// the clearing mapped year by year (the f<year>.png masks), counted per block of 2 km in a worker and drawn dark
-// on the forest: the first n years of them
-const LOSS = { f: 4, busy: null, years: R.hyears.filter(y => M.years[y]?.flags500), got: {}, shown: -1 };
+
+// ---------- the story's motion. All of it is one GSAP timeline, paused: STORY.tl. It holds a child timeline a
+// step, laid end to end, and a label where each step rests (the label has the step's id). The way on plays the
+// playhead to the next label, the way back plays it in reverse to the one before; a press that comes while it is
+// still on its way is never dropped: what is left of the steps behind is run fast, and the last one at its own pace.
+// A child begins by letting the old line go, then a call makes the page match the step (apply), then what the step
+// brings comes in. What is drawn on a canvas (the years, the clearing, the dive into the cells, the red, the yellow)
+// is drawn from a number the timeline tweens, FX, read on every tick: nothing here counts frames or waits on a timer.
+const FX = { yt: 0, lossO: 0, u: 0, x: 0, amt: 0, v: 0, so: 0 };  // yt: the clock of the years that run; lossO: the clearing's opacity; u: the dive; x: the red's spread; amt: the yellow; v, so: the picture of the map on its way to the corner, and its opacity
+const STORY = { tl: null, drv: null, mm: null, rest: [0], enter: [0], want: 0, dir: 1, calm: false };
+const smooth = x => { const u = Math.max(0, Math.min(1, x)); return u * u * (3 - 2 * u); };
+
+// the clearing mapped year by year (the f<year>.png masks), counted per block of 2 km in a worker and drawn red on
+// the forest. A year is kept only where it has clearing, on rows even in Mercator, as the sheet is drawn; the sheet
+// shows the years that have run in full and the year that is running part of the way, so the red comes in
+// continuously and can be run backward.
+const LOSS = { f: 4, busy: null, years: R.hyears.filter(y => M.years[y]?.flags500), sp: {}, n: 0, part: -1 };
 async function decodeLoss(url, cols, rows, f) {
   const bmp = await createImageBitmap(await (await fetch(url)).blob(), { colorSpaceConversion: "none", premultiplyAlpha: "none" });
   const T = 1024, cx = new OffscreenCanvas(T, T).getContext("2d", { willReadFrequently: true }), c2 = Math.ceil(cols / f), out = new Uint8Array(c2 * Math.ceil(rows / f));
@@ -2021,6 +2051,20 @@ async function decodeLoss(url, cols, rows, f) {
   if (bmp.close) bmp.close();
   return out;
 }
+const lossDim = () => { const F = M.years[FY]?.flags500 && ras(M.years[FY].flags500); return F && { c: Math.ceil(F.cols / LOSS.f), r: Math.ceil(F.rows / LOSS.f), lat: F.cell * LOSS.f }; };
+function lossYear(y, a) {
+  const { c, r, lat } = lossDim();
+  if (!LOSS.rowOf) {  // which row of the grid each row of the sheet takes (see toMercatorRows)
+    const y0 = mercY(M.north), y1 = mercY(M.north - r * lat);
+    LOSS.rowOf = Int32Array.from({ length: r }, (_, j) => Math.min(r - 1, Math.max(0, Math.floor((M.north - (2 * Math.atan(Math.exp(y0 + (j + 0.5) / r * (y1 - y0))) - Math.PI / 2) * 180 / Math.PI) / lat))));
+  }
+  let n = 0;
+  for (let j = 0; j < r; j++) for (let x = 0, o = LOSS.rowOf[j] * c; x < c; x++) n += a[o + x] > 0;
+  const idx = new Uint32Array(n), cnt = new Uint8Array(n);
+  for (let j = 0, k = 0; j < r; j++) for (let x = 0, o = LOSS.rowOf[j] * c; x < c; x++) if (a[o + x]) { idx[k] = j * c + x; cnt[k++] = a[o + x]; }
+  LOSS.sp[y] = { idx, cnt };
+  if (LOSS.sheet) { LOSS.n = 0; LOSS.part = -1; LOSS.acc.fill(0); LOSS.px.fill(0); LOSS.stale = true; }  // (a year that comes late: the sheet is counted again from nothing)
+}
 function lossLoad() {
   const F = M.years[FY]?.flags500 && ras(M.years[FY].flags500);
   if (LOSS.worker || !F || !LOSS.years.length) return;
@@ -2030,93 +2074,241 @@ function lossLoad() {
   setTimeout(free, 20000);
   try {
     LOSS.worker = new Worker(URL.createObjectURL(new Blob([`onmessage = async e => { for (const [y, url] of e.data.urls) { let a = null; try { a = await (${decodeLoss})(url, ...e.data.dim); } catch (err) {} postMessage({ y, a }, a ? [a.buffer] : []); } };`], { type: "text/javascript" })));
-    LOSS.worker.onmessage = e => { if (e.data.a) { LOSS.got[e.data.y] = e.data.a; if (storyOn && SCENES[sAt].loss && LOSS.shown >= LOSS.years.indexOf(e.data.y) + 1) lossShow(LOSS.shown, true); } if (LOSS.years.every(y => y in LOSS.got || e.data.y === y) && e.data.y === LOSS.years.at(-1)) { LOSS.worker.terminate(); free(); } };
+    LOSS.worker.onmessage = e => { if (e.data.a && storyOn) { lossYear(e.data.y, e.data.a); lossDraw(); } if (e.data.y === LOSS.years.at(-1)) { LOSS.worker.terminate(); free(); } };
     LOSS.worker.onerror = free;
     const w = LOSS.worker;
     baseReady.then(() => { if (LOSS.worker === w) w.postMessage({ urls: LOSS.years.map(y => [y, new URL(`data/f${y}${F.suf}.png`, location.href).href]), dim: [F.cols, F.rows, LOSS.f] }); });  // (after the base map, which the first lines need)
   } catch (err) { free(); /* no worker: the bars run without the map */ }
 }
-function lossShow(n, again) {
-  const F = M.years[FY]?.flags500 && ras(M.years[FY].flags500);
-  if (!F || (n === LOSS.shown && !again)) return;
-  LOSS.shown = n;
-  const f = LOSS.f, c = Math.ceil(F.cols / f), r = Math.ceil(F.rows / f);
-  if (!LOSS.sheet) { if (!n) return; LOSS.sheet = sheet(c, r, BOUNDS, "paint"); LOSS.sheet.layer.getElement().classList.add("loss"); }
-  if (n) {
-    const sum = new Uint16Array(c * r), px = new Uint32Array(c * r), lut = Uint32Array.from({ length: 8 * f * f + 1 }, (_, k) => (k ? rgba(228, 0, 43, Math.min(1, 0.35 + 0.9 * Math.sqrt(k / (f * f)))) : 0));  // what fell is red: the story has no chances on the map yet
-    for (const y of LOSS.years.slice(0, n)) { const a = LOSS.got[y]; if (a) for (let i = 0; i < a.length; i++) sum[i] += a[i]; }
-    for (let i = 0; i < px.length; i++) px[i] = lut[sum[i]];
-    LOSS.sheet.cx.putImageData(toMercatorRows(px, c, r, F.cell * f), 0, 0);
-  }
-  LOSS.sheet.layer.setOpacity(n ? 1 : 0);
+// The years on the story's clock: those before the first mapped one pass quickly, each mapped year takes longer,
+// and a short tail lets the last bar settle. p is how many years have run, as a real number.
+const YEARS = ST && (() => { const d = ST.history.years.map(y => (y < (LOSS.years[0] ?? Infinity) ? 0.09 : 0.43)), end = []; let s = 0; for (const x of d) end.push(s += x); return { d, end, run: s, n: d.length, tail: 0.3 }; })();
+const pOf = t_ => { const Y = YEARS; if (t_ >= Y.run) return Y.n + 0.5 * Math.min(1, (t_ - Y.run) / Y.tail); let i = 0; while (Y.end[i] <= t_) i++; return i + (t_ - (Y.end[i] - Y.d[i])) / Y.d[i]; };
+// the years of clearing as small bars under the line: a bar is faint until its year comes, full while it is counted, and then settles
+function yearBars() {
+  const h = ST.history, W = 300, Hh = 56, n = h.years.length, pitch = W / n, max = Math.max(...h.km2);
+  const bars = h.km2.map((v, i) => { const hh = Math.max(1.5, (Hh - 2) * v / max); return `<rect x="${(i * pitch + 1.5).toFixed(1)}" y="${(Hh - hh).toFixed(1)}" width="${(pitch - 3).toFixed(1)}" height="${hh.toFixed(1)}" style="opacity:0.07"/>`; }).join("");
+  return `<div class="years"><svg viewBox="0 0 ${W} ${Hh}" width="${W}" height="${Hh}" aria-hidden="true">${bars}</svg><p></p></div>`;
 }
+function barsAt() {
+  if (!BARS.el) return;
+  const h = ST.history, n = h.years.length, p = pOf(FX.yt), all = SCENES[sAt].fx !== "loss";
+  for (let i = 0; i < n; i++) {
+    const x = p - i, o = Math.round(1000 * (x <= 0 ? 0.07 : x < 0.35 ? 0.07 + 0.93 * x / 0.35 : x <= 1 ? 1 : x < 1.5 ? 1 - 0.78 * (x - 1) / 0.5 : 0.22)) / 1000;
+    if (BARS.o[i] !== o) { BARS.rects[i].style.opacity = o; BARS.o[i] = o; }
+  }
+  const at = Math.max(0, Math.min(n - 1, Math.ceil(p) - 1)), lab = all ? "all" : at;
+  if (BARS.lab !== lab) { BARS.lab = lab; BARS.el.lastElementChild.innerHTML = all ? `${h.years[0]}<span>${h.years.at(-1)}</span>` : `<b>${h.years[at]}</b> ${fmt(h.km2[at])} km²`; }  // (the one thing here that is counted, not drawn: the year's name)
+}
+function lossAt() {
+  const D = lossDim();
+  if (!D) return;
+  const h = ST.history, p = pOf(FX.yt), o = FX.lossO;
+  let pm = 0;
+  for (const y of LOSS.years) pm += Math.max(0, Math.min(1, p - h.years.indexOf(y)));  // how many of the mapped years have run
+  if (!LOSS.sheet) {
+    if (!(pm > 0 && o > 0)) return;
+    LOSS.sheet = sheet(D.c, D.r, BOUNDS, "paint");
+    LOSS.sheet.layer.getElement().classList.add("loss");
+    LOSS.img = LOSS.sheet.cx.createImageData(D.c, D.r); LOSS.px = new Uint32Array(LOSS.img.data.buffer); LOSS.acc = new Uint16Array(D.c * D.r);
+    LOSS.A = Float32Array.from({ length: LOSS.years.length * LOSS.f ** 2 + 1 }, (_, k) => (k ? Math.min(1, 0.35 + 0.9 * Math.sqrt(k / LOSS.f ** 2)) : 0));  // how strong the red is for so many cleared cells in a block
+    LOSS.n = 0; LOSS.part = -1;
+  }
+  const { px, acc, A } = LOSS, n = Math.min(LOSS.years.length, Math.floor(pm)), fr = pm - n, red = a => (a <= 0 ? 0 : ((a * 255) << 24 | 43 << 16 | 228) >>> 0);  // what fell is red: the story has no chances on the map yet
+  const settle = s => { for (let k = 0; k < s.idx.length; k++) px[s.idx[k]] = red(A[acc[s.idx[k]]]); };
+  let dirty = LOSS.stale;
+  LOSS.stale = false;
+  if (LOSS.part >= 0 && (LOSS.part !== n || !fr)) { const s = LOSS.sp[LOSS.years[LOSS.part]]; if (s) settle(s); LOSS.part = -1; dirty = true; }
+  while (LOSS.n < n) { const s = LOSS.sp[LOSS.years[LOSS.n++]]; if (s) { for (let k = 0; k < s.idx.length; k++) acc[s.idx[k]] += s.cnt[k]; settle(s); } dirty = true; }
+  while (LOSS.n > n) { const s = LOSS.sp[LOSS.years[--LOSS.n]]; if (s) { for (let k = 0; k < s.idx.length; k++) acc[s.idx[k]] -= s.cnt[k]; settle(s); } dirty = true; }
+  const s = fr > 0 && LOSS.sp[LOSS.years[n]];
+  if (s) { for (let k = 0; k < s.idx.length; k++) { const i = s.idx[k], a0 = A[acc[i]]; px[i] = red(a0 + (A[acc[i] + s.cnt[k]] - a0) * fr); } LOSS.part = n; dirty = true; }
+  if (dirty) LOSS.sheet.cx.putImageData(LOSS.img, 0, 0);
+  if (LOSS.o !== o) LOSS.sheet.layer.setOpacity(LOSS.o = o);
+}
+const lossDraw = () => { if (!storyOn) return; barsAt(); lossAt(); };
+
 // the year the story replays, kept light: only the far views of it, which is all a whole Amazon needs
 let lite = null, keep = null;
 const liteYear = () => (lite ||= loadProb(CY, ras(M.years[CY].flags500), true).then(g => ({ key: CY, prob: true, cell: ras(M.years[CY].flags500).cell, levels: g.levels.filter(l => l.f * ras(M.years[CY].flags500).cell > 0.02), stats: g.stats })));
 const gridOf = y => new Promise(done => { const look = () => (grid?.key === y && grid.prob ? done() : !storyOn ? 0 : setTimeout(look, 120)); look(); });
-// effects, each run once on the way forward and overtaken by the next step
-async function mosaic(my) {  // the forest as coarse squares that get finer: it is made of them
-  if (!baseCv) return;
-  const w = Math.round(M.cols / 8), h = Math.round(M.rows / 8), small = new OffscreenCanvas(w, h), tiny = new OffscreenCanvas(w, h), sh = sheet(w, h, BOUNDS, "paint");
-  small.getContext("2d").drawImage(baseCv, 0, 0, w, h);
-  sh.layer.getElement().classList.add("crisp", "base");
-  sh.cx.imageSmoothingEnabled = false;
-  for (const k of [30, 30, 21, 15, 10, 7, 5, 3, 2]) {
-    const tw = Math.ceil(w / k), th = Math.ceil(h / k), tx = tiny.getContext("2d");
-    tx.clearRect(0, 0, w, h); tx.drawImage(small, 0, 0, w, h, 0, 0, tw, th);
-    sh.cx.clearRect(0, 0, w, h); sh.cx.drawImage(tiny, 0, 0, tw, th, 0, 0, tw * k, th * k);
-    await wait(k > 20 ? 260 : 130);
-    if (my !== sRun) break;
+
+// ---------- the dive. "We divided the forest into squares of 500 metres": the picture goes down, in one eased
+// move, from the whole Amazon into a place on the frontier (the first of the priority list that has forest and
+// clearing side by side), until a cell is a square one can count, with a thin gap of the page's colour around it;
+// and it comes back up before the model's red arrives. The map itself does not move: what dives is a drawing of it,
+// on one canvas over the map, made at every tick from the tweened FX.u. It is a pure zoom about one point of the
+// screen, so everything flows outward from there and nothing ever turns back. From far the drawing is the base map
+// (1 km); as the cells grow past two pixels they come in as flat squares, one a cell of the 500 m grid, forest
+// where the model's grid has a forest cell; then the gaps. Squares and gaps are drawn as shapes, never as a
+// magnified picture, so nothing is blurred or pixelated at any size.
+const DIVE = { cv: null, uf: null, blocks: null };
+const PAL = [FOREST, [156, 196, 212], [216, 214, 184], [236, 229, 210]];  // forest, water, natural non-forest, cleared land (the base map's four)
+function diveTarget() {
+  const mid = L.latLngBounds(AMAZON).getCenter(), cand = DIVE.blocks || [];
+  if (!cand.length || !baseCv) return cand[0] ? L.latLng(cand[0].lat, cand[0].lon) : mid;
+  const w = Math.ceil(M.cols / 4), h = Math.ceil(M.rows / 4), sm = new OffscreenCanvas(w, h), sx = sm.getContext("2d", { willReadFrequently: true });
+  sx.drawImage(baseCv, 0, 0, w, h);
+  const d = sx.getImageData(0, 0, w, h).data, y0 = mercY(M.north), y1 = mercY(M.north - M.rows * M.cell);
+  for (const b of cand) {  // forest and clearing side by side: between half and nine tenths of what is around it is forest
+    const cx = Math.round((b.lon - M.west) / (M.cols * M.cell) * w), cy = Math.round((mercY(b.lat) - y0) / (y1 - y0) * h);
+    let f = 0, all = 0;
+    for (let y = cy - 4; y <= cy + 4; y++) for (let x = cx - 7; x <= cx + 7; x++) { if (x < 0 || y < 0 || x >= w || y >= h) continue; const i = 4 * (y * w + x); all++; if (d[i + 3] > 128 && Math.abs(d[i] - FOREST[0]) + Math.abs(d[i + 1] - FOREST[1]) + Math.abs(d[i + 2] - FOREST[2]) < 70) f++; }
+    if (all && f / all >= 0.5 && f / all <= 0.9) return L.latLng(b.lat, b.lon);
   }
-  sh.layer.remove();
+  return L.latLng(cand[0].lat, cand[0].lon);
 }
-async function lossRun(my) {  // the years run: the small bars count them, and from the first mapped year the map darkens
-  const h = ST.history, first = LOSS.years[0];
-  for (const y of h.years) {
-    if (my !== sRun) return;
-    $("story-extra").innerHTML = yearBars(y);
-    lossShow(LOSS.years.indexOf(y) + 1 || 0);
-    await wait(y < first ? 90 : 430);
+function diveInit() {
+  const box = $("map"), size = map.getSize(), W = size.x, H = size.y, dpr = Math.min(2, devicePixelRatio || 1), cv = document.createElement("canvas");
+  cv.width = Math.round(W * dpr); cv.height = Math.round(H * dpr);
+  cv.className = "dive"; cv.setAttribute("aria-hidden", "true");
+  cv.style.cssText = `position:absolute;left:0;top:0;width:${W}px;height:${H}px;z-index:401;pointer-events:none`;
+  const z0 = map.getZoom(), org = map.getPixelBounds().min, pr = (la, lo) => map.project([la, lo], z0), F5 = M.years[FY].flags500, c5 = F5.cell, rm = room();
+  // the point of the screen everything flows from: chosen so that the place arrives in the middle of what is free
+  const P0 = map.project(diveTarget(), z0).subtract(org), C = L.point((rm.left + W - rm.right) / 2, (rm.top + H - rm.bottom) / 2);
+  const s0 = pr(0, M.west + c5).x - pr(0, M.west).x, s1 = Math.max(9, Math.min(16, W / 80)), K = s1 / s0, A = P0.multiplyBy(K).subtract(C).divideBy(K - 1), Aw = A.add(org);
+  const path = polys => { const p = new Path2D(); for (const poly of polys) for (const ring of poly) { ring.forEach(([la, lo], i) => { const q = pr(la, lo); i ? p.lineTo(q.x - Aw.x, q.y - Aw.y) : p.moveTo(q.x - Aw.x, q.y - Aw.y); }); p.closePath(); } return p; };
+  // the base map as the page has it (Leaflet sets it on whole pixels), and where it truly is: the drawing starts on the first and is on the second by the time that matters
+  const bq = base && rectOf(base.getElement()), mq = rectOf(box), nw = pr(M.north, M.west).subtract(org), se = pr(M.north - M.rows * M.cell, M.west + M.cols * M.cell).subtract(org);
+  const real = [nw.x, nw.y, se.x - nw.x, se.y - nw.y], shown = bq ? [bq.x - mq.x, bq.y - mq.y, bq.width, bq.height] : real;
+  // the cells of the 500 m grid around the place: all that the view holds from the moment a cell is two pixels wide (the view only narrows after that)
+  const k2 = 2 / s0, ll0 = map.unproject(Aw.add(L.point(-A.x / k2, -A.y / k2)), z0), ll1 = map.unproject(Aw.add(L.point((W - A.x) / k2, (H - A.y) / k2)), z0);
+  const c0 = Math.max(0, Math.floor((ll0.lng - M.west) / c5) - 2), c1 = Math.min(F5.cols, Math.ceil((ll1.lng - M.west) / c5) + 2), r0 = Math.max(0, Math.floor((M.north - ll0.lat) / c5) - 2), r1 = Math.min(F5.rows, Math.ceil((M.north - ll1.lat) / c5) + 2);
+  const rw = Math.max(0, c1 - c0), rh = Math.max(0, r1 - r0), cls = new Uint8Array(rw * rh), seen = [0, 0, 0, 0, 0];
+  const wy = Float64Array.from({ length: rh + 1 }, (_, i) => pr(M.north - (r0 + i) * c5, 0).y - Aw.y), wx0 = pr(0, M.west + c0 * c5).x - Aw.x;
+  if (rw && rh && baseCv) {
+    const q = Math.round(M.cell / c5), y0 = mercY(M.north), y1 = mercY(M.north - M.rows * M.cell), jOf = la => Math.max(0, Math.min(M.rows - 1, Math.floor((mercY(la) - y0) / (y1 - y0) * M.rows)));
+    const bx0 = Math.floor(c0 / q), bw = Math.min(M.cols, Math.ceil(c1 / q)) - bx0, j0 = jOf(M.north - r0 * c5), bh = jOf(M.north - r1 * c5) - j0 + 1, d = baseCv.getContext("2d").getImageData(bx0, j0, bw, bh).data;
+    const g = grid?.key === FY && grid.prob ? grid : keep?.key === FY ? keep : null, lv = g?.levels[0], f = lv?.val ? Math.max(1, Math.round(g.cell / c5)) : 0;  // the model's grid, when it is here: a forest cell is one that has a chance
+    for (let r = 0; r < rh; r++) {
+      const jj = jOf(M.north - (r0 + r + 0.5) * c5) - j0, vo = f ? (((r0 + r) / f) | 0) * lv.cols : 0;
+      for (let c = 0; c < rw; c++) {
+        const i = 4 * (jj * bw + Math.min(bw - 1, (((c0 + c) / q) | 0) - bx0));
+        let b = 0, other = 4;
+        if (d[i + 3] >= 128) {  // a base pixel is forest mixed with one other kind: which kind, and how much forest
+          let best = 1e9, share = 0;
+          for (let n = 1; n < 4; n++) {
+            const X = PAL[n], ax = FOREST[0] - X[0], ay = FOREST[1] - X[1], az = FOREST[2] - X[2], px = d[i] - X[0], py = d[i + 1] - X[1], pz = d[i + 2] - X[2];
+            const fo = Math.max(0, Math.min(1, (px * ax + py * ay + pz * az) / (ax * ax + ay * ay + az * az))), e = Math.abs(px - fo * ax) + Math.abs(py - fo * ay) + Math.abs(pz - fo * az);
+            if (e < best) { best = e; other = n + 1; share = fo; }
+          }
+          b = share > 0.5 ? 1 : other;
+        }
+        if (b && f) b = lv.val[vo + (((c0 + c) / f) | 0)] ? 1 : other;
+        cls[r * rw + c] = b; seen[b]++;
+      }
+    }
   }
+  box.append(cv);
+  Object.assign(DIVE, { cv, cx: cv.getContext("2d"), W, H, dpr, K, A, s0, real, shown, c0, rw, rh, cls, seen, wy, wx0, rm, border: path(border), states: DIVE.uf ? path(DIVE.uf.flat()) : null });
 }
-async function sweep(my) {  // the chances arrive: from where they are highest, outward
-  veil.th = 255;
-  gridLayer._update();
-  await gridOf(FY);
-  if (my !== sRun) return;
-  const t0 = performance.now(), ms = 3600, lo = Math.floor(255 * Math.sqrt(PCUT[0]));
-  const tick = now => {
-    if (my !== sRun) return;
-    const x = Math.min(1, (now - t0) / ms);
-    veil.th = x >= 1 ? 0 : Math.round(lo + (215 - lo) * (1 - x) ** 2.2);
-    gridLayer._update();
-    if (x < 1) requestAnimationFrame(tick);
-  };
-  requestAnimationFrame(tick);
+function diveGone() { if (DIVE.cv) { DIVE.cv.remove(); DIVE.cv.width = DIVE.cv.height = 0; DIVE.cv = DIVE.cx = DIVE.cls = null; } }
+function diveDraw() {
+  const u = storyOn ? FX.u : 0;
+  if (!(u > 0)) return diveGone();
+  if (!DIVE.cv) diveInit();
+  const { cx, W, H, dpr, A, s0, rw, rh, cls, wy, wx0, rm } = DIVE, k = DIVE.K ** u, s = s0 * k;
+  cx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  cx.globalAlpha = 1;
+  cx.fillStyle = GROUND; cx.fillRect(0, 0, W, H);
+  if (baseCv) {  // the base map, the part of it in view
+    const m = 1 / (k * k), b = DIVE.real.map((v, i) => v + (DIVE.shown[i] - v) * m), x = A.x + (b[0] - A.x) * k, y = A.y + (b[1] - A.y) * k, w = b[2] * k, h = b[3] * k;
+    const u0 = Math.max(0, -x / w), v0 = Math.max(0, -y / h), u1 = Math.min(1, (W - x) / w), v1 = Math.min(1, (H - y) / h);
+    if (u1 > u0 && v1 > v0) { cx.imageSmoothingEnabled = true; cx.imageSmoothingQuality = "high"; cx.drawImage(baseCv, u0 * M.cols, v0 * M.rows, (u1 - u0) * M.cols, (v1 - v0) * M.rows, x + u0 * w, y + v0 * h, (u1 - u0) * w, (v1 - v0) * h); }
+  }
+  if (s >= 2 && rw && rh) {  // the cells: runs of one kind along a row are one rectangle, and each kind is filled in one go
+    const X = c => A.x + (wx0 + c * s0) * k, Y = i => A.y + wy[i] * k;
+    const ca = Math.max(0, Math.floor((-A.x / k - wx0) / s0)), cb = Math.min(rw, Math.ceil(((W - A.x) / k - wx0) / s0));
+    let ra = 0, rb = rh;
+    while (ra < rh && Y(ra + 1) <= 0) ra++;
+    while (rb > ra && Y(rb - 1) >= H) rb--;
+    cx.globalAlpha = smooth((s - 2) / 2);
+    for (let kind = 1; kind <= 4; kind++) {
+      if (!DIVE.seen[kind]) continue;
+      cx.beginPath();
+      for (let r = ra; r < rb; r++) {
+        const y = Y(r), hh = Y(r + 1) - y, o = r * rw;
+        for (let c = ca; c < cb; c++) { if (cls[o + c] !== kind) continue; const a = c; while (c + 1 < cb && cls[o + c + 1] === kind) c++; cx.rect(X(a), y, (c + 1 - a) * s, hh); }
+      }
+      cx.fillStyle = `rgb(${PAL[kind - 1]})`; cx.fill();
+    }
+    const ga = smooth((s - 4.5) / 3.5);
+    if (ga > 0) {  // the gaps between the squares, in the page's colour
+      const lw = Math.max(1, Math.min(1.6, s * 0.1));
+      cx.globalAlpha = ga; cx.fillStyle = GROUND; cx.beginPath();
+      for (let c = ca; c <= cb; c++) cx.rect(X(c) - lw / 2, 0, lw, H);
+      for (let r = ra; r <= rb; r++) cx.rect(0, Y(r) - lw / 2, W, lw);
+      cx.fill();
+    }
+  }
+  // the outline of the Amazon and the state lines, at their own weight whatever the scale
+  cx.setTransform(dpr * k, 0, 0, dpr * k, dpr * A.x, dpr * A.y);
+  cx.strokeStyle = INK; cx.lineJoin = "round";
+  if (DIVE.states) { cx.globalAlpha = 0.6; cx.lineWidth = 0.9 / k; cx.stroke(DIVE.states); }
+  cx.globalAlpha = 0.85; cx.lineWidth = 1.4 / k; cx.stroke(DIVE.border);
+  cx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  if (!narrow()) {  // the column of type keeps its own ground: the map passes behind it
+    cx.globalAlpha = smooth(u / 0.2); cx.fillStyle = GROUND;
+    RTL.has(lang) ? cx.fillRect(W - rm.right, 0, rm.right, H) : cx.fillRect(0, 0, rm.left, H);
+  }
+  cx.globalAlpha = 1;
 }
-async function proof(my) {  // the year that is replayed: first the chances as they were given, then what was cleared, in yellow, coming in on top
-  veil.mapped = false;
-  await gridOf(CY);
-  if (my !== sRun) return;
-  gridLayer._update();
-  await wait(1300);
-  if (my !== sRun) return;
-  veil.mapped = true; veil.amt = 0;
-  $("legend").dataset.mapped = "in";  // its swatch comes in with it
-  const t0 = performance.now(), ms = 1000;
-  const tick = now => {
-    if (my !== sRun) return;
-    veil.amt = Math.min(1, (now - t0) / ms);
-    gridLayer._update();
-    if (veil.amt < 1) requestAnimationFrame(tick);
-  };
-  requestAnimationFrame(tick);
+
+// the red arrives from where the chance is highest, outward: only the blocks whose highest chance reaches a
+// threshold are drawn, and the threshold falls, as a real number, with the tween
+const TH_LO = 255 * Math.sqrt(PCUT[0]) - 14;
+const thOf = x => (x >= 1 ? 0 : TH_LO + (256 - TH_LO) * (1 - x) ** 2.2);
+const sweepDraw = () => { if (!storyOn) return; veil.th = thOf(FX.x); gridLayer._update(); };
+// the clearing that was mapped in the replayed year comes in, yellow, over the chances as they were given; its swatch with it
+const amtDraw = () => { if (!storyOn) return; const on = SCENES[sAt].fx === "proof"; veil.amt = on ? FX.amt : 1; $("legend").style.setProperty("--mapped", veil.amt); gridLayer._update(); };
+
+// ---------- the map leaves the stage for its corner, and comes back, when the model's panel has the stage. What
+// travels is a picture of the map (as in the tool, and with its geometry: morph), and the timeline holds its place
+// on the way (FX.v, 0 on the stage and 1 in the corner) and its opacity (FX.so). The map itself is laid out where
+// it is going at the step's call, out of sight, and shown when the picture is over it.
+const SHOT = { a: null, b: null, el: null, anims: null, geo: null };
+function shotGeo() {  // measured with the map on the stage
+  const box = BOX.map, G = L.latLngBounds(AMAZON).getCenter(), r = rectOf($("map")), p = map.latLngToContainerPoint(G), big = rectOf(box), z0 = map.getZoom();
+  const [small, pane] = dockOf(box), sz = L.point(pane.width, pane.height), v = dockView(sz), q = map.project(G, v.z).subtract(map.project(v.c, v.z));
+  return { big, small, ref: { big: [r.x + p.x, r.y + p.y], small: [pane.x + sz.x / 2 + q.x, pane.y + sz.y / 2 + q.y] }, s: 2 ** (v.z - z0) };
 }
-async function scene(i, dir = 0) {
-  const sc = SCENES[sAt = Math.max(0, Math.min(SCENES.length - 1, i))], my = ++sRun, fwd = dir > 0 && !calm(), has = sc.has || "", listed = !storyShut && sc.mode === "prio" && !(narrow() && /chart/.test(has));  // (a phone shows one sheet at a time: there the timeline takes the list's place)
+function shotGone() {
+  if (SHOT.el) { for (const a of SHOT.anims) a.cancel(); SHOT.el.remove(); SHOT.el = SHOT.anims = null; }
+  BOX.map.style.visibility = "";
+}
+const shotDraw = () => { if (!SHOT.el) return; for (const a of SHOT.anims) a.currentTime = FX.v * 1000; SHOT.el.style.opacity = FX.so; };
+function shotMake(cv) {
+  shotGone();
+  const g = SHOT.geo;
+  if (!cv || !g || STORY.calm) return;
+  const w = document.createElement("div"), i = document.createElement("div");
+  w.className = "box shot"; i.className = "in";
+  w.style.cssText = `left:${g.big.x}px;top:${g.big.y}px;width:${g.big.width}px;height:${g.big.height}px`;
+  i.append(cv); w.append(i); $("app").append(w);
+  SHOT.el = w;
+  SHOT.anims = morph(w, g.big, g.small, g.ref, g.s, true, 1000, x => x);  // (the way is laid out once, and the timeline moves along it)
+  for (const a of SHOT.anims) a.pause();
+  shotDraw();
+}
+const shotKeep = () => { if (STORY.dir > 0 && !STORY.calm && !narrow()) SHOT.b = mapShot(); };  // the map with the forecast year's chances, whole: the picture that will come back from the corner
+function shotPrep(kind) {  // forward: the picture is made, over the map or over the small map; backward: it has done its work
+  if (STORY.dir < 0 || STORY.calm) return shotGone();
+  if (kind === "leave") { SHOT.geo = shotGeo(); SHOT.a = mapShot(); SHOT.b ||= SHOT.a; shotMake(SHOT.a); } else shotMake(SHOT.b);
+}
+function shotDone(kind) {  // forward: the picture has handed over to the map; backward: it is put back where it handed over
+  if (STORY.dir > 0 || STORY.calm) return shotGone();
+  if (kind === "leave") shotMake(SHOT.a); else { SHOT.geo = shotGeo(); shotMake(mapShot()); }
+}
+const shotArrive = () => { BOX.map.style.visibility = STORY.dir > 0 || !SHOT.el ? "" : "hidden"; };
+addEventListener("resize", () => { if (!storyOn) return; SHOT.a = SHOT.b = SHOT.geo = null; shotGone(); if (DIVE.cv) { diveGone(); diveDraw(); } });  // (pictures of another size are let go; the dive is drawn again for the new one)
+
+// Each step is a scene, a plain description of what is on the page; apply() makes the page match it, whichever way
+// it was reached. What moves is left to the timeline: here the page is only told what is on it.
+function apply(i, dir = 0) {
+  const sc = SCENES[sAt = Math.max(0, Math.min(SCENES.length - 1, i))], has = sc.has || "", listed = !storyShut && sc.mode === "prio" && !(narrow() && /chart/.test(has));  // (a phone shows one sheet at a time: there the timeline takes the list's place)
   const had = (root.dataset.has || "").split(" ");
   root.dataset.has = has;  // the pieces of the tool that are on the page by now
-  root.dataset.new = dir > 0 ? has.split(" ").filter(k => k && !had.includes(k)).join(" ") : "";  // what this step brings: it comes in with the stage's motion
+  root.dataset.new = dir > 0 ? has.split(" ").filter(k => k && !had.includes(k)).join(" ") : "";  // what this step brings
   for (const el of INERT()) el.inert = true;  // what is on the page is not for the hand until the story is over
   storyText();
   // what the map and the timeline are set to
@@ -2126,53 +2318,158 @@ async function scene(i, dir = 0) {
   if (sc.id === "use") pristine = true;  // the last step is the tool as it opens: the cells, the whole Amazon
   S.scale = sc.cells && sc.cells !== FY ? "years" : "months";
   S.year = sc.cells || FY;
-  veil.off = !sc.cells; veil.mapped = !(fwd && sc.fx === "proof"); veil.th = 0; veil.amt = 1;
-  if (veil.mapped) delete $("legend").dataset.mapped; else $("legend").dataset.mapped = "wait";
+  veil.off = !sc.cells; veil.mapped = true; veil.th = thOf(FX.x); veil.amt = sc.fx === "proof" ? FX.amt : 1;
+  $("legend").style.setProperty("--mapped", veil.amt);
   if (outline) { outline.remove(); outline = null; }
   // the replayed year is the story's own light copy; the forecast year is the tool's, kept aside meanwhile
   if (sc.cells === CY) {
     if (grid?.key === FY) keep = grid;
-    if (grid?.key !== CY) { veil.off = true; liteYear().then(g => { if (my === sRun) { grid = g; veil.off = false; zoomed(); legend(); } }); }
+    if (grid?.key !== CY) { veil.off = true; liteYear().then(g => { if (storyOn && SCENES[sAt] === sc) { grid = g; veil.off = false; zoomed(); legend(); } }); }
   } else if (grid?.key !== FY && keep) grid = keep;
+  // the stage: the model's panel has it, or the map does (on a phone the panel is a sheet over the map, which stays)
+  const wasDocked = docked("map");
+  if (!sc.about && $("about").open) { panel = null; $("about").close(); }
+  if (sc.about) panel = "about";
   front = "map"; place();
-  lossShow(sc.loss && !(fwd && sc.fx === "loss") ? LOSS.years.length : 0);
+  if (docked("map") !== wasDocked && !narrow()) { map.invalidateSize({ pan: false }); whole(); }
+  lossDraw();
   sheetAt("half");
   refresh();
-  if (sc.about) about(sc.about); else if ($("about").open) $("about").close();
-  if (fwd && sc.fx === "mosaic") mosaic(my);
-  if (fwd && sc.fx === "loss") lossRun(my);
-  if (fwd && sc.fx === "sweep") sweep(my);
-  if (fwd && sc.fx === "proof") proof(my);
+  if (sc.about) about(sc.about);
+}
+function storyEnter(k) {  // the call in the middle of a step's child: forward the page becomes that step's, backward the one before
+  const sc = SCENES[k], prev = SCENES[k - 1];
+  apply(STORY.dir > 0 ? k : k - 1, STORY.dir);
+  if (!narrow() && !sc.about !== !prev.about) BOX.map.style.visibility = STORY.dir > 0 && SHOT.el ? "hidden" : "";  // (the map is on its way: out of sight until its picture has arrived)
+}
+// a step that needs a year's chances waits for them here, on the way forward at its own pace; a reader who presses on is not held
+function storyGate(y) {
+  const d = STORY.drv;
+  if (STORY.dir < 0 || !d || (grid?.key === y && grid.prob) || STORY.tl.time() < d.data - 1e-3) return;
+  d.pause();
+  gridOf(y).then(() => { if (STORY.drv === d) d.resume(); });
+}
+function storyBuild(ctx) {
+  const nar = ctx.conditions.narrow, line = $("story-line"), extra = $("story-extra"), body = $("about-body"), key_ = $("mappanel"), out = { duration: 0.12, ease: "none" };
+  const listedOf = s => s.mode === "prio" && !(nar && /chart/.test(s.has || ""));
+  STORY.calm = ctx.conditions.calm;
+  STORY.rest = [0]; STORY.enter = [0];
+  const tl = STORY.tl = window.gsap.timeline({ paused: true });
+  tl.addLabel(SCENES[0].id, 0);
+  for (let k = 1; k < SCENES.length; k++) {
+    const sc = SCENES[k], prev = SCENES[k - 1], c = window.gsap.timeline({ defaults: { immediateRender: false, ease: "power2.out" } });
+    const leave = !nar && !!sc.about && !prev.about, back = !nar && !sc.about && !!prev.about, E = back ? 0.2 : 0.13, brings = x => (sc.has || "").split(" ").includes(x) && !(prev.has || "").split(" ").includes(x);
+    const come = back ? E + 0.63 : E - 0.01;  // when what the step brings comes in: as the page becomes the step's, or once the map is back on the stage
+    // the line: the old one goes, the page becomes the step's, the new one comes
+    c.fromTo(line, { autoAlpha: 1, y: 0 }, { autoAlpha: 0, y: -6, ...out }, 0);
+    if (prev.extra && !sc.extra) c.fromTo(extra, { autoAlpha: 1 }, { autoAlpha: 0, ...out }, 0);
+    c.call(storyEnter, [k], E);
+    c.fromTo(line, { autoAlpha: 0, y: 10 }, { autoAlpha: 1, y: 0, duration: 0.45, ease: "power3.out" }, E + 0.005);
+    if (sc.extra && !prev.extra) c.fromTo(extra, { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.3 }, E - 0.01);
+    // the years run, and the clearing with them; then the clearing leaves
+    if (sc.loss && !prev.loss) c.set(FX, { lossO: 1 }, E - 0.01);
+    if (sc.fx === "loss") c.fromTo(FX, { yt: 0 }, { yt: YEARS.run, duration: YEARS.run, ease: "none", onUpdate: lossDraw }, 0.35);
+    if (prev.fx === "loss") c.fromTo(FX, { yt: YEARS.run }, { yt: YEARS.run + YEARS.tail, duration: YEARS.tail, ease: "none", onUpdate: lossDraw }, E);
+    if (prev.loss && !sc.loss) c.fromTo(FX, { lossO: 1 }, { lossO: 0, duration: 0.4, ease: "power1.inOut", onUpdate: lossDraw }, 0);
+    // the dive into the cells, and back out before the next step shows anything
+    if (sc.fx === "dive") c.fromTo(FX, { u: 0 }, { u: 1, duration: 2.6, ease: "sine.inOut", onUpdate: diveDraw }, 0.42);
+    if (prev.fx === "dive") c.fromTo(FX, { u: 1 }, { u: 0, duration: 1.5, ease: "sine.inOut", onUpdate: diveDraw }, E + 0.005);
+    // the key, and the red from where the chance is highest
+    if (brings("legend")) { c.set(key_, { autoAlpha: 0 }, E - 0.01); c.fromTo(key_, { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.4 }, prev.fx === "dive" ? E + 1.2 : E); }
+    if (sc.fx === "sweep") { const at = prev.fx === "dive" ? E + 1.5 : E + 0.3; c.call(storyGate, [FY], at); c.fromTo(FX, { x: 0 }, { x: 1, duration: 3.6, ease: "none", onUpdate: sweepDraw }, at + 0.02); }
+    // the replayed year: the chances as they were given, and after a beat the clearing that was mapped, over one second
+    if (sc.fx === "proof") { c.call(shotKeep, null, 0.02); c.call(storyGate, [CY], E + 0.07); c.fromTo(FX, { amt: 0 }, { amt: 1, duration: 1, ease: "none", onUpdate: amtDraw }, E + 1.4); }
+    // the model's panel: the key goes, the map travels to its corner as a picture, what the panel shows comes in; and the way back
+    if (sc.about && !prev.about) c.fromTo(key_, { autoAlpha: 1 }, { autoAlpha: 0, ...out }, 0);
+    if (leave || back) {
+      c.call(shotPrep, [leave ? "leave" : "back"], 0.004);
+      c.fromTo(FX, { so: 0 }, { so: 1, duration: leave ? 0.1 : 0.18, ease: "none", onUpdate: shotDraw }, 0.01);
+      c.fromTo(FX, { v: leave ? 0 : 1 }, { v: leave ? 1 : 0, duration: 0.6, ease: "power2.inOut", onUpdate: shotDraw }, E + 0.01);
+      c.call(shotArrive, null, E + 0.62);
+      c.fromTo(FX, { so: 1 }, { so: 0, duration: 0.18, ease: "none", onUpdate: shotDraw }, E + 0.63);
+      c.call(shotDone, [leave ? "leave" : "back"], E + 0.82);
+    }
+    if (sc.about && !prev.about) { c.set(body, { autoAlpha: 0 }, E - 0.01); c.fromTo(body, { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.4 }, leave ? E + 0.3 : E); }
+    if (prev.about) c.fromTo(body, { autoAlpha: 1 }, { autoAlpha: 0, duration: back ? 0.19 : 0.12, ease: "none" }, 0);
+    if (sc.about && prev.about) c.fromTo(body, { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.4 }, E + 0.005);
+    if (!sc.about && prev.about) c.fromTo(key_, { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.4 }, come);
+    // the pieces of the tool, each at the step that speaks of it (the tabs through a variable on their row, which is drawn again at every step)
+    if (brings("sectors")) { c.set("#modes", { "--a-sectors": 0 }, E - 0.01); c.set("#kindrow", { autoAlpha: 0 }, E - 0.01); c.fromTo("#modes", { "--a-sectors": 0 }, { "--a-sectors": 1, duration: 0.4 }, come); c.fromTo("#kindrow", { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.4 }, come); }
+    if (brings("prio")) c.fromTo("#modes", { "--a-prio": 0 }, { "--a-prio": 1, duration: 0.4 }, come);
+    if (listedOf(prev) && !listedOf(sc)) c.fromTo("#list", { autoAlpha: 1 }, { autoAlpha: 0, ...out }, 0);
+    if (listedOf(sc) && !listedOf(prev)) c.fromTo("#list", { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.4 }, come);
+    if (brings("chart")) c.fromTo("#chartbox", { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.4 }, come);
+    if (brings("nav")) c.fromTo(["#story-btn", "#about-btn", "#api-btn", "#menu-btn", ".leaflet-control-zoom"], { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.4 }, come);
+    c.to({}, { duration: 0.03 }, c.duration());  // (a step never ends on a call: the label where it rests stands clear of it)
+    tl.add(c, STORY.rest[k - 1]);
+    STORY.enter[k] = STORY.rest[k - 1] + E + 0.004;
+    STORY.rest[k] = STORY.rest[k - 1] + c.duration();
+    tl.addLabel(sc.id, STORY.rest[k]);
+  }
+}
+// The playhead is sent to where step i rests. Forward: whatever lies before that step's call is run in a quarter
+// of a second at most, and the step itself at its own pace. Backward: the same tweens in reverse, in half a second
+// at most. When less motion is asked for the playhead is set there, and nothing is animated.
+function storyGo(i) {
+  const tl = STORY.tl, now = tl.time(), end = STORY.rest[i];
+  if (STORY.drv) { STORY.drv.kill(); STORY.drv = null; }
+  if (Math.abs(end - now) < 1e-4) return;
+  STORY.dir = end > now ? 1 : -1;
+  if (STORY.calm) { tl.time(end); return; }
+  if (STORY.dir > 0) {
+    const mid = Math.min(end, Math.max(now, STORY.enter[i]));
+    STORY.drv = window.gsap.timeline({ data: mid });
+    if (mid > now + 1e-4) STORY.drv.to(tl, { time: mid, duration: Math.min(mid - now, 0.25), ease: "none" });
+    if (end > mid + 1e-4) STORY.drv.to(tl, { time: end, duration: end - mid, ease: "none" });
+  } else STORY.drv = window.gsap.timeline({ data: 0 }).to(tl, { time: end, duration: Math.max(0.25, Math.min(0.5, (now - end) * 0.6)), ease: "power1.inOut" });
 }
 function storyBegin() {
   root.dataset.story = "";
   $("story").hidden = false;
   pristine = true;
-  scene(0);
+  apply(0);
   map.invalidateSize({ pan: false });
   whole();
   // while the first lines are read: the base map, the masks of the loss, the chances of the forecast year (the
-  // ordinary way, since the map is in cells), and after them the year that is replayed
+  // ordinary way, since the map is in cells), and after them the year that is replayed; the state lines and the
+  // first places of the priority list, for the dive
   lossLoad();
   if (SCENES.some(s => s.cells === CY)) gridOf(FY).then(() => liteYear()).catch(() => {});
+  baseReady.then(() => { if (!storyOn) return; sectors("uf").then(U => (DIVE.uf = U.items.map(it => it.ll))).catch(() => {}); priority().then(PR => (DIVE.blocks = PR.blocks.slice(0, 60))).catch(() => {}); });
+  // the timeline is built for the page as it is (a phone has no map travelling to a corner) and built again if that
+  // changes; with less motion asked for, the same timeline is only ever set, never played
+  STORY.mm = window.gsap.matchMedia();
+  STORY.mm.add({ narrow: "(max-width: 860px)", calm: "(prefers-reduced-motion: reduce)", any: "(min-width: 1px)" }, ctx => {
+    storyBuild(ctx);
+    STORY.want = sAt; STORY.dir = 1;
+    if (sAt) { STORY.tl.time(STORY.rest[sAt], true); apply(sAt); sweepDraw(); diveDraw(); }
+    return () => { if (STORY.drv) STORY.drv.kill(); STORY.drv = null; shotGone(); diveGone(); };
+  });
 }
 // Finished or skipped, the story is remembered (with its version) and does not play by itself again. Either way
-// the page is left as the last step has it: the key, the priority list with its first place open (unless the
-// reader closed it), the timeline in its dock. Nothing else changes.
+// the page is left as the last step has it: the key, the timeline in its dock, the map on its cells. The timeline
+// is set to its end and given back: nothing it put on an element stays there.
 function storyEnd() {
   storyOn = false;
-  sRun++;
+  if (STORY.drv) STORY.drv.kill();
+  if (STORY.tl) STORY.tl.progress(1, true);
+  if (STORY.mm) STORY.mm.revert();
+  STORY.tl = STORY.drv = STORY.mm = null;
+  shotGone(); diveGone();
+  SHOT.a = SHOT.b = SHOT.geo = null;
+  for (const k of ["--a-sectors", "--a-prio"]) $("modes").style.removeProperty(k);
+  $("legend").style.removeProperty("--mapped");
   try { localStorage.setItem("story", root.dataset.storyVersion); } catch (err) { /* private mode: it plays again next time */ }
   for (const k of ["story", "has", "step", "new"]) delete root.dataset[k];
   for (const el of INERT()) el.inert = false;
   $("story").hidden = true;
-  veil.off = false; veil.th = 0; veil.mapped = true; veil.amt = 1; delete $("legend").dataset.mapped;
-  lossShow(0);
+  veil.off = false; veil.th = 0; veil.mapped = true; veil.amt = 1;
   if (LOSS.worker) LOSS.worker.terminate();
-  if (LOSS.sheet) { LOSS.sheet.layer.remove(); LOSS.sheet.cx.canvas.width = 0; LOSS.sheet = null; LOSS.shown = -1; }  // the picture of the loss belongs to the story: let go with it
-  LOSS.got = {};
+  if (LOSS.sheet) { LOSS.sheet.layer.remove(); LOSS.sheet.cx.canvas.width = 0; LOSS.sheet = LOSS.img = LOSS.px = LOSS.acc = null; }  // the picture of the loss belongs to the story: let go with it
+  LOSS.sp = {};
   if (grid?.key !== FY && keep) grid = keep;
   keep = lite = null;
+  panel = null;
   if ($("about").open) $("about").close();
   unselect();
   S.hazard = "clear"; S.min = 0; S.h = 0; S.rank = false; S.scale = "months"; S.year = FY;
@@ -2185,7 +2482,13 @@ function storyEnd() {
   // skipped from an earlier step, the Amazon goes to where the tool has it (from the last step it is there already)
   requestAnimationFrame(() => { const v = fitNow(); if (pristine && (map.latLngToContainerPoint(v.c).distanceTo(map.latLngToContainerPoint(map.getCenter())) > 2 || Math.abs(v.z - map.getZoom()) > 0.01)) view(v, !calm()); });
 }
-const storyStep = d => { if (!storyOn) return; if (d > 0 && sAt === SCENES.length - 1) storyEnd(); else if (sAt + d >= 0) scene(sAt + d, d); };
+// a press is a step: it moves where the story is wanted, at once, and the playhead follows
+const storyStep = d => {
+  if (!storyOn || !STORY.tl) return;
+  if (d > 0 && STORY.want === SCENES.length - 1) return storyEnd();
+  STORY.want = Math.max(0, Math.min(SCENES.length - 1, STORY.want + d));
+  storyGo(STORY.want);
+};
 $("story-next").onclick = () => storyStep(1);
 $("story-back").onclick = () => storyStep(-1);
 $("skip-btn").onclick = () => storyEnd();
@@ -2212,6 +2515,8 @@ document.addEventListener("keydown", e => {
 
 document.fonts?.ready.then(fitRows);
 document.fonts?.ready.then(() => requestAnimationFrame(sheetFloor));  // (the sheet's floor, measured once it is laid out in its own type)  // (the rows were fitted in the fallback face if the page was quicker than its type)
+if (storyOn && !window.gsap) await new Promise(done => { const s = document.querySelector("script[data-gsap]"); if (!s || s.dataset.failed) return done(); s.addEventListener("load", done); s.addEventListener("error", done); });  // (the story's motion library, asked for in the head: it is here long before the data is)
+if (storyOn && !window.gsap) { storyOn = false; for (const k of ["story", "has"]) delete root.dataset[k]; $("story").hidden = true; }  // (without it there is no story: the tool, at once)
 if (storyOn) storyBegin();
 else if (S.sel != null) select(S.sel); else refresh();
 if (H.has("about")) about();

@@ -7,7 +7,7 @@
   "line2": "Lo hicimos para que la fiscalización llegue antes que la deforestación.",
   "metric": "La puntuación es la media de {b0} a {b1}.",
   "model": "El mapa usa el modelo que lidera el benchmark, hoy {name}, que combina gradient boosting y una red U-Net. El bosque se divide en cuadrados de {m} metros, las celdas, y el modelo da a cada una su probabilidad de deforestación en el año siguiente.",
-  "open": "El código, los datos y el benchmark son abiertos. Quien haga un modelo mejor reemplaza al nuestro.",
+  "open": "El código, los datos y el benchmark son abiertos. Cualquiera puede enviar un modelo.",
   "org": "Una iniciativa del {org}.",
   "tested": "Para probarlo, le ocultamos un año al modelo y le pedimos su previsión. En {y}, de cada {of} lugares que señaló, {hit} fueron deforestados."
  },
@@ -493,7 +493,7 @@
   "model": "Entrenamos un modelo de IA para calcular la probabilidad de que cada celda sea deforestada el año siguiente.",
   "moreKm": 130373,
   "next": "Siguiente",
-  "open": "El código y el benchmark son abiertos. Quien haga un modelo mejor reemplaza al nuestro.",
+  "open": "El código y el benchmark son abiertos. Cualquiera puede enviar un modelo.",
   "proof": "Le ocultamos {y} al modelo y le pedimos su previsión. De cada {of} lugares que señaló, {hit} fueron deforestados.",
   "sectors": "En Sectores, la previsión se suma por estado, municipio, tierra indígena o unidad de conservación.",
   "sources": {

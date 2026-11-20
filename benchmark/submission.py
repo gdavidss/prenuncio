@@ -10,6 +10,7 @@
       what the workflow runs: check and re-score every submission that differs from the base checkout
 """
 import argparse
+import datetime
 import filecmp
 import json
 import re
@@ -20,6 +21,8 @@ from pathlib import Path
 HERE = Path(__file__).resolve().parent
 ROOT = HERE / "submissions"
 LIVE_YEAR = 2027
+LIVE_CUTOFF = datetime.date(LIVE_YEAR - 1, 7, 31)
+LIVE_DEADLINE = datetime.datetime(LIVE_YEAR - 1, 12, 31, 23, 59, 59, 999999, tzinfo=datetime.timezone.utc)
 YEARS = (2022, 2023, 2024, 2025, 2026, LIVE_YEAR)
 SECTIONS = ("Method", "Inputs and their dates", "How leakage was avoided", "What was tried and failed",
             "How to reproduce", "Compute and cost", "Agent disclosure")
@@ -98,8 +101,14 @@ def check(name, root=ROOT):
             say(f"predictions {y}: `url` must be an https link to the file")
         if not SHA.match(str(p.get("sha256", ""))):
             say(f"predictions {y}: `sha256` must be 64 hex characters")
-        if y == LIVE_YEAR and not DATE.match(str(p.get("information_cutoff", ""))):
-            say(f"predictions {y}: a live forecast states its `information_cutoff` as YYYY-MM-DD")
+        if y == LIVE_YEAR:
+            cutoff = str(p.get("information_cutoff", ""))
+            try:
+                if not DATE.fullmatch(cutoff):
+                    raise ValueError
+                datetime.date.fromisoformat(cutoff)
+            except ValueError:
+                say(f"predictions {y}: information_cutoff must be a valid date in YYYY-MM-DD form")
     src = m.get("data_sources")
     if not (isinstance(src, list) and src and all(text(s.get("name")) and text(s.get("url")) and text(s.get("dates")) for s in src)):
         say("meta.json `data_sources` must list every input with `name`, `url` and `dates`")
@@ -142,6 +151,17 @@ def check(name, root=ROOT):
             say("review.json `flag` must be absent, disputed or withdrawn")
         if rv.get("status") != "self-reported" and sc is None:
             say("review.json claims a re-score but scores.json is missing")
+        live = rv.get("live", {})
+        if not isinstance(live, dict):
+            say("review.json live must map years to registration dates")
+        else:
+            for year, registered in live.items():
+                try:
+                    stamp = datetime.datetime.fromisoformat(registered)
+                    if not DATE.fullmatch(registered) and stamp.tzinfo is None:
+                        raise ValueError
+                except (TypeError, ValueError):
+                    say(f"review.json live {year}: expected a date or a timestamp with a time zone")
     return bad
 
 

@@ -7,7 +7,7 @@
   "line2": "Fizemos para que a fiscalização chegue antes do desmate.",
   "metric": "A nota é a média de {b0} a {b1}.",
   "model": "O mapa usa o modelo que lidera o benchmark, hoje o {name}, que combina gradient boosting e uma rede U-Net. A floresta é dividida em quadrados de {m} metros, as células, e o modelo dá a cada uma a chance de desmate no ano seguinte.",
-  "open": "O código, os dados e o benchmark são abertos. Quem fizer um modelo melhor substitui o nosso.",
+  "open": "O código, os dados e o benchmark são abertos. Qualquer pessoa pode enviar um modelo.",
   "org": "Uma iniciativa do {org}.",
   "tested": "Para testar, escondemos um ano do modelo e pedimos a previsão. Em {y}, de cada {of} lugares que ele apontou, {hit} foram desmatados."
  },
@@ -495,7 +495,7 @@
   "model": "Treinamos um modelo de IA para calcular a chance de cada célula ser desmatada no ano seguinte.",
   "moreKm": 130279,
   "next": "Seguir",
-  "open": "O código e o benchmark são abertos. Quem fizer um modelo melhor substitui o nosso.",
+  "open": "O código e o benchmark são abertos. Qualquer pessoa pode enviar um modelo.",
   "proof": "Escondemos {y} do modelo e pedimos a previsão. De cada {of} lugares que ele apontou, {hit} foram desmatados.",
   "sectors": "Em Setores, a previsão é somada por estado, município, terra indígena ou unidade de conservação.",
   "sources": "O modelo aprende com {n} fontes públicas, de imagens de satélite a licenças de desmate.",

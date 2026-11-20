@@ -7,7 +7,7 @@
   "line2": "We built it so enforcement can arrive before the clearing does.",
   "metric": "The score is the mean of {b0} to {b1}.",
   "model": "The map uses the model that leads the benchmark, today {name}, which combines gradient boosting with a U-Net. The forest is divided into {m} metre squares, the cells, and the model gives each one its chance of clearing in the year ahead.",
-  "open": "The code, the data and the benchmark are open. Build a better model and it replaces ours.",
+  "open": "The code, the data and the benchmark are open. Anyone can submit a model.",
   "org": "An initiative of {org}.",
   "tested": "To test it, we hid a year from the model and asked for its forecast. In {y}, {hit} of every {of} places it pointed to were cleared."
  },
@@ -476,7 +476,7 @@
   "model": "We trained an AI model to calculate each cell's chance of being cleared in the year ahead.",
   "moreKm": 130279,
   "next": "Next",
-  "open": "The code and the benchmark are open. Build a better model and it replaces ours.",
+  "open": "The code and the benchmark are open. Anyone can submit a model.",
   "proof": "We hid {y} from the model and asked for its forecast. Of every {of} places it pointed to, {hit} were cleared.",
   "sectors": "In Sectors, the forecast is added up by state, municipality, Indigenous land or conservation unit.",
   "sources": "The model learns from {n} public sources, from satellite images to clearing permits.",

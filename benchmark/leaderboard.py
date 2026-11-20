@@ -7,6 +7,7 @@ benchmark/LEADERBOARD.md and the table between the leaderboard markers in README
 Nobody edits the leaderboard by hand. A row comes from a submission's meta.json, its scores.json
 (written by score.py) and, once a maintainer has looked at it, its review.json.
 """
+import datetime
 import json
 import re
 import sys
@@ -33,6 +34,19 @@ def maps_page(preds):
     return f"{m[1]}/tag/{m[2]}" if m else preds[0]["url"].rsplit("/", 1)[0]
 
 
+def live_track(cutoff, registered):
+    if not registered:
+        return "awaiting review"
+    stamp = datetime.datetime.fromisoformat(registered)
+    if stamp.tzinfo is None:
+        stamp = stamp.replace(tzinfo=datetime.timezone.utc)
+    if stamp > submission.LIVE_DEADLINE:
+        return "after deadline"
+    if datetime.date.fromisoformat(cutoff) > submission.LIVE_CUTOFF:
+        return "later information"
+    return "standard"
+
+
 def build():
     rows, live = [], []
     for name in submission.names():
@@ -55,6 +69,8 @@ def build():
             if p["year"] == submission.LIVE_YEAR:
                 live.append({"model": name, "year": p["year"], "sha256": p["sha256"], "map": p["url"],
                              "information_cutoff": p["information_cutoff"], "registered": (rv.get("live") or {}).get(str(p["year"]))})
+    for forecast in live:
+        forecast["track"] = live_track(forecast["information_cutoff"], forecast["registered"])
     current = lambda r: r["mean"] and r["benchmark_version"] == score.VERSION and r["flag"] != "withdrawn"
     ranked = sorted((r for r in rows if current(r)), key=lambda r: -r["cap5"])
     for i, r in enumerate(ranked):
@@ -93,8 +109,15 @@ def markdown(board):
             f"## Live track, PRODES year {submission.LIVE_YEAR}", "",
             "Forecasts registered before the outcome exists. They get their scores when INPE publishes the map.", "",
             "| Model | Registered | Information cutoff | Map, sha256 | Score |", "|---|---|---|---|---|"]
-    for r in board["live"]:
-        out.append(f"| {name(r)} | {r['registered'] or 'awaiting review'} | {r['information_cutoff']} | [`{r['sha256'][:16]}`]({r['map']}) | pending |")
+    def live_row(r):
+        return f"| {name(r)} | {r['registered'] or 'awaiting review'} | {r['information_cutoff']} | [`{r['sha256'][:16]}`]({r['map']}) | pending |"
+
+    out += [live_row(r) for r in board["live"] if r["track"] == "standard"]
+    for track, heading in (("later information", "Later information"), ("after deadline", "After the deadline"), ("awaiting review", "Awaiting review")):
+        forecasts = [r for r in board["live"] if r["track"] == track]
+        if forecasts:
+            out += ["", f"### {heading}", "", "| Model | Registered | Information cutoff | Map, sha256 | Score |", "|---|---|---|---|---|"]
+            out += [live_row(r) for r in forecasts]
     if board["unranked"]:
         out += ["", "## Not ranked", "", "Without all four years, scored under an older benchmark version, or withdrawn.", ""]
         for r in board["unranked"]:

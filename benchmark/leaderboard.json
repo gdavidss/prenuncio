@@ -193,7 +193,8 @@
    "sha256": "9a8902961b0ed6e66e0b481b6fb3239925f86aca62d66824fa36d50a40c437d0",
    "map": "https://github.com/gdavidss/prenuncio/releases/download/baseline-1/2027.npz",
    "information_cutoff": "2026-07-31",
-   "registered": "2026-11-15"
+   "registered": "2026-11-15",
+   "track": "standard"
   },
   {
    "model": "prenuncio-2",
@@ -201,7 +202,8 @@
    "sha256": "b76070ebd3368c8d19b896da6400e24cbfeef0b911441fb8c4c1431bb67fd915",
    "map": "https://github.com/gdavidss/prenuncio/releases/download/baseline-2/2027.npz",
    "information_cutoff": "2026-07-31",
-   "registered": "2026-11-16"
+   "registered": "2026-11-16",
+   "track": "standard"
   },
   {
    "model": "prenuncio-3",
@@ -209,7 +211,8 @@
    "sha256": "3180062462118990679dc44a0cf246e7494b88967191e8cf89d057dbe8efb639",
    "map": "https://github.com/gdavidss/prenuncio/releases/download/baseline-3/2027.npz",
    "information_cutoff": "2026-07-31",
-   "registered": "2026-11-16"
+   "registered": "2026-11-16",
+   "track": "standard"
   },
   {
    "model": "last-year-nearby",
@@ -217,7 +220,8 @@
    "sha256": "75b18dd9b0175294b504dc55d68aec21065d6cdd4281b985be6e7ebf23506e21",
    "map": "https://github.com/gdavidss/prenuncio/releases/download/reference-1/2027.npz",
    "information_cutoff": "2026-07-31",
-   "registered": "2026-11-17"
+   "registered": "2026-11-17",
+   "track": "standard"
   }
  ]
 }
