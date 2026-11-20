@@ -58,6 +58,10 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 .brand svg { width: 24px; height: 24px; }
 .brand .f { fill: var(--green); }
 .brand .c { fill: var(--red); }
+#sound-btn { display: grid; place-items: center; width: 44px; min-height: 44px; flex: 0 0 auto; margin-inline-end: 8px; color: var(--grey); }
+#sound-btn svg { width: 20px; height: 20px; }
+#sound-btn:hover, #sound-btn[aria-pressed="true"] { color: var(--ink); }
+#sound-btn[aria-pressed="false"] .sound-on, #sound-btn[aria-pressed="true"] .sound-off { display: none; }
 #nav { display: flex; gap: 22px; }
 #nav button, #skip-btn, .pick button { font: 600 16px/1 var(--cond); letter-spacing: 0.07em; text-transform: uppercase; padding: 7px 0; border-bottom: 3px solid transparent; }
 #nav button:hover, #skip-btn:hover, .pick button:hover { border-bottom-color: var(--line); }

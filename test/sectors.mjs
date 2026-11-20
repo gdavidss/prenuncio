@@ -195,7 +195,7 @@ try {
   assert.ok(storyWords <= 10, `the first screen is almost empty: ${storyWords} words (${JSON.stringify(await js(`document.body.innerText`))})`);
   assert.equal(await onPage(), "", "no piece of the tool is on the first screen");
   assert.equal(await js(`!!document.querySelector(".leaflet-control-zoom")?.offsetParent && getComputedStyle(document.querySelector(".leaflet-control-zoom")).visibility === "visible"`), false);
-  assert.equal(await js(`[...document.querySelectorAll("#top button")].filter(b => b.offsetParent).map(b => b.textContent).join()`), "EN,Skip", "the header keeps the language and a way out");
+  assert.equal(await js(`[...document.querySelectorAll("#top button:not(#sound-btn)")].filter(b => b.offsetParent).map(b => b.textContent).join()`), "EN,Skip", "the header keeps the language and a way out");
   assert.equal(await js(`location.hash + location.search`), "", "the story plays at the bare address");
   assert.equal(await js(`document.getElementById("story-back").disabled`), true);
   assert.equal(await redPx(), 0, "the forest is green: no chance is painted yet");
@@ -279,7 +279,7 @@ try {
       await flip();
       await until(`document.documentElement.lang === "pt" && /^Desde ${hist.years[0]}, /.test(document.getElementById("story-line").textContent)`, "the story in Portuguese");
       assert.equal(await line(), WORDS.pt.lossB);
-      assert.equal(await js(`[...document.querySelectorAll("#top button")].filter(b => b.offsetParent).map(b => b.textContent).join()`), "PT,Pular");
+      assert.equal(await js(`[...document.querySelectorAll("#top button:not(#sound-btn)")].filter(b => b.offsetParent).map(b => b.textContent).join()`), "PT,Pular");
       assert.deepEqual([await label("story-next"), await label("story-back")], ["Seguir", "Voltar"]);
       await flip();
       await until(`document.documentElement.lang === "en" && /^Since ${hist.years[0]}, /.test(document.getElementById("story-line").textContent)`, "English again");
@@ -306,7 +306,7 @@ try {
     }
     if (id === "sources") {  // About comes in: in the header, and open beside the map on the model's figure
       await until(`document.getElementById("about").open && !!document.querySelector("#model-fig canvas")`, "the model's figure, beside the map");
-      assert.equal(await js(`[...document.querySelectorAll("#top button")].filter(b => b.offsetParent).map(b => b.textContent).join()`), "EN,Skip", "the header's links wait for the last step");
+      assert.equal(await js(`[...document.querySelectorAll("#top button:not(#sound-btn)")].filter(b => b.offsetParent).map(b => b.textContent).join()`), "EN,Skip", "the header's links wait for the last step");
       assert.deepEqual(await ONLY(), { shown: ["DIV#model-fig"], scroll: false, inside: true }, "only the figure is on the stage, whole, and nothing scrolls");
       await SMALL("sources");
     }
@@ -333,7 +333,7 @@ try {
       assert.equal(await js(`document.documentElement.dataset.new`), "sectors", "and that is what this step brought");
     }
     if (id === "use") {  // the header's links and the zoom arrive; the page is the tool, under the caption
-      assert.equal(await js(`[...document.querySelectorAll("#top button")].filter(b => b.offsetParent).map(b => b.textContent).join()`), "Story,About,API,EN,Skip");
+      assert.equal(await js(`[...document.querySelectorAll("#top button:not(#sound-btn)")].filter(b => b.offsetParent).map(b => b.textContent).join()`), "Story,About,API,EN,Skip");
       assert.equal(await js(`(() => { const k = document.getElementById("skip-btn").getBoundingClientRect(), n = document.getElementById("nav").getBoundingClientRect(); return k.right <= n.left; })()`), true, "Skip stands before the links, so nothing moves when it goes");
       assert.equal(await label("story-next"), "Done");
       assert.equal(await js(`document.querySelector('#modes button[data-k="cells"]').getAttribute("aria-pressed")`), "true");
@@ -363,7 +363,7 @@ try {
   assert.equal(await js(`(() => { const b = [...document.querySelectorAll("#modes button")]; return b.length === 3 && b.every(e => getComputedStyle(e).visibility === "visible" && !!e.offsetParent && (e.focus(), document.activeElement === e)) && getComputedStyle(document.getElementById("mapctl")).visibility === "visible"; })()`), true, "and the mode tabs have come in with the end");
   const VER = await js(`document.documentElement.dataset.storyVersion`);
   assert.equal(await js(`localStorage.story`), VER, "finishing is remembered, with the story's version");
-  assert.equal(await js(`[...document.querySelectorAll("#top button")].filter(b => b.offsetParent).map(b => b.textContent).join()`), "Story,About,API,EN");
+  assert.equal(await js(`[...document.querySelectorAll("#top button:not(#sound-btn)")].filter(b => b.offsetParent).map(b => b.textContent).join()`), "Story,About,API,EN");
   assert.equal(await js(`document.getElementById("list").hidden + "/" + document.getElementById("mapbox").dataset.as`), "true/stage");
   const endHash = (await hash()).replace(/&l=\w+/, "");
   // after that the bare address goes straight to the tool
@@ -1683,7 +1683,7 @@ try {
   assert.deepEqual(await place("mapbox"), [0, 0, 390, 844], "the map is the screen");
   const cap = await js(`(() => { const s = document.getElementById("story").getBoundingClientRect(), b = document.getElementById("story-next").getBoundingClientRect(), k = document.getElementById("skip-btn").getBoundingClientRect(); return [s.top / innerHeight, s.bottom / innerHeight, b.width, b.height, b.bottom / innerHeight, k.height, k.top, b.right > innerWidth * 0.8]; })()`);
   assert.ok(cap[0] > 0.8 && cap[1] > 0.99 && cap[2] >= 48 && cap[2] <= 72 && cap[3] === 48 && cap[4] > 0.9 && cap[5] >= 44 && cap[6] < 10 && cap[7], "the caption is at the bottom and no taller than its one line needs, the way on is a 48 px arrow at the thumb, and Skip is in the header: " + cap);
-  assert.equal(await js(`[...document.querySelectorAll("#top button")].filter(b => b.offsetParent).map(b => b.textContent).join()`), "PT,Pular");
+  assert.equal(await js(`[...document.querySelectorAll("#top button:not(#sound-btn)")].filter(b => b.offsetParent).map(b => b.textContent).join()`), "PT,Pular");
   const lineSize = await px("#story-line");
   assert.ok(lineSize >= 22 && lineSize <= 24, "the story's line is set at 22 to 24 px on a phone: " + lineSize);
   const whereP = await amazon(), ptSaid = [], budget = [];
@@ -1719,7 +1719,7 @@ try {
   await until(`!(${onStory}) && /m=cells/.test(location.hash) && document.getElementById("list").hidden`, "the tool on a phone, after the story: the map on its cells, the bulletin at rest");
   await sleep(600);
   // the tool. The header is the mark and one menu.
-  assert.equal(await js(`[...document.querySelectorAll("#top button")].filter(b => b.offsetParent).map(b => b.id).join()`), "menu-btn", "the header: the mark and one menu");
+  assert.equal(await js(`[...document.querySelectorAll("#top button")].filter(b => b.offsetParent).map(b => b.id).join()`), "sound-btn,menu-btn", "the header has sound and one menu");
   await clickOn("#menu-btn");
   await until(`"menu" in document.documentElement.dataset && !!document.getElementById("about-btn").offsetParent`, "the menu");
   assert.deepEqual(await js(`[...document.querySelectorAll("#nav button")].map(b => [b.textContent, b.getBoundingClientRect().height >= 44, b.getBoundingClientRect().right <= innerWidth])`), [["História", true, true], ["Sobre", true, true], ["API", true, true], ["PT", true, true]], "the menu holds the story, About, the API and the language");

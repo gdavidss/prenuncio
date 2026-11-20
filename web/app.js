@@ -5,6 +5,32 @@
 const $ = id => document.getElementById(id);
 const root = document.documentElement;
 
+const forestAudio = $("forest-audio"), soundButton = $("sound-btn");
+const soundPreference = "prenuncio:forest-sound";
+let soundOn = true;
+try { soundOn = localStorage.getItem(soundPreference) !== "off"; } catch {}
+function startForestSound() {
+  if (soundOn && forestAudio.paused) forestAudio.play().catch(() => {
+    // If autoplay is blocked, the next interaction retries inside a user gesture.
+  });
+}
+function applySoundPreference() {
+  soundButton.setAttribute("aria-pressed", String(soundOn));
+  if (soundOn) startForestSound();
+  else forestAudio.pause();
+}
+soundButton.onclick = () => {
+  soundOn = !soundOn;
+  try { localStorage.setItem(soundPreference, soundOn ? "on" : "off"); } catch {}
+  applySoundPreference();
+};
+for (const event of ["click", "keydown"]) {
+  document.addEventListener(event, e => {
+    if (!soundButton.contains(e.target)) startForestSound();
+  }, { capture: true });
+}
+applySoundPreference();
+
 // ---------- words. Every string a reader sees is in web/i18n/<code>.json, one file a language, fetched when the
 // language is asked for (web/i18n/README.md says what each key is). A string is a whole sentence with named
 // placeholders in braces. Where a sentence changes with a count it is an object of plural forms (one, few, many,
@@ -1592,6 +1618,8 @@ function chrome() {
   $("skip-btn").textContent = L_.skip;
   $("about-btn").textContent = L_.about;
   $("api-copy").setAttribute("aria-label", L_.copy); $("api-copy").title = L_.copy;
+  soundButton.setAttribute("aria-label", L_.forestSound);
+  soundButton.title = L_.forestSound;
   $("lang-btn").textContent = lang.toUpperCase();
   $("lang-btn").setAttribute("aria-label", L_.language); $("lang-btn").title = L_.language;
   $("lang-menu").innerHTML = Object.keys(LANGS).map(l => `<button data-l="${l}" lang="${l}" role="menuitemradio" aria-checked="${l === lang}">${LANGS[l][0]}</button>`).join("");

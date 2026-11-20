@@ -50,6 +50,14 @@
 <body>
 <header id="top">
   <div class="brand"><svg viewBox="0 0 100 100" aria-hidden="true"><path class="f" d="M0 0H100V100H0Z"/><path class="c" d="M100 34C84 40 88 60 70 65C52 70 50 86 42 100H100Z"/><path class="g" d="M100 34C84 40 88 60 70 65C52 70 50 86 42 100" fill="none" stroke="#f4f5f0" stroke-width="7"/></svg>Prenúncio</div>
+  <button id="sound-btn" type="button" aria-label="Forest sounds" aria-pressed="false" title="Forest sounds">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <path d="M3 9v6h4l5 4V5L7 9H3Z"/>
+      <path class="sound-off" d="m16 10 5 5m0-5-5 5"/>
+      <path class="sound-on" d="M16 9a4 4 0 0 1 0 6m2-8a7 7 0 0 1 0 10"/>
+    </svg>
+  </button>
+  <audio id="forest-audio" preload="none" loop src="audio/forest.m4a?v=2"></audio>
   <nav id="nav">
     <button id="story-btn"></button>
     <button id="about-btn"></button>
