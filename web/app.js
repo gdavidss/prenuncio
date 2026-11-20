@@ -1826,9 +1826,9 @@ map.on("moveend", link);
 const CY = ST?.check?.year;  // the year the story replays
 const SCENES = [
   { id: "forestA" },
-  { id: "forestB", fx: "mosaic" },
   { id: "lossA", loss: true, fx: "loss", extra: "years" },
   { id: "lossB", loss: true, extra: "years" },
+  { id: "forestB", fx: "mosaic" },                                                       // the cells come in once the loss is told, just before the model
   { id: "model", has: "legend", cells: FY, fx: "sweep" },                                  // the key, and the Cells tab
   { id: "proof", has: "legend", cells: CY, fx: "proof" },
   { id: "sources", has: "legend", cells: FY, about: "model-fig" },

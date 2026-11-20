@@ -145,9 +145,9 @@ try {
   const WORDS = {
     en: {
       forestA: "This is the Amazon.",
-      forestB: `We divided the forest into squares ${story.forest.cell_m} metres across. That makes ${n0(story.forest.cells / 1e6)} million cells.`,
       lossA: "Every year, a piece of the forest is cleared.",
       lossB: `Since ${hist.years[0]}, the Amazon has lost ${n0(sum / 1000)} thousand km² of forest${sum > 130279 ? ", an area larger than England" : ""}.`,
+      forestB: `We divided the forest into squares ${story.forest.cell_m} metres across. That makes ${n0(story.forest.cells / 1e6)} million cells.`,
       model: "We trained an AI model to calculate each cell's chance of being cleared in the year ahead.",
       proof: `We hid ${story.check.year} from the model and asked for its forecast. Of every ${of5} places it pointed to, ${hit5} were cleared.`,
       sources: `The model learns from ${NUM.en[nIn]} public sources, from satellite images to clearing permits.`,
@@ -159,9 +159,9 @@ try {
     },
     pt: {
       forestA: "Esta é a Amazônia.",
-      forestB: `Dividimos a floresta em quadrados de ${story.forest.cell_m} metros de lado. São ${Math.round(story.forest.cells / 1e6)} milhões de células.`,
       lossA: "Todo ano, um pedaço da floresta é desmatado.",
       lossB: `Desde ${hist.years[0]}, a Amazônia perdeu ${Math.round(sum / 1000).toLocaleString("pt-BR")} mil km² de floresta${sum > 130279 ? ", uma área maior que a Inglaterra" : ""}.`,
+      forestB: `Dividimos a floresta em quadrados de ${story.forest.cell_m} metros de lado. São ${Math.round(story.forest.cells / 1e6)} milhões de células.`,
       model: "Treinamos um modelo de IA para calcular a chance de cada célula ser desmatada no ano seguinte.",
       proof: `Escondemos ${story.check.year} do modelo e pedimos a previsão. De cada ${of5} lugares que ele apontou, ${hit5} foram desmatados.`,
       sources: `O modelo aprende com ${NUM.pt[nIn]} fontes públicas, de imagens de satélite a licenças de desmate.`,
@@ -404,7 +404,7 @@ try {
   await send("Page.navigate", { url: SITE + "?story=1" });
   await until(`${onStory} && document.documentElement.dataset.step === "forestA" && !!document.querySelector("canvas.base")`, "the story, forced");
   await key("ArrowRight");
-  await until(`document.documentElement.dataset.step === "forestB"`, "a step in");
+  await until(`document.documentElement.dataset.step === "lossA"`, "a step in");
   await clickOn("#skip-btn");
   await until(`!(${onStory}) && /m=cells/.test(location.hash) && document.querySelector("canvas.cells")?.dataset.key === "${fy0}" && document.getElementById("list").hidden && document.querySelectorAll("#chart .bar").length === 36`, "skipped, onto the tool");
   await sleep(1600);  // (the Amazon glides to where the tool has it)
