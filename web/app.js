@@ -1758,7 +1758,7 @@ function about(at) {
     + p(esc(A.model({ name: "\u0001", m: ST.forest.cell_m })).replace("\u0001", `<b>${esc(MODEL)}</b>`)) + p(esc(A.tested({ y: ST.check.year, hit, of })))
     + `<h3 id="about-benchmark">${esc(A.benchmark)}</h3>${bench()}<p class="metric">${esc(A.metric({ b0: ST.benchmark.years[0], b1: ST.benchmark.years.at(-1) }))}</p>` + p(esc(A.open))
     + `<p class="go"><a class="btn" href="${esc(ST.links.benchmark)}" target="_blank" rel="noopener">${esc(B.submit)}</a><a href="${esc(ST.links.repository)}" target="_blank" rel="noopener">${esc(B.repo)}</a></p>`
-    + `<p class="by">${esc(A.by({ name: "\u0001" })).replace("\u0001", `<a href="https://guidavid.com" target="_blank" rel="noopener">Gui Dávid</a>`)} ${esc(A.org({ org: "Movimento Cibernético Brasileiro" }))}<img class="org" src="img/mcbr.png" alt="" width="131" height="48" loading="lazy"></p>`;
+    + `<p class="by">${esc(A.by({ name: "\u0001" })).replace("\u0001", `<a href="https://guidavid.com" target="_blank" rel="noopener">Gui Dávid</a>`)} ${esc(A.org({ org: "\u0002" })).replace("\u0002", `<a href="https://cibernetico.org" target="_blank" rel="noopener">Movimento Cibernético Brasileiro</a>`)}<a class="org" href="https://cibernetico.org" target="_blank" rel="noopener"><img src="img/mcbr.png" alt="Movimento Cibernético Brasileiro" width="131" height="48" loading="lazy"></a></p>`;
 
   // in the story it is put together a piece at a time: the figure alone, then the benchmark alone, each entering as the other leaves
   const only = storyOn ? (at === "about-benchmark" ? "bench" : "fig") : "";
@@ -2216,3 +2216,8 @@ if (storyOn) storyBegin();
 else if (S.sel != null) select(S.sel); else refresh();
 if (H.has("about")) about();
 if (H.has("api")) $("api-btn").click();
+
+// the name in the corner is the way back to the map: whatever is on the stage leaves, and the whole Amazon returns
+{ const b = document.querySelector(".brand"); b.setAttribute("role", "link"); b.tabIndex = 0;
+  const go = () => { if (storyOn) return; if (panel) $(panel).close(); if (front !== "map") swap("map"); homeBtn.click(); };
+  b.addEventListener("click", go); b.addEventListener("keydown", e => { if (e.key === "Enter") go(); }); }

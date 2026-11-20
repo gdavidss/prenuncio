@@ -6,7 +6,7 @@
   "line1": "Prenúncio prevede dove l'Amazzonia sarà disboscata entro luglio {year}.",
   "line2": "Lo abbiamo costruito perché i controlli arrivino prima del disboscamento.",
   "metric": "Il punteggio è la media dal {b0} al {b1}.",
-  "model": "La mappa usa il modello in testa al benchmark, oggi {name}. La foresta è divisa in quadrati di {m} metri, le celle, e il modello dà a ciascuna la sua probabilità di disboscamento nell'anno successivo.",
+  "model": "La mappa usa il modello in testa al benchmark, oggi {name}, che combina gradient boosting e una rete U-Net. La foresta è divisa in quadrati di {m} metri, le celle, e il modello dà a ciascuna la sua probabilità di disboscamento nell'anno successivo.",
   "open": "Il codice, i dati e il benchmark sono aperti. Chi fa un modello migliore sostituisce il nostro.",
   "org": "Un'iniziativa del {org}.",
   "tested": "Per provarlo abbiamo nascosto un anno al modello e chiesto la sua previsione. Nel {y}, su {of} luoghi che ha indicato, {hit} sono stati disboscati."
