@@ -69,9 +69,10 @@ try {
   const ws = new WebSocket(page.webSocketDebuggerUrl);
   await new Promise(r => (ws.onopen = r));
   let id = 0;
-  const waiting = new Map(), errors = [];
+  const waiting = new Map(), errors = [], heard = [];  // heard: listeners to the browser's events
   ws.onmessage = e => {
     const m = JSON.parse(e.data);
+    for (const f of heard) f(m);
     if (m.method === "Runtime.exceptionThrown") errors.push(m.params.exceptionDetails.exception?.description || m.params.exceptionDetails.text);
     if (waiting.has(m.id)) { waiting.get(m.id)(m.result); waiting.delete(m.id); }
   };
@@ -595,14 +596,20 @@ try {
   }
   // The timeline's way to the stage and back, frame by frame, on the whole page. No frame is blank where the one
   // before and the one after show the same thing, and no frame differs from the one before by a spike.
+  // (the frames are the browser's own, every one it paints, from a screencast at an eighth of the size)
   const filmed = async (start, done) => {
     await js(`window.__f = []`);
+    const shots = [], hear = m => { if (m.method === "Page.screencastFrame") { shots.push(m.params.data); send("Page.screencastFrameAck", { sessionId: m.params.sessionId }); } };
+    heard.push(hear);
+    await send("Page.startScreencast", { format: "png", maxWidth: Math.round(vw0 / 8), maxHeight: Math.round(vh0 / 8), everyNthFrame: 1 });
+    await sleep(120);
+    shots.length = Math.min(shots.length, 1);  // (the first frame is the page before the change)
     await start();
-    for (let k = 0, over = 0; k < 90 && over < 2; k++) {
-      const { data } = await send("Page.captureScreenshot", { format: "png", clip: { x: 0, y: 0, width: vw0, height: vh0, scale: 0.125 } });
-      await jsA(`(async () => { const b = await createImageBitmap(await (await fetch("data:image/png;base64,${data}")).blob()), c = new OffscreenCanvas(b.width, b.height), x = c.getContext("2d"); x.drawImage(b, 0, 0); window.__f.push(x.getImageData(0, 0, b.width, b.height).data); })()`);
-      if (await js(done)) over++;
-    }
+    for (let k = 0; k < 80 && !(await js(done)); k++) await sleep(50);
+    await sleep(250);
+    await send("Page.stopScreencast");
+    heard.splice(heard.indexOf(hear), 1);
+    for (const data of shots) await jsA(`(async () => { const b = await createImageBitmap(await (await fetch("data:image/png;base64,${data}")).blob()), c = new OffscreenCanvas(${Math.round(vw0 / 8)}, ${Math.round(vh0 / 8)}), x = c.getContext("2d"); x.drawImage(b, 0, 0, c.width, c.height); window.__f.push(x.getImageData(0, 0, c.width, c.height).data); })()`);
     return js(`(() => { const F = window.__f, n = F[0].length / 4, ground = (d, i) => Math.abs(d[i] - 244) + Math.abs(d[i + 1] - 245) + Math.abs(d[i + 2] - 240) < 24, diff = [], blank = []; for (let k = 1; k < F.length; k++) { let s = 0, bl = 0; for (let i = 0; i < 4 * n; i += 4) { s += Math.abs(F[k][i] - F[k - 1][i]) + Math.abs(F[k][i + 1] - F[k - 1][i + 1]) + Math.abs(F[k][i + 2] - F[k - 1][i + 2]); if (k + 1 < F.length && ground(F[k], i) && !ground(F[k - 1], i) && !ground(F[k + 1], i) && Math.abs(F[k - 1][i] - F[k + 1][i]) + Math.abs(F[k - 1][i + 1] - F[k + 1][i + 1]) + Math.abs(F[k - 1][i + 2] - F[k + 1][i + 2]) < 40) bl++; } diff.push(s / (3 * 255 * n)); blank.push(bl / n); } return { diff, blank, frames: F.length }; })()`);
   };
   const smooth = (m, what) => {
@@ -617,7 +624,39 @@ try {
     smooth(await filmed(() => clickOn("#chart-front"), `${settled("chart")} && !document.querySelector(".shot")`), "the timeline to the stage, " + (q || "default"));
     await sleep(300);
     smooth(await filmed(() => clickOn("#chart-front"), `${settled("map")} && !document.querySelector(".shot")`), "the timeline back to its dock, " + (q || "default"));
+  }  // Every frame of the timeline's way to the stage and back, sampled in the page at the screen's own rate, in Cells
+  // and in Priorities: nothing in the timeline is ever scaled, so its headline and its hazards are never drawn
+  // larger than they are at either end; the alert band is on the page once at most; and the small map never
+  // passes over what the timeline shows.
+  const FRAMES = `window.__mv = []; window.__mvr = true; (function f() {
+    const vis = e => { for (let x = e; x && x.nodeType === 1; x = x.parentElement) { const s = getComputedStyle(x); if (s.display === "none" || s.visibility === "hidden" || +s.opacity < 0.05) return false; } const r = e.getBoundingClientRect(); return r.width > 0 && r.height > 0; };
+    const sc = t => { if (!t || t === "none") return false; const m = t.match(/matrix\\(([^)]+)\\)/); if (!m) return true; const [a, b, c, d] = m[1].split(",").map(Number); return Math.abs(Math.hypot(a, b) - 1) > 0.001 || Math.abs(Math.hypot(c, d) - 1) > 0.001; };
+    const cin = document.getElementById("chartin"), say = document.getElementById("say"), hz = document.getElementById("hazrow");
+    let scaled = 0; for (const e of [cin, ...cin.querySelectorAll("*")]) if (sc(getComputedStyle(e).transform)) scaled++;
+    for (let x = cin.parentElement; x && x !== document.body; x = x.parentElement) if (sc(getComputedStyle(x).transform)) scaled++;
+    const small = [document.getElementById("mapbox"), ...document.querySelectorAll(".box.shot")].filter(vis).map(e => e.getBoundingClientRect()).filter(r => r.width < innerWidth * 0.6), content = [hz, document.getElementById("lead"), document.getElementById("chart")].filter(vis).map(e => e.getBoundingClientRect());
+    window.__mv.push({ say: vis(say) ? say.getBoundingClientRect().height : 0, hz: vis(hz) ? hz.getBoundingClientRect().height : 0, scaled, bands: [...document.querySelectorAll('[id="level"]')].filter(vis).length, cross: small.some(m => content.some(c => m.left < c.right - 1 && m.right > c.left + 1 && m.top < c.bottom - 1 && m.bottom > c.top + 1)) });
+    if (window.__mvr) requestAnimationFrame(f); })()`;
+  for (const q of ["&m=cells", "&m=prio&b=1"]) {
+    await send("Page.navigate", { url: SITE + `?story=0&mv=${encodeURIComponent(q)}#l=pt${q}` });
+    await until(`document.documentElement.lang === "pt" && !!document.querySelector("#chart .bar") && !!document.querySelector("canvas.cells")?.dataset.key && /v=/.test(location.hash)`, "the page to sample at " + q);
+    await sleep(1200);
+    for (const [way, done] of [["to the stage", settled("chart")], ["back to its dock", settled("map")]]) {
+      const ends = () => js(`[document.getElementById("say").getBoundingClientRect().height, document.getElementById("hazrow").getBoundingClientRect().height]`);
+      const e0 = await ends();
+      await js(FRAMES);
+      await clickOn("#chart-front");
+      await until(`${done} && !document.querySelector(".shot") && !document.querySelector(".surface")`, `the timeline ${way}, ${q}`);
+      await sleep(250);
+      const f = await js(`(window.__mvr = false, window.__mv)`), e1 = await ends(), what = `the timeline ${way}, ${q}`;
+      assert.ok(f.length >= 12, `${what}: frames were sampled: ${f.length}`);
+      assert.ok(f.every(x => x.say <= 1.1 * Math.max(e0[0], e1[0]) + 0.5 && x.hz <= 1.1 * Math.max(e0[1], e1[1]) + 0.5), `${what}: the headline and the hazards are never drawn larger than at either end: ${Math.max(...f.map(x => x.say))} and ${Math.max(...f.map(x => x.hz))} against ${e0} and ${e1}`);
+      assert.equal(f.filter(x => x.scaled).length, 0, `${what}: nothing in the timeline is scaled at any frame`);
+      assert.ok(f.every(x => x.bands <= 1), `${what}: the alert band is on the page once at most`);
+      assert.equal(f.filter(x => x.cross).length, 0, `${what}: the small map never passes over what the timeline shows`);
+    }
   }
+
 
   await send("Page.navigate", { url: SITE + "#l=en" });
   // the default screen: the whole Amazon, every cell by its chance on the stage, and the bulletin docked with the months ahead
@@ -707,14 +746,18 @@ try {
   // The map's way to its corner and back, frame by frame. A screenshot is taken as often as the browser gives
   // one while the swap runs, and in each the forest's green is counted. The map is never gone (no blank frame),
   // and it never jumps: from one frame to the next the green shrinks or grows by steps, in one direction.
-  const greens = async (start, done) => {
-    const out = [];
+  const greens = async (start, done) => {  // (every frame the browser paints, from a screencast at a quarter of the size)
+    const out = [], shots = [], hear = m => { if (m.method === "Page.screencastFrame") { shots.push(m.params.data); send("Page.screencastFrameAck", { sessionId: m.params.sessionId }); } };
+    heard.push(hear);
+    await send("Page.startScreencast", { format: "png", maxWidth: Math.round(vw / 4), maxHeight: Math.round(vh / 4), everyNthFrame: 1 });
+    await sleep(120);
     await start();
-    for (let k = 0; k < 80; k++) {
-      const { data } = await send("Page.captureScreenshot", { format: "png", clip: { x: 0, y: 0, width: vw, height: vh, scale: 0.25 } });
-      out.push(await jsA(`(async () => { const b = await createImageBitmap(await (await fetch("data:image/png;base64,${data}")).blob()), c = new OffscreenCanvas(b.width, b.height), x = c.getContext("2d"); x.drawImage(b, 0, 0); const d = x.getImageData(0, 0, b.width, b.height).data; let n = 0; for (let i = 0; i < d.length; i += 4) n += d[i + 1] > d[i] + 40 && d[i + 1] > d[i + 2] + 25; return n / (b.width * b.height); })()`));
-      if (await js(done)) { if (out.done) break; out.done = true; }  // one more frame after it has settled
-    }
+    shots.length = 0;  // (from when the change has been asked for: a panel that leaves at once is not the map)
+    for (let k = 0; k < 80 && !(await js(done)); k++) await sleep(50);
+    await sleep(250);
+    await send("Page.stopScreencast");
+    heard.splice(heard.indexOf(hear), 1);
+    for (const data of shots) out.push(await jsA(`(async () => { const b = await createImageBitmap(await (await fetch("data:image/png;base64,${data}")).blob()), c = new OffscreenCanvas(b.width, b.height), x = c.getContext("2d"); x.drawImage(b, 0, 0); const d = x.getImageData(0, 0, b.width, b.height).data; let n = 0; for (let i = 0; i < d.length; i += 4) n += d[i + 1] > d[i] + 40 && d[i + 1] > d[i + 2] + 25; return n / (b.width * b.height); })()`));
     return out;
   };
   const steady = (g, down, what) => {

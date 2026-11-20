@@ -418,8 +418,9 @@ for (const [name, z] of [["veil", 250], ["base", 300], ["paint", 350], ["lines",
   const p = map.createPane(name);
   p.style.zIndex = z; p.style.pointerEvents = "none";
 }
-L.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}", { minZoom: SAT_ZOOM, maxNativeZoom: 17 }).addTo(map);
-L.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}", { pane: "labels", minZoom: SAT_ZOOM, opacity: 0.9 }).addTo(map);
+// (asked for with CORS, which the host allows, so the picture of the map that moves between the stage and its corner can hold the imagery too)
+L.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}", { minZoom: SAT_ZOOM, maxNativeZoom: 17, crossOrigin: "anonymous" }).addTo(map);
+L.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}", { pane: "labels", minZoom: SAT_ZOOM, opacity: 0.9, crossOrigin: "anonymous" }).addTo(map);
 const cvSectors = L.canvas({ padding: LITE ? 0.1 : 0.4 }), cvLines = L.canvas({ pane: "lines", padding: LITE ? 0.1 : 0.4 }), svgSel = L.svg({ pane: "sel", padding: 0.4 });
 // The view that fits the whole Amazon in a pane of a given size, as fitBounds would choose it: the largest zoom,
 // in sixteenths, at which it fits inside the padding, centred in what the padding leaves. Worked out here so
@@ -1371,26 +1372,29 @@ const dockOf = box => { box.dataset.as = "dock"; const r = [rectOf(box), rectOf(
 const dockView = size => (pristine ? fitView(size, { paddingTopLeft: [6, 6], paddingBottomRight: [6, 6] })
   : { c: map.getCenter(), z: Math.max(FLOOR, map.getZoom() + Math.log2(Math.min(size.x / map.getSize().x, size.y / map.getSize().y))) });
 const corner = (big, small) => ({ big: [big.x, big.y], small: [small.x, small.y] });  // contents that scale from the box's own corner
-// The map as it is drawn at this moment, in one bitmap: its canvases, in the order of their panes. (Satellite
-// tiles, which only show close up, are another site's pictures and cannot be copied: the ground stands in.)
+// The map as it is drawn at this moment, in one bitmap: its canvases and its imagery tiles, in the order of their panes.
 function mapShot(clear) {  // clear: the ground is left out, so what is under the picture shows around the Amazon
   const r = rectOf($("map")), k = Math.min(2, devicePixelRatio || 1), cv = document.createElement("canvas"), cx = cv.getContext("2d");
   cv.width = Math.max(1, Math.round(r.width * k)); cv.height = Math.max(1, Math.round(r.height * k));
   cv.style.cssText = `display:block;width:${r.width}px;height:${r.height}px`;
   if (!clear) { cx.fillStyle = GROUND; cx.fillRect(0, 0, cv.width, cv.height); }
-  const z = c => +getComputedStyle(c.closest(".leaflet-pane")).zIndex || 0;
-  for (const c of [...$("map").querySelectorAll(".leaflet-pane canvas")].sort((a, b) => z(a) - z(b))) {
-    const q = rectOf(c), o = +getComputedStyle(c).opacity;
-    if (!q.width || !q.height || !c.width || !c.height || !o) continue;
+  const z = c => +getComputedStyle(c.closest(".leaflet-pane")).zIndex || 0, all = [...$("map").querySelectorAll(".leaflet-pane canvas, .leaflet-pane img.leaflet-tile-loaded")];
+  for (const c of all.map((e, i) => [e, i]).sort((a, b) => z(a[0]) - z(b[0]) || a[1] - b[1]).map(x => x[0])) {
+    const q = rectOf(c);
+    let o = 1; for (let x = c; x && x !== $("map"); x = x.parentElement) o *= +getComputedStyle(x).opacity;
+    if (!q.width || !q.height || !o || (c.tagName === "CANVAS" ? !c.width || !c.height : !c.naturalWidth)) continue;
     cx.globalAlpha = o;
-    cx.drawImage(c, (q.x - r.x) * k, (q.y - r.y) * k, q.width * k, q.height * k);
+    const f = getComputedStyle(c.closest(".leaflet-pane")).filter;
+    cx.filter = f && f !== "none" ? f : "none";  // (the imagery is drawn as the page shows it: a pale print)
+    try { cx.drawImage(c, (q.x - r.x) * k, (q.y - r.y) * k, q.width * k, q.height * k); } catch (err) { /* a tile that came without leave to be copied */ }
+    cx.filter = "none";
   }
   return cv;
 }
 // The map leaves the stage for its dock, or comes back. What moves is never the map itself but a picture of it:
 // the map is laid out and painted in its new place at once, under the picture, and shown only when the picture
 // has arrived and fades from over it. So nothing is cleared, resized or repainted in sight, in either direction.
-async function mapMove(dock, ms) {
+async function mapMove(dock, ms, arrived = () => {}, overlap = false) {  // overlap: the small picture fades out over the first moments (when nothing else is moving), instead of going at once  // arrived: called as soon as the picture is in its place, before it hands over to the map itself
   const box = BOX.map, G = L.latLngBounds(AMAZON).getCenter(), frame = () => new Promise(r => requestAnimationFrame(r));
   const at = () => { const r = rectOf($("map")), p = map.latLngToContainerPoint(G); return [r.x + p.x, r.y + p.y]; };  // where the middle of the Amazon is on the page
   const boxed = (cv, r) => { const w = document.createElement("div"), i = document.createElement("div"); w.className = "box shot"; i.className = "in"; w.style.cssText = `left:${r.x}px;top:${r.y}px;width:${r.width}px;height:${r.height}px`; i.append(cv); w.append(i); $("app").append(w); return w; };
@@ -1418,41 +1422,58 @@ async function mapMove(dock, ms) {
   }
   if (!ms) return;
   const anims = morph(shot, big, small, ref, s, dock, ms);
-  if (first) { $("app").append(first); first.animate({ opacity: [1, 0] }, { duration: 200, fill: "forwards" }).finished.then(() => first.remove(), () => first.remove()); }
+  if (first && overlap) { $("app").append(first); first.animate({ opacity: [1, 0] }, { duration: 200, fill: "forwards" }).finished.then(() => first.remove(), () => first.remove()); }
+  else if (first) first.remove();  // (beside the timeline the moving picture starts where the small one was: one map at a time)
   await Promise.race([Promise.all(anims.map(a => a.finished)), new Promise(r => setTimeout(r, ms + 500))]).catch(() => {});  // (never left waiting on a drawing that was cut short)
+  arrived();
   box.style.visibility = "";
   await frame();
   await shot.animate({ opacity: [1, 0] }, { duration: 180, easing: "linear" }).finished.catch(() => {});
   shot.remove();
 }
-// The timeline goes to the stage or back to its dock the same way: it is laid out and drawn in its new place at
-// once, out of sight, and what moves is a still copy of it as it is on the stage, scaled between the two places.
-// Going up, the copy of the dock fades from over it as it starts; arriving, the moving copy fades from over the
-// real one. So no bar, word or surface is seen being redrawn at the wrong size.
-async function chartMove(up, ms) {
-  const cb = BOX.chart;
-  if (!ms) { cb.dataset.as = up ? "stage" : "dock"; chart(); return; }
-  // One box moves, and it is the timeline itself: it is laid out once, at the start, as it will be where it is
-  // going, and travels there from the rectangle it had. Nothing is drawn twice and nothing fades over anything.
-  const from = rectOf(cb);
+// The timeline goes to the stage or back to its dock in three beats, and nothing in it is ever scaled. What it
+// shows leaves, where it is (80 ms). An empty surface of its colour then travels from its old rectangle to its new
+// one while the map makes its own move (180 ms, easing out); the timeline is laid out in its new place meanwhile,
+// out of sight. When both have arrived what it shows comes in, already in its new layout (100 ms). So no word,
+// bar or band is ever drawn at a size it does not have, twice, or under the map.
+async function chartMove(up, ms, alongside = () => null) {
+  const cb = BOX.chart, inn = $("chartin");
+  if (!ms) { cb.dataset.as = up ? "stage" : "dock"; chart(); await alongside(); return; }
+  const from = rectOf(cb), bg0 = getComputedStyle(cb).backgroundColor;
+  // (the map's panel, the list and the zoom leave with it, in the same beat: they come back on their own when the swap is over)
+  const side = [$("mappanel"), $("list"), document.querySelector(".leaflet-control-zoom")].filter(e => e && e.offsetParent).map(e => e.animate({ opacity: [+getComputedStyle(e).opacity, 0] }, { duration: 80, easing: "linear", fill: "forwards" }));
+  const out = inn.animate({ opacity: [1, 0] }, { duration: 80, easing: "linear", fill: "forwards" });
+  await Promise.race([out.finished, new Promise(r => setTimeout(r, 300))]).catch(() => {});
+  root.dataset.swap = front;
+  for (const a of side) a.cancel();
+  const sf = document.createElement("div");
+  sf.className = "surface"; sf.setAttribute("aria-hidden", "true");
+  sf.style.cssText = `position:absolute;left:${from.x}px;top:${from.y}px;width:${from.width}px;height:${from.height}px;z-index:38;background:${bg0};transform-origin:0 0;pointer-events:none`;
+  $("app").append(sf);
+  cb.style.visibility = "hidden";
   cb.dataset.as = up ? "stage" : "dock";
   chart();
-  const to = rectOf(cb);
-  cb.style.zIndex = 38; cb.style.pointerEvents = "none"; cb.classList.add("flying");  // (under the picture of the map, both ways)
-  const anims = morph(cb, to, from, corner(to, from), from.width / to.width, false, ms);
-  await Promise.race([Promise.all(anims.map(a => a.finished)), new Promise(r => setTimeout(r, ms + 500))]).catch(() => {});
-  for (const a of anims) a.cancel();
-  cb.style.zIndex = cb.style.pointerEvents = ""; cb.classList.remove("flying");
+  const to = rectOf(cb), bg1 = getComputedStyle(cb).backgroundColor;
+  const move = sf.animate([{ transform: "none", backgroundColor: bg0 }, { transform: `translate(${to.x - from.x}px, ${to.y - from.y}px) scale(${to.width / from.width}, ${to.height / from.height})`, backgroundColor: bg1 }], { duration: ms, easing: "cubic-bezier(0.2, 0.7, 0.2, 1)", fill: "forwards" });
+  await Promise.all([Promise.race([move.finished, new Promise(r => setTimeout(r, ms + 400))]).catch(() => {}), alongside()]);
+  out.cancel();
+  inn.style.opacity = "0";
+  cb.style.visibility = "";
+  sf.remove();
+  inn.style.opacity = "";
+  await Promise.race([inn.animate({ opacity: [0, 1] }, { duration: 100, easing: "linear" }).finished, new Promise(r => setTimeout(r, 400))]).catch(() => {});
 }
-// The swap of the map and the timeline, at the same time: the map as a picture of itself, the timeline as itself.
+// The swap of the map and the timeline: the timeline's surface and the map move together, while what the timeline shows is away.
 async function swap(to = front === "map" ? "chart" : "map") {
   if (swapping || to === front) return;
   if (narrow()) { front = to; place(); sheetAt(); refresh(); return; }  // a phone: the timeline's sheet goes up or down over the map, which stays where it is
   swapping = true;
   cellQuiet(); map.eachLayer(l => l.closeTooltip?.());  // no label rides the map into its dock
-  const ms = calm() ? 0 : 600;
-  root.dataset.swap = front = to;
-  await Promise.all([chartMove(to === "chart", ms), mapMove(to === "chart", ms)]);
+  const ms = calm() ? 0 : 180;
+  front = to;
+  let mapDone = null;
+  await chartMove(to === "chart", ms, () => new Promise(r => { mapDone = mapMove(to === "chart", ms, r); if (!ms) mapDone.then(r); }));  // (what the timeline shows comes back as soon as the map is in its place)
+  await mapDone;
   root.dataset.front = panel || to;
   delete root.dataset.swap;
   swapping = false;
@@ -1463,7 +1484,7 @@ async function mapTo(dock) {
   swapping = true;
   cellQuiet(); map.eachLayer(l => l.closeTooltip?.());
   root.dataset.swap = "map";
-  try { await mapMove(dock, calm() ? 0 : 600); }
+  try { await mapMove(dock, calm() ? 0 : 600, undefined, true); }
   finally { BOX.map.dataset.as = dock ? "dock" : "stage"; BOX.map.style.visibility = ""; delete root.dataset.swap; swapping = false; }
 }
 // make the map's place agree with what holds the stage (a step of the story may change its mind while the map is on its way)

@@ -447,7 +447,7 @@ canvas.cells { position: absolute; left: 0; top: 0; transition: opacity 0.25s; }
 #api { --apad: max(var(--pad), calc((100vw - 1000px) / 2)); }
 /* a panel takes the stage whole, at once, so nothing shows through it on the way; what is in it comes in */
 #about[open] > *, #api[open] > * { animation: enter 0.5s cubic-bezier(0.2, 0.7, 0.2, 1) both; }
-@keyframes enter { from { opacity: 0; transform: scale(0.96); } }
+@keyframes enter { from { opacity: 0; } }  /* (what comes in fades in at its own size: nothing is ever scaled) */
 .pbar { position: sticky; top: 0; z-index: 1; display: flex; justify-content: flex-end; flex: none; padding: 8px 0 4px; background: var(--ground); }
 .pbar .x:not(.ico) { margin-right: -10px; }
 /* in the story one piece has the stage at a time, in the middle of it, and nothing scrolls */
