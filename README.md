@@ -2,6 +2,16 @@
 
 Prenúncio forecasts where the Brazilian Amazon will be cleared in the next PRODES year (August to July, the year INPE maps), for every 500 m cell of forest. The forecast and its replay over past years are at **[prenuncio.com](https://prenuncio.com)**. The code, the data pipeline and the benchmark are open, and anyone can submit a model.
 
+[![The forecast for 2027 on prenuncio.com: every forest cell of the Amazon coloured by its chance of being cleared, green under 0.1%, then four reds up to over 20%.](docs/img/platform.jpg)](https://prenuncio.com)
+
+## How it works
+
+- **Cells.** The forest is divided into 14 million squares of 500 m. Each one gets a chance of losing at least a hectare in the next PRODES year.
+- **Inputs.** Eighteen years of public data: PRODES clearing since 2008, DETER alerts, Hansen and GLAD forest loss, JRC disturbance, AlphaEarth satellite embeddings, clearing permits, IBAMA notices and embargoes, fires, land tenure and climate indices. Everything a forecast for year T reads is dated before 31 July of T-1.
+- **Model.** The site shows whichever model leads the benchmark. Today that is prenuncio-3, gradient boosted trees on the 500 m grid blended with a convolutional network that reads the landscape at 100 m.
+- **Test.** Every forecast is scored on years the model never saw. The 5% of cells it ranks highest held 75% of the clearing in 2022 to 2025, and of the 500 places it listed first for 2024, 4 in 5 lost at least 10 hectares. The chances are calibrated: of the cells given 10 to 20%, 13% lost forest.
+- **Sectors and priorities.** The cells add up to states, municipalities, Indigenous lands and conservation units, and to a ranked list of 500 places to inspect first.
+
 ## Leaderboard
 
 <!-- leaderboard:start -->
@@ -65,8 +75,8 @@ The code is under the [MIT licence](LICENSE). Submission folders are published u
 - **Indigenous lands, conservation units, municipalities and states**, FUNAI, MMA and IBGE, as distributed by INPE.
 - **Satellite imagery on the site**, Esri World Imagery (Esri, Maxar, Earthstar Geographics), under Esri's terms of use.
 
-Prenúncio is an independent project. It does not replace INPE's official figures and has no tie to the institutions above.
+Prenúncio is an independent project, made by [Gui Dávid](https://guidavid.com) as an initiative of Movimento Cibernético Brasileiro. It does not replace INPE's official figures and has no tie to the institutions above.
 
 ## Em português
 
-O Prenúncio prevê onde a Amazônia Legal vai ser desmatada no próximo ano PRODES, em cada célula de 500 m de floresta. A previsão e a reprise dos anos passados estão em [prenuncio.com](https://prenuncio.com). O código e o benchmark são abertos. Para entrar no placar acima, envie por pull request um modelo com as notas, o código e um relatório, seguindo as regras de [benchmark/README.md](benchmark/README.md). Agentes de IA são bem-vindos, desde que o relatório diga qual foi usado e como. O Prenúncio é um projeto independente e não substitui os números oficiais do INPE.
+O Prenúncio prevê onde a Amazônia Legal vai ser desmatada no próximo ano PRODES, em cada célula de 500 m de floresta. A previsão e a reprise dos anos passados estão em [prenuncio.com](https://prenuncio.com). O código e o benchmark são abertos. Para entrar no benchmark acima, envie por pull request um modelo com as notas, o código e um relatório, seguindo as regras de [benchmark/README.md](benchmark/README.md). Agentes de IA são bem-vindos, desde que o relatório diga qual foi usado e como. O Prenúncio é um projeto independente e não substitui os números oficiais do INPE. Feito por [Gui Dávid](https://guidavid.com), uma iniciativa do Movimento Cibernético Brasileiro.
