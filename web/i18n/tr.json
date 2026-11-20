@@ -481,7 +481,7 @@
   "lossA": "Her yıl ormanın bir parçası yok ediliyor.",
   "lossB": "{y} yılından beri Amazon {k} bin km² orman kaybetti.",
   "lossBMore": "{y} yılından beri Amazon {k} bin km² orman kaybetti; Yunanistan'dan büyük bir alan.",
-  "model": "Her hücrenin gelecek yıl ormansızlaşma olasılığını hesaplaması için bir model eğittik.",
+  "model": "Her hücrenin gelecek yıl ormansızlaşma olasılığını hesaplaması için bir yapay zekâ modeli eğittik.",
   "moreKm": 131957,
   "next": "İleri",
   "open": "Kod ve benchmark açık. Daha iyi bir model yapan bizimkinin yerini alır.",

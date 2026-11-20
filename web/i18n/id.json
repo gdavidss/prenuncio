@@ -459,7 +459,7 @@
   "lossA": "Setiap tahun, sebagian hutan dibuka.",
   "lossB": "Sejak {y}, Amazon kehilangan {k} ribu km² hutan.",
   "lossBMore": "Sejak {y}, Amazon kehilangan {k} ribu km² hutan, area yang lebih luas dari Pulau Jawa.",
-  "model": "Kami melatih sebuah model untuk menghitung peluang tiap sel dibuka pada tahun berikutnya.",
+  "model": "Kami melatih sebuah model AI untuk menghitung peluang tiap sel dibuka pada tahun berikutnya.",
   "moreKm": 128297,
   "next": "Lanjut",
   "open": "Kode dan benchmark terbuka. Buat model yang lebih baik, dan model itu menggantikan model kami.",

@@ -490,7 +490,7 @@
   "lossA": "Jedes Jahr wird ein Stück des Waldes gerodet.",
   "lossB": "Seit {y} hat Amazonien {k} Tausend km² Wald verloren.",
   "lossBMore": "Seit {y} hat Amazonien {k} Tausend km² Wald verloren, eine Fläche größer als England.",
-  "model": "Wir haben ein Modell trainiert, das für jede Zelle die Wahrscheinlichkeit einer Rodung im Folgejahr berechnet.",
+  "model": "Wir haben ein KI-Modell trainiert, das für jede Zelle die Wahrscheinlichkeit einer Rodung im Folgejahr berechnet.",
   "moreKm": 130279,
   "next": "Weiter",
   "open": "Code und Benchmark sind offen. Wer ein besseres Modell baut, ersetzt unseres.",

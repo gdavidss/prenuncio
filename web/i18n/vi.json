@@ -482,7 +482,7 @@
   "lossA": "Mỗi năm, một phần rừng bị phá.",
   "lossB": "Từ năm {y}, Amazon đã mất {k} nghìn km² rừng.",
   "lossBMore": "Từ năm {y}, Amazon đã mất {k} nghìn km² rừng, lớn hơn diện tích Hàn Quốc.",
-  "model": "Chúng tôi huấn luyện một mô hình để tính khả năng mỗi ô bị phá trong năm tới.",
+  "model": "Chúng tôi huấn luyện một mô hình AI để tính khả năng mỗi ô bị phá trong năm tới.",
   "moreKm": 100400,
   "next": "Tiếp",
   "open": "Mã nguồn và benchmark đều mở. Ai làm được mô hình tốt hơn, nó sẽ thay mô hình của chúng tôi.",

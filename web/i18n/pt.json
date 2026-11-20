@@ -492,7 +492,7 @@
   "lossA": "Todo ano, um pedaço da floresta é desmatado.",
   "lossB": "Desde {y}, a Amazônia perdeu {k} mil km² de floresta.",
   "lossBMore": "Desde {y}, a Amazônia perdeu {k} mil km² de floresta, uma área maior que a Inglaterra.",
-  "model": "Treinamos um modelo para calcular a chance de cada célula ser desmatada no ano seguinte.",
+  "model": "Treinamos um modelo de IA para calcular a chance de cada célula ser desmatada no ano seguinte.",
   "moreKm": 130279,
   "next": "Seguir",
   "open": "O código e o benchmark são abertos. Quem fizer um modelo melhor substitui o nosso.",
