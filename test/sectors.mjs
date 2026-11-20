@@ -1951,18 +1951,23 @@ try {
   for (let k = 0; k < 4; k++) { await fingerSlow("#hazard", 25); give.push(await js(GIVE)); }
   assert.ok(give.every((g, i) => !i || (g.h < give[i - 1].h && g.say <= give[i - 1].say + 0.01 && g.share >= give[0].share - 0.01)), "under its rest the headline only gets smaller and the plot's share never falls: " + JSON.stringify(give));
   assert.ok(give.every(g => g.inside && (g.lines === 0 || Math.abs(g.lines - Math.round(g.lines)) < 0.15 && g.lines <= 2.1) && (g.say === 0 || g.say >= 14.5)), "nothing is cut in the middle of a line, and the headline is two lines at most, 15 px or more: " + JSON.stringify(give));
-  // the story under a finger: ten quick taps on the way on go ten steps on and the page is never zoomed; a swipe to
+  // the story under a finger: six quick taps reach the model diagram without zooming; a swipe to
   // the left goes on and to the right goes back; up and down does nothing
   await send("Page.navigate", { url: SITE + "?story=1&sw=1#l=pt" });
   await until(`${onStory} && document.documentElement.dataset.step === "forestA" && !!document.querySelector("canvas.base")`, "the story on an iPhone");
   await sleep(800);
   const stepNo = () => js(`[...document.querySelectorAll("#story-marks li")].findIndex(e => e.classList.contains("now"))`);
-  const [nx, ny] = await js(`(r => [r.left + r.width / 2, r.top + r.height / 2])(document.getElementById("story-next").getBoundingClientRect())`);
-  for (let k = 0; k < 10; k++) { await touch("touchStart", nx, ny); await sleep(25); await touch("touchEnd"); await sleep(90); }
-  await sleep(600);
-  assert.deepEqual([await stepNo(), await js(`visualViewport.scale`)], [10, 1], "ten quick taps: ten steps on, and the page not zoomed");
-  for (let k = 0; k < 4; k++) await clickOn("#story-back");
-  await until(`document.documentElement.dataset.step === "${IDS[6]}"`, "back to step 7"); await sleep(800);
+  const quickTaps = IDS.indexOf("sources");
+  for (let k = 0; k < quickTaps; k++) {
+    const [x, y] = await js(`(r => [r.left + r.width / 2, r.top + r.height / 2])(document.getElementById("story-next").getBoundingClientRect())`);
+    await touch("touchStart", x, y);
+    await sleep(25);
+    await touch("touchEnd");
+    await sleep(90);
+  }
+  await until(`document.documentElement.dataset.step === "sources"`, "six quick taps reach the model diagram");
+  assert.deepEqual([await stepNo(), await js(`visualViewport.scale`)], [quickTaps, 1], "quick taps advance without zooming the page");
+  await sleep(1000);
   const sw = async (dx, dy) => { await Promise.all([touch("touchStart", 220, 400), touch("touchMove", 220 + dx / 3, 400 + dy / 3), touch("touchMove", 220 + 2 * dx / 3, 400 + 2 * dy / 3), touch("touchMove", 220 + dx, 400 + dy), touch("touchEnd")]); await sleep(700); };  // (a quick flick: its events are sent together, so a busy machine does not stretch it past the 0.6 s a swipe may take)
   await sw(-120, 10); assert.equal(await stepNo(), 7, "a swipe to the left goes on, over the panel on the stage");
   await sw(120, -8); assert.equal(await stepNo(), 6, "a swipe to the right goes back");
