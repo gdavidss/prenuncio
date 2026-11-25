@@ -1224,15 +1224,15 @@ try {
   // ---------- About: a panel beside the map, and exactly this: what the site shows and who it is for, the model's
   // figure, the model and how it did in two sentences, the benchmark as a bare table with at most one short line
   // under it, that it is open with the way in as a button, that it gets things wrong, and whose data it is.
-  const lead = story.model.name;  // the model that generated the shipped forecast
+  const mapModel = story.model.name;  // the model that generated the shipped forecast
   const ABOUT = {
     en: [`Prenúncio forecasts where the Amazon will be cleared by July ${story.forecast.year}.`, "We built it so enforcement can arrive before the clearing does.",
-      `The map currently uses ${lead}, which combines gradient boosting with a U-Net. The forest is divided into ${story.forest.cell_m} metre squares, the cells, and the model gives each one its chance of clearing in the year ahead.`,
+      `The map currently uses ${mapModel}, which combines gradient boosting with a U-Net. The forest is divided into ${story.forest.cell_m} metre squares, the cells, and the model gives each one its chance of clearing in the year ahead.`,
       `To test it, we hid a year from the model and asked for its forecast. In ${story.check.year}, ${hit5} of every ${of5} places it pointed to were cleared.`,
       "Benchmark", `The score is the mean of ${story.benchmark.years[0]} to ${story.benchmark.years.at(-1)}.`,
       "The code, the data and the benchmark are open. Anyone can submit a model.", "Submit a modelGitHub", "Made by Gui Dávid. An initiative of Movimento Cibernético Brasileiro."],
     pt: [`O Prenúncio prevê onde a Amazônia será desmatada até julho de ${story.forecast.year}.`, "Fizemos para que a fiscalização chegue antes do desmate.",
-      `O mapa usa atualmente o ${lead}, que combina gradient boosting e uma rede U-Net. A floresta é dividida em quadrados de ${story.forest.cell_m} metros, as células, e o modelo dá a cada uma a chance de desmate no ano seguinte.`,
+      `O mapa usa atualmente o ${mapModel}, que combina gradient boosting e uma rede U-Net. A floresta é dividida em quadrados de ${story.forest.cell_m} metros, as células, e o modelo dá a cada uma a chance de desmate no ano seguinte.`,
       `Para testar, escondemos um ano do modelo e pedimos a previsão. Em ${story.check.year}, de cada ${of5} lugares que ele apontou, ${hit5} foram desmatados.`,
       "Benchmark", `A nota é a média de ${story.benchmark.years[0]} a ${story.benchmark.years.at(-1)}.`,
       "O código, os dados e o benchmark são abertos. Qualquer pessoa pode enviar um modelo.", "Enviar um modeloGitHub", "Feito por Gui Dávid. Uma iniciativa do Movimento Cibernético Brasileiro."],
@@ -1266,7 +1266,7 @@ try {
     assert.ok(figBox.fits && figBox.down && figBox.ink > 5000 && figBox.red > 200 && figBox.h > 400, `${l}: the names fit the panel and go down the stack, the planes are drawn and the last one is red: ${JSON.stringify(figBox)}`);
     // the benchmark: a bare table, a model a row with its link, then the way in as a button
     assert.deepEqual(await js(`[...document.querySelectorAll("#about .bench tbody tr")].map(tr => [tr.cells[0].textContent, tr.querySelector("a").getAttribute("href"), tr.cells[2].textContent, tr.cells[3].textContent])`), rows.map(r => [String(r.rank), r.url, n(100 * r.cap5, 1) + "%", n(100 * r.unseen_2026, 1) + "%"]), `${l}: the table is the file's, a model a row, to one decimal in the language's own figures`);
-    assert.equal(await js(`document.querySelector("#about .bench tbody tr a").textContent`), name);
+    assert.equal(await js(`document.querySelector("#about .bench tbody tr a").textContent`), rows[0].model, "the first row shows the benchmark leader");
     assert.deepEqual(await js(`[...document.querySelectorAll("#about .bench tbody tr.ref")].map(tr => tr.cells[4].textContent)`), rows.filter(r => r.kind === "reference").map(() => (en ? "no model" : "sem modelo")), `${l}: the row that is not a model says so`);
     assert.deepEqual(await js(`[...document.querySelectorAll("#about .bench th")].map(e => e.textContent)`), en ? ["", "model", "score", "2026", "by", "date"] : ["", "modelo", "nota", "2026", "de", "data"], `${l}: the table keeps its columns`);
     assert.deepEqual(await js(`(() => { const t = document.querySelector("#about .bench"), s = [t, ...t.querySelectorAll("tr, td, th")].map(e => getComputedStyle(e)); return [s.every(x => parseFloat(x.borderTopWidth) === 0 && parseFloat(x.borderBottomWidth) === 0 && parseFloat(x.borderLeftWidth) === 0), new Set(s.slice(1).map(x => x.backgroundColor)).size]; })()`), [true, 1], `${l}: a bare table: no rules, no stripes`);
