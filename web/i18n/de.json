@@ -7,7 +7,7 @@
   "line1": "Prenúncio sagt vorher, wo in Amazonien bis Juli {year} gerodet wird.",
   "line2": "Wir haben es gebaut, damit die Kontrolle vor der Rodung da ist.",
   "metric": "Der Score ist der Mittelwert von {b0} bis {b1}.",
-  "model": "Die Karte nutzt das Modell, das den Benchmark anführt, derzeit {name}, das Gradient Boosting mit einem U-Net kombiniert. Der Wald ist in Quadrate von {m} Metern geteilt, die Zellen, und das Modell gibt jeder ihre Wahrscheinlichkeit einer Rodung im Folgejahr.",
+  "model": "Die Karte nutzt derzeit das Modell {name}, das Gradient Boosting mit einem U-Net kombiniert. Der Wald ist in Quadrate von {m} Metern geteilt, die Zellen, und das Modell gibt jeder ihre Wahrscheinlichkeit einer Rodung im Folgejahr.",
   "open": "Code, Daten und Benchmark sind offen. Alle können ein Modell einreichen.",
   "org": "Eine Initiative des {org}.",
   "tested": "Zum Test haben wir dem Modell ein Jahr vorenthalten und nach seiner Prognose gefragt. {y} wurden von {of} Orten, auf die es zeigte, {hit} gerodet."

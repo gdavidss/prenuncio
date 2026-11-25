@@ -1,0 +1,9 @@
+{
+ "status": "re-scored",
+ "by": "maintainers",
+ "date": "2026-11-25",
+ "note": "Maintainers matched all supplied map hashes and independently ran benchmark/score.py. Training has not been reproduced. The source commit archives the submitted code; the original training commit was not supplied. See the report for reproduction and deployment limitations.",
+ "live": {
+  "2027": "2026-11-25T13:03:05.258055+00:00"
+ }
+}

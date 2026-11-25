@@ -1,0 +1,134 @@
+{
+ "name": "surveil-prenuncio-1",
+ "kind": "model",
+ "summary": "Multi-family GBDT ensemble (LGBM+XGB+Hurdle) with RADD SAR, GFW, AEF dynamics & JEV signals",
+ "authors": [
+  "Henrique Godoy",
+  "SURVEIL Autonomous ML Swarm"
+ ],
+ "date": "2026-11-23",
+ "benchmark_version": "1.0",
+ "code": {
+  "url": "https://github.com/gdavidss/prenuncio",
+  "commit": "f667bee73a6ed0c1f68d8c465ec6cda320585d06",
+  "license": "MIT",
+  "source_path": "contrib/surveil-prenuncio-1",
+  "provenance": "Maintainer archive of the submitted source. Original training commit was not supplied."
+ },
+ "weights": "",
+ "predictions": [
+  {
+   "year": 2022,
+   "url": "https://github.com/gdavidss/prenuncio/releases/download/surveil-prenuncio-1/2022.npz",
+   "sha256": "585c469497654195b0911cdd19964801890ef605e146bc3f34c791170da3ce96",
+   "bytes": 16957368
+  },
+  {
+   "year": 2023,
+   "url": "https://github.com/gdavidss/prenuncio/releases/download/surveil-prenuncio-1/2023.npz",
+   "sha256": "ddd979ed1b9625bd131e6492e240e8b54742eaeb221aacae30f470429c542cfa",
+   "bytes": 16766833
+  },
+  {
+   "year": 2024,
+   "url": "https://github.com/gdavidss/prenuncio/releases/download/surveil-prenuncio-1/2024.npz",
+   "sha256": "685844031117a1ad0aa8cf3ad8c1a244a6e02b111128235d7ce6af0197dc50e5",
+   "bytes": 16590594
+  },
+  {
+   "year": 2025,
+   "url": "https://github.com/gdavidss/prenuncio/releases/download/surveil-prenuncio-1/2025.npz",
+   "sha256": "4863df1593751fbbc481e5e3ac49bd4d15326564b44ce1be5e159e0ad8f6c37a",
+   "bytes": 17320658
+  },
+  {
+   "year": 2026,
+   "url": "https://github.com/gdavidss/prenuncio/releases/download/surveil-prenuncio-1/2026.npz",
+   "sha256": "072598f383de0f3247c71c6a1b187358db4f5931ef261ad6638c358215326ba8",
+   "bytes": 16629983
+  },
+  {
+   "year": 2027,
+   "url": "https://github.com/gdavidss/prenuncio/releases/download/surveil-prenuncio-1/2027.npz",
+   "sha256": "1189dcb3201f4fc197aeafcc1d94a07dfcdc95ac019a5e0d9e5346ffaf0fa9e5",
+   "bytes": 16219037,
+   "information_cutoff": "2026-07-31"
+  }
+ ],
+ "data_sources": [
+  {
+   "name": "INPE PRODES 10 m raster (2025 release) + 2026 priority scenes",
+   "url": "https://terrabrasilis.dpi.inpe.br",
+   "dates": "2008-2025 wall-to-wall, 2026 priority scenes; forecast T uses <= T-1",
+   "license": "CC BY-SA 4.0"
+  },
+  {
+   "name": "INPE DETER-B alerts & Programa Queimadas AQUA reference fires",
+   "url": "https://terrabrasilis.dpi.inpe.br",
+   "dates": "2003-2026; strictly <= 31 Jul T-1",
+   "license": "CC BY-SA 4.0"
+  },
+  {
+   "name": "Hansen Global Forest Change v1.13 (lossyear, treecover2000, gain)",
+   "url": "https://storage.googleapis.com/earthenginepartners-hansen/GFC-2025-v1.13/",
+   "dates": "2001-2025; strictly calendar year <= T-2 (treecover2000/gain static)",
+   "license": "CC BY 4.0"
+  },
+  {
+   "name": "UMD GLAD Sentinel-2 disturbance alerts (10 m)",
+   "url": "https://storage.googleapis.com/earthenginepartners-hansen/S2alert/",
+   "dates": "2019-2026; strictly <= 31 Jul T-1",
+   "license": "Public open data"
+  },
+  {
+   "name": "JRC Tropical Moist Forest v1 first-disturbance year (30 m)",
+   "url": "https://ies-ows.jrc.ec.europa.eu/iforce/tmf_v1/",
+   "dates": "1982-2025; strictly min(degr,defo) calendar year <= T-2",
+   "license": "Public open data"
+  },
+  {
+   "name": "Google AlphaEarth Foundations annual satellite embeddings (64-dim)",
+   "url": "https://data.source.coop/tge-labs/aef/",
+   "dates": "2018-2025; strictly calendar years <= T-2 (velocity, cosine shift, spatial contrast)",
+   "license": "CC BY 4.0"
+  },
+  {
+   "name": "WUR RADD Sentinel-1 SAR alerts (v20261115) & GFW Integrated Alerts (v20261122)",
+   "url": "https://data-api.globalforestwatch.org/dataset/wur_radd_alerts",
+   "dates": "2020-2026; decoded day = R*255+G since 2014-12-31, strictly <= 31 Jul T-1",
+   "license": "CC BY 4.0"
+  },
+  {
+   "name": "IBAMA SINAFLOR permits (ASV/UAS/PMFS), DOF logging auths, Flora infractions & Embargoes (JEV-scored non-PII text)",
+   "url": "https://dadosabertos.ibama.gov.br",
+   "dates": "2007-2026; strictly issued/event date <= 31 Jul T-1; zero PII read or persisted",
+   "license": "Brazilian Open Government Data"
+  },
+  {
+   "name": "CHIRPS v3.0 monthly rainfall (0.05 deg)",
+   "url": "https://data.chc.ucsb.edu/products/CHIRPS/v3.0/monthly/global/tifs/",
+   "dates": "2005-2026; strictly hydrological 12m Aug T-2..Jul T-1 and dry May-Jul T-1",
+   "license": "Public open data"
+  },
+  {
+   "name": "ANM SIGMINE Legal Amazon mining processes",
+   "url": "https://geo.anm.gov.br/arcgis/rest/services/SIGMINE/dados_anm/MapServer/0",
+   "dates": "Protocol year ANO <= T-2 only",
+   "license": "Brazilian Open Government Data"
+  }
+ ],
+ "compute": {
+  "hardware": "3x Apple M5 Max (18 CPU cores, 40-core Metal GPU, 128 GB unified RAM each); final 14M-cell maps produced on 1x M5 Max (c3ru-5s)",
+  "hours": 10.5,
+  "cost_usd": 5.34
+ },
+ "agents": {
+  "used": true,
+  "tools": [
+   {
+    "name": "Self-hosted LLM evolutionary swarm (GLM-5.2/5.3, Kimi-K3, DeepSeek-V4.1) + TypeSafe JEV-1.13.0 + Cursor Gemini orchestrator",
+    "how": "Orchestrated 144 overnight experiments, engineered 15 candidate feature packs, ran 30 cross-family red-team leakage audits, and generated clean standalone reproduction code; final leakage audit, jump tests, and official 14M-cell scoring were verified directly."
+   }
+  ]
+ }
+}

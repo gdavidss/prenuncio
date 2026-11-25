@@ -10,6 +10,50 @@
  "rows": [
   {
    "rank": 1,
+   "model": "surveil-prenuncio-1",
+   "kind": "model",
+   "note": "Multi-family GBDT ensemble (LGBM+XGB+Hurdle) with RADD SAR, GFW, AEF dynamics & JEV signals",
+   "by": "Henrique Godoy, SURVEIL Autonomous ML Swarm",
+   "date": "2026-11-23",
+   "cap5": 0.756588,
+   "unseen_2026": 0.753001,
+   "by_year": {
+    "2022": 0.760291,
+    "2023": 0.770258,
+    "2024": 0.75409,
+    "2025": 0.741711
+   },
+   "status": "re-scored",
+   "flag": null,
+   "superseded_by": null,
+   "url": "https://github.com/gdavidss/prenuncio/blob/main/benchmark/submissions/surveil-prenuncio-1/REPORT.md",
+   "code": "https://github.com/gdavidss/prenuncio/tree/f667bee73a6ed0c1f68d8c465ec6cda320585d06",
+   "maps": "https://github.com/gdavidss/prenuncio/releases/tag/surveil-prenuncio-1",
+   "weights": null,
+   "agents": true,
+   "review_note": "Maintainers matched all supplied map hashes and independently ran benchmark/score.py. Training has not been reproduced. The source commit archives the submitted code; the original training commit was not supplied. See the report for reproduction and deployment limitations.",
+   "benchmark_version": "1.0",
+   "mean": {
+    "cap1": 0.384173,
+    "cap5": 0.756588,
+    "cap10": 0.889799,
+    "capf5": 0.807635,
+    "auprc": 0.183865,
+    "auc": 0.953911,
+    "front5": 0.801877
+   },
+   "y2026": {
+    "cap1": 0.384015,
+    "cap5": 0.753001,
+    "cap10": 0.889921,
+    "capf5": 0.817189,
+    "auprc": 0.126744,
+    "auc": 0.959062,
+    "front5": 0.883505
+   }
+  },
+  {
+   "rank": 2,
    "model": "prenuncio-3",
    "kind": "model",
    "note": "ensemble of boosted trees and a U-Net, with clearing permits",
@@ -53,7 +97,7 @@
    }
   },
   {
-   "rank": 2,
+   "rank": 3,
    "model": "prenuncio-2",
    "kind": "model",
    "note": "the same ensemble before clearing permits",
@@ -97,7 +141,7 @@
    }
   },
   {
-   "rank": 3,
+   "rank": 4,
    "model": "prenuncio-1",
    "kind": "model",
    "note": "first public version, before the JRC disturbance record",
@@ -141,7 +185,7 @@
    }
   },
   {
-   "rank": 4,
+   "rank": 5,
    "model": "last-year-nearby",
    "kind": "reference",
    "note": "no model, only last year's clearing within 9 km",
@@ -221,6 +265,15 @@
    "map": "https://github.com/gdavidss/prenuncio/releases/download/reference-1/2027.npz",
    "information_cutoff": "2026-07-31",
    "registered": "2026-11-17",
+   "track": "standard"
+  },
+  {
+   "model": "surveil-prenuncio-1",
+   "year": 2027,
+   "sha256": "1189dcb3201f4fc197aeafcc1d94a07dfcdc95ac019a5e0d9e5346ffaf0fa9e5",
+   "map": "https://github.com/gdavidss/prenuncio/releases/download/surveil-prenuncio-1/2027.npz",
+   "information_cutoff": "2026-07-31",
+   "registered": "2026-11-25T13:03:05.258055+00:00",
    "track": "standard"
   }
  ]

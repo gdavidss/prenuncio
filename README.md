@@ -19,10 +19,11 @@ The score is cap5, the share of the year's clearing inside the 5% of forest cell
 
 | # | Model | cap5 | 2026 | By | Date | Links | Status |
 |---|---|---:|---:|---|---|---|---|
-| 1 | [prenuncio-3](benchmark/submissions/prenuncio-3/REPORT.md) | 75.1% | 74.3% | Prenúncio | 2026-11-16 | [code](https://github.com/gdavidss/prenuncio/tree/bfead815f2c8b41515230c46d66dd9f2d2204519) [maps](https://github.com/gdavidss/prenuncio/releases/tag/baseline-3) | re-scored |
-| 2 | [prenuncio-2](benchmark/submissions/prenuncio-2/REPORT.md) | 74.5% | 73.5% | Prenúncio | 2026-11-16 | [code](https://github.com/gdavidss/prenuncio/tree/beafc85cb0897b44148987e2ea6db2edf78641f1) [maps](https://github.com/gdavidss/prenuncio/releases/tag/baseline-2) | re-scored, superseded |
-| 3 | [prenuncio-1](benchmark/submissions/prenuncio-1/REPORT.md) | 72.5% | 72.7% | Prenúncio | 2026-11-15 | [code](https://github.com/gdavidss/prenuncio/tree/bb3f7f38e67442a2c3736ec73000a42faf3d58e3) [maps](https://github.com/gdavidss/prenuncio/releases/tag/baseline-1) | re-scored, superseded |
-| 4 | [last-year-nearby](benchmark/submissions/last-year-nearby/REPORT.md) | 50.2% | 51.2% | Prenúncio | 2026-11-17 | [code](https://github.com/gdavidss/prenuncio/tree/0f3d250688c8ae8822dd9286b2b4ad5c86ea75de) [maps](https://github.com/gdavidss/prenuncio/releases/tag/reference-1) | reference |
+| 1 | [surveil-prenuncio-1](benchmark/submissions/surveil-prenuncio-1/REPORT.md) | 75.7% | 75.3% | Henrique Godoy, SURVEIL Autonomous ML Swarm | 2026-11-23 | [code](https://github.com/gdavidss/prenuncio/tree/f667bee73a6ed0c1f68d8c465ec6cda320585d06) [maps](https://github.com/gdavidss/prenuncio/releases/tag/surveil-prenuncio-1) | re-scored |
+| 2 | [prenuncio-3](benchmark/submissions/prenuncio-3/REPORT.md) | 75.1% | 74.3% | Prenúncio | 2026-11-16 | [code](https://github.com/gdavidss/prenuncio/tree/bfead815f2c8b41515230c46d66dd9f2d2204519) [maps](https://github.com/gdavidss/prenuncio/releases/tag/baseline-3) | re-scored |
+| 3 | [prenuncio-2](benchmark/submissions/prenuncio-2/REPORT.md) | 74.5% | 73.5% | Prenúncio | 2026-11-16 | [code](https://github.com/gdavidss/prenuncio/tree/beafc85cb0897b44148987e2ea6db2edf78641f1) [maps](https://github.com/gdavidss/prenuncio/releases/tag/baseline-2) | re-scored, superseded |
+| 4 | [prenuncio-1](benchmark/submissions/prenuncio-1/REPORT.md) | 72.5% | 72.7% | Prenúncio | 2026-11-15 | [code](https://github.com/gdavidss/prenuncio/tree/bb3f7f38e67442a2c3736ec73000a42faf3d58e3) [maps](https://github.com/gdavidss/prenuncio/releases/tag/baseline-1) | re-scored, superseded |
+| 5 | [last-year-nearby](benchmark/submissions/last-year-nearby/REPORT.md) | 50.2% | 51.2% | Prenúncio | 2026-11-17 | [code](https://github.com/gdavidss/prenuncio/tree/0f3d250688c8ae8822dd9286b2b4ad5c86ea75de) [maps](https://github.com/gdavidss/prenuncio/releases/tag/reference-1) | reference |
 <!-- leaderboard:end -->
 
 2026 stays out of the mean because INPE has mapped it for its priority scenes only. Every year and the live track for 2027 are in [benchmark/LEADERBOARD.md](benchmark/LEADERBOARD.md).
