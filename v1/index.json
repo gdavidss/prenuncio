@@ -1,7 +1,8 @@
 {
  "name": "Prenúncio API",
  "version": 1,
- "built": "2026-11-16",
+ "model": "surveil-prenuncio-1",
+ "built": "2026-11-27",
  "base": "https://prenuncio.com/api/v1",
  "mirror": "https://raw.githubusercontent.com/gdavidss/prenuncio/api/v1",
  "mirror_note": "The same files on GitHub. Use it if prenuncio.com answers 403 with a browser check, which its host does to some clients that are not browsers.",
