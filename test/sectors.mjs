@@ -374,7 +374,7 @@ try {
   await js(`localStorage.removeItem("story")`);
   for (const [url, ready] of [["#l=en&m=sectors", `!!document.querySelector("#legend .ramp")`], ["#about", `document.getElementById("about").open`], ["#api", `document.getElementById("api").open`], ["?story=0", `/v=/.test(location.hash)`]]) {
     await send("Page.navigate", { url: SITE + url });
-    await until(`${ready} && /km²/.test(document.getElementById("say").textContent)`, "the tool at " + url);
+    await until(`${ready} && /km²|Quase nenhum desmatamento esperado/.test(document.getElementById("say").textContent)`, "the tool at " + url);
     assert.equal(await js(`${onStory} || !document.getElementById("story").hidden`), false, `no story at ${url}`);
     for (const id of ["about", "api"]) await js(`document.getElementById("${id}").open && document.getElementById("${id}").close()`);
   }
@@ -1080,7 +1080,7 @@ try {
 
   // Portuguese, and the About text
   await flip();
-  await until(`document.documentElement.lang === "pt" && /km²/.test(document.getElementById("say").textContent)`, "Portuguese");
+  await until(`document.documentElement.lang === "pt" && /km²|Quase nenhum desmatamento esperado/.test(document.getElementById("say").textContent)`, "Portuguese");
   assert.equal(await js(`[...document.querySelectorAll("#top nav button")].filter(b => b.offsetParent).map(b => b.textContent).join()`), "História,Sobre,API,PT");
   await clickOn("#about-btn");
   await until(`document.getElementById("about").open`, "the About text");
