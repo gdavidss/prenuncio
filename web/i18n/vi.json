@@ -7,7 +7,7 @@
   "line1": "Prenúncio dự báo nơi rừng Amazon sẽ bị phá từ nay đến tháng 7 năm {year}.",
   "line2": "Chúng tôi làm ra nó để lực lượng kiểm tra đến trước khi rừng bị phá.",
   "metric": "Điểm là trung bình các năm từ {b0} đến {b1}.",
-  "model": "Bản đồ hiện dùng mô hình {name}, kết hợp gradient boosting và mạng U-Net. Rừng được chia thành các ô vuông cạnh {m} mét, gọi là ô, và mô hình cho mỗi ô khả năng bị phá trong năm tới.",
+  "model": "Bản đồ hiện dùng mô hình {name}, một tổ hợp các mô hình gradient boosting. Rừng được chia thành các ô vuông cạnh {m} mét, gọi là ô, và mô hình cho mỗi ô khả năng bị phá trong năm tới.",
   "open": "Mã nguồn, dữ liệu và benchmark đều mở. Ai cũng có thể gửi mô hình.",
   "org": "Một sáng kiến của {org}.",
   "tested": "Để kiểm tra, chúng tôi giấu một năm khỏi mô hình và yêu cầu nó dự báo. Năm {y}, cứ {of} nơi nó chỉ ra thì {hit} nơi đã bị phá."

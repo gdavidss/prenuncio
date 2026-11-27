@@ -1227,12 +1227,12 @@ try {
   const mapModel = story.model.name;  // the model that generated the shipped forecast
   const ABOUT = {
     en: [`Prenúncio forecasts where the Amazon will be cleared by July ${story.forecast.year}.`, "We built it so enforcement can arrive before the clearing does.",
-      `The map currently uses ${mapModel}, which combines gradient boosting with a U-Net. The forest is divided into ${story.forest.cell_m} metre squares, the cells, and the model gives each one its chance of clearing in the year ahead.`,
+      `The map currently uses ${mapModel}, an ensemble of gradient-boosted trees. The forest is divided into ${story.forest.cell_m} metre squares, the cells, and the model gives each one its chance of clearing in the year ahead.`,
       `To test it, we hid a year from the model and asked for its forecast. In ${story.check.year}, ${hit5} of every ${of5} places it pointed to were cleared.`,
       "Benchmark", `The score is the mean of ${story.benchmark.years[0]} to ${story.benchmark.years.at(-1)}.`,
       "The code, the data and the benchmark are open. Anyone can submit a model.", "Submit a modelGitHub", "Made by Gui Dávid. An initiative of Movimento Cibernético Brasileiro."],
     pt: [`O Prenúncio prevê onde a Amazônia será desmatada até julho de ${story.forecast.year}.`, "Fizemos para que a fiscalização chegue antes do desmate.",
-      `O mapa usa atualmente o ${mapModel}, que combina gradient boosting e uma rede U-Net. A floresta é dividida em quadrados de ${story.forest.cell_m} metros, as células, e o modelo dá a cada uma a chance de desmate no ano seguinte.`,
+      `O mapa usa atualmente o ${mapModel}, um conjunto de modelos de gradient boosting. A floresta é dividida em quadrados de ${story.forest.cell_m} metros, as células, e o modelo dá a cada uma a chance de desmate no ano seguinte.`,
       `Para testar, escondemos um ano do modelo e pedimos a previsão. Em ${story.check.year}, de cada ${of5} lugares que ele apontou, ${hit5} foram desmatados.`,
       "Benchmark", `A nota é a média de ${story.benchmark.years[0]} a ${story.benchmark.years.at(-1)}.`,
       "O código, os dados e o benchmark são abertos. Qualquer pessoa pode enviar um modelo.", "Enviar um modeloGitHub", "Feito por Gui Dávid. Uma iniciativa do Movimento Cibernético Brasileiro."],

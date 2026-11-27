@@ -7,7 +7,7 @@
   "line1": "Prenúncio prévoit où l'Amazonie sera déboisée d'ici juillet {year}.",
   "line2": "Nous l'avons conçu pour que les contrôles arrivent avant le déboisement.",
   "metric": "Le score est la moyenne de {b0} à {b1}.",
-  "model": "La carte utilise actuellement {name}, qui combine gradient boosting et un réseau U-Net. La forêt est divisée en carrés de {m} mètres, les cellules, et le modèle donne à chacune sa probabilité de déforestation dans l'année qui suit.",
+  "model": "La carte utilise actuellement {name}, un ensemble d’arbres de gradient boosting. La forêt est divisée en carrés de {m} mètres, les cellules, et le modèle donne à chacune sa probabilité de déforestation dans l'année qui suit.",
   "open": "Le code, les données et le benchmark sont ouverts. Tout le monde peut soumettre un modèle.",
   "org": "Une initiative du {org}.",
   "tested": "Pour le tester, nous avons caché une année au modèle et demandé sa prévision. En {y}, sur {of} lieux qu'il a désignés, {hit} ont été déboisés."

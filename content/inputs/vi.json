@@ -1,11 +1,11 @@
 [
  "lịch sử phá rừng từ năm 2008 (INPE PRODES)",
- "cảnh báo hằng ngày (INPE DETER)",
+ "cảnh báo quang học và radar (DETER, RADD, GFW)",
  "mất rừng ở độ phân giải 30 m (Hansen)",
  "cảnh báo Sentinel-2 ở độ phân giải 10 m (GLAD)",
  "thiệt hại do khai thác gỗ và cháy ở 30 m (JRC)",
  "tóm lược ảnh vệ tinh (AlphaEarth)",
- "giấy phép phá rừng (SINAFLOR)",
- "cháy, tiền phạt và lệnh đình chỉ (INPE, IBAMA)",
- "ai nắm giữ đất"
+ "giấy phép phá rừng và khai thác gỗ (SINAFLOR, DOF)",
+ "cháy, mưa và thực thi pháp luật (INPE, CHIRPS, IBAMA)",
+ "quyền sử dụng đất và khai khoáng (ANM)"
 ]

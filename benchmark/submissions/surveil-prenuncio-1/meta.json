@@ -130,5 +130,31 @@
     "how": "Orchestrated 144 overnight experiments, engineered 15 candidate feature packs, ran 30 cross-family red-team leakage audits, and generated clean standalone reproduction code; final leakage audit, jump tests, and official 14M-cell scoring were verified directly."
    }
   ]
+ },
+ "deployment": {
+  "date": "2026-11-27",
+  "calibration": "https://github.com/gdavidss/prenuncio/releases/download/surveil-prenuncio-1/calibration.json",
+  "probabilities": [
+   {
+    "year": 2024,
+    "url": "https://github.com/gdavidss/prenuncio/releases/download/surveil-prenuncio-1/prob-2024.npz",
+    "sha256": "444ebf2c8ec2e10428cb123958d6b6e6f9ee533f5841fb2032110dc92c4c2776"
+   },
+   {
+    "year": 2025,
+    "url": "https://github.com/gdavidss/prenuncio/releases/download/surveil-prenuncio-1/prob-2025.npz",
+    "sha256": "18b947d33beab62a88fe12c30850941ec313669c39d1599598943339a2433d20"
+   },
+   {
+    "year": 2026,
+    "url": "https://github.com/gdavidss/prenuncio/releases/download/surveil-prenuncio-1/prob-2026.npz",
+    "sha256": "25dc79a661d97cb1e8b498b53a534b24d2ba9ec259a3bf9619b421662cd0071d"
+   },
+   {
+    "year": 2027,
+    "url": "https://github.com/gdavidss/prenuncio/releases/download/surveil-prenuncio-1/prob-2027.npz",
+    "sha256": "2aabf712dba8c03657df0ae72937641b9eb98726a5950c60a0eb3bf9e35d45f7"
+   }
+  ]
  }
 }

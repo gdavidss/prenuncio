@@ -32,6 +32,8 @@ def png(path, bands):
 def main():
     WEB.mkdir(parents=True, exist_ok=True)
     q = json.load(open(m.OUT / "quantity.json"))
+    adopted_path = m.OUT / "adopted.json"
+    adopted = json.load(open(adopted_path)) if adopted_path.exists() else {"model": "prenuncio-3", "years": {}}
     ev = json.load(open(m.OUT / "eval.json"))
     ev["2026"] = json.load(open(m.OUT / "check2026.json"))
     m.load_2026()
@@ -62,6 +64,7 @@ def main():
                         naive={k: max(e[b][f"capture@{k}"] for b in ("persistence_cell", "persistence_9km", "edge_distance"))
                                for k in ("1", "5")})
         years[y] = info
+        info.update(adopted["years"].get(str(y), {"model": "prenuncio-3"}))
         print(y, {k: (round(x, 3) if isinstance(x, float) else x) for k, x in info.items() if k != "cut"})
     # the yearly forecast at the 500 m it is scored at: which cells are flagged, which were cleared
     # (pipeline/blendmaps.py). One grey PNG per year, value 85 * (flagged + 2 * cleared).
@@ -108,7 +111,7 @@ def main():
     png(WEB / "tenure.png", [np.where(m.INSIDE, ten, 255)])
     meta = {"west": float(m.W), "north": float(m.N), "cell": float(m.C), "rows": m.NROW, "cols": m.NCOL,
             "years": years, "layers": layers, "history": q["history"],
-            "forecast": {"year": q["target"], "total_km2": q["total_km2"], "range_km2": q["range_km2"],
+            "forecast": {"year": q["target"], "model": adopted["model"], "quantity_model": "prenuncio-quantity", "total_km2": q["total_km2"], "range_km2": q["range_km2"],
                          "deter_months": q["deter_months_used"], "by_state": q["by_state"],
                          "mape": q["backtest"]["mape"][str(q["deter_months_used"])] if isinstance(next(iter(q["backtest"]["mape"])), str) else q["backtest"]["mape"][q["deter_months_used"]],
                          "previsia_mape": q["backtest"]["previsia_mape"]},

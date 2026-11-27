@@ -4,6 +4,8 @@ Prenúncio forecasts deforestation in the Brazilian Amazon. Every 500 m forest c
 chance that it loses at least one hectare in the PRODES year 2027 (1 August 2026 to 31 July 2027). The forecast
 was made with information up to 31 July 2026. Sums are given by municipality, state, Indigenous land and
 conservation unit.
+The annual spatial forecast and cell probabilities use surveil-prenuncio-1. The 2027 probabilities are calibrated
+on 2024 and 2025 outcomes. The basin-wide amount and monthly forecasts use their separate models.
 
 ## How to connect
 Plain HTTPS GET, static JSON, no key, no login, CORS open. Base: https://prenuncio.com/api/v1
@@ -26,7 +28,8 @@ for example https://raw.githubusercontent.com/gdavidss/prenuncio/api/v1/index.js
 - benchmark.json          the open benchmark's leaderboard
 - cells/grid.json         the grid, and how to read the chance of any cell
 
-## The chance of one place
+## The model's forecast for one cell
+Read the precomputed probability from surveil-prenuncio-1 for 2027.
 row = floor((north - lat) / cell_degrees), col = floor((lon - west) / cell_degrees), from cells/grid.json.
 GET cells/2027/<floor(row/100)>_<floor(col/100)>.bin, a row-major array of bytes, 100 per row.
 byte = bytes[(row % 100) * width + (col % 100)], where width is 100 except in the last column of tiles.
@@ -36,7 +39,8 @@ chance = (byte / 255) ** 2. Byte 0 means not forest. A 404 means no forest in th
 - km2 figures by year are PRODES years (August to July), named by the year they end in.
 - Monthly figures are what INPE's DETER detects; the yearly PRODES count is larger.
 - "expected" values are forecasts. "cleared" and "observed" values are measurements by INPE.
-- The chances were checked: in 2024, cells given about 3% lost a hectare 3% of the time (calibration.json).
+- Probability validation covers 2024 and 2025, with 2026 reported separately (calibration.json).
+- The 2022 and 2023 probabilities use retrospective calibration and are excluded from probability validation.
 - A chance is not a verdict. Most cells with a 10% chance are not cleared.
 - Fire amounts are not forecast; they depend on a drought that has not happened yet.
 - enforcement-effect.json is an association and a floor, not a causal estimate.

@@ -7,7 +7,7 @@
   "line1": "Prenúncio forecasts where the Amazon will be cleared by July {year}.",
   "line2": "We built it so enforcement can arrive before the clearing does.",
   "metric": "The score is the mean of {b0} to {b1}.",
-  "model": "The map currently uses {name}, which combines gradient boosting with a U-Net. The forest is divided into {m} metre squares, the cells, and the model gives each one its chance of clearing in the year ahead.",
+  "model": "The map currently uses {name}, an ensemble of gradient-boosted trees. The forest is divided into {m} metre squares, the cells, and the model gives each one its chance of clearing in the year ahead.",
   "open": "The code, the data and the benchmark are open. Anyone can submit a model.",
   "org": "An initiative of {org}.",
   "tested": "To test it, we hid a year from the model and asked for its forecast. In {y}, {hit} of every {of} places it pointed to were cleared."

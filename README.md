@@ -8,8 +8,8 @@ Prenúncio forecasts where the Brazilian Amazon will be cleared in the next PROD
 
 - **Cells.** The forest is divided into 14 million squares of 500 m. Each one gets a chance of losing at least a hectare in the next PRODES year.
 - **Inputs.** Eighteen years of public data: PRODES clearing since 2008, DETER alerts, Hansen and GLAD forest loss, JRC disturbance, AlphaEarth satellite embeddings, clearing permits, IBAMA notices and embargoes, fires, land tenure and climate indices. Everything a forecast for year T reads is dated before 31 July of T-1.
-- **Model.** The forecast on the site comes from prenuncio-3, gradient boosted trees on the 500 m grid blended with a convolutional network that reads the landscape at 100 m.
-- **Test.** The benchmark scores forecasts made using earlier years. Model development used results from the backtest years. The 5% of cells it ranks highest held 75% of the clearing in 2022 to 2025, and of the 500 places it listed first for 2024, 4 in 5 lost at least 10 hectares. The chances are calibrated: of the cells given 10 to 20%, 13% lost forest.
+- **Model.** The annual forecast on the site comes from surveil-prenuncio-1, submitted by Henrique Godoy and SURVEIL. It combines LightGBM, XGBoost and a hurdle model on the 500 m grid. Cell probabilities are calibrated on earlier years.
+- **Test.** The benchmark scores forecasts made using earlier years. Model development used results from the backtest years. The 5% of cells it ranks highest held 75.66% of the clearing in 2022 to 2025. Of the 500 places it listed first for 2024, 83% lost at least 10 hectares. Among cells assigned a 10 to 20% chance for 2024, 16% lost at least one hectare.
 - **Sectors and priorities.** The cells add up to states, municipalities, Indigenous lands and conservation units, and to a ranked list of 500 places to inspect first.
 
 ## Leaderboard

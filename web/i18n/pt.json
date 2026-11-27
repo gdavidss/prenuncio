@@ -7,7 +7,7 @@
   "line1": "O Prenúncio prevê onde a Amazônia será desmatada até julho de {year}.",
   "line2": "Fizemos para que a fiscalização chegue antes do desmate.",
   "metric": "A nota é a média de {b0} a {b1}.",
-  "model": "O mapa usa atualmente o {name}, que combina gradient boosting e uma rede U-Net. A floresta é dividida em quadrados de {m} metros, as células, e o modelo dá a cada uma a chance de desmate no ano seguinte.",
+  "model": "O mapa usa atualmente o {name}, um conjunto de modelos de gradient boosting. A floresta é dividida em quadrados de {m} metros, as células, e o modelo dá a cada uma a chance de desmate no ano seguinte.",
   "open": "O código, os dados e o benchmark são abertos. Qualquer pessoa pode enviar um modelo.",
   "org": "Uma iniciativa do {org}.",
   "tested": "Para testar, escondemos um ano do modelo e pedimos a previsão. Em {y}, de cada {of} lugares que ele apontou, {hit} foram desmatados."

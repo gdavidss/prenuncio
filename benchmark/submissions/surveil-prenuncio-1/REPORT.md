@@ -10,7 +10,11 @@ The source is archived in [contrib/surveil-prenuncio-1](../../../contrib/surveil
 
 The authors' report below mentions CatBoost in an experiment paragraph, while its Method section and submitted inference script use LightGBM, XGBoost and a hurdle model. This discrepancy remains to be clarified during reproduction.
 
-The package supplies a 2027 ranking map, but calibrated probability maps only for 2024–2026. The site's cell probabilities and operational forecasts continue to use prenuncio-3 pending a calibrated 2027 probability export and integration of the new model. The 2027 ranking forecast is registered separately in the live track.
+On 27 November 2026, the maintainers integrated the supplied ranking maps into the annual spatial forecasts, cell probabilities, sector totals and priorities on prenuncio.com. The site's existing isotonic calibration was fitted on 2024 and 2025 outcomes to generate 2027 cell probabilities. The basin-wide quantity model, monthly forecasts and other-hazard models remain separately identified. Forecasts before 2022 retain their prior model.
+
+Independent probability scoring reproduced the reported 2024–2025 mean Brier skill of 0.0893, log loss of 0.02290, count ratio of 0.9166 and ECE of 0.1578. The 2027 map contains 14,024,403 candidate cells and a sum of 54,530 expected cells losing at least one hectare before PNG quantization. Priority replay for 2024 found that 83% of the top 500 blocks lost at least ten hectares.
+
+The deployment commands are in [PIPELINE.md](../../../docs/PIPELINE.md). Calibration metadata and the generated probability maps are published with the submission's release. Display probabilities for 2022 and 2023 use retrospective calibration on 2024–2025 and are excluded from probability validation. Training has not been independently reproduced.
 
 ## Method
 

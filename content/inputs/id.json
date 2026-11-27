@@ -1,11 +1,11 @@
 [
  "riwayat deforestasi sejak 2008 (INPE PRODES)",
- "peringatan harian (INPE DETER)",
+ "peringatan optik dan radar (DETER, RADD, GFW)",
  "kehilangan hutan pada 30 m (Hansen)",
  "peringatan Sentinel-2 pada 10 m (GLAD)",
  "kerusakan akibat penebangan dan kebakaran pada 30 m (JRC)",
  "embedding satelit (AlphaEarth)",
- "izin pembukaan hutan (SINAFLOR)",
- "kebakaran, denda, dan embargo (INPE, IBAMA)",
- "siapa yang menguasai lahan"
+ "izin pembukaan lahan dan penebangan (SINAFLOR, DOF)",
+ "kebakaran, hujan dan pengawasan (INPE, CHIRPS, IBAMA)",
+ "penguasaan tanah dan pertambangan (ANM)"
 ]

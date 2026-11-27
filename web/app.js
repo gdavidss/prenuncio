@@ -122,7 +122,8 @@ const css = name => getComputedStyle(document.documentElement).getPropertyValue(
 // so it is on the screen before anything is fetched.
 let storyOn = "story" in root.dataset;
 if (storyOn) { $("story").hidden = false; $("story-line").textContent = t().st.forestA; $("story-next").setAttribute("aria-label", t().st.next); $("skip-btn").textContent = t().skip; $("lang-btn").textContent = lang.toUpperCase(); }
-const [M, R, MO, P, ACT, ST] = await Promise.all(["meta", "regions", "monthly", "prob", "actions", "story"].map(f => fetch(`data/${f}.json`).then(r => (r.ok ? r.json() : null)).catch(() => null)));  // monthly.json, prob.json, actions.json and story.json may not be there yet
+const DATA_REV = "surveil-1-20261127";
+const [M, R, MO, P, ACT, ST] = await Promise.all(["meta", "regions", "monthly", "prob", "actions", "story"].map(f => fetch(`data/${f}.json?v=${DATA_REV}`).then(r => (r.ok ? r.json() : null)).catch(() => null)));  // monthly.json, prob.json, actions.json and story.json may not be there yet
 if (!ST) storyOn = false;
 M.layers ||= {};
 if (Math.abs(R.total_km2 / M.forecast.total_km2 - 1) > 1e-6) console.warn("Sector numbers are older than the forecast, run pipeline/regions.py");
@@ -188,7 +189,7 @@ const rings = g => g.map(poly => poly.map(r => {
   return out;
 }));
 function sectors(kind) {
-  return (SEC[kind] ||= fetch(`data/sectors_${kind}.json`).then(r => r.json()).then(d => {
+  return (SEC[kind] ||= fetch(`data/sectors_${kind}.json?v=${DATA_REV}`).then(r => r.json()).then(d => {
     for (const it of d.items) { it.ll = rings(it.g); delete it.g; }
     d.items.sort((a, b) => b.a - a.a);  // big ones first, so small ones are drawn on top and can be clicked
     return { kind, items: d.items, byId: new Map(d.items.map(it => [String(it.id), it])) };
@@ -588,7 +589,7 @@ function toMercatorRows(src, w, h, cellLat) {  // src: a Uint32Array [h, w], row
   return img;
 }
 async function pixels(name) {
-  const bmp = await createImageBitmap(await (await fetch(`data/${name}.png`)).blob(), { colorSpaceConversion: "none", premultiplyAlpha: "none" });
+  const bmp = await createImageBitmap(await (await fetch(`data/${name}.png?v=${DATA_REV}`)).blob(), { colorSpaceConversion: "none", premultiplyAlpha: "none" });
   MEM.decode = Math.max(MEM.decode, M.cols * M.rows);
   const cv = new OffscreenCanvas(M.cols, M.rows), cx = cv.getContext("2d", { willReadFrequently: true });
   cx.drawImage(bmp, 0, 0);
@@ -764,7 +765,7 @@ async function decodeProb(urlP, urlF, cols, rows, cuts, part, steps, mult) {
   return { levels, stats };
 }
 function loadProb(y, F, withTruth) {
-  const url = f => new URL(`data/${f}${y}${F.suf}.png`, location.href).href, args = [url("p"), withTruth ? url("f") : null, F.cols, F.rows, PCUT, FAR_PART, F.far, F.mult];
+  const url = f => new URL(`data/${f}${y}${F.suf}.png?v=${DATA_REV}`, location.href).href, args = [url("p"), withTruth ? url("f") : null, F.cols, F.rows, PCUT, FAR_PART, F.far, F.mult];
   MEM.decode = Math.max(MEM.decode, F.cols * F.rows);
   return new Promise(done => {
     let w;
@@ -779,7 +780,7 @@ function loadProb(y, F, withTruth) {
 }
 // which years have a p file: asked once per year, without downloading it
 const probs = {};
-const hasProb = y => (probs[y] ??= M.years[y]?.flags500 ? fetch(`data/p${y}${LITE ? "_h" : ""}.png`, { method: "HEAD" }).then(r => r.ok).catch(() => false) : Promise.resolve(false));
+const hasProb = y => (probs[y] ??= M.years[y]?.flags500 ? fetch(`data/p${y}${LITE ? "_h" : ""}.png?v=${DATA_REV}`, { method: "HEAD" }).then(r => r.ok).catch(() => false) : Promise.resolve(false));
 // the five steps: forest under 0.1% is left as the base map shows it, green; then clearing's four reds
 const PRGB = HAZ.clear.steps, PCOL = [0, ...PRGB.map(c => rgba(...c, 1))], PCSS = [FOREST, ...PRGB].map(c => `rgb(${c})`);
 const pct = c => pcOf(c, c < 0.01 ? 1 : 0);
@@ -1661,7 +1662,7 @@ function recentre() {
 // drawn as outlines over the cells. Sectors: the same idea at a coarser scale, the sectors of the kind on screen
 // ranked by the forecast.
 let PRIO = null, blocks = null, blockSel = null, here = null, listed = "", flown = false, listWas = sideOn();
-const priority = () => (PRIO ||= fetch("data/priority.json").then(r => r.json()));
+const priority = () => (PRIO ||= fetch(`data/priority.json?v=${DATA_REV}`).then(r => r.json()));
 const blockBox = (PR, b) => { const h = PR.block_km * M.years[PR.year].flags500.cell; return [[b.lat - h, b.lon - h], [b.lat + h, b.lon + h]]; };  // 5 km is ten 500 m cells
 // (the name gives way when the row is narrow; the mark of protected land after it does not)
 const row = (attr, rank, name, right, on, mark = "") => `<li><button ${attr}${on ? ' aria-current="true"' : ""}><b>${rank}</b><span class="nm"><span>${name}</span>${mark}</span>${right}</button></li>`;
@@ -2105,7 +2106,7 @@ function lossLoad() {
     LOSS.worker.onmessage = e => { if (e.data.a && storyOn) { lossYear(e.data.y, e.data.a); lossDraw(); } if (e.data.y === LOSS.years.at(-1)) { LOSS.worker.terminate(); free(); } };
     LOSS.worker.onerror = free;
     const w = LOSS.worker;
-    baseReady.then(() => { if (LOSS.worker === w) w.postMessage({ urls: LOSS.years.map(y => [y, new URL(`data/f${y}${F.suf}.png`, location.href).href]), dim: [F.cols, F.rows, LOSS.f] }); });  // (after the base map, which the first lines need)
+    baseReady.then(() => { if (LOSS.worker === w) w.postMessage({ urls: LOSS.years.map(y => [y, new URL(`data/f${y}${F.suf}.png?v=${DATA_REV}`, location.href).href]), dim: [F.cols, F.rows, LOSS.f] }); });  // (after the base map, which the first lines need)
   } catch (err) { free(); /* no worker: the bars run without the map */ }
 }
 // The years on the story's clock: those before the first mapped one pass quickly, each mapped year takes longer,

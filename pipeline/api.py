@@ -141,7 +141,7 @@ for kind, name in (("uf", "states"), ("mun", "municipalities"), ("ti", "indigeno
          "indigenous-lands": "Indigenous lands, full detail each.", "conservation-units": "Conservation units, full detail each."}[name])
 
 months = R["months"]
-put("amazon.json", {"forecast_year": 2027, "forecast_date": "2026-07-31", "expected_clearing_km2": round(R["total_km2"]), "forest_cells": PROB["forecast"]["cells"],
+put("amazon.json", {"forecast_year": 2027, "forecast_date": "2026-07-31", "model": PROB["model"], "quantity_model": META["forecast"]["quantity_model"], "expected_clearing_km2": round(R["total_km2"]), "forest_cells": PROB["forecast"]["cells"],
                     "cells_expected_to_lose_a_hectare": PROB["forecast"]["expected_cells"], "cells_by_chance": [{"from": a, "to": b, "cells": n} for a, b, n in PROB["forecast"]["cells_by_chance"]],
                     "clearing_km2_by_year": {str(y): r1(sum(it["c"][k] for it in J("sectors_uf.json")["items"])) for k, y in enumerate(R["cyears"])},
                     "monthly": {"start": months["start"], "end": months["end"], **{k: months[k] for k in ("clear", "scar", "degr", "mine", "autos", "oni")}},
@@ -154,13 +154,13 @@ shutil.copy(WEB / "priority.csv", OUT / "priority.csv")
 put("enforcement-effect.json", ACT, "Clearing observed against clearing implied had IBAMA enforcement stayed at its 2021 to 2022 level, by semester, with the action series. A floor, not a causal estimate.")
 put("permits.json", PERMITS, "Clearing permits (SINAFLOR authorisations of vegetation suppression, IBAMA open data) inside the grid: dates, point, hectares, purpose, municipality. No holder names or tax numbers.")
 put("benchmark.json", benchmark_payload(), "The open benchmark's leaderboard.")
-put("cells/grid.json", {"west": G["west"], "north": G["north"], "cell_degrees": G["cell"], "rows": G["rows"], "cols": G["cols"], "tile": TILE, "tiles": tiles,
+put("cells/grid.json", {"model": PROB["model"], "west": G["west"], "north": G["north"], "cell_degrees": G["cell"], "rows": G["rows"], "cols": G["cols"], "tile": TILE, "tiles": tiles,
                         "decode": "chance = (byte / 255) ** 2; byte 0 = not forest; row = floor((north - lat) / cell_degrees), col = floor((lon - west) / cell_degrees)",
                         "tile_url": f"{BASE}/cells/2027/{{floor(row/100)}}_{{floor(col/100)}}.bin", "tile_layout": "row-major uint8, 100 columns per row (fewer in the last column and row of tiles); a missing tile means no forest",
                         "rasters": {str(y): f"https://prenuncio.com/data/p{y}.png" for y in range(2022, 2028)}},
     "The 500 m grid and how to read a cell's chance: whole-basin 8-bit PNGs per year, and 2027 cut into small binary tiles.")
 
-index = {"name": "Prenúncio API", "version": 1, "built": datetime.date.today().isoformat(), "base": BASE, "mirror": MIRROR, "mirror_note": "The same files on GitHub. Use it if prenuncio.com answers 403 with a browser check, which its host does to some clients that are not browsers.", "instructions": f"{BASE}/llms.txt",
+index = {"name": "Prenúncio API", "version": 1, "model": PROB["model"], "built": datetime.date.today().isoformat(), "base": BASE, "mirror": MIRROR, "mirror_note": "The same files on GitHub. Use it if prenuncio.com answers 403 with a browser check, which its host does to some clients that are not browsers.", "instructions": f"{BASE}/llms.txt",
          "what": "Forecast of deforestation in the Brazilian Amazon: for every 500 m forest cell, the chance it loses at least one hectare in the PRODES year 2027 (August 2026 to July 2027), with sums by municipality, state, Indigenous land and conservation unit.",
          "access": "Static JSON over HTTPS. No key, no rate limit beyond the host's, CORS open. GET only.",
          "licence": "CC BY-SA 4.0 for the data (derived from INPE PRODES and DETER); code MIT. Credit INPE and Prenúncio.", "source": "https://github.com/gdavidss/prenuncio",
@@ -174,6 +174,8 @@ Prenúncio forecasts deforestation in the Brazilian Amazon. Every 500 m forest c
 chance that it loses at least one hectare in the PRODES year 2027 (1 August 2026 to 31 July 2027). The forecast
 was made with information up to 31 July 2026. Sums are given by municipality, state, Indigenous land and
 conservation unit.
+The annual spatial forecast and cell probabilities use {PROB["model"]}. The 2027 probabilities are calibrated
+on 2024 and 2025 outcomes. The basin-wide amount and monthly forecasts use their separate models.
 
 ## How to connect
 Plain HTTPS GET, static JSON, no key, no login, CORS open. Base: {BASE}
@@ -196,7 +198,8 @@ for example {MIRROR}/index.json
 - benchmark.json          the open benchmark's leaderboard
 - cells/grid.json         the grid, and how to read the chance of any cell
 
-## The chance of one place
+## The model's forecast for one cell
+Read the precomputed probability from {PROB["model"]} for 2027.
 row = floor((north - lat) / cell_degrees), col = floor((lon - west) / cell_degrees), from cells/grid.json.
 GET cells/2027/<floor(row/100)>_<floor(col/100)>.bin, a row-major array of bytes, 100 per row.
 byte = bytes[(row % 100) * width + (col % 100)], where width is 100 except in the last column of tiles.
@@ -206,7 +209,8 @@ chance = (byte / 255) ** 2. Byte 0 means not forest. A 404 means no forest in th
 - km2 figures by year are PRODES years (August to July), named by the year they end in.
 - Monthly figures are what INPE's DETER detects; the yearly PRODES count is larger.
 - "expected" values are forecasts. "cleared" and "observed" values are measurements by INPE.
-- The chances were checked: in 2024, cells given about 3% lost a hectare 3% of the time (calibration.json).
+- Probability validation covers 2024 and 2025, with 2026 reported separately (calibration.json).
+- The 2022 and 2023 probabilities use retrospective calibration and are excluded from probability validation.
 - A chance is not a verdict. Most cells with a 10% chance are not cleared.
 - Fire amounts are not forecast; they depend on a drought that has not happened yet.
 - enforcement-effect.json is an association and a floor, not a causal estimate.

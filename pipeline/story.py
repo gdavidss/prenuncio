@@ -13,7 +13,9 @@ from az import ROOT  # noqa: E402
 W = ROOT / "web/data"
 J = lambda f: json.load(open(f))
 prob, prio, act, meta, reg = J(W / "prob.json"), J(W / "priority.json"), J(W / "actions.json"), J(W / "meta.json"), J(W / "regions.json")
-sub = ROOT / "benchmark/submissions/prenuncio-3"  # the model the site shows
+model_name = meta["forecast"]["model"]
+assert prob["model"] == model_name, "calibration and annual maps must use the same model"
+sub = ROOT / "benchmark/submissions" / model_name
 scores, smeta = J(sub / "scores.json"), J(sub / "meta.json")
 lb = J(ROOT / "benchmark/leaderboard.json")
 r4 = lambda v: v if v is None else round(v, 4)
@@ -35,18 +37,18 @@ out = {
     "check": {"year": 2024, "expected_cells": prob["years"]["2024"]["expected_cells"], "actual_cells": prob["years"]["2024"]["actual_cells"],
               "reliability": prob["years"]["2024"]["reliability"],
               "priority_blocks_that_lost_10ha": prio["replay"]["2024"]["lost_10ha"], "all_blocks_that_lost_10ha": prio["replay"]["2024"]["base_10ha"]},
-    "model": {"name": "prenuncio-3", "what": "one model, an ensemble of boosted trees and a convolutional network", "parts": ["gradient boosted trees on a 500 m grid, more than 300 numbers per cell", "a convolutional network (U-Net) reading 25 km tiles at 100 m"],
-              "trained_on": {"first_outcome_year": 2015, "last_outcome_year": 2026, "rule": "the model that forecasts a year has never seen that year or any later one"},
+    "model": {"name": model_name, "authors": smeta["authors"], "what": smeta["summary"], "parts": ["LightGBM and XGBoost ensembles on a 500 m grid, 355 features per cell", "a LightGBM hurdle model for clearing occurrence and magnitude"],
+              "trained_on": {"first_outcome_year": 2011, "last_outcome_year": 2025, "rule": "the model that forecasts a year has never seen that year or any later one"},
               "inputs": [{"en": "clearing history since 2008 (INPE PRODES)", "pt": "histórico de desmate desde 2008 (INPE PRODES)"},
-                         {"en": "daily alerts (INPE DETER)", "pt": "alertas diários (INPE DETER)"},
+                         {"en": "optical and radar alerts (DETER, RADD, GFW)", "pt": "alertas ópticos e de radar (DETER, RADD, GFW)"},
                          {"en": "forest loss at 30 m (Hansen)", "pt": "perda de floresta a 30 m (Hansen)"},
                          {"en": "Sentinel-2 alerts at 10 m (GLAD)", "pt": "alertas Sentinel-2 a 10 m (GLAD)"},
                          {"en": "logging and fire damage at 30 m (JRC)", "pt": "extração e dano de fogo a 30 m (JRC)"},
                          {"en": "satellite embeddings (AlphaEarth)", "pt": "resumo de imagens de satélite (AlphaEarth)"},
-                         {"en": "clearing permits (SINAFLOR)", "pt": "licenças de desmate (SINAFLOR)"},
-                         {"en": "fire, fines and embargoes (INPE, IBAMA)", "pt": "fogo, autos e embargos (INPE, IBAMA)"},
-                         {"en": "who holds the land", "pt": "quem ocupa a terra"}],
-              "compute": smeta["compute"]},
+                         {"en": "clearing and logging permits (SINAFLOR, DOF)", "pt": "licenças de desmate e extração (SINAFLOR, DOF)"},
+                         {"en": "fire, rainfall and enforcement (INPE, CHIRPS, IBAMA)", "pt": "fogo, chuva e fiscalização (INPE, CHIRPS, IBAMA)"},
+                         {"en": "land tenure and mining titles (ANM)", "pt": "ocupação da terra e mineração (ANM)"}],
+              "compute": smeta["compute"], "data_sources": smeta["data_sources"]},
     "benchmark": {"question": "flag 5% of the forest: what share of the year's clearing falls inside?", "years": [2022, 2023, 2024, 2025],
                   "today": round(mean("cap5"), 4), "by_year": {y: ys[y]["cap5"] for y in ("2022", "2023", "2024", "2025")}, "unseen_2026": ys["2026"]["cap5"],
                   "naive": naive, "first_version": 0.62, "top1": round(mean("cap1"), 4), "top10": round(mean("cap10"), 4),

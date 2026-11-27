@@ -1,11 +1,11 @@
 [
  "historial de deforestación desde 2008 (INPE PRODES)",
- "alertas diarias (INPE DETER)",
+ "alertas ópticas y de radar (DETER, RADD, GFW)",
  "pérdida de bosque a 30 m (Hansen)",
  "alertas de Sentinel-2 a 10 m (GLAD)",
  "daños por tala y fuego a 30 m (JRC)",
  "embeddings satelitales (AlphaEarth)",
- "permisos de desmonte (SINAFLOR)",
- "fuego, multas y embargos (INPE, IBAMA)",
- "quién tiene la tierra"
+ "permisos de desmonte y tala (SINAFLOR, DOF)",
+ "fuego, lluvia y fiscalización (INPE, CHIRPS, IBAMA)",
+ "tenencia de tierras y minería (ANM)"
 ]

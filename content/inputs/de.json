@@ -1,11 +1,11 @@
 [
  "Rodungsverlauf seit 2008 (INPE PRODES)",
- "tägliche Warnmeldungen (INPE DETER)",
+ "optische und Radarwarnungen (DETER, RADD, GFW)",
  "Waldverlust in 30 m Auflösung (Hansen)",
  "Sentinel-2-Warnmeldungen in 10 m Auflösung (GLAD)",
  "Schäden durch Holzeinschlag und Feuer in 30 m Auflösung (JRC)",
  "Satelliten-Embeddings (AlphaEarth)",
- "Rodungsgenehmigungen (SINAFLOR)",
- "Feuer, Bußgelder und Embargos (INPE, IBAMA)",
- "wem das Land gehört"
+ "Rodungs- und Einschlagsgenehmigungen (SINAFLOR, DOF)",
+ "Feuer, Niederschlag und Kontrollen (INPE, CHIRPS, IBAMA)",
+ "Land- und Bergbaurechte (ANM)"
 ]

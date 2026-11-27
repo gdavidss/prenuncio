@@ -31,7 +31,7 @@
    "maps": "https://github.com/gdavidss/prenuncio/releases/tag/surveil-prenuncio-1",
    "weights": null,
    "agents": true,
-   "review_note": "Maintainers matched all supplied map hashes and independently ran benchmark/score.py. Training has not been reproduced. The source commit archives the submitted code; the original training commit was not supplied. See the report for reproduction and deployment limitations.",
+   "review_note": "Maintainers matched all supplied map hashes and independently ran the ranking and probability scorers. The annual spatial forecast was integrated on 2026-11-27, with 2027 probabilities calibrated on 2024–2025 outcomes. Training has not been reproduced; see the report for source and input-provenance limitations.",
    "benchmark_version": "1.0",
    "mean": {
     "cap1": 0.384173,

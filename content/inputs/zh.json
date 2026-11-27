@@ -1,11 +1,11 @@
 [
  "2008年以来的毁林记录（INPE PRODES）",
- "每日警报（INPE DETER）",
+ "光学与雷达警报 (DETER, RADD, GFW)",
  "30米分辨率的森林损失（Hansen）",
  "10米分辨率的 Sentinel-2 警报（GLAD）",
  "30米分辨率的采伐和火灾损害（JRC）",
  "卫星嵌入（AlphaEarth）",
- "毁林许可（SINAFLOR）",
- "火情、罚款和封禁（INPE、IBAMA）",
- "土地归谁持有"
+ "清林与采伐许可 (SINAFLOR, DOF)",
+ "火灾、降雨与执法 (INPE, CHIRPS, IBAMA)",
+ "土地权属与采矿权 (ANM)"
 ]

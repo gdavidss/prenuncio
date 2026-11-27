@@ -7,7 +7,7 @@
   "line1": "Prenúncio, Amazon'un Temmuz {year} sonuna kadar nerede ormansızlaşacağını tahmin eder.",
   "line2": "Denetim ormansızlaşmadan önce varsın diye yaptık.",
   "metric": "Puan, {b0} ile {b1} arasındaki yılların ortalamasıdır.",
-  "model": "Harita şu anda şu modeli kullanır: {name} (gradient boosting ve U-Net ağının birleşimi). Orman {m} metrelik karelere, yani hücrelere bölünür ve model her birine gelecek yıl ormansızlaşma olasılığını verir.",
+  "model": "Harita şu anda şu modeli kullanır: {name} (gradient boosting modellerinden oluşan bir topluluk). Orman {m} metrelik karelere, yani hücrelere bölünür ve model her birine gelecek yıl ormansızlaşma olasılığını verir.",
   "open": "Kod, veri ve benchmark açık. Herkes bir model gönderebilir.",
   "org": "{org} girişimidir.",
   "tested": "Sınamak için bir yılı modelden sakladık ve tahminini istedik. {y} yılında işaret ettiği her {of} yerden {hit} tanesi ormansızlaştı."

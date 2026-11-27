@@ -7,7 +7,7 @@
   "line1": "Prenúncio memprakirakan bagian Amazon yang akan dibuka sampai Juli {year}.",
   "line2": "Kami membuatnya agar penegakan hukum tiba sebelum hutan dibuka.",
   "metric": "Skor adalah rata-rata {b0} sampai {b1}.",
-  "model": "Peta saat ini memakai {name}, yang menggabungkan gradient boosting dan jaringan U-Net. Hutan dibagi menjadi petak {m} meter, yaitu sel, dan model memberi tiap sel peluang deforestasi pada tahun berikutnya.",
+  "model": "Peta saat ini memakai {name}, gabungan model gradient boosting. Hutan dibagi menjadi petak {m} meter, yaitu sel, dan model memberi tiap sel peluang deforestasi pada tahun berikutnya.",
   "open": "Kode, data, dan benchmark terbuka. Siapa pun bisa mengirimkan model.",
   "org": "Sebuah inisiatif {org}.",
   "tested": "Untuk mengujinya, kami menyembunyikan satu tahun dari model dan meminta prakiraannya. Pada {y}, {hit} dari setiap {of} tempat yang ditunjuknya benar-benar dibuka."

@@ -10,8 +10,9 @@ Reads the published maps and the public truth files, so anyone can rerun it:
 Writes web/data/p<year>.png (uint8, 255 * sqrt(chance), 0 outside forest) and web/data/prob.json with the
 reliability of each tested year.
 """
+import argparse
+import hashlib
 import json
-import sys
 from pathlib import Path
 
 import numpy as np
@@ -19,14 +20,23 @@ import rasterio
 from sklearn.isotonic import IsotonicRegression
 
 ROOT = Path(__file__).resolve().parent.parent
-folder = Path(sys.argv[1])
+parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
+parser.add_argument("folder", type=Path)
+parser.add_argument("--model", default="prenuncio-3")
+parser.add_argument("--prob-output", type=Path, default=ROOT / "benchmark/data/baseline_prob")
+args = parser.parse_args()
+folder = args.folder
+args.prob_output.mkdir(parents=True, exist_ok=True)
 HA = 100  # pixels of 10 m in one hectare
 BINS = [0, 0.001, 0.005, 0.01, 0.02, 0.05, 0.1, 0.2, 0.4, 1.0001]
 rng = np.random.default_rng(0)
 
 
 def year(y):
-    risk = np.load(folder / f"blend500_{y}.npz")["risk"].astype(np.float32)
+    path = folder / f"{y}.npz"
+    if not path.exists():
+        path = folder / f"blend500_{y}.npz"
+    risk = np.load(path, allow_pickle=False)["risk"].astype(np.float32)
     f = ROOT / "benchmark/data" / f"truth_{y}.npz"
     if not f.exists():
         return risk, None, None
@@ -57,7 +67,7 @@ def paint(y, p, cand):
         aux.unlink()
 
 
-out = {"event": "the cell loses at least one hectare in the PRODES year", "scale": "value = 255 * sqrt(chance); 0 = not forest", "years": {}}
+out = {"model": args.model, "event": "the cell loses at least one hectare in the PRODES year", "scale": "value = 255 * sqrt(chance); 0 = not forest", "years": {}}
 for T, train in ((2024, (2022, 2023)), (2025, (2023, 2024)), (2026, (2024, 2025))):
     iso = fit(train)
     risk, cand, hit = year(T)
@@ -76,9 +86,8 @@ for T, train in ((2024, (2022, 2023)), (2025, (2023, 2024)), (2026, (2024, 2025)
     for r in rel:
         print(f"    chance {100 * r[0]:5.1f}% to {100 * r[1]:5.1f}%: said {100 * r[2]:6.2f}%, happened {100 * r[3]:6.2f}%  ({r[4]:,} cells, {r[5]:,} cleared)")
     paint(T, p, cand)
-    (ROOT / "benchmark/data/baseline_prob").mkdir(exist_ok=True)
-    np.savez_compressed(ROOT / "benchmark/data/baseline_prob" / f"{T}.npz", p=np.where(cand, p, 0).astype(np.float16))  # for benchmark/score_prob.py
-# the years before the truth files start, and the forecast: painted with the nearest honest mapping
+    np.savez_compressed(args.prob_output / f"{T}.npz", p=np.where(cand, p, 0).astype(np.float16))
+# Early-year display probabilities are retrospective. The live forecast uses only earlier outcomes.
 iso = fit((2024, 2025))
 for y in (2022, 2023, 2027):
     risk, cand, _ = year(y)
@@ -88,8 +97,14 @@ for y in (2022, 2023, 2027):
     p = iso.predict(risk.ravel()).reshape(risk.shape).astype(np.float32)
     paint(y, p, cand)
     if y == 2027:
+        np.savez_compressed(args.prob_output / "2027.npz", p=np.where(cand, p, 0).astype(np.float16))
         pc = p[cand]
         out["forecast"] = {"year": 2027, "fitted_on": [2024, 2025], "cells": int(cand.sum()), "expected_cells": round(float(pc.sum())),
                            "cells_by_chance": [[lo, min(hi, 1), int(((pc >= lo) & (pc < hi)).sum())] for lo, hi in zip(BINS[:-1], BINS[1:])]}
         print("2027:", out["forecast"])
+out["historical_recalibration"] = {"years": [2022, 2023], "fitted_on": [2024, 2025],
+                                  "note": "Retrospective probabilities for display only; excluded from probability validation."}
+out["calibration"] = {"method": "isotonic regression", "seed": 0, "samples_per_year": 4_000_000,
+                      "forecast_thresholds": {"risk": iso.X_thresholds_.tolist(), "probability": iso.y_thresholds_.tolist()}}
+out["probability_files"] = {p.name: hashlib.sha256(p.read_bytes()).hexdigest() for p in sorted(args.prob_output.glob("*.npz"))}
 json.dump(out, open(ROOT / "web/data/prob.json", "w"))

@@ -1,11 +1,11 @@
 [
  "storico del disboscamento dal 2008 (INPE PRODES)",
- "allerte giornaliere (INPE DETER)",
+ "allerte ottiche e radar (DETER, RADD, GFW)",
  "perdita di foresta a 30 m (Hansen)",
  "allerte Sentinel-2 a 10 m (GLAD)",
  "danni da taglio e da fuoco a 30 m (JRC)",
  "embedding satellitari (AlphaEarth)",
- "permessi di disboscamento (SINAFLOR)",
- "incendi, multe ed embarghi (INPE, IBAMA)",
- "chi detiene la terra"
+ "permessi di disboscamento e taglio (SINAFLOR, DOF)",
+ "incendi, pioggia e controlli (INPE, CHIRPS, IBAMA)",
+ "diritti fondiari e minerari (ANM)"
 ]

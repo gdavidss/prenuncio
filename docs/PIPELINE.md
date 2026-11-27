@@ -24,7 +24,27 @@ python3 -m http.server 8878 -d web      # open http://localhost:8878
 node test/sectors.mjs                   # drives the site with real mouse events
 ```
 
-`AZ_F=50` in front of a pipeline step runs it on the 500 m grid, with its own folders `data/grid50` and `data/model50`. `AZ_X=hansen,glad,aef` adds the finer inputs, which need the gridded files that `unet/hansen.py`, `unet/glad.py` and `unet/aef.py` write from public cloud storage. The published model is the 500 m trees with those inputs, blended with the U-Net by `pipeline/blendmaps.py`. Its exact commands are in [its report](../benchmark/submissions/prenuncio-3/REPORT.md).
+`AZ_F=50` in front of a pipeline step runs it on the 500 m grid, with its own folders `data/grid50` and `data/model50`. `AZ_X=hansen,glad,aef` adds the finer inputs, which need the gridded files that `unet/hansen.py`, `unet/glad.py` and `unet/aef.py` write from public cloud storage. The published annual map now uses surveil-prenuncio-1. Its source, inputs and scores are described in [its report](../benchmark/submissions/surveil-prenuncio-1/REPORT.md).
+
+## Deploying the SURVEIL maps
+
+Download the six ranking maps from the `surveil-prenuncio-1` release into a local folder, then run these commands from the repository root. The adoption step verifies each submitted hash and the flagged cells against the published cap5 scores. The national annual amount continues to come from the quantity model. Forecasts before 2022 retain their earlier model, recorded per year in `meta.json`.
+
+```sh
+python pipeline/adopt_submission.py surveil-prenuncio-1 /path/to/maps
+python pipeline/adopt.py data/adopted/surveil-prenuncio-1/risk1km.npz
+python pipeline/export.py
+python pipeline/regions.py
+python pipeline/calibrate.py /path/to/maps --model surveil-prenuncio-1 --prob-output data/adopted/surveil-prenuncio-1/prob
+python pipeline/priority.py
+python pipeline/lowres.py
+python pipeline/story.py
+python pipeline/api.py
+cp web/api/v1/llms.txt web/llms.txt
+python test/forecast.py /path/to/maps
+```
+
+The 2027 isotonic calibration uses 2024 and 2025 outcomes. Validation probabilities for 2024–2026 each use earlier outcomes. Display probabilities for 2022 and 2023 are retrospectively calibrated on 2024–2025 and are excluded from probability validation. `prob.json` records the fitting years, thresholds and probability-file hashes. Publish the generated API mirror and deploy `web/` together with its regenerated data.
 
 ## The fast loop
 
